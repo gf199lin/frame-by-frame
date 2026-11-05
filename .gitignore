@@ -1,0 +1,35 @@
+# --- dependencies ---
+node_modules/
+
+# --- secrets ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- local session data (never commit) ---
+.deepworks/tmp/
+.opencode/deepworks/inbox/
+.opencode/deepworks/outbox/
+.opencode/deepworks/previews/
+uploads/
+
+# --- build output ---
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- logs / os ---
+*.log
+.DS_Store
+Thumbs.db

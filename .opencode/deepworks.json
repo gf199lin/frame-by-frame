@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "frame by frame",
+    "createdAt": 1793872135756,
+    "preset": "starter"
+  },
+  "authorizedRoots": [
+    "C:\\Users\\BayMax\\Desktop\\frame by frame"
+  ],
+  "reload": null
+}
