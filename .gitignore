@@ -10,6 +10,9 @@ node_modules/
 
 # --- local session data (never commit) ---
 .deepworks/tmp/
+data/user-memory/
+data/pending/
+data/*.local.json
 .opencode/deepworks/inbox/
 .opencode/deepworks/outbox/
 .opencode/deepworks/previews/
