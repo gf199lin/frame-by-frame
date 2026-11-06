@@ -52,7 +52,7 @@ export const Rating = ({
         ))}
       </span>
       {showValue && (
-        <span className={cn('ml-1 font-mono text-[11px] tabular-nums', light ? 'text-ink/55' : 'text-paper-dim')}>
+        <span className={cn('ml-1 font-mono text-[13px] tabular-nums', light ? 'text-ink/55' : 'text-paper-dim')}>
           {value.toFixed(1)}
         </span>
       )}

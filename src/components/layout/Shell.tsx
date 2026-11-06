@@ -28,11 +28,11 @@ const Brand = ({ compact = false }: { compact?: boolean }) => (
   <Link to="/" className="group flex items-center gap-3" aria-label="Frame by Frame — home">
     <Mark className="h-7 w-7 text-ink transition-colors group-hover:text-taupe" />
     <span className="flex flex-col">
-      <span className="font-display text-[18px] leading-none tracking-[0.005em] text-ink sm:text-[21px]">
+      <span className="font-display text-[20px] leading-none tracking-[0.005em] text-ink sm:text-[23px]">
         Frame <span className="italic text-taupe">by</span> Frame
       </span>
       {!compact && (
-        <span className="mt-[5px] hidden font-mono text-[8px] uppercase tracking-[0.24em] text-taupe sm:block">
+        <span className="mt-[6px] hidden font-mono text-[10px] uppercase tracking-[0.18em] text-taupe sm:block">
           Private cinema archive · Est. 2026
         </span>
       )}
@@ -73,33 +73,33 @@ export const Shell = ({ children }: { children: ReactNode }) => {
 
       <header className="sticky top-0 z-[60] border-b border-ink/12 bg-paper/92 backdrop-blur-xl">
         <div className="h-px w-full bg-ink/55" aria-hidden="true" />
-        <div className="shell flex h-[68px] items-stretch justify-between gap-3 lg:gap-6">
+        <div className="shell flex h-[76px] items-stretch justify-between gap-3 xl:gap-5">
           <div className="flex items-center">
             <Brand />
           </div>
 
-          <nav className="hidden items-stretch lg:flex" aria-label="Primary">
+          <nav className="hidden items-stretch xl:flex" aria-label="Primary">
             {NAV.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'group relative flex flex-col justify-center border-l border-ink/12 px-5 transition-colors xl:px-6',
+                  'group relative flex flex-col justify-center border-l border-ink/12 px-4 transition-colors 2xl:px-5',
                   isActive(item.to) ? 'text-ink' : 'text-taupe hover:text-ink',
                 )}
               >
                 <span className="flex items-baseline gap-1.5">
                   <span
                     className={cn(
-                      'font-mono text-[7px] tracking-[0.14em]',
+                      'font-mono text-[10px] tracking-[0.1em]',
                       isActive(item.to) ? 'text-ink' : 'text-taupe/70',
                     )}
                   >
                     {item.index}
                   </span>
-                  <span className="text-[9.5px] uppercase tracking-[0.2em]">{item.label}</span>
+                  <span className={cn("text-[15px] uppercase leading-none tracking-[0.1em]", isActive(item.to) && "font-medium")}>{item.label}</span>
                 </span>
-                <span className="mt-[3px] text-[8.5px] tracking-[0.14em] text-taupe/70">
+                <span className="mt-[5px] text-[12px] tracking-[0.08em] text-taupe">
                   {item.zh}
                 </span>
                 <span
@@ -113,18 +113,18 @@ export const Shell = ({ children }: { children: ReactNode }) => {
           </nav>
 
           <div className="flex items-center gap-4">
-            <div className="hidden text-right xl:block">
-              <p className="font-mono text-[9px] tracking-[0.18em] text-ink/70">
+            <div className="hidden text-right 2xl:block">
+              <p className="font-mono text-[12px] tracking-[0.18em] text-ink/70">
                 {String(records.length).padStart(2, '0')} FILMS
               </p>
-              <p className="mt-1 font-mono text-[7.5px] uppercase tracking-[0.2em] text-taupe/70">
+              <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-taupe/70">
                 Local archive
               </p>
             </div>
             <button
               type="button"
               onClick={() => openAdd()}
-              className="btn btn-primary h-9 shrink-0 px-3 text-[9px] sm:px-5"
+              className="btn btn-primary h-10 shrink-0 px-3 text-[12.5px] sm:px-5"
               aria-label="Add a film"
             >
               <Plus size={13} strokeWidth={1.6} />
@@ -134,7 +134,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="icon-btn lg:hidden"
+              className="icon-btn xl:hidden"
               aria-label="Open menu"
               aria-expanded={mobileOpen}
             >
@@ -146,9 +146,9 @@ export const Shell = ({ children }: { children: ReactNode }) => {
       </header>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-[90] flex flex-col bg-paper lg:hidden">
+        <div className="fixed inset-0 z-[90] flex flex-col bg-paper xl:hidden">
           <div className="h-px w-full bg-ink/55" />
-          <div className="flex h-[68px] items-center justify-between border-b border-ink/12 px-5">
+          <div className="flex h-[76px] items-center justify-between border-b border-ink/12 px-5">
             <Brand compact />
             <button type="button" onClick={() => setMobileOpen(false)} className="icon-btn" aria-label="Close menu">
               <X size={17} />
@@ -160,17 +160,17 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'flex items-baseline justify-between border-b border-ink/12 py-5',
-                  isActive(item.to) ? 'text-ink' : 'text-ink/75',
+                  'flex items-baseline justify-between border-b border-ink/12 py-6',
+                  isActive(item.to) ? 'text-ink' : 'text-ink/80',
                 )}
               >
                 <span className="flex items-baseline gap-4">
-                  <span className="font-mono text-[9px] tracking-[0.15em] text-taupe">
+                  <span className="font-mono text-[12px] tracking-[0.15em] text-taupe">
                     {item.index}
                   </span>
                   <span className="font-display text-[2.1rem] leading-none">{item.label}</span>
                 </span>
-                <span className="zh-label text-[9px] text-ink/45">{item.zh}</span>
+                <span className="zh-label text-[13px] text-ink/60">{item.zh}</span>
               </NavLink>
             ))}
           </nav>
@@ -178,7 +178,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             <button type="button" onClick={() => openAdd()} className="btn btn-primary w-full">
               <Plus size={14} /> Add a Film
             </button>
-            <p className="mt-4 text-center font-mono text-[9px] tracking-[0.16em] text-taupe">
+            <p className="mt-4 text-center font-mono text-[12px] tracking-[0.16em] text-taupe">
               {String(records.length).padStart(2, '0')} FILMS IN YOUR LOCAL ARCHIVE
             </p>
           </div>
@@ -186,7 +186,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
       )}
 
       {!storageAvailable && (
-        <div className="border-b border-ink/25 bg-ink/[0.06] px-5 py-2 text-center text-[9px] uppercase tracking-[0.16em] text-ink">
+        <div className="border-b border-ink/25 bg-ink/[0.06] px-5 py-2 text-center text-[12px] uppercase tracking-[0.16em] text-ink">
           Local storage is unavailable — records will not survive a refresh in this browser.
         </div>
       )}
@@ -205,7 +205,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                 <br />
                 <span className="italic text-paper-dim">Every frame tells your story.</span>
               </p>
-              <p className="mt-5 max-w-xs text-[11.5px] leading-relaxed text-paper-dim">
+              <p className="mt-5 max-w-xs text-[13.5px] leading-relaxed text-paper-dim">
                 An independent archive of the films you keep, the notes you write, and the person
                 they reveal. Local-first; your archive lives in this browser, not on a server.
               </p>
@@ -218,7 +218,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   <li key={item.to}>
                     <Link
                       to={item.to}
-                      className="link-underline text-[11.5px] text-paper-dim transition-colors hover:text-paper"
+                      className="link-underline text-[13.5px] text-paper-dim transition-colors hover:text-paper"
                     >
                       {item.label}
                     </Link>
@@ -229,7 +229,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
 
             <div className="lg:pl-6 lg:border-l lg:border-paper/15">
               <p className="micro-sm text-paper-dim">On the Record</p>
-              <ul className="mt-5 space-y-3 text-[11.5px] text-paper-dim">
+              <ul className="mt-5 space-y-3 text-[13.5px] text-paper-dim">
                 <li>{String(records.length).padStart(2, '0')} films archived</li>
                 <li>Local storage · v1</li>
                 <li>No account required</li>
@@ -239,24 +239,24 @@ export const Shell = ({ children }: { children: ReactNode }) => {
 
             <div className="lg:pl-6 lg:border-l lg:border-paper/15">
               <p className="micro-sm text-paper-dim">A Note on the AI</p>
-              <p className="mt-5 text-[11.5px] leading-relaxed text-paper-dim">
+              <p className="mt-5 text-[13.5px] leading-relaxed text-paper-dim">
                 The taste readings in this build are produced by a transparent local engine:
                 weighted ratings, note length, and theme overlap. No API key, no model call, and no
                 claim that a model has read your mind.
               </p>
-              <p className="mt-4 text-[10px] leading-relaxed text-paper-dim/60">
+              <p className="mt-4 text-[12.5px] leading-relaxed text-paper-dim/60">
                 Posters and scene images are official film artwork sourced from TMDB where
                 available, or a verified local copy of the official release poster. Artwork © the
                 respective rights holders; shown for identification only. No generated imagery is
                 used for a real film.
               </p>
-              <p className="mt-2 text-[10px] leading-relaxed text-paper-dim/50">
+              <p className="mt-2 text-[12.5px] leading-relaxed text-paper-dim/50">
                 This product uses the TMDB API but is not endorsed or certified by TMDB.
               </p>
               <div className="mt-6">
                 {confirmReset ? (
                   <div className="border border-paper/20 p-3">
-                    <p className="text-[11px] leading-relaxed text-paper-dim">
+                    <p className="text-[13px] leading-relaxed text-paper-dim">
                       Reset to the ten sample films? Your own records will be removed.
                     </p>
                     <div className="mt-3 flex gap-2">
@@ -266,14 +266,14 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                           resetDemo()
                           setConfirmReset(false)
                         }}
-                        className="btn btn-primary h-8 px-3 text-[9px]"
+                        className="btn btn-primary h-8 px-3 text-[12px]"
                       >
                         Reset
                       </button>
                       <button
                         type="button"
                         onClick={() => setConfirmReset(false)}
-                        className="btn btn-ghost h-8 px-3 text-[9px]"
+                        className="btn btn-ghost h-8 px-3 text-[12px]"
                       >
                         Cancel
                       </button>
@@ -283,7 +283,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   <button
                     type="button"
                     onClick={() => setConfirmReset(true)}
-                    className="inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-paper-dim transition-colors hover:text-paper"
+                    className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] text-paper-dim transition-colors hover:text-paper"
                   >
                     <RotateCcw size={11} /> Reset demo data
                   </button>
@@ -292,7 +292,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             </div>
           </div>
 
-          <div className="mt-16 flex flex-col gap-3 border-t border-paper/15 pt-6 font-mono text-[9px] uppercase tracking-[0.18em] text-paper-dim sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-16 flex flex-col gap-3 border-t border-paper/15 pt-6 font-mono text-[12px] uppercase tracking-[0.18em] text-paper-dim sm:flex-row sm:items-center sm:justify-between">
             <p>© 2026 Frame by Frame · A student prototype</p>
             <p>Built for 滴普杯 · DeepWorks</p>
           </div>

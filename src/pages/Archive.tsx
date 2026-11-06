@@ -155,7 +155,7 @@ export const Archive = () => {
               <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
                 <p className="zh-title text-[15px] text-ink/65">电影收藏</p>
                 <span className="hidden h-3 w-px bg-white/20 sm:block" />
-                <p className="measure text-[12.5px] leading-relaxed text-taupe">
+                <p className="measure text-[14px] leading-relaxed text-taupe">
                   Every film you kept, with the date, the rating, and the paragraph you wrote after
                   the credits. Search it like a memory, not a spreadsheet.
                 </p>
@@ -167,7 +167,7 @@ export const Archive = () => {
                 <p className="micro-sm text-taupe">Average rating</p>
                 <p className="num mt-1.5 text-[2.6rem] leading-none text-ink">
                   {snapshot.averageRating.toFixed(1)}
-                  <span className="ml-1 text-[13px] text-taupe">/ 5</span>
+                  <span className="ml-1 text-[15px] text-taupe">/ 5</span>
                 </p>
                 <Rating value={snapshot.averageRating} size={9} className="mt-2" />
               </div>
@@ -175,9 +175,9 @@ export const Archive = () => {
                 <p className="micro-sm text-taupe">Time in the dark</p>
                 <p className="num mt-1.5 text-[2.6rem] leading-none text-ink">
                   {(snapshot.totalMinutes / 60).toFixed(1)}
-                  <span className="ml-1 text-[13px] text-taupe">h</span>
+                  <span className="ml-1 text-[15px] text-taupe">h</span>
                 </p>
-                <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-taupe">
+                <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.14em] text-taupe">
                   {formatMinutes(snapshot.totalMinutes)}
                 </p>
               </div>
@@ -209,7 +209,7 @@ export const Archive = () => {
 
             <div className="flex shrink-0 flex-wrap items-center gap-4">
               <label className="flex items-center gap-2">
-                <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-taupe">Sort</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-taupe">Sort</span>
                 <select
                   value={sort}
                   onChange={(event) => setSort(event.target.value as SortKey)}
@@ -233,7 +233,7 @@ export const Archive = () => {
                     aria-label={`${mode} view`}
                     aria-pressed={view === mode}
                     className={cn(
-                      'relative pb-1 font-mono text-[8px] uppercase tracking-[0.18em] transition-colors',
+                      'relative pb-1 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors',
                       view === mode ? 'text-ink' : 'text-taupe/60 hover:text-ink',
                     )}
                   >
@@ -252,7 +252,7 @@ export const Archive = () => {
 
           {/* Filters — text, not pills */}
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-ink/10 py-4">
-            <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-taupe">Genre</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-taupe">Genre</span>
             {['all', ...genres].map((g) => {
               const active = genre === g
               return (
@@ -261,7 +261,7 @@ export const Archive = () => {
                   type="button"
                   onClick={() => setGenre(g === 'all' ? 'all' : genre === g ? 'all' : g)}
                   className={cn(
-                    'relative pb-0.5 text-[9px] uppercase tracking-[0.16em] transition-colors',
+                    'relative pb-0.5 text-[12px] uppercase tracking-[0.16em] transition-colors',
                     active ? 'text-ink' : 'text-taupe/65 hover:text-ink',
                   )}
                   aria-pressed={active}
@@ -318,14 +318,14 @@ export const Archive = () => {
             </select>
 
             <div className="ml-auto flex items-center gap-4">
-              <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-taupe">
+              <span className="font-mono text-[12px] uppercase tracking-[0.14em] text-taupe">
                 {filtered.length} {filtered.length === 1 ? 'film' : 'films'}
               </span>
               {activeFilters > 0 && (
                 <button
                   type="button"
                   onClick={clearAll}
-                  className="font-mono text-[8px] uppercase tracking-[0.16em] text-brass underline underline-offset-4 hover:text-brass-soft"
+                  className="font-mono text-[11px] uppercase tracking-[0.16em] text-brass underline underline-offset-4 hover:text-brass-soft"
                 >
                   Clear ({activeFilters})
                 </button>
@@ -367,7 +367,7 @@ export const Archive = () => {
                       <h2 className="mt-2 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[0.94] tracking-[-0.02em] text-paper">
                         {featured.film.title}
                       </h2>
-                      <p className="mt-2 text-[9.5px] uppercase tracking-[0.2em] text-paper/60">
+                      <p className="mt-2 text-[12.5px] uppercase tracking-[0.2em] text-paper/60">
                         {featured.film.director} · {featured.film.year} · {featured.film.genres.join(' / ')}
                       </p>
                       <p className="mt-4 line-clamp-2 max-w-xl font-display text-[1.05rem] italic leading-snug text-paper/70">
@@ -376,7 +376,7 @@ export const Archive = () => {
                     </div>
                     <div className="hidden shrink-0 text-right sm:block">
                       <Rating value={featured.record.rating} size={13} showValue />
-                      <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/60">
+                      <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.16em] text-paper/60">
                         {featured.film.runtime} min
                       </p>
                     </div>
@@ -416,7 +416,7 @@ export const Archive = () => {
                   <p className="artifact-label">
                     <b>{featured ? '02' : '01'}</b> The shelf
                   </p>
-                  <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-taupe/60">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-taupe/60">
                     Click a frame to read the note
                   </p>
                 </div>
@@ -446,19 +446,19 @@ export const Archive = () => {
                     <span className="block font-display text-[1.5rem] leading-none text-ink">
                       Add a film to the archive
                     </span>
-                    <span className="mt-1.5 block font-mono text-[8px] uppercase tracking-[0.2em] text-taupe">
+                    <span className="mt-1.5 block font-mono text-[11px] uppercase tracking-[0.2em] text-taupe">
                       A new frame, a new note, a new reading
                     </span>
                   </span>
                 </span>
-                <span className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-brass sm:block">
+                <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-brass sm:block">
                   Open the entry form →
                 </span>
               </button>
             </>
           ) : (
             <div>
-              <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-ink/20 pb-2 font-mono text-[8px] uppercase tracking-[0.18em] text-taupe sm:grid">
+              <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-ink/20 pb-2 font-mono text-[11px] uppercase tracking-[0.18em] text-taupe sm:grid">
                 <span>No.</span>
                 <span>Frame</span>
                 <span>Film</span>
@@ -487,7 +487,7 @@ export const Archive = () => {
                   </p>
                   <h2 className="mt-3 t-head">The waiting room.</h2>
                 </div>
-                <p className="max-w-sm text-[11px] leading-relaxed text-taupe">
+                <p className="max-w-sm text-[13px] leading-relaxed text-taupe">
                   Films already in the catalogue, waiting for a memory. Open one to record it.
                 </p>
               </div>
@@ -506,7 +506,7 @@ export const Archive = () => {
 
       <section className="chapter--night border-t border-paper/10">
         <div className="shell flex flex-wrap items-center justify-between gap-4 py-8">
-          <p className="text-[11px] text-paper-dim">
+          <p className="text-[13px] text-paper-dim">
             Looking for a film that is not here?{' '}
             <button
               type="button"

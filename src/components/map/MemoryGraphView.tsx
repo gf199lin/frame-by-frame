@@ -464,7 +464,7 @@ export const MemoryGraphView = ({
       </svg>
 
       <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
-        <p className="hidden font-mono text-[9px] uppercase tracking-[0.16em] text-paper-muted/70 sm:block">
+        <p className="hidden font-mono text-[12px] uppercase tracking-[0.16em] text-paper-muted/70 sm:block">
           Drag to pan · scroll to zoom · drag a node · click for context
         </p>
         <div className="pointer-events-auto flex items-center gap-1 border border-paper/15 bg-[#1b1814]/85 p-1 text-paper backdrop-blur">
@@ -501,7 +501,7 @@ export const MemoryGraphView = ({
 }
 
 export const GraphLegend = ({ showThemes, showMoods }: { showThemes: boolean; showMoods: boolean }) => (
-  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] uppercase tracking-[0.14em] text-paper-muted">
     <span className="flex items-center gap-2">
       <span className="inline-block h-3 w-2.5 border border-brass/70" /> Film
     </span>

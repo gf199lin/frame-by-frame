@@ -9,7 +9,7 @@ export const NotFound = () => (
       <br />
       <span className="italic text-taupe">cut from the print.</span>
     </h1>
-    <p className="mt-5 max-w-md text-[13px] leading-relaxed text-ink/70">
+    <p className="mt-5 max-w-md text-[15px] leading-relaxed text-ink/70">
       The page you asked for does not exist — or the record it pointed to was removed from the
       archive.
     </p>

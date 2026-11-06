@@ -130,7 +130,7 @@ export const Taste = () => {
               <p className="mt-3 font-display text-[clamp(1.7rem,3.2vw,2.8rem)] italic leading-[1.05] text-ink/65">
                 a reading in progress.
               </p>
-              <p className="measure mt-7 text-[13px] leading-[1.8] text-ink/65">
+              <p className="measure mt-7 text-[15px] leading-[1.8] text-ink/65">
                 {snapshot.filmCount} films and{' '}
                 {records.filter((r) => r.reflection.trim().length > 0).length} written notes produce
                 the profile below. It is a weighted interpretation of what you keep choosing — not a
@@ -167,13 +167,13 @@ export const Taste = () => {
                 <div className="mt-4 grid w-full grid-cols-3 divide-x divide-ink/10 border-t border-ink/10 pt-3 text-center">
                   <div>
                     <p className="num text-[1.35rem] text-ink">{percent(snapshot.overallConfidence)}</p>
-                    <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-taupe">
+                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-taupe">
                       confidence
                     </p>
                   </div>
                   <div>
                     <p className="num text-[1.35rem] text-ink">{snapshot.filmCount}</p>
-                    <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-taupe">
+                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-taupe">
                       films read
                     </p>
                   </div>
@@ -181,7 +181,7 @@ export const Taste = () => {
                     <p className="num text-[1.35rem] text-ink">
                       {feedbackCounts.agree + feedbackCounts['not-quite'] + feedbackCounts.corrected}
                     </p>
-                    <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-taupe">
+                    <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-taupe">
                       verdicts
                     </p>
                   </div>
@@ -198,7 +198,7 @@ export const Taste = () => {
             <p className="artifact-label">
               <b>—</b> What this is
             </p>
-            <p className="mt-3 text-[12.5px] leading-[1.8] text-ink/65">
+            <p className="mt-3 text-[14px] leading-[1.8] text-ink/65">
               A transparent, local reading of your archive. Six axes are computed from ratings,
               note depth, and the themes that recur. Every claim links back to a sentence you wrote.
               Confidence reflects how much evidence exists — not how correct the AI is.
@@ -208,7 +208,7 @@ export const Taste = () => {
             <p className="artifact-label">
               <b>—</b> What this is not
             </p>
-            <p className="mt-3 text-[12.5px] leading-[1.8] text-ink/65">
+            <p className="mt-3 text-[14px] leading-[1.8] text-ink/65">
               Not a personality test, not an aesthetic ranking, and not a live language model. No
               text leaves this browser. “Not quite” and corrections are stored and visibly reduce
               the confidence of the reading they challenge.
@@ -225,7 +225,7 @@ export const Taste = () => {
               <p className="mt-4 font-display text-[1.8rem] leading-snug text-ink">
                 {strongest?.def.label} is the loudest signal.
               </p>
-              <p className="mt-2 text-[11px] leading-relaxed text-taupe">
+              <p className="mt-2 text-[13px] leading-relaxed text-taupe">
                 {strongest
                   ? `${strongest.def.labelZh} · ${percent(
                       strongest.value < 0.5 ? 1 - strongest.value : strongest.value,
@@ -235,7 +235,7 @@ export const Taste = () => {
             </div>
             <div className="space-y-3 border-l border-ink/10 pl-6 sm:pl-8">
               {summary.map((sentence, i) => (
-                <p key={i} className="text-[13px] leading-[1.8] text-ink/65">
+                <p key={i} className="text-[15px] leading-[1.8] text-ink/65">
                   {sentence}
                 </p>
               ))}
@@ -249,14 +249,14 @@ export const Taste = () => {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <SectionLabel index="01">Six dimensions</SectionLabel>
-              <p className="mt-4 max-w-xl text-[12px] leading-relaxed text-taupe">
+              <p className="mt-4 max-w-xl text-[14px] leading-relaxed text-taupe">
                 Each axis runs from one pole to the other. The marker is your archive's position;
                 the number is confidence. Read the direction, not the percentage as a grade.
               </p>
             </div>
             <div className="text-right">
               <p className="micro-sm text-taupe">Feedback given</p>
-              <p className="mt-1 text-[12px] text-ink/65">
+              <p className="mt-1 text-[14px] text-ink/65">
                 {feedbackCounts.agree} agree · {feedbackCounts['not-quite']} not quite ·{' '}
                 {feedbackCounts.corrected} corrections
               </p>
@@ -298,17 +298,17 @@ export const Taste = () => {
                 <div key={theme.id} className="group border-b border-ink/10 py-6">
                   <div className="flex items-baseline justify-between gap-4">
                     <div className="flex items-baseline gap-4">
-                      <span className="font-mono text-[8px] tracking-[0.2em] text-brass/70">
+                      <span className="font-mono text-[11px] tracking-[0.2em] text-brass/70">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <p className="font-display text-[clamp(1.6rem,2.4vw,2.2rem)] leading-none text-ink">
                         {THEMES[theme.id].label}
                       </p>
-                      <span className="zh-label text-[9px] text-taupe/60">
+                      <span className="zh-label text-[12px] text-taupe/60">
                         {THEMES[theme.id].zh}
                       </span>
                     </div>
-                    <span className="font-mono text-[9px] text-taupe">
+                    <span className="font-mono text-[12px] text-taupe">
                       {String(theme.count).padStart(2, '0')} films
                     </span>
                   </div>
@@ -318,7 +318,7 @@ export const Taste = () => {
                       style={{ width: `${Math.max(12, theme.weight * 100)}%`, opacity: 1 - i * 0.08 }}
                     />
                   </div>
-                  <p className="mt-2.5 text-[11px] leading-relaxed text-taupe">
+                  <p className="mt-2.5 text-[13px] leading-relaxed text-taupe">
                     {THEMES[theme.id].blurb}
                   </p>
                 </div>
@@ -337,18 +337,18 @@ export const Taste = () => {
               <br />
               <span className="italic text-brass-soft">grows with the archive.</span>
             </h2>
-            <p className="mt-5 max-w-md text-[13px] leading-relaxed text-ink/65">
+            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-ink/65">
               These are real snapshots, recomputed from the first N films at each milestone — not
               decorative copy. Each stage keeps the films it was built from, and each one can be
               agreed with, contested, or corrected.
             </p>
-            <p className="mt-4 max-w-md text-[11px] leading-relaxed text-taupe">
+            <p className="mt-4 max-w-md text-[13px] leading-relaxed text-taupe">
               The newest stage is highlighted. If you add another film, a new stage appears above it
               and the whole profile re-reads itself.
             </p>
             <div className="mt-8 border-t border-ink/10 pt-5">
               <p className="micro-sm text-taupe">Latest stage</p>
-              <p className="mt-2 text-[12px] text-ink/65">
+              <p className="mt-2 text-[14px] text-ink/65">
                 {timeline[0]
                   ? `${timeline[0].filmCount} films · ${formatLongDate(timeline[0].at)} · ${percent(
                       timeline[0].confidence,
@@ -372,18 +372,18 @@ export const Taste = () => {
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <p className="micro text-brass/80">Your corrections</p>
-                <p className="mt-2 text-[12px] text-taupe">
+                <p className="mt-2 text-[14px] text-taupe">
                   Kept locally. These are the sentences that should outrank the engine's reading.
                 </p>
               </div>
-              <p className="font-mono text-[10px] text-taupe">
+              <p className="font-mono text-[12.5px] text-taupe">
                 {state.corrections.length} saved
               </p>
             </div>
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
               {state.corrections.slice(0, 6).map((correction) => (
                 <li key={correction.id} className="border-l border-brass/40 pl-4">
-                  <p className="text-[9px] uppercase tracking-[0.16em] text-taupe">
+                  <p className="text-[12px] uppercase tracking-[0.16em] text-taupe">
                     {correction.scope.replace('dimension:', '').replace('timeline:', 'stage ')}
                   </p>
                   <p className="mt-1.5 font-display text-lg italic leading-snug text-ink/65">

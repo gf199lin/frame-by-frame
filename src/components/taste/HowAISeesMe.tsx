@@ -40,7 +40,7 @@ export const HowAISeesMe = ({
                     <span className="block font-display text-xl leading-none text-ink sm:text-2xl">
                       {String(stage.filmCount).padStart(2, '0')}
                     </span>
-                    <span className="mt-1 block text-[8px] uppercase tracking-[0.16em] text-taupe">
+                    <span className="mt-1 block text-[11px] uppercase tracking-[0.16em] text-taupe">
                       films
                     </span>
                   </span>
@@ -52,18 +52,18 @@ export const HowAISeesMe = ({
                   <p className="micro-sm text-brass/80">
                     {stage.filmCount === 1 ? 'After 1 film' : `After ${stage.filmCount} films`}
                   </p>
-                  <p className="font-mono text-[9px] tracking-[0.14em] text-taupe">
+                  <p className="font-mono text-[12px] tracking-[0.14em] text-taupe">
                     {formatShortDate(stage.at)} · confidence {Math.round(stage.confidence * 100)}%
                   </p>
                 </div>
                 <h4 className="mt-2 font-display text-xl leading-snug text-ink sm:text-2xl">
                   {stage.headline}
                 </h4>
-                <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-ink/65">
+                <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-ink/65">
                   {stage.body}
                 </p>
                 {stage.topTheme && (
-                  <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-taupe">
+                  <p className="mt-2 text-[12.5px] uppercase tracking-[0.16em] text-taupe">
                     Recurring theme · <span className="text-brass/70">{THEMES[stage.topTheme].label}</span>
                   </p>
                 )}
@@ -73,7 +73,7 @@ export const HowAISeesMe = ({
                     <>
                       <span
                         className={cn(
-                          'inline-flex items-center gap-1.5 border px-2.5 py-1 text-[9px] uppercase tracking-[0.14em]',
+                          'inline-flex items-center gap-1.5 border px-2.5 py-1 text-[12px] uppercase tracking-[0.14em]',
                           state.verdict === 'agree'
                             ? 'border-brass/40 bg-brass/10 text-brass-soft'
                             : 'border-ink/25 text-ink/65',
@@ -87,7 +87,7 @@ export const HowAISeesMe = ({
                             : 'Corrected'}
                       </span>
                       {state.correction && (
-                        <span className="text-[11px] italic text-taupe">“{state.correction}”</span>
+                        <span className="text-[13px] italic text-taupe">“{state.correction}”</span>
                       )}
                       <button
                         type="button"
@@ -95,7 +95,7 @@ export const HowAISeesMe = ({
                           setEditing(editing === stage.id ? null : stage.id)
                           setText(state.correction ?? '')
                         }}
-                        className="text-[9px] uppercase tracking-[0.14em] text-taupe underline underline-offset-4 hover:text-ink"
+                        className="text-[12px] uppercase tracking-[0.14em] text-taupe underline underline-offset-4 hover:text-ink"
                       >
                         Revise
                       </button>
@@ -105,14 +105,14 @@ export const HowAISeesMe = ({
                       <button
                         type="button"
                         onClick={() => onFeedback(stage.id, 'agree')}
-                        className="chip h-7 gap-1 text-[9px]"
+                        className="chip h-7 gap-1 text-[12px]"
                       >
                         <Check size={10} /> I agree
                       </button>
                       <button
                         type="button"
                         onClick={() => onFeedback(stage.id, 'not-quite')}
-                        className="chip h-7 gap-1 text-[9px]"
+                        className="chip h-7 gap-1 text-[12px]"
                       >
                         <X size={10} /> Not quite
                       </button>
@@ -122,7 +122,7 @@ export const HowAISeesMe = ({
                           setEditing(stage.id)
                           setText('')
                         }}
-                        className="chip h-7 gap-1 text-[9px]"
+                        className="chip h-7 gap-1 text-[12px]"
                       >
                         <Pencil size={9} /> Let me correct you
                       </button>
@@ -136,7 +136,7 @@ export const HowAISeesMe = ({
                       value={text}
                       onChange={(event) => setText(event.target.value)}
                       rows={2}
-                      className="input input-boxed text-[12px] leading-relaxed"
+                      className="input input-boxed text-[14px] leading-relaxed"
                       placeholder="What did it get wrong?"
                     />
                     <div className="mt-2 flex gap-2">
@@ -148,14 +148,14 @@ export const HowAISeesMe = ({
                           setEditing(null)
                           setText('')
                         }}
-                        className="btn btn-primary h-8 px-3 text-[9px]"
+                        className="btn btn-primary h-8 px-3 text-[12px]"
                       >
                         Save
                       </button>
                       <button
                         type="button"
                         onClick={() => setEditing(null)}
-                        className="btn btn-quiet h-8 text-[9px]"
+                        className="btn btn-quiet h-8 text-[12px]"
                       >
                         Cancel
                       </button>

@@ -17,7 +17,7 @@ export default {
           warm: '#E3D9C8',
           deep: '#D8CCB8',
           dim: '#C7BBA8',
-          muted: '#91816B',
+          muted: 'var(--paper-muted, #6B5F4E)',
         },
         // `brass` keeps its class name for continuity, but it now carries the
         // dark-brown accent. No red exists anywhere in the palette.
@@ -32,8 +32,8 @@ export default {
           deep: '#181510',
         },
         archive: '#C7BBA8',
-        taupe: '#91816B',
-        ash: '#91816B',
+        taupe: '#6B5F4E',
+        ash: '#6B5F4E',
       },
       fontFamily: {
         display: ['"Instrument Serif"', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', 'serif'],

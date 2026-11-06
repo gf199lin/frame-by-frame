@@ -78,7 +78,7 @@ const Yearbook = ({
           <p className="micro text-[#7a7264]">The year, in a paragraph</p>
           <div className="mt-3 space-y-2">
             {summary.map((sentence, i) => (
-              <p key={i} className="text-[12px] leading-relaxed text-[#2c2822]">
+              <p key={i} className="text-[14px] leading-relaxed text-[#2c2822]">
                 {sentence}
               </p>
             ))}
@@ -90,7 +90,7 @@ const Yearbook = ({
               {themes.slice(0, 6).map((theme) => (
                 <span
                   key={theme.id}
-                  className="border border-[#171512]/25 px-2.5 py-1 text-[9px] uppercase tracking-[0.14em] text-[#3a3428]"
+                  className="border border-[#171512]/25 px-2.5 py-1 text-[12px] uppercase tracking-[0.14em] text-[#3a3428]"
                 >
                   {THEMES[theme.id].label} · {theme.count}
                 </span>
@@ -123,15 +123,15 @@ const Yearbook = ({
                   <p className="font-display text-2xl leading-none text-[#171512]">
                     {favourite.film.title}
                   </p>
-                  <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-[#7a7264]">
+                  <p className="mt-1 text-[12.5px] uppercase tracking-[0.12em] text-[#7a7264]">
                     {favourite.film.director} · {favourite.film.year}
                   </p>
-                  <p className="mt-2 font-mono text-[11px] text-[#3a3428]">
+                  <p className="mt-2 font-mono text-[13px] text-[#3a3428]">
                     ★ {favourite.record.rating.toFixed(1)}
                   </p>
                 </div>
               </div>
-              <p className="mt-4 border-l border-[#29251f]/50 pl-3 font-display text-[13px] italic leading-relaxed text-[#3a3428]">
+              <p className="mt-4 border-l border-[#29251f]/50 pl-3 font-display text-[15px] italic leading-relaxed text-[#3a3428]">
                 “{favourite.record.reflection}”
               </p>
             </div>
@@ -140,10 +140,10 @@ const Yearbook = ({
       </div>
 
       <div className="mt-12 flex flex-col justify-between gap-2 border-t border-[#171512]/20 pt-4 sm:flex-row sm:items-center">
-        <p className="text-[8px] uppercase tracking-[0.2em] text-[#7a7264]">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-[#7a7264]">
           Generated locally · Frame by Frame · {year}
         </p>
-        <p className="text-[8px] uppercase tracking-[0.2em] text-[#7a7264]">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-[#7a7264]">
           A personal record, not a published survey
         </p>
       </div>
@@ -378,10 +378,10 @@ export const Reflection = () => {
       <div className="shell pb-8 pt-10 lg:pt-14">
         {/* Masthead */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#171512]/25 pb-3">
-          <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#7a7264]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#7a7264]">
             05 — Reflection / The Annual
           </p>
-          <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#7a7264]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#7a7264]">
             A printed record · {year}
           </p>
         </div>
@@ -392,16 +392,16 @@ export const Reflection = () => {
               The {year} Reel
             </h1>
             <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-              <p className="zh-title text-[14px] text-[#3a3428]">年度观影年鉴</p>
+              <p className="zh-title text-[15px] text-[#3a3428]">年度观影年鉴</p>
               <span className="hidden h-3 w-px bg-[#171512]/25 sm:block" />
-              <p className="max-w-xl text-[12.5px] leading-relaxed text-[#3a3428]">
+              <p className="max-w-xl text-[14px] leading-relaxed text-[#3a3428]">
                 A printed record of what the year did to you in the dark. Months, moods, the frame
                 you kept, and the slow drift of your taste.
               </p>
             </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-2">
-              <span className="mr-1 font-mono text-[8px] uppercase tracking-[0.2em] text-[#7a7264]">
+              <span className="mr-1 font-mono text-[11px] uppercase tracking-[0.2em] text-[#7a7264]">
                 Edition
               </span>
               {years.map((y) => (
@@ -409,7 +409,7 @@ export const Reflection = () => {
                   key={y}
                   type="button"
                   onClick={() => setYear(y)}
-                  className="chip h-8 text-[9px]"
+                  className="chip h-8 text-[12px]"
                   data-active={year === y}
                 >
                   {y}
@@ -421,17 +421,17 @@ export const Reflection = () => {
           {favorite && favoriteFilm && (
             <div className="col-span-9 col-start-1 sm:col-span-6 lg:col-span-4 lg:col-start-9">
               <div className="flex items-baseline justify-between border-b border-[#171512]/25 pb-2">
-                <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-[#7a7264]">
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#7a7264]">
                   The frame I kept
                 </p>
-                <p className="font-mono text-[8px] text-[#7a7264]">
+                <p className="font-mono text-[11px] text-[#7a7264]">
                   {favorite.rating.toFixed(1)} / 5
                 </p>
               </div>
               <div className="mt-3 aspect-[2/3] w-full max-w-[230px] overflow-hidden lg:ml-auto">
                 <FilmPoster film={favoriteFilm} showTitle={false} />
               </div>
-              <p className="mt-2.5 text-right font-mono text-[8px] uppercase tracking-[0.16em] text-[#7a7264]">
+              <p className="mt-2.5 text-right font-mono text-[11px] uppercase tracking-[0.16em] text-[#7a7264]">
                 Cover · {favoriteFilm.year}
               </p>
             </div>
@@ -468,7 +468,7 @@ export const Reflection = () => {
                 <div key={label}>
                   <p className="micro-sm text-[#7a7264]">{label}</p>
                   <p className="num mt-2 text-5xl leading-none text-[#171512]">{value}</p>
-                  <p className="mt-2 text-[10px] text-[#7a7264]">{sub}</p>
+                  <p className="mt-2 text-[12.5px] text-[#7a7264]">{sub}</p>
                 </div>
               ))}
             </div>
@@ -483,7 +483,7 @@ export const Reflection = () => {
                       {months.reduce((sum, m) => sum + m.count, 0)} frames, {months.filter((m) => m.count > 0).length} months
                     </p>
                   </div>
-                  <p className="text-[10px] uppercase tracking-[0.14em] text-[#7a7264]">films</p>
+                  <p className="text-[12.5px] uppercase tracking-[0.14em] text-[#7a7264]">films</p>
                 </div>
 
                 <div className="mt-8 flex h-52 items-end gap-2 sm:gap-3">
@@ -496,16 +496,16 @@ export const Reflection = () => {
                           title={`${month.label}: ${month.count} films · ${formatMinutes(month.minutes)}`}
                         />
                       </div>
-                      <p className={`mt-2 text-center text-[8px] uppercase tracking-[0.1em] ${activeMonth?.month === month.month ? 'text-[#29251f]' : 'text-[#7a7264]'}`}>
+                      <p className={`mt-2 text-center text-[11px] uppercase tracking-[0.1em] ${activeMonth?.month === month.month ? 'text-[#29251f]' : 'text-[#7a7264]'}`}>
                         {month.label}
                       </p>
-                      <p className="mt-0.5 text-center font-mono text-[8px] text-[#7a7264]">
+                      <p className="mt-0.5 text-center font-mono text-[11px] text-[#7a7264]">
                         {month.count > 0 ? month.count : '·'}
                       </p>
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 border-t border-[#171512]/15 pt-3 text-[10px] text-[#7a7264]">
+                <p className="mt-4 border-t border-[#171512]/15 pt-3 text-[12.5px] text-[#7a7264]">
                   Bars are film counts, not ratings. Hover a bar for the month's runtime.
                 </p>
               </div>
@@ -515,7 +515,7 @@ export const Reflection = () => {
                   <p className="micro text-[#7a7264]">
                     {activeMonth ? `${monthName(activeMonth.records[0]?.watchedAt ?? `${year}-01-01`)} · this month` : 'This month'}
                   </p>
-                  <p className="font-mono text-[10px] text-[#7a7264]">{monthRecords.length} films</p>
+                  <p className="font-mono text-[12.5px] text-[#7a7264]">{monthRecords.length} films</p>
                 </div>
                 {monthRecords.length > 0 ? (
                   <ul className="mt-2 divide-y divide-[#171512]/15">
@@ -531,10 +531,10 @@ export const Reflection = () => {
                           </div>
                           <div className="min-w-0">
                             <p className="font-display text-lg leading-tight text-[#171512]">{film.title}</p>
-                            <p className="mt-0.5 text-[9px] uppercase tracking-[0.12em] text-[#7a7264]">
+                            <p className="mt-0.5 text-[12px] uppercase tracking-[0.12em] text-[#7a7264]">
                               {formatLongDate(record.watchedAt)} · ★ {record.rating.toFixed(1)}
                             </p>
-                            <p className="mt-2 line-clamp-2 text-[11px] leading-relaxed text-[#3a3428]">
+                            <p className="mt-2 line-clamp-2 text-[13px] leading-relaxed text-[#3a3428]">
                               {record.reflection}
                             </p>
                           </div>
@@ -543,7 +543,7 @@ export const Reflection = () => {
                     })}
                   </ul>
                 ) : (
-                  <p className="mt-4 text-[12px] text-[#7a7264]">No films this month.</p>
+                  <p className="mt-4 text-[14px] text-[#7a7264]">No films this month.</p>
                 )}
               </div>
             </div>
@@ -556,7 +556,7 @@ export const Reflection = () => {
                   <p className="mt-4 font-display text-[clamp(2.2rem,4.4vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-[#171512]">
                     {favoriteFilm.title}
                   </p>
-                  <p className="mt-3 text-[10px] uppercase tracking-[0.14em] text-[#7a7264]">
+                  <p className="mt-3 text-[12.5px] uppercase tracking-[0.14em] text-[#7a7264]">
                     {favoriteFilm.director} · {favoriteFilm.year} · ★ {favorite.rating.toFixed(1)}
                   </p>
                 </div>
@@ -580,11 +580,11 @@ export const Reflection = () => {
                       <div className="flex items-baseline justify-between gap-3">
                         <p className="font-display text-xl text-[#171512]">
                           {THEMES[theme.id].label}
-                          <span className="ml-2 text-[10px] tracking-[0.1em] text-[#7a7264]">
+                          <span className="ml-2 text-[12.5px] tracking-[0.1em] text-[#7a7264]">
                             {THEMES[theme.id].zh}
                           </span>
                         </p>
-                        <span className="font-mono text-[10px] text-[#7a7264]">{theme.count}</span>
+                        <span className="font-mono text-[12.5px] text-[#7a7264]">{theme.count}</span>
                       </div>
                       <div className="mt-2 h-px w-full bg-[#171512]/12">
                         <div
@@ -602,19 +602,19 @@ export const Reflection = () => {
                   {moods.slice(0, 8).map((mood) => (
                     <span
                       key={mood.id}
-                      className="border border-[#171512]/25 px-3 py-1.5 text-[10px] uppercase tracking-[0.14em] text-[#3a3428]"
+                      className="border border-[#171512]/25 px-3 py-1.5 text-[12.5px] uppercase tracking-[0.14em] text-[#3a3428]"
                     >
                       {MOODS[mood.id].label} <span className="text-[#7a7264]">{mood.count}</span>
                     </span>
                   ))}
                 </div>
-                <p className="mt-6 max-w-sm text-[12px] leading-relaxed text-[#3a3428]">
+                <p className="mt-6 max-w-sm text-[14px] leading-relaxed text-[#3a3428]">
                   {moods[0]
                     ? `${MOODS[moods[0].id].label} is the dominant register of the year — it appears in ${moods[0].count} films, often alongside ${THEMES[themes[0]?.id ?? 'memory'].label.toLowerCase()}.`
                     : 'No moods have been recorded yet.'}
                 </p>
                 {state.yearbookGenerations.length > 0 && (
-                  <p className="mt-6 border-t border-[#171512]/15 pt-4 text-[9px] uppercase tracking-[0.16em] text-[#7a7264]">
+                  <p className="mt-6 border-t border-[#171512]/15 pt-4 text-[12px] uppercase tracking-[0.16em] text-[#7a7264]">
                     {state.yearbookGenerations.length} yearbook
                     {state.yearbookGenerations.length === 1 ? '' : 's'} generated on this device
                   </p>
@@ -628,12 +628,12 @@ export const Reflection = () => {
                 <p className="micro text-[#7a7264]">How the year reads</p>
                 <div className="mt-4 space-y-3">
                   {summary.map((sentence, i) => (
-                    <p key={i} className="text-[13px] leading-relaxed text-[#2c2822]">
+                    <p key={i} className="text-[15px] leading-relaxed text-[#2c2822]">
                       {sentence}
                     </p>
                   ))}
                 </div>
-                <p className="mt-5 text-[10px] leading-relaxed text-[#7a7264]">
+                <p className="mt-5 text-[12.5px] leading-relaxed text-[#7a7264]">
                   This summary is recomputed from the {year} records only. It is an estimate of
                   preference, not a judgement of taste.
                 </p>
@@ -650,7 +650,7 @@ export const Reflection = () => {
                       const steady = Math.abs(delta) < 0.04
                       return (
                         <li key={def.key} className="grid grid-cols-[7.5rem_1fr_auto] items-center gap-4">
-                          <p className="text-[10px] uppercase tracking-[0.12em] text-[#3a3428]">
+                          <p className="text-[12.5px] uppercase tracking-[0.12em] text-[#3a3428]">
                             {def.label.split(' ')[0]}
                           </p>
                           <div className="relative h-4">
@@ -666,7 +666,7 @@ export const Reflection = () => {
                               title={`Second half: ${percent(after)}`}
                             />
                           </div>
-                          <p className="w-[5.5rem] text-right font-mono text-[9px] uppercase tracking-[0.08em] text-[#7a7264]">
+                          <p className="w-[5.5rem] text-right font-mono text-[12px] uppercase tracking-[0.08em] text-[#7a7264]">
                             {steady ? 'steady' : delta > 0 ? 'outward / up' : 'inward / down'}
                           </p>
                         </li>
@@ -674,13 +674,13 @@ export const Reflection = () => {
                     })}
                   </ul>
                 ) : (
-                  <p className="mt-4 text-[12px] leading-relaxed text-[#7a7264]">
+                  <p className="mt-4 text-[14px] leading-relaxed text-[#7a7264]">
                     At least two films in each half of the year are needed to show a drift.
                   </p>
                 )}
-                <p className="mt-4 text-[10px] leading-relaxed text-[#7a7264]">
-                  Square = first half, red = second half. Axes run from the inward pole to the
-                  outward pole.
+                <p className="mt-4 text-[12.5px] leading-relaxed text-[#7a7264]">
+                  Outlined square = first half, filled square = second half. Axes run from the
+                  inward pole to the outward pole.
                 </p>
               </div>
             </div>
@@ -694,7 +694,7 @@ export const Reflection = () => {
                 <p className="mt-2 font-display text-3xl leading-tight text-[#171512]">
                   Turn {year} into a yearbook.
                 </p>
-                <p className="mt-2 max-w-lg text-[12px] leading-relaxed text-[#3a3428]">
+                <p className="mt-2 max-w-lg text-[14px] leading-relaxed text-[#3a3428]">
                   A single-page annual you can keep: the numbers, the themes, the frame you kept,
                   and the reading of your taste. Generated locally, downloadable as HTML, printable.
                 </p>
@@ -729,7 +729,7 @@ export const Reflection = () => {
                       <span className="block h-1 w-1 rounded-full bg-paper-muted/40" />
                     )}
                   </span>
-                  <span className={`text-[12px] ${genStage >= i ? 'text-paper' : 'text-paper-muted'}`}>
+                  <span className={`text-[14px] ${genStage >= i ? 'text-paper' : 'text-paper-muted'}`}>
                     {label}
                   </span>
                 </div>
@@ -743,7 +743,7 @@ export const Reflection = () => {
                 </div>
               </div>
             </div>
-            <p className="mt-8 max-w-xs text-[10px] leading-relaxed text-paper-dim">
+            <p className="mt-8 max-w-xs text-[12.5px] leading-relaxed text-paper-dim">
               No model is called. The annual is composed from your {year} records in this browser.
             </p>
           </div>,
@@ -771,21 +771,21 @@ export const Reflection = () => {
             hours={hours}
           />
           <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-paper/15 bg-[#211e19] p-4">
-            <p className="max-w-md text-[10px] leading-relaxed text-paper-dim">
+            <p className="max-w-md text-[12.5px] leading-relaxed text-paper-dim">
               The downloaded file is self-contained and print-ready. It contains only your film
               titles, ratings, and notes.
             </p>
             <div className="flex flex-wrap gap-2">
-              <button type="button" onClick={download} className="btn btn-primary h-9 px-4 text-[9px]">
+              <button type="button" onClick={download} className="btn btn-primary h-9 px-4 text-[12px]">
                 <Download size={12} /> Download HTML
               </button>
-              <button type="button" onClick={print} className="btn btn-ghost h-9 px-4 text-[9px]">
+              <button type="button" onClick={print} className="btn btn-ghost h-9 px-4 text-[12px]">
                 <Printer size={12} /> Print
               </button>
             </div>
           </div>
           {printBlocked && (
-            <p className="mt-2 text-[10px] text-[#c7bba8]">
+            <p className="mt-2 text-[12.5px] text-[#c7bba8]">
               The print window was blocked. Allow popups, or use Download HTML and print from there.
             </p>
           )}

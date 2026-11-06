@@ -67,8 +67,15 @@ const reducer = (state: AppState, action: Action): AppState => {
           ...state.corrections,
         ],
       }
-    case 'add-film':
-      return { ...state, customFilms: [...state.customFilms, action.film] }
+    case 'add-film': {
+      const exists = state.customFilms.some((film) => film.id === action.film.id)
+      return {
+        ...state,
+        customFilms: exists
+          ? state.customFilms.map((film) => (film.id === action.film.id ? action.film : film))
+          : [...state.customFilms, action.film],
+      }
+    }
     case 'mark-yearbook':
       return {
         ...state,
@@ -123,7 +130,10 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => relisten((next) => dispatch({ type: 'hydrate', state: next })), [])
 
-  const films = useMemo(() => [...FILMS, ...state.customFilms], [state.customFilms])
+  const films = useMemo(() => {
+    const builtIn = new Set(FILMS.map((film) => film.id))
+    return [...FILMS, ...state.customFilms.filter((film) => !builtIn.has(film.id))]
+  }, [state.customFilms])
 
   const snapshot = useMemo(() => computeSnapshot(state.records, films), [state.records, films])
   const timeline = useMemo(() => buildTimeline(state.records, films), [state.records, films])

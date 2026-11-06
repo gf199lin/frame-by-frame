@@ -105,7 +105,7 @@ export const FilmStill = ({
           <div className="relative">
             <p
               className={cn(
-                'font-mono text-[8px] uppercase tracking-[0.22em]',
+                'font-mono text-[11px] uppercase tracking-[0.22em]',
                 tone === 'paper' ? 'text-ink/45' : 'text-paper/40',
               )}
             >
@@ -124,7 +124,7 @@ export const FilmStill = ({
       )}
       <span className="pointer-events-none absolute inset-0 still-edge" aria-hidden="true" />
       {label && (
-        <span className="pointer-events-none absolute bottom-3 left-3 bg-ink/70 px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-paper/80 backdrop-blur-sm">
+        <span className="pointer-events-none absolute bottom-3 left-3 bg-ink/70 px-2 py-1 font-mono text-[12px] uppercase tracking-[0.18em] text-paper/80 backdrop-blur-sm">
           {label}
         </span>
       )}

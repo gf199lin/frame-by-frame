@@ -25,7 +25,7 @@ const BootScreen = () => (
       <div className="relative mt-8 h-px w-full overflow-hidden bg-white/15">
         <div className="absolute inset-y-0 left-0 w-1/3 animate-[boot_1.1s_ease-in-out_infinite] bg-paper" />
       </div>
-      <p className="mt-4 text-[10px] leading-relaxed text-paper-muted">
+      <p className="mt-4 text-[12.5px] leading-relaxed text-paper-muted">
         Reading your local archive. Nothing is sent to a server.
       </p>
     </div>

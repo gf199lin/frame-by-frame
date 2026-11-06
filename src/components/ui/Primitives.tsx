@@ -13,8 +13,8 @@ export const SectionLabel = ({
   className?: string
 }) => (
   <div className={cn('flex items-center gap-3 text-taupe', className)}>
-    {index && <span className="font-mono text-[9px] tracking-[0.2em] text-brass">{index}</span>}
-    <span className="font-mono text-[9px] uppercase tracking-[0.24em]">{children}</span>
+    {index && <span className="font-mono text-[12px] tracking-[0.2em] text-brass">{index}</span>}
+    <span className="font-mono text-[12px] uppercase tracking-[0.24em]">{children}</span>
     <span className="h-px flex-1 bg-white/10" />
   </div>
 )

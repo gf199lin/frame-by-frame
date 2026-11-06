@@ -94,7 +94,7 @@ export type FilmPalette = {
 /*  fallback. No generated imagery is allowed here.                    */
 /* ------------------------------------------------------------------ */
 
-export type ArtworkProvider = 'tmdb' | 'local'
+export type ArtworkProvider = 'tmdb' | 'local' | 'remote'
 
 export type FilmImage = {
   provider: ArtworkProvider
@@ -120,7 +120,7 @@ export type FilmArtwork = {
   /** ISO date of the last manual verification. */
   verifiedAt: string
   /** How the film ↔ artwork match was established. */
-  matchSource: 'wikidata-tmdb-id' | 'tmdb-api' | 'catalog'
+  matchSource: 'wikidata-tmdb-id' | 'tmdb-api' | 'catalog' | 'catalogue-api'
   /** Archived TMDB page used to harvest the paths (provenance). */
   evidenceUrl?: string
 }
@@ -142,6 +142,10 @@ export type Film = {
   palette: FilmPalette
   /** Verified TMDB movie id, used to fetch official artwork by id. */
   tmdbId?: number
+  /** IMDb id when the record came from the external catalogue. */
+  imdbId?: string
+  /** How the film entered the archive. */
+  externalSource?: 'imdb' | 'tmdb' | 'manual'
   /** Verified real artwork. Never generated. */
   artwork?: FilmArtwork
   /** Legacy user-supplied image URL. */

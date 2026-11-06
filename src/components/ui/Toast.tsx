@@ -40,7 +40,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
             <span className="mt-[2px] text-paper/60">
               {toast.tone === 'success' ? <Check size={13} /> : <Info size={13} />}
             </span>
-            <p className="flex-1 text-[12px] leading-relaxed text-paper">{toast.message}</p>
+            <p className="flex-1 text-[14px] leading-relaxed text-paper">{toast.message}</p>
             <button
               type="button"
               onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}

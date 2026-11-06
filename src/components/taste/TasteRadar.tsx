@@ -216,29 +216,29 @@ export const PoleAxis = ({
   return (
     <div className={className}>
       <div className="relative h-6">
-        <div className="absolute left-0 right-0 top-1/2 h-px bg-white/15" />
+        <div className="absolute left-0 right-0 top-1/2 h-px bg-ink/20" />
         {[0.25, 0.5, 0.75].map((tick) => (
           <div
             key={tick}
-            className="absolute top-1/2 h-2 w-px -translate-y-1/2 bg-white/12"
+            className="absolute top-1/2 h-2 w-px -translate-y-1/2 bg-ink/15"
             style={{ left: `${tick * 100}%` }}
           />
         ))}
         {filmPct !== null && (
           <div
-            className="absolute top-1/2 h-[10px] w-[10px] -translate-x-1/2 -translate-y-1/2 border border-paper/50 bg-transparent"
+            className="absolute top-1/2 h-[10px] w-[10px] -translate-x-1/2 -translate-y-1/2 border border-ink/45 bg-transparent"
             style={{ left: `${filmPct}%` }}
             title="This film"
           />
         )}
         <div
-          className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-brass shadow-[0_0_10px_rgba(41,37,31,0.35)]"
+          className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-ink shadow-[0_0_10px_rgba(41,37,31,0.25)]"
           style={{ left: `${pct}%` }}
           title="Your archive"
         />
       </div>
       {showLabels && (
-        <div className="mt-1 flex justify-between gap-2 text-[9px] uppercase tracking-[0.12em] text-paper-muted">
+        <div className="mt-1 flex justify-between gap-2 text-[12px] uppercase tracking-[0.12em] text-taupe">
           <span>{low}</span>
           <span className="text-right">{high}</span>
         </div>
@@ -250,7 +250,7 @@ export const PoleAxis = ({
 
 /**
  * Two-state radar used after a new record: the previous shape is a dashed
- * ghost, the new shape is cinema red. Small numeric shifts read as a visible change.
+ * ghost, the new shape is drawn in paper. Small numeric shifts read as a visible change.
  */
 export const ShiftRadar = ({
   before,
@@ -310,7 +310,7 @@ export const ShiftRadar = ({
         )
       })}
       <polygon points={beforePoints} fill="none" stroke="rgba(242,240,235,0.4)" strokeWidth="0.9" strokeDasharray="2 4" />
-      <polygon points={afterPoints} fill="rgba(41,37,31,0.14)" stroke="rgba(74,66,54,0.9)" strokeWidth="1.1" />
+      <polygon points={afterPoints} fill="rgba(199,187,168,0.16)" stroke="rgba(233,224,208,0.92)" strokeWidth="1.1" />
       {DIMENSIONS.map((dim, i) => {
         const [x, y] = point(after[dim.key], i)
         return <circle key={dim.key} cx={x} cy={y} r={2} fill="#E9E0D0" />

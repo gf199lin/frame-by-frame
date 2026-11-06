@@ -22,7 +22,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
         <h1 className="mt-4 font-display text-4xl text-paper sm:text-5xl">
           Something broke in the projector.
         </h1>
-        <p className="mt-3 max-w-md text-[13px] leading-relaxed text-paper-muted">
+        <p className="mt-3 max-w-md text-[15px] leading-relaxed text-paper-muted">
           Your archive is still in this browser's local storage. Reload the page to re-enter the
           museum; if the error repeats, reset the demo data from the footer.
         </p>
@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
         >
           Reload
         </button>
-        <p className="mt-6 max-w-lg font-mono text-[10px] leading-relaxed text-paper-muted/70">
+        <p className="mt-6 max-w-lg font-mono text-[12.5px] leading-relaxed text-paper-muted/70">
           {this.state.error.message}
         </p>
       </div>
