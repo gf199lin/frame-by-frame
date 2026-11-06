@@ -18,6 +18,10 @@ data/*.local.json
 .opencode/deepworks/previews/
 uploads/
 
+# --- local artifacts (screenshots, generated previews) ---
+output/
+outputs/
+
 # --- build output ---
 dist/
 build/

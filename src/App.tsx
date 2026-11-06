@@ -59,9 +59,11 @@ const AppRoutes = () => {
   )
 }
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+
 export const App = () => (
   <ErrorBoundary>
-    <BrowserRouter>
+    <BrowserRouter basename={routerBasename}>
       <AppStoreProvider>
         <ToastProvider>
           <AppRoutes />
