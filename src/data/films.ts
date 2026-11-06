@@ -12,6 +12,7 @@ import type { Film } from '@/types'
 export const FILMS: Film[] = [
   {
     id: 'manchester',
+    tmdbId: 334541,
     title: 'Manchester by the Sea',
     titleZh: '海边的曼彻斯特',
     year: 2016,
@@ -34,6 +35,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'eternal-sunshine',
+    tmdbId: 38,
     title: 'Eternal Sunshine of the Spotless Mind',
     titleZh: '美丽心灵的永恒阳光',
     year: 2004,
@@ -56,6 +58,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'la-la-land',
+    tmdbId: 313369,
     title: 'La La Land',
     titleZh: '爱乐之城',
     year: 2016,
@@ -78,6 +81,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'truman-show',
+    tmdbId: 37165,
     title: 'The Truman Show',
     titleZh: '楚门的世界',
     year: 1998,
@@ -100,6 +104,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'grand-budapest',
+    tmdbId: 120467,
     title: 'The Grand Budapest Hotel',
     titleZh: '布达佩斯大饭店',
     year: 2014,
@@ -122,6 +127,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'good-will-hunting',
+    tmdbId: 489,
     title: 'Good Will Hunting',
     titleZh: '心灵捕手',
     year: 1997,
@@ -144,6 +150,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'interstellar',
+    tmdbId: 157336,
     title: 'Interstellar',
     titleZh: '星际穿越',
     year: 2014,
@@ -166,6 +173,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'shawshank',
+    tmdbId: 278,
     title: 'The Shawshank Redemption',
     titleZh: '肖申克的救赎',
     year: 1994,
@@ -188,6 +196,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'inside-out',
+    tmdbId: 150540,
     title: 'Inside Out',
     titleZh: '头脑特工队',
     year: 2015,
@@ -210,6 +219,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'dead-poets',
+    tmdbId: 207,
     title: 'Dead Poets Society',
     titleZh: '死亡诗社',
     year: 1989,
@@ -234,6 +244,7 @@ export const FILMS: Film[] = [
   /* -------------------------- catalogue only ------------------------ */
   {
     id: 'moonlight',
+    tmdbId: 376867,
     title: 'Moonlight',
     titleZh: '月光男孩',
     year: 2016,
@@ -257,6 +268,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'arrival',
+    tmdbId: 329865,
     title: 'Arrival',
     titleZh: '降临',
     year: 2016,
@@ -280,6 +292,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'her',
+    tmdbId: 152601,
     title: 'Her',
     titleZh: '她',
     year: 2013,
@@ -303,6 +316,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'whiplash',
+    tmdbId: 244786,
     title: 'Whiplash',
     titleZh: '爆裂鼓手',
     year: 2014,
@@ -326,6 +340,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'past-lives',
+    tmdbId: 666277,
     title: 'Past Lives',
     titleZh: '过往人生',
     year: 2023,
@@ -349,6 +364,7 @@ export const FILMS: Film[] = [
   },
   {
     id: 'portrait',
+    tmdbId: 531428,
     title: 'Portrait of a Lady on Fire',
     titleZh: '燃烧女子的肖像',
     year: 2019,

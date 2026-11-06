@@ -56,7 +56,7 @@ export const Modal = ({
         aria-modal="true"
         aria-labelledby={labelledBy}
         className={cn(
-          'relative my-0 flex w-full flex-col border border-line bg-[#0C0D0F] shadow-[0_40px_120px_rgba(0,0,0,0.6)] animate-fade-up sm:my-6',
+          'relative my-0 flex w-full flex-col border border-paper/15 bg-[#1b1814] shadow-[0_40px_120px_rgba(0,0,0,0.6)] animate-fade-up sm:my-6',
           widths[size],
           className,
         )}
@@ -66,7 +66,7 @@ export const Modal = ({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center border border-white/25 bg-[#111111]/85 text-paper-dim shadow-lg backdrop-blur transition-colors hover:border-paper/50 hover:text-paper"
+            className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center border border-paper/25 bg-[#211e19]/90 text-paper-dim shadow-lg backdrop-blur transition-colors hover:border-paper/50 hover:text-paper"
           >
             <X size={14} />
           </button>

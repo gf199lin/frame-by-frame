@@ -30,13 +30,13 @@ export const DimensionCard = ({
       : score.confidence
 
   return (
-    <article className={cn('group border-t border-white/10 py-7', className)}>
+    <article className={cn('group border-t border-ink/10 py-7', className)}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-baseline gap-4">
           <span className="font-mono text-[9px] tracking-[0.2em] text-brass/70">{def.index}</span>
           <div>
-            <h3 className="font-display text-[1.8rem] leading-none text-paper">{def.label}</h3>
-            <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.16em] text-paper-muted">
+            <h3 className="font-display text-[1.8rem] leading-none text-ink">{def.label}</h3>
+            <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.16em] text-taupe">
               <span>{def.labelZh}</span>
               <span className="h-2 w-px bg-white/20" />
               <span>{score.thin ? 'Still learning' : 'Reading established'}</span>
@@ -45,13 +45,13 @@ export const DimensionCard = ({
         </div>
 
         <div className="text-right">
-          <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-paper-muted">
+          <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-taupe">
             Confidence
           </p>
-          <p className="num mt-0.5 text-[1.6rem] leading-none text-paper">
+          <p className="num mt-0.5 text-[1.6rem] leading-none text-ink">
             {percent(score.confidence)}
             {adjustedConfidence !== score.confidence && (
-              <span className="ml-2 font-sans text-[10px] text-paper-muted">
+              <span className="ml-2 font-sans text-[10px] text-taupe">
                 → {percent(adjustedConfidence)}
               </span>
             )}
@@ -63,13 +63,13 @@ export const DimensionCard = ({
         <div>
           <PoleAxis value={score.value} low={def.low} high={def.high} />
           <div className="mt-4 flex items-baseline justify-between gap-4">
-            <p className="text-[12px] leading-relaxed text-paper-dim">
+            <p className="text-[12px] leading-relaxed text-ink/65">
               Your archive leans{' '}
               <span className="text-brass-soft">{leanPct}% toward {leaning.toLowerCase()}</span>.
               {' '}
               {def.note}
             </p>
-            <span className="shrink-0 font-mono text-[10px] text-paper-muted">
+            <span className="shrink-0 font-mono text-[10px] text-taupe">
               {score.strength < 0.15 ? 'faint' : score.strength < 0.4 ? 'clear' : 'strong'}
             </span>
           </div>
@@ -84,7 +84,7 @@ export const DimensionCard = ({
                     : 'You corrected this'}
               </span>
               {feedback.correction && (
-                <p className="text-[11px] leading-relaxed text-paper-dim">“{feedback.correction}”</p>
+                <p className="text-[11px] leading-relaxed text-ink/65">“{feedback.correction}”</p>
               )}
             </div>
           ) : null}
@@ -105,7 +105,7 @@ export const DimensionCard = ({
               onClick={() => onFeedback('not-quite')}
               className={cn(
                 'chip h-8 gap-1.5 text-[9px]',
-                feedback?.verdict === 'not-quite' && 'border-white/40 text-paper',
+                feedback?.verdict === 'not-quite' && 'border-ink/40 text-ink',
               )}
             >
               <X size={11} /> Not quite
@@ -123,7 +123,7 @@ export const DimensionCard = ({
             <div className="mt-3">
               <label className="field-label" htmlFor={`correction-${def.key}`}>
                 <span>In your words</span>
-                <span className="normal-case tracking-normal text-paper-muted/60">
+                <span className="normal-case tracking-normal text-taupe/60">
                   Stored locally, not sent anywhere
                 </span>
               </label>
@@ -160,8 +160,8 @@ export const DimensionCard = ({
           )}
         </div>
 
-        <div className="border-l-0 border-white/10 lg:border-l lg:pl-5">
-          <p className="flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-paper-muted">
+        <div className="border-l-0 border-ink/10 lg:border-l lg:pl-5">
+          <p className="flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-taupe">
             <MessageSquare size={10} /> Evidence from your notes
           </p>
           <ul className="mt-3 space-y-4">
@@ -169,12 +169,12 @@ export const DimensionCard = ({
               <li key={item.filmId}>
                 <Link
                   to={`/archive/${item.filmId}`}
-                  className="group/quote block border-b border-white/[0.07] pb-3 last:border-0"
+                  className="group/quote block border-b border-ink/[0.07] pb-3 last:border-0"
                 >
-                  <p className="font-display text-[13px] italic leading-relaxed text-paper-dim transition-colors group-hover/quote:text-paper">
+                  <p className="font-display text-[13px] italic leading-relaxed text-ink/65 transition-colors group-hover/quote:text-ink">
                     “{item.quote}”
                   </p>
-                  <p className="mt-2 flex items-center gap-2 text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+                  <p className="mt-2 flex items-center gap-2 text-[9px] uppercase tracking-[0.14em] text-taupe">
                     <span className="text-brass/80">{item.filmTitle}</span>
                     <span>·</span>
                     <Rating value={item.rating} size={8} />
@@ -183,7 +183,7 @@ export const DimensionCard = ({
               </li>
             ))}
             {evidence.length === 0 && (
-              <li className="text-[11px] leading-relaxed text-paper-muted">
+              <li className="text-[11px] leading-relaxed text-taupe">
                 Record a film with a written note and the evidence will appear here.
               </li>
             )}

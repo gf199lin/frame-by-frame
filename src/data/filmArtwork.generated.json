@@ -1,0 +1,7 @@
+{
+  "_meta": {
+    "generatedAt": null,
+    "source": "none",
+    "note": "Run `npm run artwork:sync` with TMDB_API_KEY or TMDB_READ_TOKEN to refresh official poster, backdrop and still paths by TMDB id."
+  }
+}

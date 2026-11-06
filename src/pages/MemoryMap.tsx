@@ -81,7 +81,7 @@ export const MemoryMapPage = () => {
 
   return (
     <div className="shell pb-20 pt-10 lg:pt-14">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/12 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/12 pb-3">
         <p className="artifact-label">
           <b>03</b> Memory map
         </p>
@@ -94,9 +94,9 @@ export const MemoryMapPage = () => {
             Memory map.
           </h1>
           <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-            <p className="zh-title text-[14px] text-paper-dim">电影记忆地图</p>
+            <p className="zh-title text-[14px] text-ink/65">电影记忆地图</p>
             <span className="hidden h-3 w-px bg-white/20 sm:block" />
-            <p className="measure text-[12.5px] leading-relaxed text-paper-muted">
+            <p className="measure text-[12.5px] leading-relaxed text-taupe">
               Films are frames. Themes are the ground they share. Moods are how the memory felt.
               Drag the map, pull a node, and follow a line until it explains something.
             </p>
@@ -111,8 +111,8 @@ export const MemoryMapPage = () => {
             ['Shared links', linkCount],
           ].map(([label, value]) => (
             <div key={String(label)}>
-              <dt className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">{label}</dt>
-              <dd className="num mt-1.5 text-[1.7rem] leading-none text-paper">
+              <dt className="font-mono text-[8px] uppercase tracking-[0.2em] text-taupe">{label}</dt>
+              <dd className="num mt-1.5 text-[1.7rem] leading-none text-ink">
                 {String(value).padStart(2, '0')}
               </dd>
             </div>
@@ -120,10 +120,10 @@ export const MemoryMapPage = () => {
         </dl>
       </div>
 
-      <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-y border-white/12 py-4">
+      <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-y border-ink/12 py-4">
         <GraphLegend showThemes={showThemes} showMoods={showMoods} />
         <div className="flex items-center gap-3">
-          <span className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted sm:inline">
+          <span className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-taupe sm:inline">
             Layers
           </span>
           <button
@@ -156,7 +156,7 @@ export const MemoryMapPage = () => {
       </div>
 
       <div className="relative mt-6">
-        <div className="relative h-[62vh] min-h-[480px] w-full border border-white/15 lg:h-[68vh] lg:min-h-[560px]">
+        <div className="relative h-[62vh] min-h-[480px] w-full border border-ink/20 lg:h-[68vh] lg:min-h-[560px]">
           <span className="pointer-events-none absolute -left-px -top-px z-10 h-3 w-3 border-l border-t border-brass/70" />
           <span className="pointer-events-none absolute -right-px -top-px z-10 h-3 w-3 border-r border-t border-brass/70" />
           <span className="pointer-events-none absolute -bottom-px -left-px z-10 h-3 w-3 border-b border-l border-brass/70" />
@@ -169,15 +169,15 @@ export const MemoryMapPage = () => {
               onSelect={(node: GraphNode | null) => setSelectedId(node?.id ?? null)}
             />
           ) : (
-            <div className="flex h-full items-center justify-center bg-[#111111]">
-              <p className="text-[12px] text-paper-muted">
+            <div className="flex h-full items-center justify-center bg-[#211e19]">
+              <p className="text-[12px] text-paper-dim">
                 Turn a layer back on to see the map.
               </p>
             </div>
           )}
 
           {selected && (
-            <aside className="absolute bottom-4 left-4 top-4 z-10 w-[min(21rem,calc(100%-2rem))] overflow-y-auto border border-white/15 bg-[#111111]/94 p-5 backdrop-blur-md animate-fade-in">
+            <aside className="absolute bottom-4 left-4 top-4 z-10 w-[min(21rem,calc(100%-2rem))] overflow-y-auto border border-paper/20 bg-[#211e19]/95 p-5 backdrop-blur-md animate-fade-in">
               <div className="flex items-start justify-between gap-3">
                 <p className="micro-sm text-brass/80">
                   {selected.kind === 'film'
@@ -189,7 +189,7 @@ export const MemoryMapPage = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedId(null)}
-                  className="text-paper-muted transition-colors hover:text-paper"
+                  className="text-paper-dim transition-colors hover:text-paper"
                   aria-label="Clear selection"
                 >
                   <X size={13} />
@@ -211,16 +211,16 @@ export const MemoryMapPage = () => {
                       >
                         {selectedFilm.title}
                       </Link>
-                      <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-paper-muted">
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-paper-dim">
                         {selectedFilm.year} · {selectedFilm.director}
                       </p>
                       <Rating value={selectedRecord.rating} size={9} className="mt-2" />
                     </div>
                   </div>
-                  <p className="mt-4 border-t border-white/10 pt-3 text-[12px] leading-relaxed text-paper-dim">
+                  <p className="mt-4 border-t border-paper/15 pt-3 text-[12px] leading-relaxed text-paper-dim">
                     “{selectedRecord.reflection}”
                   </p>
-                  <p className="mt-3 text-[10px] text-paper-muted">
+                  <p className="mt-3 text-[10px] text-paper-dim">
                     Watched {formatShortDate(selectedRecord.watchedAt)}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-1.5">
@@ -242,13 +242,13 @@ export const MemoryMapPage = () => {
                   <h3 className="mt-3 font-display text-3xl text-paper">
                     {THEMES[selected.label as keyof typeof THEMES]?.label ?? selected.label}
                   </h3>
-                  <p className="mt-1 text-[11px] tracking-[0.12em] text-paper-muted">
+                  <p className="mt-1 text-[11px] tracking-[0.12em] text-paper-dim">
                     {THEMES[selected.label as keyof typeof THEMES]?.zh ?? selected.sublabel}
                   </p>
                   <p className="mt-3 text-[12px] leading-relaxed text-paper-dim">
                     {THEMES[selected.label as keyof typeof THEMES]?.blurb}
                   </p>
-                  <p className="mt-4 text-[10px] uppercase tracking-[0.16em] text-paper-muted">
+                  <p className="mt-4 text-[10px] uppercase tracking-[0.16em] text-paper-dim">
                     {relatedFilms.length} films hold this theme
                   </p>
                   <ul className="mt-3 divide-y divide-white/10">
@@ -266,10 +266,10 @@ export const MemoryMapPage = () => {
                             <FilmPoster film={film} showTitle={false} />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate font-display text-sm text-paper group-hover:text-brass-soft">
+                            <span className="block truncate font-display text-sm text-paper group-hover:text-paper">
                               {film.title}
                             </span>
-                            <span className="text-[9px] text-paper-muted">{film.year}</span>
+                            <span className="text-[9px] text-paper-dim">{film.year}</span>
                           </span>
                         </button>
                       </li>
@@ -281,7 +281,7 @@ export const MemoryMapPage = () => {
                   <h3 className="mt-3 font-display text-3xl text-paper">
                     {MOODS[selected.label as keyof typeof MOODS]?.label ?? selected.label}
                   </h3>
-                  <p className="mt-1 text-[11px] tracking-[0.12em] text-paper-muted">
+                  <p className="mt-1 text-[11px] tracking-[0.12em] text-paper-dim">
                     {MOODS[selected.label as keyof typeof MOODS]?.zh ?? selected.sublabel}
                   </p>
                   <p className="mt-3 text-[12px] leading-relaxed text-paper-dim">
@@ -303,10 +303,10 @@ export const MemoryMapPage = () => {
                             <FilmPoster film={film} showTitle={false} />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate font-display text-sm text-paper group-hover:text-brass-soft">
+                            <span className="block truncate font-display text-sm text-paper group-hover:text-paper">
                               {film.title}
                             </span>
-                            <span className="text-[9px] text-paper-muted">{film.year}</span>
+                            <span className="text-[9px] text-paper-dim">{film.year}</span>
                           </span>
                         </button>
                       </li>
@@ -316,8 +316,8 @@ export const MemoryMapPage = () => {
               )}
 
               {selected.kind === 'film' && relatedFilms.length > 0 && (
-                <div className="mt-5 border-t border-white/10 pt-4">
-                  <p className="micro-sm text-paper-muted">Shared ground</p>
+                <div className="mt-5 border-t border-paper/15 pt-4">
+                  <p className="micro-sm text-paper-dim">Shared ground</p>
                   <ul className="mt-2 space-y-2">
                     {relatedFilms.slice(0, 4).map(({ film, reason }) => (
                       <li key={film.id}>
@@ -327,7 +327,7 @@ export const MemoryMapPage = () => {
                             const node = graph.nodes.find((n) => n.filmId === film.id)
                             if (node) setSelectedId(node.id)
                           }}
-                          className="text-left text-[11px] leading-relaxed text-paper-muted hover:text-paper"
+                          className="text-left text-[11px] leading-relaxed text-paper-dim hover:text-paper"
                         >
                           <span className="text-paper-dim">{film.title}</span>
                           {reason && <span className="block text-[10px]">{reason}</span>}
@@ -353,7 +353,7 @@ export const MemoryMapPage = () => {
           )}
         </div>
 
-        <div className={cn('mt-3 flex flex-wrap items-center justify-between gap-2 text-[10px] text-paper-muted/60')}>
+        <div className={cn('mt-3 flex flex-wrap items-center justify-between gap-2 text-[10px] text-taupe/60')}>
           <p>
             Node size reflects rating weight or how many notes carry that theme. Solid lines between
             films require at least two shared themes.
@@ -364,7 +364,7 @@ export const MemoryMapPage = () => {
         </div>
       </div>
 
-      <div className="mt-14 grid gap-8 border-t border-white/10 pt-10 sm:grid-cols-3">
+      <div className="mt-14 grid gap-8 border-t border-ink/10 pt-10 sm:grid-cols-3">
         {[
           {
             title: 'Films',
@@ -381,7 +381,7 @@ export const MemoryMapPage = () => {
         ].map((item) => (
           <div key={item.title}>
             <p className="micro text-brass/80">{item.title}</p>
-            <p className="mt-3 text-[12px] leading-relaxed text-paper-muted">{item.body}</p>
+            <p className="mt-3 text-[12px] leading-relaxed text-taupe">{item.body}</p>
           </div>
         ))}
       </div>

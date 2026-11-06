@@ -259,7 +259,7 @@ export const MemoryGraphView = ({
         <g transform={`translate(${view.x} ${view.y}) scale(${view.k})`}>
           {/* faint orbit guides */}
           {size.w > 0 && (
-            <g fill="none" stroke="rgba(237,231,220,0.055)">
+            <g fill="none" stroke="rgba(233,224,208,0.06)">
               <ellipse cx={size.w / 2} cy={size.h / 2} rx={size.w * 0.37} ry={size.h * 0.34} />
               <ellipse cx={size.w / 2} cy={size.h / 2} rx={size.w * 0.245} ry={size.h * 0.245} />
               <ellipse cx={size.w / 2} cy={size.h / 2} rx={size.w * 0.115} ry={size.h * 0.125} />
@@ -276,16 +276,16 @@ export const MemoryGraphView = ({
               selectedId !== null && (edge.source === selectedId || edge.target === selectedId)
             const stroke =
               edge.kind === 'film-film'
-                ? 'rgba(237,231,220,0.26)'
+                ? 'rgba(199,187,168,0.28)'
                 : edge.kind === 'film-theme'
-                  ? 'rgba(200,59,53,0.32)'
-                  : 'rgba(110,143,138,0.3)'
+                  ? 'rgba(199,187,168,0.34)'
+                  : 'rgba(145,129,107,0.32)'
             return (
               <path
                 key={edge.id}
                 d={edgePath(edge, a, b)}
                 fill="none"
-                stroke={active ? 'rgba(226,200,147,0.9)' : stroke}
+                stroke={active ? 'rgba(233,224,208,0.92)' : stroke}
                 strokeWidth={active ? 1.4 : edge.kind === 'film-film' ? 1 : 0.7}
                 strokeDasharray={edge.kind === 'film-mood' ? '2 5' : undefined}
                 opacity={dim ? 0.07 : 1}
@@ -364,7 +364,7 @@ export const MemoryGraphView = ({
                   <circle
                     r={radiusOf(node) + 12}
                     fill="none"
-                    stroke="rgba(200,59,53,0.6)"
+                    stroke="rgba(199,187,168,0.55)"
                     strokeDasharray="2 5"
                     className="animate-breathe"
                   />
@@ -376,9 +376,10 @@ export const MemoryGraphView = ({
                       <rect x={-23} y={-30} width={46} height={60} rx={0.5} />
                     </clipPath>
                     <g clipPath={`url(#clip-${node.id.replace(/[^a-zA-Z0-9-]/g, '')})`}>
-                      {film ? (
+                      <rect x={-23} y={-30} width={46} height={60} fill="#181818" />
+                      {film && (
                         <image
-                          href={frameSrc(film.id)}
+                          href={frameSrc(film.id, 'w342')}
                           x={-40}
                           y={-42}
                           width={80}
@@ -386,8 +387,6 @@ export const MemoryGraphView = ({
                           preserveAspectRatio="xMidYMid slice"
                           opacity={isSelected || isHovered ? 1 : 0.86}
                         />
-                      ) : (
-                        <rect x={-23} y={-30} width={46} height={60} fill="#181818" />
                       )}
                       <rect x={-23} y={-30} width={46} height={60} fill="#050505" opacity={0.16} />
                     </g>
@@ -397,7 +396,7 @@ export const MemoryGraphView = ({
                       width={46}
                       height={60}
                       fill="none"
-                      stroke={isSelected ? '#E2625B' : 'rgba(242,240,235,0.42)'}
+                      stroke={isSelected ? '#E9E0D0' : 'rgba(233,224,208,0.42)'}
                       strokeWidth={isSelected ? 1.6 : 0.75}
                     />
                     {isSelected && (
@@ -407,7 +406,7 @@ export const MemoryGraphView = ({
                         width={53}
                         height={67}
                         fill="none"
-                        stroke="rgba(200,59,53,0.5)"
+                        stroke="rgba(199,187,168,0.45)"
                         strokeWidth={0.6}
                       />
                     )}
@@ -420,17 +419,17 @@ export const MemoryGraphView = ({
                       width={radiusOf(node) * 2}
                       height={radiusOf(node) * 2}
                       transform="rotate(45)"
-                      fill="rgba(200,59,53,0.16)"
-                      stroke={isSelected ? 'rgba(226,98,91,0.95)' : 'rgba(200,59,53,0.7)'}
+                      fill="rgba(199,187,168,0.14)"
+                      stroke={isSelected ? 'rgba(233,224,208,0.95)' : 'rgba(199,187,168,0.65)'}
                       strokeWidth={isSelected ? 1.5 : 0.8}
                     />
-                    <circle r={1.5} fill="#F2F0EB" />
+                    <circle r={1.5} fill="#E9E0D0" />
                   </>
                 ) : (
                   <circle
                     r={radiusOf(node)}
-                    fill="rgba(110,143,138,0.22)"
-                    stroke={isSelected ? 'rgba(200,220,214,0.95)' : 'rgba(143,171,164,0.65)'}
+                    fill="rgba(145,129,107,0.22)"
+                    stroke={isSelected ? 'rgba(233,224,208,0.95)' : 'rgba(145,129,107,0.7)'}
                     strokeWidth={isSelected ? 1.4 : 0.8}
                   />
                 )}
@@ -439,8 +438,8 @@ export const MemoryGraphView = ({
                   <text
                     y={labelY}
                     textAnchor="middle"
-                    fill={isSelected ? '#F2F0EB' : 'rgba(237,231,220,0.8)'}
-                    stroke="#111111"
+                    fill={isSelected ? '#E9E0D0' : 'rgba(233,224,208,0.8)'}
+                    stroke="#1b1814"
                     strokeWidth={3.5}
                     strokeOpacity={0.85}
                     paintOrder="stroke"

@@ -65,11 +65,11 @@ export const TasteRadar = ({
   tone?: 'dark' | 'light'
 }) => {
   const values = snapshot.dimensionScores.map((d) => d.value)
-  const gridColor = tone === 'light' ? 'rgba(23,20,18,0.14)' : 'rgba(242,240,235,0.12)'
-  const axisColor = tone === 'light' ? 'rgba(23,20,18,0.18)' : 'rgba(242,240,235,0.15)'
-  const labelColor = tone === 'light' ? 'rgba(23,20,18,0.62)' : 'rgba(242,240,235,0.62)'
-  const subLabelColor = tone === 'light' ? 'rgba(23,20,18,0.42)' : 'rgba(201,197,189,0.55)'
-  const pointColor = tone === 'light' ? '#B02F2A' : '#E2625B'
+  const gridColor = tone === 'light' ? 'rgba(41,37,31,0.18)' : 'rgba(242,240,235,0.12)'
+  const axisColor = tone === 'light' ? 'rgba(41,37,31,0.26)' : 'rgba(242,240,235,0.15)'
+  const labelColor = tone === 'light' ? 'rgba(41,37,31,0.72)' : 'rgba(242,240,235,0.62)'
+  const subLabelColor = tone === 'light' ? 'rgba(145,129,107,0.85)' : 'rgba(201,197,189,0.55)'
+  const pointColor = tone === 'light' ? '#29251F' : '#E9E0D0'
   const animated = useAnimatedValues(values, mini ? 500 : 900)
   const center = size / 2
   const radius = size * (mini ? 0.33 : 0.31)
@@ -95,8 +95,8 @@ export const TasteRadar = ({
       >
         <defs>
           <radialGradient id="radar-fill">
-            <stop offset="0%" stopColor="#C83B35" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#C83B35" stopOpacity="0.045" />
+            <stop offset="0%" stopColor="#29251F" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#29251F" stopOpacity="0.045" />
           </radialGradient>
         </defs>
 
@@ -132,14 +132,14 @@ export const TasteRadar = ({
               y1={center}
               x2={outer[0]}
               y2={outer[1]}
-              stroke={activeKey === dim.key ? 'rgba(200,59,53,0.7)' : axisColor}
+              stroke={activeKey === dim.key ? 'rgba(41,37,31,0.7)' : axisColor}
               strokeWidth={activeKey === dim.key ? 1.2 : 0.6}
             />
           )
         })}
 
-        <polygon points={polygon} fill="url(#radar-fill)" stroke="rgba(200,59,53,0.92)" strokeWidth="1.2" />
-        <polygon points={polygon} fill="none" stroke="rgba(226,98,91,0.22)" strokeWidth="4" />
+        <polygon points={polygon} fill="url(#radar-fill)" stroke="rgba(41,37,31,0.92)" strokeWidth="1.2" />
+        <polygon points={polygon} fill="none" stroke="rgba(145,129,107,0.25)" strokeWidth="4" />
 
         {animated.map((value, i) => {
           const [x, y] = point(value, i)
@@ -174,7 +174,7 @@ export const TasteRadar = ({
                   y={y}
                   textAnchor={anchor}
                   className="micro-sm"
-                  fill={activeKey === dim.key ? '#C83B35' : labelColor}
+                  fill={activeKey === dim.key ? '#29251F' : labelColor}
                   style={{ letterSpacing: '0.16em', fontSize: size * 0.022 }}
                 >
                   {SHORT[dim.key]}
@@ -183,7 +183,7 @@ export const TasteRadar = ({
                   x={x}
                   y={y + size * 0.033}
                   textAnchor={anchor}
-                  fill={activeKey === dim.key ? 'rgba(200,59,53,0.9)' : subLabelColor}
+                  fill={activeKey === dim.key ? 'rgba(41,37,31,0.9)' : subLabelColor}
                   style={{ fontSize: size * 0.022, fontStyle: 'italic', fontFamily: 'Instrument Serif, Georgia, serif' }}
                 >
                   {lean}
@@ -232,7 +232,7 @@ export const PoleAxis = ({
           />
         )}
         <div
-          className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-brass shadow-[0_0_10px_rgba(200,59,53,0.55)]"
+          className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-brass shadow-[0_0_10px_rgba(41,37,31,0.35)]"
           style={{ left: `${pct}%` }}
           title="Your archive"
         />
@@ -310,10 +310,10 @@ export const ShiftRadar = ({
         )
       })}
       <polygon points={beforePoints} fill="none" stroke="rgba(242,240,235,0.4)" strokeWidth="0.9" strokeDasharray="2 4" />
-      <polygon points={afterPoints} fill="rgba(200,59,53,0.16)" stroke="rgba(226,98,91,0.92)" strokeWidth="1.1" />
+      <polygon points={afterPoints} fill="rgba(41,37,31,0.14)" stroke="rgba(74,66,54,0.9)" strokeWidth="1.1" />
       {DIMENSIONS.map((dim, i) => {
         const [x, y] = point(after[dim.key], i)
-        return <circle key={dim.key} cx={x} cy={y} r={2} fill="#E2625B" />
+        return <circle key={dim.key} cx={x} cy={y} r={2} fill="#E9E0D0" />
       })}
     </svg>
   )

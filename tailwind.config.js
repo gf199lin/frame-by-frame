@@ -5,33 +5,35 @@ export default {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#111111',
-          900: '#181818',
-          800: '#1D1D1D',
-          700: '#242424',
-          600: '#2E2E2E',
-          500: '#3A3A3A',
+          DEFAULT: '#29251F',
+          900: '#211E19',
+          800: '#332E27',
+          700: '#3D372F',
+          600: '#4A4238',
+          500: '#5A5045',
         },
         paper: {
-          DEFAULT: '#F2F0EB',
-          warm: '#E8E3DA',
-          deep: '#D8D2C7',
-          dim: '#C9C5BD',
-          muted: '#929292',
+          DEFAULT: '#E9E0D0',
+          warm: '#E3D9C8',
+          deep: '#D8CCB8',
+          dim: '#C7BBA8',
+          muted: '#91816B',
         },
-        // `brass` is kept as an alias so existing components inherit the new
-        // accent without a risky class rename. It now means cinema red.
+        // `brass` keeps its class name for continuity, but it now carries the
+        // dark-brown accent. No red exists anywhere in the palette.
         brass: {
-          DEFAULT: '#C83B35',
-          soft: '#E2625B',
-          deep: '#8E2622',
+          DEFAULT: '#29251F',
+          soft: '#4A4236',
+          deep: '#181510',
         },
         accent: {
-          DEFAULT: '#C83B35',
-          soft: '#E2625B',
-          deep: '#8E2622',
+          DEFAULT: '#29251F',
+          soft: '#4A4236',
+          deep: '#181510',
         },
-        ash: '#6F7276',
+        archive: '#C7BBA8',
+        taupe: '#91816B',
+        ash: '#91816B',
       },
       fontFamily: {
         display: ['"Instrument Serif"', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', 'serif'],

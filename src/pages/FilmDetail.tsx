@@ -11,6 +11,7 @@ import { PoleAxis } from '@/components/taste/TasteRadar'
 import { EmptyState } from '@/components/ui/Primitives'
 import { MOODS, STATUS_LABELS, THEMES, DIMENSIONS } from '@/data/taxonomy'
 import { formatLongDate, formatMinutes, percent } from '@/lib/format'
+import { artworkSourceUrl, artworkVerifiedAt, resolveFilmArtwork } from '@/lib/artwork'
 import { filmById, getEvidence, recordsSorted } from '@/lib/tasteEngine'
 
 export const FilmDetail = () => {
@@ -80,6 +81,8 @@ export const FilmDetail = () => {
     .filter((item) => item.filmId !== film.id)
     .slice(0, 2)
   const frameNumber = recordsSorted(records).findIndex((r) => r.id === record.id) + 1
+  const artwork = resolveFilmArtwork(film)
+  const artworkUrl = artworkSourceUrl(film)
 
   const related = records
     .filter((r) => r.id !== record.id)
@@ -112,7 +115,7 @@ export const FilmDetail = () => {
       <div className="shell pt-6">
         <Link
           to="/archive"
-          className="inline-flex items-center gap-2 font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted transition-colors hover:text-paper"
+          className="inline-flex items-center gap-2 font-mono text-[8px] uppercase tracking-[0.2em] text-ink/60 transition-colors hover:text-ink"
         >
           <ArrowLeft size={11} /> The archive
         </Link>
@@ -121,7 +124,7 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  I — The film                                                     */}
       {/* ================================================================ */}
-      <section className="relative mt-5">
+      <section className="relative mt-5 text-paper [--brass:#e9e0d0]">
         <div className="relative">
           <FilmStill film={film} ratio="free" eager className="h-[54vh] min-h-[340px] w-full lg:h-[66vh]" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-ink/35" />
@@ -155,8 +158,8 @@ export const FilmDetail = () => {
           </div>
         </div>
 
-        <div className="shell">
-          <div className="flex flex-col gap-6 border-b border-white/12 py-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="shell text-ink">
+          <div className="flex flex-col gap-6 border-b border-ink/12 py-5 lg:flex-row lg:items-center lg:justify-between">
             <dl className="grid flex-1 grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
               {[
                 ['Director', film.director],
@@ -165,8 +168,8 @@ export const FilmDetail = () => {
                 ['Language', film.language],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <dt className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">{label}</dt>
-                  <dd className="mt-1.5 text-[12px] text-paper-dim">{value}</dd>
+                  <dt className="font-mono text-[8px] uppercase tracking-[0.2em] text-ink/70">{label}</dt>
+                  <dd className="mt-1.5 text-[12px] text-ink/70">{value}</dd>
                 </div>
               ))}
             </dl>
@@ -180,18 +183,18 @@ export const FilmDetail = () => {
               </Link>
               {confirmDelete ? (
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] text-paper-dim">Remove?</span>
+                  <span className="text-[10px] text-ink/70">Remove?</span>
                   <button
                     type="button"
                     onClick={onDelete}
-                    className="font-mono text-[9px] uppercase tracking-[0.14em] text-brass hover:text-brass-soft"
+                    className="font-mono text-[9px] uppercase tracking-[0.14em] text-brass hover:text-taupe"
                   >
                     Remove
                   </button>
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
-                    className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted hover:text-paper"
+                    className="font-mono text-[9px] uppercase tracking-[0.14em] text-ink/70 hover:text-ink"
                   >
                     Cancel
                   </button>
@@ -200,7 +203,7 @@ export const FilmDetail = () => {
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(true)}
-                  className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted transition-colors hover:text-brass"
+                  className="inline-flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-ink/60 transition-colors hover:text-ink"
                 >
                   <Trash2 size={11} /> Remove
                 </button>
@@ -213,6 +216,31 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  II — My memory                                                   */}
       {/* ================================================================ */}
+      <div className="shell">
+        <p className="border-b border-ink/10 py-3 font-mono text-[8px] uppercase tracking-[0.18em] text-ink/45">
+          Artwork:{' '}
+          {artwork ? (
+            <a
+              href={artworkUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-ink/50 underline decoration-ink/25 underline-offset-4 transition-colors hover:text-ink"
+            >
+              {artwork.poster?.provider === 'tmdb' || artwork.backdrop?.provider === 'tmdb'
+                ? 'TMDB'
+                : artwork.poster?.credit?.includes('Letterboxd') ||
+                    artwork.backdrop?.credit?.includes('Letterboxd')
+                  ? 'Letterboxd'
+                  : 'local archive'}{' '}
+              · verified {artworkVerifiedAt(film)}
+            </a>
+          ) : (
+            <span>no verified image available</span>
+          )}
+          {film.tmdbId && <span> · TMDB #{film.tmdbId}</span>}
+        </p>
+      </div>
+
       <section className="chapter--paper paper-texture">
         <div className="shell py-16 lg:py-24">
           <div className="grid grid-cols-12 gap-x-6 gap-y-10">
@@ -292,7 +320,7 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  III — What stayed with me                                        */}
       {/* ================================================================ */}
-      <section className="chapter--ink">
+      <section className="chapter--paper">
         <div className="shell py-16 lg:py-20">
           <div className="grid grid-cols-12 gap-x-6 gap-y-10">
             <Reveal className="col-span-12 lg:col-span-4">
@@ -300,20 +328,20 @@ export const FilmDetail = () => {
                 <b>III</b> What stayed with me
               </p>
               <h2 className="mt-5 t-head">The things it left behind.</h2>
-              <p className="mt-4 max-w-xs text-[11.5px] leading-relaxed text-paper-muted">
+              <p className="mt-4 max-w-xs text-[11.5px] leading-relaxed text-taupe">
                 Themes are the argument; moods are the texture. Both were read from your note and the
                 film's own tags, then weighted by how often they recur.
               </p>
 
               <div className="mt-8">
-                <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">
+                <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-taupe">
                   Emotional register
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {moods.map((mood) => (
-                    <span key={mood.id} className="tag border-white/15 text-paper-dim">
+                    <span key={mood.id} className="tag border-ink/15 text-ink/65">
                       {mood.label}
-                      <span className="zh-label text-[8px] text-paper-muted/60">{mood.zh}</span>
+                      <span className="zh-label text-[8px] text-taupe/60">{mood.zh}</span>
                     </span>
                   ))}
                 </div>
@@ -321,26 +349,26 @@ export const FilmDetail = () => {
             </Reveal>
 
             <Reveal delay={80} className="col-span-12 lg:col-span-7 lg:col-start-6">
-              <ul className="border-t border-white/15">
+              <ul className="border-t border-ink/15">
                 {themes.map((theme, i) => (
                   <li
                     key={theme.id}
-                    className="group flex flex-wrap items-baseline gap-x-5 gap-y-1 border-b border-white/10 py-5"
+                    className="group flex flex-wrap items-baseline gap-x-5 gap-y-1 border-b border-ink/10 py-5"
                   >
                     <span className="font-mono text-[8px] tracking-[0.2em] text-brass">
                       {String(i + 1).padStart(2, '0')}
                     </span>
-                    <span className="font-display text-[clamp(1.7rem,3vw,2.6rem)] leading-none text-paper">
+                    <span className="font-display text-[clamp(1.7rem,3vw,2.6rem)] leading-none text-ink">
                       {theme.label}
                     </span>
-                    <span className="zh-label text-[9px] text-paper-muted/60">{theme.zh}</span>
-                    <span className="ml-auto hidden max-w-[20rem] text-right text-[10.5px] leading-relaxed text-paper-muted sm:block">
+                    <span className="zh-label text-[9px] text-taupe/60">{theme.zh}</span>
+                    <span className="ml-auto hidden max-w-[20rem] text-right text-[10.5px] leading-relaxed text-taupe sm:block">
                       {theme.blurb}
                     </span>
                   </li>
                 ))}
                 {themes.length === 0 && (
-                  <li className="py-5 text-[12px] text-paper-muted">
+                  <li className="py-5 text-[12px] text-taupe">
                     No themes recorded for this entry yet.
                   </li>
                 )}
@@ -353,17 +381,17 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  IV — My taste connection                                         */}
       {/* ================================================================ */}
-      <section className="bg-[#181818] border-y border-white/10">
+      <section className="chapter--paper border-y border-ink/12">
         <div className="shell py-16 lg:py-20">
           <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/12 pb-5">
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/12 pb-5">
               <div>
                 <p className="artifact-label">
                   <b>IV</b> My taste connection
                 </p>
                 <h2 className="mt-4 t-head">The film against your archive.</h2>
               </div>
-              <p className="max-w-sm text-[11px] leading-relaxed text-paper-muted">
+              <p className="max-w-sm text-[11px] leading-relaxed text-taupe">
                 Red is your archive's current position. The hollow square is this film's own
                 signature. Distance is information, not error.
               </p>
@@ -378,10 +406,10 @@ export const FilmDetail = () => {
               return (
                 <Reveal key={def.key} delay={40}>
                   <div className="flex items-baseline justify-between gap-4">
-                    <p className="text-[10.5px] uppercase tracking-[0.18em] text-paper-dim">
+                    <p className="text-[10.5px] uppercase tracking-[0.18em] text-ink/65">
                       {def.label}
                     </p>
-                    <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-paper-muted">
+                    <p className="font-mono text-[8px] uppercase tracking-[0.14em] text-taupe">
                       {distance < 0.15 ? 'in tune' : distance < 0.32 ? 'adjacent' : 'in tension'}
                     </p>
                   </div>

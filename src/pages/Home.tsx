@@ -17,7 +17,8 @@ import {
 } from '@/lib/tasteEngine'
 import { THEMES } from '@/data/taxonomy'
 import { formatLongDate, formatMinutes, percent } from '@/lib/format'
-import { COVER_FRAME, LEGACY_HERO } from '@/lib/media'
+import { frameSrc } from '@/lib/media'
+import { backdropOf } from '@/lib/artwork'
 
 const ISSUE = [
   { no: '01', label: 'The latest frame', zh: '最新一帧', href: '#latest' },
@@ -48,10 +49,19 @@ export const Home = () => {
   )[0]
   const summary = summarizeTaste(snapshot)
 
+  // A real backdrop for the cover. If the newest film only has a poster, fall
+  // back to the first catalogue film with a verified TMDB backdrop.
+  const coverFilm =
+    latest?.film && backdropOf(latest.film) ? latest.film : films.find((f) => backdropOf(f))
+
   if (records.length === 0) {
     return (
-      <div className="relative isolate overflow-hidden bg-ink">
-        <img src={LEGACY_HERO} alt="" className="absolute inset-0 h-full w-full object-cover opacity-60" />
+      <div className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
+        <img
+          src={frameSrc('manchester')}
+          alt="Manchester by the Sea (2016) — official backdrop"
+          className="absolute inset-0 h-full w-full object-cover opacity-60"
+        />
         <div className="absolute inset-0 hero-vignette" />
         <div className="shell relative py-24 lg:py-32">
           <p className="kicker">Frame by Frame · A private cinema archive</p>
@@ -85,20 +95,25 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  COVER                                                            */}
       {/* ================================================================ */}
-      <section className="relative isolate overflow-hidden bg-ink">
+      <section className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
         <img
-          src={COVER_FRAME}
-          alt="An empty repertory cinema, a projector beam crossing the dark"
+          src={coverFilm ? frameSrc(coverFilm.id) : frameSrc('manchester')}
+          alt={
+            coverFilm
+              ? `${coverFilm.title} (${coverFilm.year}) — official backdrop`
+              : 'Official film backdrop'
+          }
           className="absolute inset-0 h-full w-full object-cover object-[58%_center]"
-          style={{ filter: 'brightness(1.22) saturate(0.92) contrast(1.02)' }}
+          style={{ filter: 'brightness(1.05) saturate(0.92) contrast(1.02)' }}
           loading="eager"
+          decoding="async"
         />
         <div className="absolute inset-0 cover-scrim" />
 
         <div className="shell relative flex min-h-[calc(100vh-69px)] flex-col">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-white/15 py-3">
             <span className="micro-sm text-paper/70">Frame by Frame</span>
-            <span className="h-px w-10 bg-brass" />
+            <span className="h-px w-10 bg-paper/60" />
             <span className="micro-sm text-paper-muted">A private cinema archive</span>
             <span className="folio ml-auto">
               Vol. 01 — {year}
@@ -111,7 +126,7 @@ export const Home = () => {
               <h1 className="mt-6 font-display text-[clamp(2.7rem,9.2vw,8.6rem)] leading-[0.86] tracking-[-0.03em] text-balance">
                 Every film
                 <br />
-                leaves a <span className="italic text-brass">frame.</span>
+                leaves a <span className="italic text-paper">frame.</span>
               </h1>
 
               <div className="mt-9 flex max-w-[46rem] flex-col gap-5 border-t border-white/20 pt-5 lg:flex-row lg:items-start lg:gap-8">
@@ -119,7 +134,7 @@ export const Home = () => {
                   An archive of what you watched, what stayed, and what it says about you. Not a
                   watchlist. Not a rating site. A room for the films that became part of your memory.
                 </p>
-                <p className="zh-label max-w-[13rem] text-[11px] leading-[2] text-paper-muted">
+                <p className="zh-label max-w-[13rem] text-[11px] leading-[2] text-paper-dim">
                   不只是观影记录，
                   <br />
                   而是一座属于你的
@@ -132,7 +147,7 @@ export const Home = () => {
                 <button type="button" onClick={() => openAdd()} className="btn btn-primary">
                   <Plus size={14} /> Record a film
                 </button>
-                <Link to="/archive" className="btn btn-ghost">
+                <Link to="/archive" className="btn btn-ghost border-paper/30 text-paper hover:border-paper/60">
                   Enter the archive <ArrowRight size={13} />
                 </Link>
               </div>
@@ -183,31 +198,31 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  ISSUE CONTENTS                                                   */}
       {/* ================================================================ */}
-      <section className="chapter--night border-b border-white/10">
+      <section className="chapter--paper border-b border-ink/10">
         <div className="shell">
           <div className="grid grid-cols-2 lg:grid-cols-4">
             {ISSUE.map((item, i) => (
               <a
                 key={item.no}
                 href={item.href}
-                className={`group flex items-baseline justify-between gap-3 border-white/10 py-5 pr-4 transition-colors hover:text-paper ${
+                className={`group flex items-baseline justify-between gap-3 border-ink/10 py-5 pr-4 transition-colors hover:text-ink ${
                   i === 0 ? 'lg:border-l-0' : 'border-l'
                 } ${i < 2 ? 'border-b lg:border-b-0' : ''} ${i % 2 === 1 ? 'border-l' : ''} pl-4 lg:pl-6`}
               >
                 <span className="flex items-baseline gap-3">
                   <span className="font-mono text-[8px] tracking-[0.2em] text-brass">{item.no}</span>
                   <span>
-                    <span className="block font-display text-[1.35rem] leading-none text-paper-dim transition-colors group-hover:text-paper">
+                    <span className="block font-display text-[1.35rem] leading-none text-ink/65 transition-colors group-hover:text-ink">
                       {item.label}
                     </span>
-                    <span className="zh-label mt-1.5 block text-[9px] text-paper-muted/60">
+                    <span className="zh-label mt-1.5 block text-[9px] text-taupe/60">
                       {item.zh}
                     </span>
                   </span>
                 </span>
                 <ArrowUpRight
                   size={13}
-                  className="shrink-0 text-paper-muted/40 transition-all group-hover:-translate-y-0.5 group-hover:text-brass"
+                  className="shrink-0 text-taupe/40 transition-all group-hover:-translate-y-0.5 group-hover:text-brass"
                 />
               </a>
             ))}
@@ -219,10 +234,10 @@ export const Home = () => {
       {/*  01 — THE COVER STORY                                             */}
       {/* ================================================================ */}
       {latest?.film && (
-        <section id="latest" className="chapter--ink">
+        <section id="latest" className="chapter--paper">
           <div className="shell pt-16 lg:pt-24">
             <Reveal>
-              <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-4">
+              <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-4">
                 <div>
                   <p className="artifact-label">
                     <b>01</b> The cover story
@@ -231,7 +246,7 @@ export const Home = () => {
                 </div>
                 <div className="text-right">
                   <p className="folio">Frame no. {String(records.length).padStart(3, '0')}</p>
-                  <p className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-paper-dim">
+                  <p className="mt-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-ink/65">
                     {formatLongDate(latest.record.watchedAt)}
                   </p>
                 </div>
@@ -252,8 +267,8 @@ export const Home = () => {
             <Reveal delay={120}>
               <div className="mt-8 grid grid-cols-12 gap-x-6 gap-y-8 pb-16 lg:pb-24">
                 <div className="col-span-12 sm:col-span-3">
-                  <p className="micro-sm text-paper-muted">Watched</p>
-                  <p className="mt-2 text-[12px] leading-relaxed text-paper-dim">
+                  <p className="micro-sm text-taupe">Watched</p>
+                  <p className="mt-2 text-[12px] leading-relaxed text-ink/65">
                     {formatLongDate(latest.record.watchedAt)}
                   </p>
                   <div className="mt-4 flex items-center gap-3">
@@ -270,22 +285,22 @@ export const Home = () => {
 
                 <div className="col-span-12 sm:col-span-9 lg:col-span-7 lg:col-start-5">
                   <Link to={`/archive/${latest.film.id}`} className="group">
-                    <h3 className="font-display text-[clamp(2.2rem,4.4vw,3.8rem)] leading-[0.98] tracking-[-0.02em] text-paper transition-colors group-hover:text-brass-soft">
+                    <h3 className="font-display text-[clamp(2.2rem,4.4vw,3.8rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-taupe">
                       {latest.film.title}
                     </h3>
                   </Link>
-                  <p className="mt-2.5 text-[9px] uppercase tracking-[0.2em] text-paper-muted">
+                  <p className="mt-2.5 text-[9px] uppercase tracking-[0.2em] text-taupe">
                     {latest.film.director} · {latest.film.year} · {latest.film.genres.join(' / ')}
                   </p>
 
                   <blockquote className="mt-7 border-l border-brass pl-5">
-                    <p className="dropcap font-display text-[clamp(1.35rem,2.1vw,1.85rem)] leading-[1.45] text-paper/85">
+                    <p className="dropcap font-display text-[clamp(1.35rem,2.1vw,1.85rem)] leading-[1.45] text-ink/80">
                       {latest.record.reflection}
                     </p>
                   </blockquote>
 
                   <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2">
-                    <span className="text-[10.5px] text-paper-muted">
+                    <span className="text-[10.5px] text-taupe">
                       {latest.record.themes
                         .slice(0, 3)
                         .map((t) => THEMES[t]?.label)
@@ -309,17 +324,17 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  02 — RECENT FRAMES                                               */}
       {/* ================================================================ */}
-      <section id="recent" className="chapter--night border-y border-white/10">
+      <section id="recent" className="chapter--paper border-y border-ink/10">
         <div className="shell py-16 lg:py-24">
           <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-4">
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-4">
               <div>
                 <p className="artifact-label">
                   <b>02</b> Recent frames
                 </p>
                 <h2 className="mt-4 t-head">What the last months kept.</h2>
               </div>
-              <Link to="/archive" className="link-rule text-paper-dim hover:text-paper">
+              <Link to="/archive" className="link-rule text-ink/65 hover:text-ink">
                 The whole archive <ArrowRight size={12} />
               </Link>
             </div>
@@ -331,18 +346,18 @@ export const Home = () => {
               <Reveal key={record.id} delay={0} className="col-span-12 lg:col-span-7">
                 <Link to={`/archive/${film.id}`} className="group block">
                   <FilmStill film={film} ratio="photo" />
-                  <div className="mt-4 flex items-start justify-between gap-4 border-t border-white/12 pt-3">
+                  <div className="mt-4 flex items-start justify-between gap-4 border-t border-ink/12 pt-3">
                     <div>
-                      <h3 className="font-display text-[1.75rem] leading-tight text-paper transition-colors group-hover:text-brass-soft">
+                      <h3 className="font-display text-[1.75rem] leading-tight text-ink transition-colors group-hover:text-taupe">
                         {film.title}
                       </h3>
-                      <p className="mt-1 text-[9.5px] uppercase tracking-[0.16em] text-paper-muted">
+                      <p className="mt-1 text-[9.5px] uppercase tracking-[0.16em] text-taupe">
                         {film.director} · {film.year}
                       </p>
                     </div>
                     <div className="shrink-0 text-right">
                       <Rating value={record.rating} size={10} />
-                      <p className="mt-1.5 font-mono text-[9px] tracking-[0.12em] text-paper-muted">
+                      <p className="mt-1.5 font-mono text-[9px] tracking-[0.12em] text-taupe">
                         {formatLongDate(record.watchedAt)}
                       </p>
                     </div>
@@ -356,12 +371,12 @@ export const Home = () => {
                 <Reveal key={record.id} delay={80 + i * 60}>
                   <Link to={`/archive/${film.id}`} className="group block">
                     <FilmStill film={film} ratio="photo" />
-                    <div className="mt-3 flex items-start justify-between gap-3 border-t border-white/12 pt-2.5">
+                    <div className="mt-3 flex items-start justify-between gap-3 border-t border-ink/12 pt-2.5">
                       <div className="min-w-0">
-                        <h3 className="truncate font-display text-[1.2rem] leading-tight text-paper transition-colors group-hover:text-brass-soft">
+                        <h3 className="truncate font-display text-[1.2rem] leading-tight text-ink transition-colors group-hover:text-taupe">
                           {film.title}
                         </h3>
-                        <p className="mt-0.5 truncate text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+                        <p className="mt-0.5 truncate text-[9px] uppercase tracking-[0.14em] text-taupe">
                           {film.year} · {film.genres[0]}
                         </p>
                       </div>
@@ -376,11 +391,11 @@ export const Home = () => {
               <Reveal key={record.id} delay={40} className="col-span-8 col-start-1 lg:col-span-5 lg:col-start-2">
                 <Link to={`/archive/${film.id}`} className="group block lg:-mt-6">
                   <FilmStill film={film} ratio="photo" />
-                  <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-white/12 pt-2.5">
-                    <h3 className="font-display text-[1.2rem] leading-tight text-paper transition-colors group-hover:text-brass-soft">
+                  <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-ink/12 pt-2.5">
+                    <h3 className="font-display text-[1.2rem] leading-tight text-ink transition-colors group-hover:text-taupe">
                       {film.title}
                     </h3>
-                    <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+                    <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-taupe">
                       {film.year}
                     </span>
                   </div>
@@ -390,19 +405,19 @@ export const Home = () => {
 
             {recent.slice(4, 5).map(({ record, film }) => (
               <Reveal key={record.id} delay={80} className="col-span-12 sm:col-span-8 sm:col-start-5 lg:col-span-4 lg:col-start-9">
-                <Link to={`/archive/${film.id}`} className="group flex items-center gap-4 border-t border-white/12 pt-4">
+                <Link to={`/archive/${film.id}`} className="group flex items-center gap-4 border-t border-ink/12 pt-4">
                   <span className="relative block h-16 w-24 shrink-0 overflow-hidden">
                     <FilmStill film={film} ratio="free" className="h-full w-full" />
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate font-display text-[1.1rem] text-paper group-hover:text-brass-soft">
+                    <span className="block truncate font-display text-[1.1rem] text-ink group-hover:text-taupe">
                       {film.title}
                     </span>
-                    <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+                    <span className="mt-1 block font-mono text-[9px] uppercase tracking-[0.14em] text-taupe">
                       {formatLongDate(record.watchedAt)}
                     </span>
                   </span>
-                  <ArrowUpRight size={13} className="ml-auto shrink-0 text-paper-muted/50" />
+                  <ArrowUpRight size={13} className="ml-auto shrink-0 text-taupe/50" />
                 </Link>
               </Reveal>
             ))}
@@ -481,20 +496,20 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  THE RECORD — oversized numbers, no cards                         */}
       {/* ================================================================ */}
-      <section className="chapter--ink border-t border-ink/20">
+      <section className="chapter--ink border-t border-paper/15">
         <div className="shell py-16 lg:py-20">
           <Reveal>
             <div className="flex flex-wrap items-end justify-between gap-4">
               <p className="artifact-label">
                 <b>04</b> The record
               </p>
-              <p className="max-w-xs text-right text-[10.5px] leading-relaxed text-paper-muted">
+              <p className="max-w-xs text-right text-[10.5px] leading-relaxed text-paper-dim">
                 Counted from the archive. A record of attention, not of achievement.
               </p>
             </div>
           </Reveal>
 
-          <dl className="mt-8 grid grid-cols-2 gap-y-10 border-y border-white/12 py-10 lg:grid-cols-4">
+          <dl className="mt-8 grid grid-cols-2 gap-y-10 border-y border-paper/12 py-10 lg:grid-cols-4">
             {[
               { label: 'Films kept', zh: '收藏电影', value: String(records.length).padStart(2, '0'), sub: 'in the archive' },
               { label: 'Hours in the dark', zh: '黑暗中的小时', value: hours.toFixed(1), sub: formatMinutes(snapshot.totalMinutes) },
@@ -506,13 +521,13 @@ export const Home = () => {
                 sub: 'an estimate, not a verdict',
               },
             ].map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 60} className={i > 0 ? 'lg:border-l lg:border-white/12 lg:pl-8' : ''}>
-                <dt className="text-[9px] uppercase tracking-[0.2em] text-paper-muted">{stat.label}</dt>
+              <Reveal key={stat.label} delay={i * 60} className={i > 0 ? 'lg:border-l lg:border-paper/12 lg:pl-8' : ''}>
+                <dt className="text-[9px] uppercase tracking-[0.2em] text-paper-dim">{stat.label}</dt>
                 <dd className="num mt-3 text-[clamp(2.6rem,5vw,4.4rem)] leading-[0.9] text-paper">
                   {stat.value}
                 </dd>
-                <dd className="zh-label mt-2 text-[9px] text-paper-muted/55">{stat.zh}</dd>
-                <dd className="mt-1 text-[10px] text-paper-muted/70">{stat.sub}</dd>
+                <dd className="zh-label mt-2 text-[9px] text-paper-dim/55">{stat.zh}</dd>
+                <dd className="mt-1 text-[10px] text-paper-dim/70">{stat.sub}</dd>
               </Reveal>
             ))}
           </dl>
@@ -605,13 +620,14 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  CLOSING SPREAD                                                   */}
       {/* ================================================================ */}
-      <section className="relative isolate overflow-hidden bg-ink">
+      <section className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
         {favouriteFilm && (
           <img
-            src={COVER_FRAME}
-            alt=""
+            src={frameSrc(favouriteFilm.id)}
+            alt={`${favouriteFilm.title} (${favouriteFilm.year}) — official backdrop`}
             className="absolute inset-0 h-full w-full object-cover object-[60%_center] opacity-30"
             loading="lazy"
+            decoding="async"
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
@@ -623,7 +639,7 @@ export const Home = () => {
               <br />
               <span className="italic text-paper-dim">last night?</span>
             </h2>
-            <p className="mt-5 max-w-md text-[12.5px] leading-relaxed text-paper-muted">
+            <p className="mt-5 max-w-md text-[12.5px] leading-relaxed text-paper-dim">
               One film, one honest paragraph. The archive updates everywhere at once.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -637,7 +653,7 @@ export const Home = () => {
           </div>
         </div>
 
-        <div className="overflow-hidden border-t border-white/10 py-3">
+        <div className="overflow-hidden border-t border-paper/10 py-3">
           <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap">
             {[...ordered, ...ordered].map((record, i) => {
               const film = filmById(films, record.filmId)
@@ -645,7 +661,7 @@ export const Home = () => {
               return (
                 <span
                   key={`${record.id}-${i}`}
-                  className="flex items-center gap-8 font-mono text-[9px] uppercase tracking-[0.24em] text-paper-muted/50"
+                  className="flex items-center gap-8 font-mono text-[9px] uppercase tracking-[0.24em] text-paper-dim/50"
                 >
                   {film.title}
                   <span className="text-brass">✳</span>

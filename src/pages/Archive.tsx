@@ -136,7 +136,7 @@ export const Archive = () => {
       {/* ================================================================ */}
       {/*  Masthead                                                         */}
       {/* ================================================================ */}
-      <section className="chapter--ink">
+      <section className="chapter--paper">
         <div className="shell pt-10 lg:pt-14">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="artifact-label">
@@ -147,15 +147,15 @@ export const Archive = () => {
             </p>
           </div>
 
-          <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-8 border-b border-white/12 pb-8">
+          <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-8 border-b border-ink/12 pb-8">
             <div className="col-span-12 lg:col-span-8">
               <h1 className="font-display text-[clamp(3rem,7.6vw,6.8rem)] leading-[0.86] tracking-[-0.03em]">
                 The archive.
               </h1>
               <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-                <p className="zh-title text-[15px] text-paper-dim">电影收藏</p>
+                <p className="zh-title text-[15px] text-ink/65">电影收藏</p>
                 <span className="hidden h-3 w-px bg-white/20 sm:block" />
-                <p className="measure text-[12.5px] leading-relaxed text-paper-muted">
+                <p className="measure text-[12.5px] leading-relaxed text-taupe">
                   Every film you kept, with the date, the rating, and the paragraph you wrote after
                   the credits. Search it like a memory, not a spreadsheet.
                 </p>
@@ -164,20 +164,20 @@ export const Archive = () => {
 
             <div className="col-span-12 flex flex-wrap items-end justify-between gap-8 lg:col-span-4 lg:justify-end">
               <div>
-                <p className="micro-sm text-paper-muted">Average rating</p>
-                <p className="num mt-1.5 text-[2.6rem] leading-none text-paper">
+                <p className="micro-sm text-taupe">Average rating</p>
+                <p className="num mt-1.5 text-[2.6rem] leading-none text-ink">
                   {snapshot.averageRating.toFixed(1)}
-                  <span className="ml-1 text-[13px] text-paper-muted">/ 5</span>
+                  <span className="ml-1 text-[13px] text-taupe">/ 5</span>
                 </p>
                 <Rating value={snapshot.averageRating} size={9} className="mt-2" />
               </div>
               <div>
-                <p className="micro-sm text-paper-muted">Time in the dark</p>
-                <p className="num mt-1.5 text-[2.6rem] leading-none text-paper">
+                <p className="micro-sm text-taupe">Time in the dark</p>
+                <p className="num mt-1.5 text-[2.6rem] leading-none text-ink">
                   {(snapshot.totalMinutes / 60).toFixed(1)}
-                  <span className="ml-1 text-[13px] text-paper-muted">h</span>
+                  <span className="ml-1 text-[13px] text-taupe">h</span>
                 </p>
-                <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+                <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-taupe">
                   {formatMinutes(snapshot.totalMinutes)}
                 </p>
               </div>
@@ -187,12 +187,12 @@ export const Archive = () => {
           {/* Search line */}
           <div className="flex flex-col gap-4 py-5 lg:flex-row lg:items-center lg:justify-between">
             <label className="group flex flex-1 items-center gap-4">
-              <Search size={17} className="shrink-0 text-paper-muted" strokeWidth={1.4} />
+              <Search size={17} className="shrink-0 text-taupe" strokeWidth={1.4} />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search titles, directors, notes, moods…"
-                className="w-full border-b border-white/20 bg-transparent pb-2 font-display text-[1.35rem] text-paper outline-none placeholder:text-paper-muted/45 focus:border-brass focus-visible:outline-none sm:text-[1.6rem]"
+                className="w-full border-b border-ink/20 bg-transparent pb-2 font-display text-[1.35rem] text-ink outline-none placeholder:text-taupe/45 focus:border-brass focus-visible:outline-none sm:text-[1.6rem]"
                 aria-label="Search the archive"
               />
               {query && (
@@ -200,7 +200,7 @@ export const Archive = () => {
                   type="button"
                   onClick={() => setQuery('')}
                   aria-label="Clear search"
-                  className="text-paper-muted hover:text-paper"
+                  className="text-taupe hover:text-ink"
                 >
                   <X size={14} />
                 </button>
@@ -209,7 +209,7 @@ export const Archive = () => {
 
             <div className="flex shrink-0 flex-wrap items-center gap-4">
               <label className="flex items-center gap-2">
-                <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-paper-muted">Sort</span>
+                <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-taupe">Sort</span>
                 <select
                   value={sort}
                   onChange={(event) => setSort(event.target.value as SortKey)}
@@ -224,7 +224,7 @@ export const Archive = () => {
                 </select>
               </label>
 
-              <div className="flex items-center gap-3 border-l border-white/15 pl-4">
+              <div className="flex items-center gap-3 border-l border-ink/15 pl-4">
                 {(['grid', 'index'] as const).map((mode) => (
                   <button
                     key={mode}
@@ -234,7 +234,7 @@ export const Archive = () => {
                     aria-pressed={view === mode}
                     className={cn(
                       'relative pb-1 font-mono text-[8px] uppercase tracking-[0.18em] transition-colors',
-                      view === mode ? 'text-paper' : 'text-paper-muted/60 hover:text-paper',
+                      view === mode ? 'text-ink' : 'text-taupe/60 hover:text-ink',
                     )}
                   >
                     {mode === 'grid' ? 'Shelf' : 'Index'}
@@ -251,8 +251,8 @@ export const Archive = () => {
           </div>
 
           {/* Filters — text, not pills */}
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-white/10 py-4">
-            <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">Genre</span>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-ink/10 py-4">
+            <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-taupe">Genre</span>
             {['all', ...genres].map((g) => {
               const active = genre === g
               return (
@@ -262,7 +262,7 @@ export const Archive = () => {
                   onClick={() => setGenre(g === 'all' ? 'all' : genre === g ? 'all' : g)}
                   className={cn(
                     'relative pb-0.5 text-[9px] uppercase tracking-[0.16em] transition-colors',
-                    active ? 'text-paper' : 'text-paper-muted/65 hover:text-paper',
+                    active ? 'text-ink' : 'text-taupe/65 hover:text-ink',
                   )}
                   aria-pressed={active}
                 >
@@ -318,7 +318,7 @@ export const Archive = () => {
             </select>
 
             <div className="ml-auto flex items-center gap-4">
-              <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+              <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-taupe">
                 {filtered.length} {filtered.length === 1 ? 'film' : 'films'}
               </span>
               {activeFilters > 0 && (
@@ -357,7 +357,7 @@ export const Archive = () => {
                   ratio="wide"
                   className="w-full lg:h-[58vh] lg:max-h-[620px]"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/20 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/55 to-ink/5" />
                 <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10">
                   <div className="flex flex-wrap items-end justify-between gap-6">
                     <div className="max-w-3xl">
@@ -391,7 +391,7 @@ export const Archive = () => {
       {/* ================================================================ */}
       {/*  The shelf                                                        */}
       {/* ================================================================ */}
-      <section className="chapter--night border-t border-white/10">
+      <section className="chapter--paper border-t border-ink/10">
         <div className="shell py-12 lg:py-16">
           {filtered.length === 0 ? (
             <EmptyState
@@ -412,11 +412,11 @@ export const Archive = () => {
           ) : view === 'grid' ? (
             <>
               <Reveal>
-                <div className="flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-4">
+                <div className="flex flex-wrap items-end justify-between gap-3 border-b border-ink/10 pb-4">
                   <p className="artifact-label">
                     <b>{featured ? '02' : '01'}</b> The shelf
                   </p>
-                  <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted/60">
+                  <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-taupe/60">
                     Click a frame to read the note
                   </p>
                 </div>
@@ -438,15 +438,15 @@ export const Archive = () => {
               <button
                 type="button"
                 onClick={() => openAdd()}
-                className="group mt-16 flex w-full items-center justify-between gap-4 border-t border-white/12 pt-5 text-left"
+                className="group mt-16 flex w-full items-center justify-between gap-4 border-t border-ink/12 pt-5 text-left"
               >
                 <span className="flex items-center gap-5">
                   <Plus size={20} strokeWidth={1} className="text-brass transition-transform group-hover:rotate-90" />
                   <span>
-                    <span className="block font-display text-[1.5rem] leading-none text-paper">
+                    <span className="block font-display text-[1.5rem] leading-none text-ink">
                       Add a film to the archive
                     </span>
-                    <span className="mt-1.5 block font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">
+                    <span className="mt-1.5 block font-mono text-[8px] uppercase tracking-[0.2em] text-taupe">
                       A new frame, a new note, a new reading
                     </span>
                   </span>
@@ -458,7 +458,7 @@ export const Archive = () => {
             </>
           ) : (
             <div>
-              <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-white/20 pb-2 font-mono text-[8px] uppercase tracking-[0.18em] text-paper-muted sm:grid">
+              <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-ink/20 pb-2 font-mono text-[8px] uppercase tracking-[0.18em] text-taupe sm:grid">
                 <span>No.</span>
                 <span>Frame</span>
                 <span>Film</span>
@@ -477,17 +477,17 @@ export const Archive = () => {
       {/*  The waiting room                                                 */}
       {/* ================================================================ */}
       {catalogOnly.length > 0 && (
-        <section className="chapter--ink border-t border-white/10">
+        <section className="chapter--paper border-t border-ink/10">
           <div className="shell py-14 lg:py-20">
             <Reveal>
-              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/12 pb-4">
+              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/12 pb-4">
                 <div>
                   <p className="artifact-label">
                     <b>Not yet archived</b>
                   </p>
                   <h2 className="mt-3 t-head">The waiting room.</h2>
                 </div>
-                <p className="max-w-sm text-[11px] leading-relaxed text-paper-muted">
+                <p className="max-w-sm text-[11px] leading-relaxed text-taupe">
                   Films already in the catalogue, waiting for a memory. Open one to record it.
                 </p>
               </div>
@@ -504,14 +504,14 @@ export const Archive = () => {
         </section>
       )}
 
-      <section className="chapter--night border-t border-white/10">
+      <section className="chapter--night border-t border-paper/10">
         <div className="shell flex flex-wrap items-center justify-between gap-4 py-8">
-          <p className="text-[11px] text-paper-muted">
+          <p className="text-[11px] text-paper-dim">
             Looking for a film that is not here?{' '}
             <button
               type="button"
               onClick={() => openAdd()}
-              className="text-brass underline underline-offset-4 hover:text-brass-soft"
+              className="text-paper underline decoration-paper/40 underline-offset-4 hover:text-paper/80"
             >
               Add it to the archive
             </button>

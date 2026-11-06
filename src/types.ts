@@ -87,6 +87,44 @@ export type FilmPalette = {
   paper: string
 }
 
+/* ------------------------------------------------------------------ */
+/*  Artwork                                                            */
+/*  Every image that stands for a real film must be a real, traceable   */
+/*  asset. TMDB paths are preferred; verified local copies are the      */
+/*  fallback. No generated imagery is allowed here.                    */
+/* ------------------------------------------------------------------ */
+
+export type ArtworkProvider = 'tmdb' | 'local'
+
+export type FilmImage = {
+  provider: ArtworkProvider
+  /** TMDB file path, e.g. "/abc123.jpg". Required when provider is "tmdb". */
+  path?: string
+  /** Root-relative or absolute URL. Required when provider is "local". */
+  url?: string
+  /** Intrinsic size of the served file, used to reserve layout space. */
+  width: number
+  height: number
+  language?: string
+  /** Page where this exact file can be verified. */
+  sourceUrl: string
+  credit: string
+  license?: string
+}
+
+export type FilmArtwork = {
+  tmdbId?: number
+  poster?: FilmImage
+  backdrop?: FilmImage
+  stills?: FilmImage[]
+  /** ISO date of the last manual verification. */
+  verifiedAt: string
+  /** How the film ↔ artwork match was established. */
+  matchSource: 'wikidata-tmdb-id' | 'tmdb-api' | 'catalog'
+  /** Archived TMDB page used to harvest the paths (provenance). */
+  evidenceUrl?: string
+}
+
 export type Film = {
   id: string
   title: string
@@ -102,7 +140,11 @@ export type Film = {
   cast: string[]
   motif: PosterMotif
   palette: FilmPalette
-  /** Optional real artwork. When absent, an editorial poster is drawn. */
+  /** Verified TMDB movie id, used to fetch official artwork by id. */
+  tmdbId?: number
+  /** Verified real artwork. Never generated. */
+  artwork?: FilmArtwork
+  /** Legacy user-supplied image URL. */
   posterUrl?: string
   /** 0 = low pole, 1 = high pole — the film's own aesthetic signature. */
   signature: Record<DimensionKey, number>

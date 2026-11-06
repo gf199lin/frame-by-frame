@@ -32,38 +32,38 @@ export const HowAISeesMe = ({
               <div className="relative flex justify-start">
                 <span
                   className={cn(
-                    'relative z-10 flex h-[56px] w-[56px] items-center justify-center border bg-[#111111] transition-colors sm:h-[72px] sm:w-[72px]',
-                    isLatest ? 'border-brass/60' : 'border-white/15',
+                    'relative z-10 flex h-[56px] w-[56px] items-center justify-center border bg-ink/[0.04] transition-colors sm:h-[72px] sm:w-[72px]',
+                    isLatest ? 'border-brass/60' : 'border-ink/15',
                   )}
                 >
                   <span className="text-center">
-                    <span className="block font-display text-xl leading-none text-paper sm:text-2xl">
+                    <span className="block font-display text-xl leading-none text-ink sm:text-2xl">
                       {String(stage.filmCount).padStart(2, '0')}
                     </span>
-                    <span className="mt-1 block text-[8px] uppercase tracking-[0.16em] text-paper-muted">
+                    <span className="mt-1 block text-[8px] uppercase tracking-[0.16em] text-taupe">
                       films
                     </span>
                   </span>
                 </span>
               </div>
 
-              <div className={cn('border-t pt-5', isLatest ? 'border-brass/30' : 'border-white/10')}>
+              <div className={cn('border-t pt-5', isLatest ? 'border-brass/30' : 'border-ink/10')}>
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <p className="micro-sm text-brass/80">
                     {stage.filmCount === 1 ? 'After 1 film' : `After ${stage.filmCount} films`}
                   </p>
-                  <p className="font-mono text-[9px] tracking-[0.14em] text-paper-muted">
+                  <p className="font-mono text-[9px] tracking-[0.14em] text-taupe">
                     {formatShortDate(stage.at)} · confidence {Math.round(stage.confidence * 100)}%
                   </p>
                 </div>
-                <h4 className="mt-2 font-display text-xl leading-snug text-paper sm:text-2xl">
+                <h4 className="mt-2 font-display text-xl leading-snug text-ink sm:text-2xl">
                   {stage.headline}
                 </h4>
-                <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-paper-dim">
+                <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-ink/65">
                   {stage.body}
                 </p>
                 {stage.topTheme && (
-                  <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-paper-muted">
+                  <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-taupe">
                     Recurring theme · <span className="text-brass/70">{THEMES[stage.topTheme].label}</span>
                   </p>
                 )}
@@ -76,7 +76,7 @@ export const HowAISeesMe = ({
                           'inline-flex items-center gap-1.5 border px-2.5 py-1 text-[9px] uppercase tracking-[0.14em]',
                           state.verdict === 'agree'
                             ? 'border-brass/40 bg-brass/10 text-brass-soft'
-                            : 'border-white/25 text-paper-dim',
+                            : 'border-ink/25 text-ink/65',
                         )}
                       >
                         {state.verdict === 'agree' ? <Check size={10} /> : <X size={10} />}
@@ -87,7 +87,7 @@ export const HowAISeesMe = ({
                             : 'Corrected'}
                       </span>
                       {state.correction && (
-                        <span className="text-[11px] italic text-paper-muted">“{state.correction}”</span>
+                        <span className="text-[11px] italic text-taupe">“{state.correction}”</span>
                       )}
                       <button
                         type="button"
@@ -95,7 +95,7 @@ export const HowAISeesMe = ({
                           setEditing(editing === stage.id ? null : stage.id)
                           setText(state.correction ?? '')
                         }}
-                        className="text-[9px] uppercase tracking-[0.14em] text-paper-muted underline underline-offset-4 hover:text-paper"
+                        className="text-[9px] uppercase tracking-[0.14em] text-taupe underline underline-offset-4 hover:text-ink"
                       >
                         Revise
                       </button>

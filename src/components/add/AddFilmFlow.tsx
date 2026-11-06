@@ -269,7 +269,7 @@ export const AddFilmFlow = ({
     >
       <div className="flex items-center justify-between gap-4 border-b border-white/10 py-4 pl-5 pr-14 sm:pl-8 sm:pr-16">
         <div className="flex items-center gap-4">
-          <span className="font-mono text-[9px] tracking-[0.2em] text-brass">
+          <span className="font-mono text-[9px] tracking-[0.2em] text-paper">
             {String(currentIndex + 1).padStart(2, '0')}<span className="text-paper-muted">/05</span>
           </span>
           <div className="hidden items-center gap-1 sm:flex">
@@ -278,7 +278,7 @@ export const AddFilmFlow = ({
                 <span
                   className={cn(
                     'h-px w-8 transition-colors duration-500',
-                    i <= currentIndex ? 'bg-brass/70' : 'bg-white/15',
+                    i <= currentIndex ? 'bg-paper/70' : 'bg-white/15',
                   )}
                 />
                 <span
@@ -301,7 +301,7 @@ export const AddFilmFlow = ({
       {step === 'search' && (
         <div className="grid flex-1 gap-0 lg:grid-cols-[1fr_0.85fr]">
           <div className="border-b border-white/10 p-5 sm:p-8 lg:border-b-0 lg:border-r">
-            <p className="micro text-brass/80">Step one</p>
+            <p className="micro text-paper-dim">Step one</p>
             <h2 id="add-film-title" className="mt-3 font-display text-4xl leading-none text-paper sm:text-5xl">
               What did you watch?
             </h2>
@@ -310,7 +310,7 @@ export const AddFilmFlow = ({
               not a duplicate.
             </p>
 
-            <label className="mt-8 flex items-center gap-3 border-b border-white/20 pb-3 focus-within:border-brass/70">
+            <label className="mt-8 flex items-center gap-3 border-b border-white/20 pb-3 focus-within:border-paper/60">
               <Search size={16} className="text-paper-muted" />
               <input
                 autoFocus
@@ -336,8 +336,9 @@ export const AddFilmFlow = ({
                 <div className="border border-dashed border-white/15 p-6">
                   <p className="font-display text-xl text-paper">Not in the catalogue.</p>
                   <p className="mt-2 text-[12px] leading-relaxed text-paper-muted">
-                    You can still record it. A manual entry gets a generated poster and is read from
-                    your note the same way.
+                    You can still record it. Artwork is matched by exact title and year when a
+                    verified image exists; otherwise a designed placeholder is shown — never a
+                    generated poster.
                   </p>
                   <button
                     type="button"
@@ -365,7 +366,7 @@ export const AddFilmFlow = ({
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="flex items-baseline gap-2">
-                            <span className="truncate font-display text-lg text-paper group-hover:text-brass-soft">
+                            <span className="truncate font-display text-lg text-paper group-hover:text-paper">
                               {film.title}
                             </span>
                             <span className="font-mono text-[10px] text-paper-muted">{film.year}</span>
@@ -379,7 +380,7 @@ export const AddFilmFlow = ({
                         </span>
                         <ChevronRight
                           size={15}
-                          className="shrink-0 text-paper-muted transition-transform group-hover:translate-x-1 group-hover:text-brass"
+                          className="shrink-0 text-paper-muted transition-transform group-hover:translate-x-1 group-hover:text-paper"
                         />
                       </button>
                     </li>
@@ -394,7 +395,7 @@ export const AddFilmFlow = ({
                   <button
                     type="button"
                     onClick={() => goTo(`/archive/${archivedMatch.id}`)}
-                    className="text-brass underline underline-offset-4 hover:text-brass-soft"
+                    className="text-paper underline underline-offset-4 hover:text-paper"
                   >
                     Open its memory
                   </button>
@@ -414,7 +415,7 @@ export const AddFilmFlow = ({
                   ['See what changed', 'Six dimensions, with evidence and a confidence level.'],
                 ].map(([title, body], i) => (
                   <li key={title} className="flex gap-4">
-                    <span className="mt-1 font-mono text-[9px] text-brass/70">0{i + 1}</span>
+                    <span className="mt-1 font-mono text-[9px] text-paper-dim">0{i + 1}</span>
                     <span>
                       <span className="block text-[12px] text-paper">{title}</span>
                       <span className="mt-1 block text-[11px] leading-relaxed text-paper-muted">{body}</span>
@@ -423,7 +424,7 @@ export const AddFilmFlow = ({
                 ))}
               </ol>
             </div>
-            <blockquote className="border-l border-brass/40 pl-4">
+            <blockquote className="border-l border-paper/30 pl-4">
               <p className="font-display text-xl italic leading-snug text-paper/80">
                 “Every film leaves a frame. Every frame tells your story.”
               </p>
@@ -444,8 +445,8 @@ export const AddFilmFlow = ({
             </button>
             <h2 className="mt-6 font-display text-4xl leading-none text-paper">A film off the map</h2>
             <p className="mt-3 max-w-md text-[13px] leading-relaxed text-paper-muted">
-              Keep it factual. The poster is generated, but your memory of it will be treated like
-              any other record.
+              Keep it factual. A verified poster is matched by title and year when available;
+              otherwise the archive shows a designed placeholder rather than invented artwork.
             </p>
 
             <div className="mt-8 grid gap-6 sm:grid-cols-2">
@@ -589,7 +590,7 @@ export const AddFilmFlow = ({
                 >
                   <ArrowLeft size={12} /> Choose another
                 </button>
-                <p className="micro mt-8 text-brass/80">Step two</p>
+                <p className="micro mt-8 text-paper-dim">Step two</p>
                 <h2 className="mt-3 font-display text-4xl leading-none text-paper">
                   Is this the film?
                 </h2>
@@ -635,7 +636,7 @@ export const AddFilmFlow = ({
             ) : (
               <div>
                 <div className="flex items-center justify-between">
-                  <p className="micro text-brass/80">Step three</p>
+                  <p className="micro text-paper-dim">Step three</p>
                   {!editRecord && (
                     <button
                       type="button"
@@ -649,7 +650,7 @@ export const AddFilmFlow = ({
                 <h2 id="add-film-title" className="mt-3 font-display text-4xl leading-none text-paper">
                   {editRecord ? 'Rewrite the memory' : 'Now the part only you have'}
                 </h2>
-                <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-brass lg:hidden">
+                <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.14em] text-paper lg:hidden">
                   {selected.title} · {selected.year}
                 </p>
                 <p className="mt-3 text-[13px] leading-relaxed text-paper-muted">
@@ -767,16 +768,16 @@ export const AddFilmFlow = ({
             <FilmPoster film={selected} />
             <div className="absolute inset-0 bg-black/35" />
             <div className="absolute inset-0 overflow-hidden">
-              <div className="absolute left-0 right-0 h-24 animate-scan bg-gradient-to-b from-transparent via-brass/20 to-transparent" />
+              <div className="absolute left-0 right-0 h-24 animate-scan bg-gradient-to-b from-transparent via-paper/20 to-transparent" />
             </div>
             <div className="absolute bottom-6 left-6 right-6">
-              <p className="micro text-brass/90">Reading</p>
+              <p className="micro text-paper/90">Reading</p>
               <p className="mt-2 font-display text-3xl leading-tight text-paper">{selected.title}</p>
             </div>
           </div>
 
           <div className="flex flex-col justify-center p-6 sm:p-10">
-            <p className="micro text-brass/80">Local analysis</p>
+            <p className="micro text-paper-dim">Local analysis</p>
             <h2 id="add-film-title" className="mt-3 font-display text-4xl leading-none text-paper">
               Listening to what you wrote.
             </h2>
@@ -795,17 +796,17 @@ export const AddFilmFlow = ({
                     className={cn(
                       'flex items-start gap-4 border-l py-3 pl-4 transition-all duration-500',
                       done
-                        ? 'border-brass/40 opacity-70'
+                        ? 'border-paper/30 opacity-70'
                         : active
-                          ? 'border-brass bg-brass/[0.04]'
+                          ? 'border-paper bg-paper/[0.04]'
                           : 'border-white/10 opacity-35',
                     )}
                   >
                     <span className="mt-[2px] flex h-5 w-5 shrink-0 items-center justify-center border border-current text-[9px]">
                       {done ? (
-                        <Check size={11} className="text-brass" />
+                        <Check size={11} className="text-paper" />
                       ) : active ? (
-                        <Loader2 size={11} className="animate-spin text-brass" />
+                        <Loader2 size={11} className="animate-spin text-paper" />
                       ) : (
                         <span className="font-mono text-paper-muted">{i + 1}</span>
                       )}
@@ -849,7 +850,7 @@ export const AddFilmFlow = ({
           <div className="border-b border-white/10 p-5 sm:p-8">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="micro text-brass/80">Step five · written</p>
+                <p className="micro text-paper-dim">Step five · written</p>
                 <h2 id="add-film-title" className="mt-3 font-display text-4xl leading-none text-paper sm:text-5xl">
                   {selected.title} is in the archive.
                 </h2>
@@ -862,7 +863,7 @@ export const AddFilmFlow = ({
                   <p className="micro-sm text-paper-muted">Confidence</p>
                   <p className="num mt-1 text-2xl text-paper">
                     {Math.round(pending.result.confidenceBefore * 100)}
-                    <span className="text-brass"> → </span>
+                    <span className="text-paper"> → </span>
                     {Math.round(pending.result.confidenceAfter * 100)}
                     <span className="ml-0.5 text-sm text-paper-muted">%</span>
                   </p>
@@ -883,7 +884,7 @@ export const AddFilmFlow = ({
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {pending.result.themes.length > 0 ? (
                   pending.result.themes.map((theme: ThemeId) => (
-                    <span key={theme} className="tag border-brass/30 bg-brass/[0.06] text-brass-soft">
+                    <span key={theme} className="tag border-paper/30 bg-paper/[0.06] text-paper">
                       {THEMES[theme].label} <span className="text-paper-muted">{THEMES[theme].zh}</span>
                     </span>
                   ))
@@ -914,7 +915,7 @@ export const AddFilmFlow = ({
                           onClick={() => goTo(`/archive/${connection.filmId}`)}
                           className="group text-left"
                         >
-                          <span className="flex items-center gap-2 font-display text-base text-paper group-hover:text-brass-soft">
+                          <span className="flex items-center gap-2 font-display text-base text-paper group-hover:text-paper">
                             {connection.title}
                             <ArrowRight
                               size={11}
@@ -954,7 +955,7 @@ export const AddFilmFlow = ({
                             Math.abs(delta) < 0.01
                               ? 'text-paper-muted'
                               : delta > 0
-                                ? 'text-brass-soft'
+                                ? 'text-paper-soft'
                                 : 'text-[#9fb4b0]',
                           )}
                         >
@@ -1003,7 +1004,7 @@ export const AddFilmFlow = ({
 
             <div className="flex flex-col p-5 sm:p-7">
               <div className="border border-white/10 p-4">
-                <p className="micro text-brass/80">The frame</p>
+                <p className="micro text-paper-dim">The frame</p>
                 <div className="mt-3 aspect-[2/3] w-full max-w-[170px]">
                   <FilmPoster film={selected} showTitle={false} />
                 </div>

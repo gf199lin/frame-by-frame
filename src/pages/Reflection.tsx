@@ -131,7 +131,7 @@ const Yearbook = ({
                   </p>
                 </div>
               </div>
-              <p className="mt-4 border-l border-[#b02f2a]/50 pl-3 font-display text-[13px] italic leading-relaxed text-[#3a3428]">
+              <p className="mt-4 border-l border-[#29251f]/50 pl-3 font-display text-[13px] italic leading-relaxed text-[#3a3428]">
                 “{favourite.record.reflection}”
               </p>
             </div>
@@ -166,7 +166,7 @@ const buildYearbookHtml = (params: {
 <html lang="en"><head><meta charset="utf-8" />
 <title>Frame by Frame — A Year in Frames ${year}</title>
 <style>
-  :root { --ink:#171412; --paper:#f2f0eb; --muted:#6f6a62; --line:rgba(23,20,18,.18); --brass:#b02f2a; }
+  :root { --ink:#171412; --paper:#f2f0eb; --muted:#91816b; --line:rgba(23,20,18,.18); --brass:#29251f; }
   * { box-sizing: border-box; }
   body { margin:0; background:#0a0a0b; color:var(--ink); font-family: Georgia, "Times New Roman", serif; }
   .sheet { max-width: 880px; margin: 32px auto; background: var(--paper); padding: 64px 72px; }
@@ -491,12 +491,12 @@ export const Reflection = () => {
                     <div key={month.month} className="group flex h-full flex-1 flex-col justify-end">
                       <div className="relative flex flex-1 items-end">
                         <div
-                          className="mx-auto w-[62%] bg-[#171512]/85 transition-colors duration-300 group-hover:bg-[#b02f2a]"
+                          className="mx-auto w-[62%] bg-[#171512]/85 transition-colors duration-300 group-hover:bg-[#29251f]"
                           style={{ height: `${Math.max(month.count > 0 ? 8 : 1, (month.count / maxMonth) * 100)}%` }}
                           title={`${month.label}: ${month.count} films · ${formatMinutes(month.minutes)}`}
                         />
                       </div>
-                      <p className={`mt-2 text-center text-[8px] uppercase tracking-[0.1em] ${activeMonth?.month === month.month ? 'text-[#b02f2a]' : 'text-[#7a7264]'}`}>
+                      <p className={`mt-2 text-center text-[8px] uppercase tracking-[0.1em] ${activeMonth?.month === month.month ? 'text-[#29251f]' : 'text-[#7a7264]'}`}>
                         {month.label}
                       </p>
                       <p className="mt-0.5 text-center font-mono text-[8px] text-[#7a7264]">
@@ -561,7 +561,7 @@ export const Reflection = () => {
                   </p>
                 </div>
                 <div className="flex flex-col justify-center lg:col-span-5">
-                  <blockquote className="border-l border-[#b02f2a]/50 pl-5">
+                  <blockquote className="border-l border-[#29251f]/50 pl-5">
                     <p className="font-display text-[clamp(1.1rem,1.8vw,1.5rem)] leading-[1.55] text-[#2c2822]">
                       “{favorite.reflection}”
                     </p>
@@ -661,7 +661,7 @@ export const Reflection = () => {
                               title={`First half: ${percent(before)}`}
                             />
                             <div
-                              className="absolute top-1/2 h-[6px] w-[6px] -translate-y-1/2 bg-[#b02f2a]"
+                              className="absolute top-1/2 h-[6px] w-[6px] -translate-y-1/2 bg-[#29251f]"
                               style={{ left: `${Math.min(98, Math.max(2, after * 100))}%` }}
                               title={`Second half: ${percent(after)}`}
                             />
@@ -714,17 +714,17 @@ export const Reflection = () => {
       {/* Generation overlay */}
       {generating &&
         createPortal(
-          <div className="fixed inset-0 z-[110] flex flex-col items-center justify-center bg-[#0a0a0b]/95 px-6 text-center backdrop-blur">
-            <p className="micro text-brass/80">Composing the annual</p>
+          <div className="fixed inset-0 z-[110] flex flex-col items-center justify-center bg-[#1b1814]/96 px-6 text-center backdrop-blur">
+            <p className="micro text-paper-dim">Composing the annual</p>
             <p className="mt-4 font-display text-4xl text-paper sm:text-5xl">A year in frames.</p>
             <div className="mt-10 w-full max-w-sm space-y-3 text-left">
               {['Gathering the frames', 'Sorting themes and moods', 'Setting the type'].map((label, i) => (
                 <div key={label} className="flex items-center gap-3">
                   <span className="w-4">
                     {genStage > i ? (
-                      <span className="text-brass">✓</span>
+                      <span className="text-paper">✓</span>
                     ) : genStage === i ? (
-                      <Loader2 size={12} className="animate-spin text-brass" />
+                      <Loader2 size={12} className="animate-spin text-paper" />
                     ) : (
                       <span className="block h-1 w-1 rounded-full bg-paper-muted/40" />
                     )}
@@ -743,7 +743,7 @@ export const Reflection = () => {
                 </div>
               </div>
             </div>
-            <p className="mt-8 max-w-xs text-[10px] leading-relaxed text-paper-muted">
+            <p className="mt-8 max-w-xs text-[10px] leading-relaxed text-paper-dim">
               No model is called. The annual is composed from your {year} records in this browser.
             </p>
           </div>,
@@ -770,8 +770,8 @@ export const Reflection = () => {
             favourite={favorite && favoriteFilm ? { record: favorite, film: favoriteFilm } : null}
             hours={hours}
           />
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-white/10 bg-[#0C0D0F] p-4">
-            <p className="max-w-md text-[10px] leading-relaxed text-paper-muted">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-paper/15 bg-[#211e19] p-4">
+            <p className="max-w-md text-[10px] leading-relaxed text-paper-dim">
               The downloaded file is self-contained and print-ready. It contains only your film
               titles, ratings, and notes.
             </p>
@@ -785,7 +785,7 @@ export const Reflection = () => {
             </div>
           </div>
           {printBlocked && (
-            <p className="mt-2 text-[10px] text-[#d99a8a]">
+            <p className="mt-2 text-[10px] text-[#c7bba8]">
               The print window was blocked. Allow popups, or use Download HTML and print from there.
             </p>
           )}
