@@ -7,9 +7,9 @@ export const NotFound = () => (
     <h1 className="display-hero mt-6 max-w-3xl">
       This frame was
       <br />
-      <span className="italic text-paper-dim">cut from the print.</span>
+      <span className="italic text-taupe">cut from the print.</span>
     </h1>
-    <p className="mt-5 max-w-md text-[13px] leading-relaxed text-paper-muted">
+    <p className="mt-5 max-w-md text-[13px] leading-relaxed text-ink/70">
       The page you asked for does not exist — or the record it pointed to was removed from the
       archive.
     </p>

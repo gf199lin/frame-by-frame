@@ -165,10 +165,11 @@ export const Home = () => {
                     </span>
                   </div>
                   <div className="aspect-[2/3] w-full max-w-[240px] overflow-hidden shadow-[0_40px_110px_rgba(0,0,0,0.7)] lg:ml-auto">
-                    <FilmPoster film={latest.film} eager />
+                    <FilmPoster film={latest.film} showTitle={false} eager />
                   </div>
                   <div className="mt-4 max-w-[240px] border-t border-white/15 pt-3 lg:ml-auto">
-                    <div className="flex items-center justify-between gap-3">
+                    <p className="font-display text-xl leading-tight text-paper">{latest.film.title}</p>
+                    <div className="mt-2 flex items-center justify-between gap-3">
                       <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-paper-muted">
                         {formatLongDate(latest.record.watchedAt)}
                       </p>

@@ -18,7 +18,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
     if (!this.state.error) return this.props.children
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-ink px-6 text-center">
-        <p className="micro text-brass/80">Projection interrupted</p>
+        <p className="micro text-paper/50">Projection interrupted</p>
         <h1 className="mt-4 font-display text-4xl text-paper sm:text-5xl">
           Something broke in the projector.
         </h1>

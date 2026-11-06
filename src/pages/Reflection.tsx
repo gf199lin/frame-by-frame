@@ -429,7 +429,7 @@ export const Reflection = () => {
                 </p>
               </div>
               <div className="mt-3 aspect-[2/3] w-full max-w-[230px] overflow-hidden lg:ml-auto">
-                <FilmPoster film={favoriteFilm} />
+                <FilmPoster film={favoriteFilm} showTitle={false} />
               </div>
               <p className="mt-2.5 text-right font-mono text-[8px] uppercase tracking-[0.16em] text-[#7a7264]">
                 Cover · {favoriteFilm.year}

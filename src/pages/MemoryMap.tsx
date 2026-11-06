@@ -207,7 +207,7 @@ export const MemoryMapPage = () => {
                     <div>
                       <Link
                         to={`/archive/${selectedFilm.id}`}
-                        className="font-display text-2xl leading-tight text-paper hover:text-brass-soft"
+                        className="font-display text-2xl leading-tight text-paper hover:text-paper/70"
                       >
                         {selectedFilm.title}
                       </Link>
@@ -232,7 +232,7 @@ export const MemoryMapPage = () => {
                   </div>
                   <Link
                     to={`/archive/${selectedFilm.id}`}
-                    className="micro mt-5 inline-flex items-center gap-2 text-brass hover:text-brass-soft"
+                    className="micro mt-5 inline-flex items-center gap-2 text-paper/70 hover:text-paper"
                   >
                     Open memory <ArrowUpRight size={11} />
                   </Link>

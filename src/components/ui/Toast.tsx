@@ -37,7 +37,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
             className="pointer-events-auto flex items-start gap-3 border border-paper/15 bg-[#211e19]/95 px-4 py-3 shadow-2xl backdrop-blur-md animate-fade-up"
             role="status"
           >
-            <span className="mt-[2px] text-brass">
+            <span className="mt-[2px] text-paper/60">
               {toast.tone === 'success' ? <Check size={13} /> : <Info size={13} />}
             </span>
             <p className="flex-1 text-[12px] leading-relaxed text-paper">{toast.message}</p>

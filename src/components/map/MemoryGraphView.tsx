@@ -467,7 +467,7 @@ export const MemoryGraphView = ({
         <p className="hidden font-mono text-[9px] uppercase tracking-[0.16em] text-paper-muted/70 sm:block">
           Drag to pan · scroll to zoom · drag a node · click for context
         </p>
-        <div className="pointer-events-auto flex items-center gap-1 border border-white/10 bg-[#111111]/80 p-1 backdrop-blur">
+        <div className="pointer-events-auto flex items-center gap-1 border border-paper/15 bg-[#1b1814]/85 p-1 text-paper backdrop-blur">
           <button type="button" onClick={() => zoomBy(1.22)} className="icon-btn h-8 w-8 border-0" aria-label="Zoom in">
             <Plus size={13} />
           </button>
@@ -489,8 +489,8 @@ export const MemoryGraphView = ({
       </div>
 
       {selectedNode && (
-        <div className="pointer-events-none absolute left-4 top-4 max-w-[220px] border border-white/10 bg-[#111111]/70 px-3 py-2 backdrop-blur">
-          <p className="micro-sm text-brass/80">
+        <div className="pointer-events-none absolute left-4 top-4 max-w-[220px] border border-paper/15 bg-[#1b1814]/80 px-3 py-2 backdrop-blur">
+          <p className="micro-sm text-paper/55">
             {selectedNode.kind === 'film' ? 'Film' : selectedNode.kind === 'theme' ? 'Theme' : 'Mood'}
           </p>
           <p className="mt-1 font-display text-lg leading-tight text-paper">{selectedNode.label}</p>

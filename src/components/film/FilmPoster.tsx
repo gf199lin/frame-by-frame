@@ -27,7 +27,7 @@ const PosterPlaceholder = ({ film }: { film: Film }) => {
       </div>
 
       <div className="relative">
-        <p className="poster-meta mb-2 uppercase tracking-[0.18em] text-brass/70">
+        <p className="poster-meta mb-2 uppercase tracking-[0.18em] text-paper/50">
           Official artwork unavailable
         </p>
         <h3 className="poster-title font-display text-paper/90">{film.title}</h3>

@@ -16,14 +16,14 @@ const BootScreen = () => (
   <div className="flex min-h-screen flex-col items-center justify-center bg-ink px-6">
     <div className="w-full max-w-[280px]">
       <div className="flex items-center justify-between">
-        <p className="micro text-brass/80">Frame by Frame</p>
+        <p className="micro text-paper/50">Frame by Frame</p>
         <p className="micro-sm text-paper-muted">Est. 2026</p>
       </div>
       <p className="mt-5 font-display text-3xl leading-none text-paper">
-        Opening the archive<span className="text-brass">.</span>
+        Opening the archive<span className="text-paper">.</span>
       </p>
       <div className="relative mt-8 h-px w-full overflow-hidden bg-white/15">
-        <div className="absolute inset-y-0 left-0 w-1/3 animate-[boot_1.1s_ease-in-out_infinite] bg-brass" />
+        <div className="absolute inset-y-0 left-0 w-1/3 animate-[boot_1.1s_ease-in-out_infinite] bg-paper" />
       </div>
       <p className="mt-4 text-[10px] leading-relaxed text-paper-muted">
         Reading your local archive. Nothing is sent to a server.

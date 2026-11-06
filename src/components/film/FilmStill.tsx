@@ -31,12 +31,14 @@ export const FilmStill = ({
 }) => {
   const [failed, setFailed] = useState(false)
   const artwork = resolveFilmArtwork(film)
-  const scene = ratio === 'portrait' ? undefined : artwork?.backdrop ?? artwork?.stills?.[0]
+  const scene = artwork?.backdrop ?? artwork?.stills?.[0]
   const posterFallback = !scene ? artwork?.poster : undefined
   const image = scene ?? posterFallback
   const src = image ? imageUrl(image, ratio === 'portrait' ? 'w500' : 'w1280') : ''
   const srcSet = image ? imageSrcSet(image) : undefined
   const isPosterFallback = !scene && Boolean(posterFallback)
+  /** A poster cropped to a wide frame needs blur; in a portrait slot it fits. */
+  const blurPoster = isPosterFallback && ratio !== 'portrait'
 
   useEffect(() => {
     setFailed(false)
@@ -78,7 +80,7 @@ export const FilmStill = ({
           onError={() => setFailed(true)}
           className={cn(
             'h-full w-full object-cover',
-            isPosterFallback && 'scale-110 blur-[18px] brightness-[0.62] saturate-[0.9]',
+            blurPoster && 'scale-110 blur-[18px] brightness-[0.62] saturate-[0.9]',
           )}
           style={{
             objectPosition:
