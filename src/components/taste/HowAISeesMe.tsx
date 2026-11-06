@@ -59,7 +59,7 @@ export const HowAISeesMe = ({
                 <h4 className="mt-2 font-display text-xl leading-snug text-ink sm:text-2xl">
                   {stage.headline}
                 </h4>
-                <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-ink/65">
+                <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-ink/75">
                   {stage.body}
                 </p>
                 {stage.topTheme && (
@@ -76,7 +76,7 @@ export const HowAISeesMe = ({
                           'inline-flex items-center gap-1.5 border px-2.5 py-1 text-[12px] uppercase tracking-[0.14em]',
                           state.verdict === 'agree'
                             ? 'border-brass/40 bg-brass/10 text-brass-soft'
-                            : 'border-ink/25 text-ink/65',
+                            : 'border-ink/25 text-ink/75',
                         )}
                       >
                         {state.verdict === 'agree' ? <Check size={10} /> : <X size={10} />}

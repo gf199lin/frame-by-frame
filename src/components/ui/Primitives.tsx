@@ -46,7 +46,7 @@ export const EmptyState = ({
       {eyebrow && <p className={cn('micro mb-4', light ? 'text-brass' : 'text-brass/80')}>{eyebrow}</p>}
       <h3 className={cn('font-display text-3xl', light ? 'text-ink' : 'text-ink')}>{title}</h3>
       {description && (
-        <p className={cn('mt-3 max-w-md text-sm leading-relaxed', light ? 'text-ink/60' : 'text-ink-dim')}>
+        <p className={cn('mt-3 max-w-md text-sm leading-relaxed', light ? 'text-ink/70' : 'text-ink-dim')}>
           {description}
         </p>
       )}
@@ -67,7 +67,7 @@ export const TextLink = ({
   <Link
     to={to}
     className={cn(
-      'link-rule text-ink/65 transition-colors hover:text-ink',
+      'link-rule text-ink/75 transition-colors hover:text-ink',
       className,
     )}
   >

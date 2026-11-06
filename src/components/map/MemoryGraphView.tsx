@@ -379,7 +379,7 @@ export const MemoryGraphView = ({
                       <rect x={-23} y={-30} width={46} height={60} fill="#181818" />
                       {film && (
                         <image
-                          href={frameSrc(film.id, 'w342')}
+                          href={frameSrc(film, 'w342')}
                           x={-40}
                           y={-42}
                           width={80}

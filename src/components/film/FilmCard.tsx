@@ -37,7 +37,7 @@ export const FilmCard = ({
         <FilmStill film={film} ratio="photo" />
 
         {typeof index === 'number' && (
-          <span className="pointer-events-none absolute left-0 top-0 bg-paper/85 px-2 py-1 font-mono text-[12px] tracking-[0.18em] text-ink/70 backdrop-blur-sm">
+          <span className="pointer-events-none absolute left-0 top-0 bg-paper/85 px-2 py-1 font-mono text-[12px] tracking-[0.18em] text-ink/80 backdrop-blur-sm">
             {String(index).padStart(3, '0')}
           </span>
         )}
@@ -96,7 +96,7 @@ export const FilmIndexRow = ({
 }) => (
   <Link
     to={`/archive/${film.id}`}
-    className="group grid grid-cols-[2rem_4.5rem_1fr_auto] items-center gap-3 border-b border-ink/12 py-4 transition-colors hover:bg-ink/[0.03] sm:grid-cols-[3.5rem_7rem_1fr_8rem_7rem] sm:gap-4"
+    className="group grid grid-cols-[2rem_4.5rem_1fr_auto] items-center gap-3 border-b border-ink/10 py-4 transition-colors hover:bg-ink/[0.03] sm:grid-cols-[3.5rem_7rem_1fr_8rem_7rem] sm:gap-4"
   >
     <span className="font-mono text-[12px] tracking-[0.16em] text-taupe">
       {String(index).padStart(3, '0')}
@@ -140,8 +140,8 @@ export const WaitingRoomCard = ({
         <span className="text-brass">+</span>
       </span>
     </div>
-    <div className="mt-2.5 border-t border-ink/12 pt-2">
-      <p className="truncate font-display text-[1.05rem] leading-tight text-ink/70 transition-colors group-hover:text-ink">
+    <div className="mt-2.5 border-t border-ink/10 pt-2">
+      <p className="truncate font-display text-[1.05rem] leading-tight text-ink/80 transition-colors group-hover:text-ink">
         {film.title}
       </p>
       <p className="mt-0.5 truncate text-[12px] uppercase tracking-[0.12em] text-taupe/80">

@@ -73,7 +73,6 @@ const HitPoster = ({ hit, eager = false }: { hit: SearchHit; eager?: boolean }) 
           className="h-full w-full object-cover"
           loading={eager ? 'eager' : 'lazy'}
           decoding="async"
-          fetchPriority={eager ? 'high' : 'auto'}
           referrerPolicy="no-referrer"
           onError={() => setFailed(true)}
         />
@@ -375,6 +374,13 @@ export const AddFilmFlow = ({
   const currentIndex = STEP_INDEX[step]
   const yearLabel = selected?.year ? String(selected.year) : 'Year unknown'
   const runtimeLabel = selected?.runtime ? `${selected.runtime} minutes` : 'Runtime unknown'
+  const reviewLine = [
+    selected?.titleZh,
+    selected && selected.country !== '—' ? selected.country : '',
+    selected && selected.language !== '—' ? selected.language : '',
+  ]
+    .filter(Boolean)
+    .join(' · ')
 
   return (
     <Modal
@@ -385,7 +391,7 @@ export const AddFilmFlow = ({
       labelledBy="add-film-title"
       className="my-0 min-h-full sm:min-h-0"
     >
-      <div className="border-b border-white/12 px-5 py-4 pr-14 sm:px-8 sm:pr-16">
+      <div className="sticky top-0 z-20 border-b border-white/10 bg-[#1b1814] px-5 py-4 pr-14 sm:px-8 sm:pr-16">
         <div className="flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
             <span className="font-mono text-[14px] tracking-[0.18em] text-paper">
@@ -438,7 +444,7 @@ export const AddFilmFlow = ({
 
       {step === 'search' && (
         <div className="grid flex-1 gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="border-b border-white/12 p-5 sm:p-8 lg:border-b-0 lg:border-r">
+          <div className="min-w-0 border-b border-white/10 p-5 sm:p-8 lg:border-b-0 lg:border-r">
             <p className="micro text-paper-dim">Step one</p>
             <h2
               id="add-film-title"
@@ -584,7 +590,7 @@ export const AddFilmFlow = ({
                               ) : null}
                               {hit.inArchive && (
                                 <span className="border border-paper/30 px-1.5 py-0.5 font-mono text-[12.5px] uppercase tracking-[0.12em] text-paper-dim">
-                                  Already in your archive
+                                  In archive
                                 </span>
                               )}
                             </span>
@@ -601,7 +607,7 @@ export const AddFilmFlow = ({
                             <span className="mt-1.5 block truncate text-[15px] text-paper-muted">
                               {[hit.genres.slice(0, 3).join(' / '), hit.inArchive ? 'Open its memory' : '']
                                 .filter(Boolean)
-                                .join(' · ') || 'Feature film'}
+                                .join(' · ')}
                             </span>
                           </span>
                           <ChevronRight
@@ -714,7 +720,7 @@ export const AddFilmFlow = ({
 
       {step === 'manual' && (
         <div className="grid flex-1 gap-0 lg:grid-cols-[1fr_0.8fr]">
-          <div className="border-b border-white/12 p-5 sm:p-8 lg:border-b-0 lg:border-r">
+          <div className="min-w-0 border-b border-white/10 p-5 sm:p-8 lg:border-b-0 lg:border-r">
             <button
               type="button"
               onClick={() => setStep('search')}
@@ -848,7 +854,7 @@ export const AddFilmFlow = ({
         <div className="grid flex-1 gap-0 lg:grid-cols-[0.82fr_1fr]">
           <div
             className={cn(
-              'border-b border-white/12 p-5 sm:p-8 lg:border-b-0 lg:border-r',
+              'min-w-0 border-b border-white/10 p-5 sm:p-8 lg:border-b-0 lg:border-r',
               step === 'form' && 'hidden lg:block',
             )}
           >
@@ -886,7 +892,7 @@ export const AddFilmFlow = ({
             </div>
           </div>
 
-          <div className="p-5 sm:p-8">
+          <div className="min-w-0 p-5 sm:p-8">
             {step === 'review' ? (
               <div className="flex h-full flex-col">
                 <button
@@ -904,11 +910,9 @@ export const AddFilmFlow = ({
                 <h2 className="mt-3 font-display text-[2.5rem] leading-none text-paper sm:text-[2.9rem]">
                   Is this the film?
                 </h2>
-                <p className="mt-3 text-[15px] leading-relaxed text-paper-dim">
-                  {[selected.titleZh, selected.country, selected.language]
-                    .filter(Boolean)
-                    .join(' · ')}
-                </p>
+                {reviewLine && (
+                  <p className="mt-3 text-[15px] leading-relaxed text-paper-dim">{reviewLine}</p>
+                )}
 
                 <dl className="mt-8 divide-y divide-white/10 border-y border-white/10 text-[15px]">
                   {[
@@ -1081,7 +1085,7 @@ export const AddFilmFlow = ({
 
       {step === 'analyzing' && selected && (
         <div className="grid flex-1 lg:grid-cols-[0.7fr_1fr]">
-          <div className="relative hidden overflow-hidden border-r border-white/12 lg:block">
+          <div className="relative hidden overflow-hidden border-r border-white/10 lg:block">
             <FilmPoster film={selected} />
             <div className="absolute inset-0 bg-black/35" />
             <div className="absolute inset-0 overflow-hidden">
@@ -1166,7 +1170,7 @@ export const AddFilmFlow = ({
 
       {step === 'result' && selected && pending && (
         <div className="flex flex-1 flex-col">
-          <div className="border-b border-white/12 p-5 sm:p-8">
+          <div className="border-b border-white/10 p-5 sm:p-8">
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <p className="micro text-paper-dim">Step five · written</p>
@@ -1180,12 +1184,12 @@ export const AddFilmFlow = ({
                   {pending.result.summary}
                 </p>
               </div>
-              <div className="flex items-center gap-6 border-l border-white/12 pl-6">
+              <div className="flex items-center gap-6 border-l border-white/10 pl-6">
                 <div>
                   <p className="micro-sm text-paper-muted">Confidence</p>
                   <p className="num mt-1 text-[26px] text-paper">
                     {Math.round(pending.result.confidenceBefore * 100)}
-                    <span className="text-paper"> →</span>
+                    <span className="text-paper"> → </span>
                     {Math.round(pending.result.confidenceAfter * 100)}
                     <span className="ml-0.5 text-[15px] text-paper-muted">%</span>
                   </p>
@@ -1201,7 +1205,7 @@ export const AddFilmFlow = ({
           </div>
 
           <div className="grid flex-1 gap-0 lg:grid-cols-[1fr_1fr_0.9fr]">
-            <div className="border-b border-white/12 p-5 sm:p-7 lg:border-b-0 lg:border-r">
+            <div className="border-b border-white/10 p-5 sm:p-7 lg:border-b-0 lg:border-r">
               <p className="micro text-paper-muted">Extracted from your note</p>
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {pending.result.themes.length > 0 ? (
@@ -1260,7 +1264,7 @@ export const AddFilmFlow = ({
               </div>
             </div>
 
-            <div className="border-b border-white/12 p-5 sm:p-7 lg:border-b-0 lg:border-r">
+            <div className="border-b border-white/10 p-5 sm:p-7 lg:border-b-0 lg:border-r">
               <p className="micro text-paper-muted">What moved</p>
               <ul className="mt-5 space-y-5">
                 {pending.result.findings.map((finding) => {

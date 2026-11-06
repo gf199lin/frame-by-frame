@@ -97,7 +97,7 @@ export const Home = () => {
       {/* ================================================================ */}
       <section className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
         <img
-          src={coverFilm ? frameSrc(coverFilm.id) : frameSrc('manchester')}
+          src={coverFilm ? frameSrc(coverFilm) : frameSrc('manchester')}
           alt={
             coverFilm
               ? `${coverFilm.title} (${coverFilm.year}) — official backdrop`
@@ -213,10 +213,10 @@ export const Home = () => {
                 <span className="flex items-baseline gap-3">
                   <span className="font-mono text-[11px] tracking-[0.2em] text-brass">{item.no}</span>
                   <span>
-                    <span className="block font-display text-[1.35rem] leading-none text-ink/65 transition-colors group-hover:text-ink">
+                    <span className="block font-display text-[1.35rem] leading-none text-ink/75 transition-colors group-hover:text-ink">
                       {item.label}
                     </span>
-                    <span className="zh-label mt-1.5 block text-[12px] text-taupe/60">
+                    <span className="zh-label mt-1.5 block text-[12px] text-taupe">
                       {item.zh}
                     </span>
                   </span>
@@ -247,7 +247,7 @@ export const Home = () => {
                 </div>
                 <div className="text-right">
                   <p className="folio">Frame no. {String(records.length).padStart(3, '0')}</p>
-                  <p className="mt-1.5 font-mono text-[12px] uppercase tracking-[0.18em] text-ink/65">
+                  <p className="mt-1.5 font-mono text-[12px] uppercase tracking-[0.18em] text-ink/75">
                     {formatLongDate(latest.record.watchedAt)}
                   </p>
                 </div>
@@ -269,7 +269,7 @@ export const Home = () => {
               <div className="mt-8 grid grid-cols-12 gap-x-6 gap-y-8 pb-16 lg:pb-24">
                 <div className="col-span-12 sm:col-span-3">
                   <p className="micro-sm text-taupe">Watched</p>
-                  <p className="mt-2 text-[14px] leading-relaxed text-ink/65">
+                  <p className="mt-2 text-[14px] leading-relaxed text-ink/75">
                     {formatLongDate(latest.record.watchedAt)}
                   </p>
                   <div className="mt-4 flex items-center gap-3">
@@ -335,7 +335,7 @@ export const Home = () => {
                 </p>
                 <h2 className="mt-4 t-head">What the last months kept.</h2>
               </div>
-              <Link to="/archive" className="link-rule text-ink/65 hover:text-ink">
+              <Link to="/archive" className="link-rule text-ink/75 hover:text-ink">
                 The whole archive <ArrowRight size={12} />
               </Link>
             </div>
@@ -347,7 +347,7 @@ export const Home = () => {
               <Reveal key={record.id} delay={0} className="col-span-12 lg:col-span-7">
                 <Link to={`/archive/${film.id}`} className="group block">
                   <FilmStill film={film} ratio="photo" />
-                  <div className="mt-4 flex items-start justify-between gap-4 border-t border-ink/12 pt-3">
+                  <div className="mt-4 flex items-start justify-between gap-4 border-t border-ink/10 pt-3">
                     <div>
                       <h3 className="font-display text-[1.75rem] leading-tight text-ink transition-colors group-hover:text-taupe">
                         {film.title}
@@ -372,7 +372,7 @@ export const Home = () => {
                 <Reveal key={record.id} delay={80 + i * 60}>
                   <Link to={`/archive/${film.id}`} className="group block">
                     <FilmStill film={film} ratio="photo" />
-                    <div className="mt-3 flex items-start justify-between gap-3 border-t border-ink/12 pt-2.5">
+                    <div className="mt-3 flex items-start justify-between gap-3 border-t border-ink/10 pt-2.5">
                       <div className="min-w-0">
                         <h3 className="truncate font-display text-[1.2rem] leading-tight text-ink transition-colors group-hover:text-taupe">
                           {film.title}
@@ -392,7 +392,7 @@ export const Home = () => {
               <Reveal key={record.id} delay={40} className="col-span-8 col-start-1 lg:col-span-5 lg:col-start-2">
                 <Link to={`/archive/${film.id}`} className="group block lg:-mt-6">
                   <FilmStill film={film} ratio="photo" />
-                  <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-ink/12 pt-2.5">
+                  <div className="mt-3 flex items-baseline justify-between gap-3 border-t border-ink/10 pt-2.5">
                     <h3 className="font-display text-[1.2rem] leading-tight text-ink transition-colors group-hover:text-taupe">
                       {film.title}
                     </h3>
@@ -406,7 +406,7 @@ export const Home = () => {
 
             {recent.slice(4, 5).map(({ record, film }) => (
               <Reveal key={record.id} delay={80} className="col-span-12 sm:col-span-8 sm:col-start-5 lg:col-span-4 lg:col-start-9">
-                <Link to={`/archive/${film.id}`} className="group flex items-center gap-4 border-t border-ink/12 pt-4">
+                <Link to={`/archive/${film.id}`} className="group flex items-center gap-4 border-t border-ink/10 pt-4">
                   <span className="relative block h-16 w-24 shrink-0 overflow-hidden">
                     <FilmStill film={film} ratio="free" className="h-full w-full" />
                   </span>
@@ -439,7 +439,7 @@ export const Home = () => {
                 </p>
                 <h2 className="mt-4 t-head text-ink">What you wrote afterwards.</h2>
               </div>
-              <p className="measure-tight text-[13px] leading-relaxed text-ink/50">
+              <p className="measure-tight text-[13px] leading-relaxed text-ink/60">
                 The paragraph after the credits. One per film, kept in your own words.
               </p>
             </div>
@@ -453,7 +453,7 @@ export const Home = () => {
                     to={`/archive/${film.id}`}
                     className="group grid grid-cols-[2rem_1fr] gap-x-4 border-b border-ink/15 py-6 first:pt-0"
                   >
-                    <span className="font-mono text-[12px] tracking-[0.16em] text-ink/35">
+                    <span className="font-mono text-[12px] tracking-[0.16em] text-ink/50">
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <span>
@@ -461,11 +461,11 @@ export const Home = () => {
                         <span className="font-display text-[1.45rem] leading-tight text-ink transition-colors group-hover:text-brass">
                           {film.title}
                         </span>
-                        <span className="font-mono text-[12px] uppercase tracking-[0.14em] text-ink/40">
+                        <span className="font-mono text-[12px] uppercase tracking-[0.14em] text-ink/55">
                           {formatLongDate(record.watchedAt)}
                         </span>
                       </span>
-                      <span className="mt-2 block max-w-[38rem] text-[15px] leading-[1.75] text-ink/65">
+                      <span className="mt-2 block max-w-[38rem] text-[15px] leading-[1.75] text-ink/75">
                         “{record.reflection}”
                       </span>
                     </span>
@@ -476,14 +476,14 @@ export const Home = () => {
 
             <Reveal delay={100} className="col-span-12 lg:col-span-4 lg:col-start-9">
               <div className="border-t border-ink/20 pt-4">
-                <p className="micro-sm text-ink/40">Selected still</p>
+                <p className="micro-sm text-ink/55">Selected still</p>
                 {latest?.film && (
                   <Link to={`/archive/${latest.film.id}`} className="group mt-4 block">
                     <FilmStill film={latest.film} ratio="portrait" tone="paper" />
                     <p className="mt-3 font-display text-[1.15rem] leading-tight text-ink">
                       {latest.film.title}
                     </p>
-                    <p className="mt-1 font-mono text-[12px] uppercase tracking-[0.14em] text-ink/40">
+                    <p className="mt-1 font-mono text-[12px] uppercase tracking-[0.14em] text-ink/55">
                       Frame no. {String(records.length).padStart(3, '0')}
                     </p>
                   </Link>
@@ -510,7 +510,7 @@ export const Home = () => {
             </div>
           </Reveal>
 
-          <dl className="mt-8 grid grid-cols-2 gap-y-10 border-y border-paper/12 py-10 lg:grid-cols-4">
+          <dl className="mt-8 grid grid-cols-2 gap-y-10 border-y border-paper/10 py-10 lg:grid-cols-4">
             {[
               { label: 'Films kept', zh: '收藏电影', value: String(records.length).padStart(2, '0'), sub: 'in the archive' },
               { label: 'Hours in the dark', zh: '黑暗中的小时', value: hours.toFixed(1), sub: formatMinutes(snapshot.totalMinutes) },
@@ -522,7 +522,7 @@ export const Home = () => {
                 sub: 'an estimate, not a verdict',
               },
             ].map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 60} className={i > 0 ? 'lg:border-l lg:border-paper/12 lg:pl-8' : ''}>
+              <Reveal key={stat.label} delay={i * 60} className={i > 0 ? 'lg:border-l lg:border-paper/10 lg:pl-8' : ''}>
                 <dt className="text-[12px] uppercase tracking-[0.2em] text-paper-dim">{stat.label}</dt>
                 <dd className="num mt-3 text-[clamp(2.6rem,5vw,4.4rem)] leading-[0.9] text-paper">
                   {stat.value}
@@ -547,12 +547,12 @@ export const Home = () => {
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                   <p className="num text-[3rem] leading-none text-ink">
                     {Math.round(snapshot.overallConfidence * 100)}
-                    <span className="text-lg text-ink/40">%</span>
+                    <span className="text-lg text-ink/55">%</span>
                   </p>
-                  <p className="micro-sm mt-1.5 text-ink/45">confidence</p>
+                  <p className="micro-sm mt-1.5 text-ink/60">confidence</p>
                 </div>
               </div>
-              <p className="mt-2 text-center text-[12.5px] text-ink/45">
+              <p className="mt-2 text-center text-[12.5px] text-ink/60">
                 Six axes, read from ratings, note depth and recurring themes.
               </p>
             </Reveal>
@@ -564,17 +564,17 @@ export const Home = () => {
               <h2 className="mt-5 font-display text-[clamp(2.1rem,4vw,3.4rem)] leading-[1.02] tracking-[-0.02em] text-ink">
                 {tasteSignature(snapshot)}
               </h2>
-              <p className="measure mt-5 text-[15px] leading-[1.8] text-ink/65">
+              <p className="measure mt-5 text-[15px] leading-[1.8] text-ink/75">
                 {summary[0]} {summary[1] ?? ''}
               </p>
 
               <div className="mt-9 grid gap-8 border-t border-ink/15 pt-6 sm:grid-cols-2">
                 <div>
-                  <p className="micro-sm text-ink/40">Strongest signal</p>
+                  <p className="micro-sm text-ink/55">Strongest signal</p>
                   <p className="mt-2 font-display text-[1.7rem] leading-tight text-ink">
                     {strongest ? strongest.def.label : 'Still listening'}
                   </p>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink/55">
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink/65">
                     {strongest
                       ? `${strongest.def.labelZh} · ${percent(
                           strongest.value < 0.5 ? 1 - strongest.value : strongest.value,
@@ -585,17 +585,17 @@ export const Home = () => {
 
                 {snapshot.topThemes.length > 0 && (
                   <div>
-                    <p className="micro-sm text-ink/40">Themes you return to</p>
+                    <p className="micro-sm text-ink/55">Themes you return to</p>
                     <ul className="mt-2.5 space-y-1.5">
                       {snapshot.topThemes.slice(0, 4).map((theme) => (
                         <li key={theme.id} className="flex items-baseline justify-between gap-3 border-b border-ink/10 pb-1.5">
-                          <span className="text-[14px] text-ink/75">
+                          <span className="text-[14px] text-ink/80">
                             {THEMES[theme.id].label}
-                            <span className="ml-2 zh-label text-[12px] text-ink/40">
+                            <span className="ml-2 zh-label text-[12px] text-ink/55">
                               {THEMES[theme.id].zh}
                             </span>
                           </span>
-                          <span className="font-mono text-[12px] text-ink/40">
+                          <span className="font-mono text-[12px] text-ink/55">
                             {String(theme.count).padStart(2, '0')}
                           </span>
                         </li>
@@ -609,7 +609,7 @@ export const Home = () => {
                 <Link to="/taste" className="link-rule text-brass-ink hover:text-ink">
                   Read the full taste profile <ArrowRight size={12} />
                 </Link>
-                <p className="flex items-center gap-2 text-[12.5px] text-ink/40">
+                <p className="flex items-center gap-2 text-[12.5px] text-ink/55">
                   <Sparkles size={10} /> Computed locally. No external model was called.
                 </p>
               </div>
@@ -624,7 +624,7 @@ export const Home = () => {
       <section className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
         {favouriteFilm && (
           <img
-            src={frameSrc(favouriteFilm.id)}
+            src={frameSrc(favouriteFilm)}
             alt={`${favouriteFilm.title} (${favouriteFilm.year}) — official backdrop`}
             className="absolute inset-0 h-full w-full object-cover object-[60%_center] opacity-30"
             loading="lazy"

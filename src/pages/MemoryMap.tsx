@@ -81,7 +81,7 @@ export const MemoryMapPage = () => {
 
   return (
     <div className="shell pb-20 pt-10 lg:pt-14">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/12 pb-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 pb-3">
         <p className="artifact-label">
           <b>03</b> Memory map
         </p>
@@ -94,7 +94,7 @@ export const MemoryMapPage = () => {
             Memory map.
           </h1>
           <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-            <p className="zh-title text-[15px] text-ink/65">电影记忆地图</p>
+            <p className="zh-title text-[15px] text-ink/75">电影记忆地图</p>
             <span className="hidden h-3 w-px bg-white/20 sm:block" />
             <p className="measure text-[14px] leading-relaxed text-taupe">
               Films are frames. Themes are the ground they share. Moods are how the memory felt.
@@ -120,7 +120,7 @@ export const MemoryMapPage = () => {
         </dl>
       </div>
 
-      <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-y border-ink/12 py-4">
+      <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-y border-ink/10 py-4">
         <GraphLegend showThemes={showThemes} showMoods={showMoods} />
         <div className="flex items-center gap-3">
           <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-taupe sm:inline">
@@ -353,7 +353,7 @@ export const MemoryMapPage = () => {
           )}
         </div>
 
-        <div className={cn('mt-3 flex flex-wrap items-center justify-between gap-2 text-[12.5px] text-taupe/60')}>
+        <div className={cn('mt-3 flex flex-wrap items-center justify-between gap-2 text-[12.5px] text-taupe')}>
           <p>
             Node size reflects rating weight or how many notes carry that theme. Solid lines between
             films require at least two shared themes.

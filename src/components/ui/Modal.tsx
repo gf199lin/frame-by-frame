@@ -43,7 +43,7 @@ export const Modal = ({
   }
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-stretch justify-center overflow-y-auto bg-black/75 p-0 backdrop-blur-[6px] sm:items-center sm:p-6">
+    <div className="fixed inset-0 z-[100] flex items-stretch justify-center overflow-y-auto bg-black/75 p-0 backdrop-blur-[6px] sm:items-start sm:p-6">
       <button
         type="button"
         aria-label="Close dialog"
@@ -66,9 +66,9 @@ export const Modal = ({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center border border-paper/25 bg-[#211e19]/90 text-paper-dim shadow-lg backdrop-blur transition-colors hover:border-paper/50 hover:text-paper"
+            className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center border border-paper/30 bg-[#211e19]/90 text-paper-dim shadow-lg backdrop-blur transition-colors hover:border-paper/60 hover:text-paper"
           >
-            <X size={14} />
+            <X size={16} />
           </button>
         )}
         {children}

@@ -10,17 +10,22 @@
  */
 
 import { FILM_BY_ID } from '@/data/films'
+import type { Film } from '@/types'
 import { imageUrl, posterOf, sceneImageOf, type TmdbSize } from '@/lib/artwork'
 
 const base = import.meta.env.BASE_URL || '/'
 
 export const withBase = (path: string) => `${base}${path.replace(/^\/+/, '')}`
 
-/** A wide, real frame for a film: TMDB backdrop, then its official poster. */
-export const frameSrc = (filmId: string, size: TmdbSize = 'w1280') => {
-  const film = FILM_BY_ID[filmId]
-  if (!film) return ''
-  const image = sceneImageOf(film) ?? posterOf(film)
+/**
+ * A wide, real frame for a film: TMDB backdrop, then its official poster.
+ * Accepts a Film object so catalogue additions (not present in the seed
+ * registry) still resolve their own artwork instead of an empty src.
+ */
+export const frameSrc = (film: Film | string, size: TmdbSize = 'w1280') => {
+  const resolved = typeof film === 'string' ? FILM_BY_ID[film] : film
+  if (!resolved) return ''
+  const image = sceneImageOf(resolved) ?? posterOf(resolved)
   return image ? imageUrl(image, size) : ''
 }
 

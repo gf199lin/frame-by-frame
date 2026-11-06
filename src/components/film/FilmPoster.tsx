@@ -16,7 +16,7 @@ const PosterPlaceholder = ({ film }: { film: Film }) => {
   return (
     <div className="absolute inset-0 flex flex-col justify-between bg-[#211e19] p-[7%]">
       <div
-        className="pointer-events-none absolute inset-[5%] border border-white/12"
+        className="pointer-events-none absolute inset-[5%] border border-white/10"
         aria-hidden="true"
       />
       <div className="relative flex items-start justify-between gap-2">

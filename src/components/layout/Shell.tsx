@@ -71,7 +71,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-[60] border-b border-ink/12 bg-paper/92 backdrop-blur-xl">
+      <header className="sticky top-0 z-[60] border-b border-ink/10 bg-paper/90 backdrop-blur-xl">
         <div className="h-px w-full bg-ink/55" aria-hidden="true" />
         <div className="shell flex h-[76px] items-stretch justify-between gap-3 xl:gap-5">
           <div className="flex items-center">
@@ -84,7 +84,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'group relative flex flex-col justify-center border-l border-ink/12 px-4 transition-colors 2xl:px-5',
+                  'group relative flex flex-col justify-center border-l border-ink/10 px-4 transition-colors 2xl:px-5',
                   isActive(item.to) ? 'text-ink' : 'text-taupe hover:text-ink',
                 )}
               >
@@ -92,7 +92,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   <span
                     className={cn(
                       'font-mono text-[10px] tracking-[0.1em]',
-                      isActive(item.to) ? 'text-ink' : 'text-taupe/70',
+                      isActive(item.to) ? 'text-ink' : 'text-taupe/85',
                     )}
                   >
                     {item.index}
@@ -114,10 +114,10 @@ export const Shell = ({ children }: { children: ReactNode }) => {
 
           <div className="flex items-center gap-4">
             <div className="hidden text-right 2xl:block">
-              <p className="font-mono text-[12px] tracking-[0.18em] text-ink/70">
+              <p className="font-mono text-[12px] tracking-[0.18em] text-ink/80">
                 {String(records.length).padStart(2, '0')} FILMS
               </p>
-              <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-taupe/70">
+              <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-taupe/85">
                 Local archive
               </p>
             </div>
@@ -142,13 +142,13 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             </button>
           </div>
         </div>
-        <div className="h-px w-full bg-ink/12" aria-hidden="true" />
+        <div className="h-px w-full bg-ink/10" aria-hidden="true" />
       </header>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-[90] flex flex-col bg-paper xl:hidden">
           <div className="h-px w-full bg-ink/55" />
-          <div className="flex h-[76px] items-center justify-between border-b border-ink/12 px-5">
+          <div className="flex h-[76px] items-center justify-between border-b border-ink/10 px-5">
             <Brand compact />
             <button type="button" onClick={() => setMobileOpen(false)} className="icon-btn" aria-label="Close menu">
               <X size={17} />
@@ -160,7 +160,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'flex items-baseline justify-between border-b border-ink/12 py-6',
+                  'flex items-baseline justify-between border-b border-ink/10 py-6',
                   isActive(item.to) ? 'text-ink' : 'text-ink/80',
                 )}
               >
@@ -170,11 +170,11 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   </span>
                   <span className="font-display text-[2.1rem] leading-none">{item.label}</span>
                 </span>
-                <span className="zh-label text-[13px] text-ink/60">{item.zh}</span>
+                <span className="zh-label text-[13px] text-ink/70">{item.zh}</span>
               </NavLink>
             ))}
           </nav>
-          <div className="border-t border-ink/12 px-5 py-6">
+          <div className="border-t border-ink/10 px-5 py-6">
             <button type="button" onClick={() => openAdd()} className="btn btn-primary w-full">
               <Plus size={14} /> Add a Film
             </button>

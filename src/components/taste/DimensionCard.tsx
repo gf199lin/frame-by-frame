@@ -63,7 +63,7 @@ export const DimensionCard = ({
         <div>
           <PoleAxis value={score.value} low={def.low} high={def.high} />
           <div className="mt-4 flex items-baseline justify-between gap-4">
-            <p className="text-[14px] leading-relaxed text-ink/65">
+            <p className="text-[14px] leading-relaxed text-ink/75">
               Your archive leans{' '}
               <span className="text-brass-soft">{leanPct}% toward {leaning.toLowerCase()}</span>.
               {' '}
@@ -84,7 +84,7 @@ export const DimensionCard = ({
                     : 'You corrected this'}
               </span>
               {feedback.correction && (
-                <p className="text-[13px] leading-relaxed text-ink/65">“{feedback.correction}”</p>
+                <p className="text-[13px] leading-relaxed text-ink/75">“{feedback.correction}”</p>
               )}
             </div>
           ) : null}
@@ -123,7 +123,7 @@ export const DimensionCard = ({
             <div className="mt-3">
               <label className="field-label" htmlFor={`correction-${def.key}`}>
                 <span>In your words</span>
-                <span className="normal-case tracking-normal text-taupe/60">
+                <span className="normal-case tracking-normal text-taupe">
                   Stored locally, not sent anywhere
                 </span>
               </label>
@@ -171,7 +171,7 @@ export const DimensionCard = ({
                   to={`/archive/${item.filmId}`}
                   className="group/quote block border-b border-ink/[0.07] pb-3 last:border-0"
                 >
-                  <p className="font-display text-[15px] italic leading-relaxed text-ink/65 transition-colors group-hover/quote:text-ink">
+                  <p className="font-display text-[15px] italic leading-relaxed text-ink/75 transition-colors group-hover/quote:text-ink">
                     “{item.quote}”
                   </p>
                   <p className="mt-2 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-taupe">

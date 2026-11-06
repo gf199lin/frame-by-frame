@@ -98,7 +98,7 @@ export const FilmStill = ({
           <div
             className={cn(
               'pointer-events-none absolute inset-[6%] border',
-              tone === 'paper' ? 'border-ink/15' : 'border-white/12',
+              tone === 'paper' ? 'border-ink/15' : 'border-white/10',
             )}
             aria-hidden="true"
           />
@@ -106,7 +106,7 @@ export const FilmStill = ({
             <p
               className={cn(
                 'font-mono text-[11px] uppercase tracking-[0.22em]',
-                tone === 'paper' ? 'text-ink/45' : 'text-paper/40',
+                tone === 'paper' ? 'text-ink/60' : 'text-paper/40',
               )}
             >
               Image unavailable
@@ -114,7 +114,7 @@ export const FilmStill = ({
             <p
               className={cn(
                 'mt-2 font-display text-[clamp(1rem,2vw,1.5rem)] leading-tight',
-                tone === 'paper' ? 'text-ink/75' : 'text-paper/75',
+                tone === 'paper' ? 'text-ink/80' : 'text-paper/75',
               )}
             >
               {film.title}

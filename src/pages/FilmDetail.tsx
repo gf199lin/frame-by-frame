@@ -45,7 +45,7 @@ export const FilmDetail = () => {
   if (!record) {
     return (
       <div>
-        <div className="relative">
+        <div className="relative text-paper [--brass:#e9e0d0]">
           <FilmStill film={film} ratio="free" className="h-[46vh] min-h-[300px] w-full" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/30" />
           <div className="shell absolute inset-x-0 bottom-0 pb-8">
@@ -53,13 +53,13 @@ export const FilmDetail = () => {
             <h1 className="mt-4 font-display text-[clamp(2.4rem,6vw,5rem)] leading-[0.92] tracking-[-0.02em]">
               {film.title}
             </h1>
-            <p className="mt-2 text-[12.5px] uppercase tracking-[0.2em] text-paper-dim">
+            <p className="mt-2 text-[12.5px] uppercase tracking-[0.2em] text-paper/85">
               {film.titleZh} · {film.year} · {film.director}
             </p>
           </div>
         </div>
         <div className="shell grid gap-10 py-14 lg:grid-cols-12">
-          <p className="measure font-display text-[1.6rem] leading-[1.4] text-paper-dim lg:col-span-7">
+          <p className="measure font-display text-[1.6rem] leading-[1.4] text-ink/75 lg:col-span-7">
             {film.logline}
           </p>
           <div className="flex flex-wrap items-start gap-3 lg:col-span-4 lg:col-start-9">
@@ -115,7 +115,7 @@ export const FilmDetail = () => {
       <div className="shell pt-6">
         <Link
           to="/archive"
-          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-ink/60 transition-colors hover:text-ink"
+          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-ink/70 transition-colors hover:text-ink"
         >
           <ArrowLeft size={11} /> The archive
         </Link>
@@ -159,7 +159,7 @@ export const FilmDetail = () => {
         </div>
 
         <div className="shell text-ink">
-          <div className="flex flex-col gap-6 border-b border-ink/12 py-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-6 border-b border-ink/10 py-5 lg:flex-row lg:items-center lg:justify-between">
             <dl className="grid flex-1 grid-cols-2 gap-x-8 gap-y-4 sm:grid-cols-4">
               {[
                 ['Director', film.director],
@@ -168,8 +168,8 @@ export const FilmDetail = () => {
                 ['Language', film.language],
               ].map(([label, value]) => (
                 <div key={label}>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/70">{label}</dt>
-                  <dd className="mt-1.5 text-[14px] text-ink/70">{value}</dd>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/80">{label}</dt>
+                  <dd className="mt-1.5 text-[14px] text-ink/80">{value}</dd>
                 </div>
               ))}
             </dl>
@@ -183,7 +183,7 @@ export const FilmDetail = () => {
               </Link>
               {confirmDelete ? (
                 <div className="flex items-center gap-3">
-                  <span className="text-[12.5px] text-ink/70">Remove?</span>
+                  <span className="text-[12.5px] text-ink/80">Remove?</span>
                   <button
                     type="button"
                     onClick={onDelete}
@@ -194,7 +194,7 @@ export const FilmDetail = () => {
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
-                    className="font-mono text-[12px] uppercase tracking-[0.14em] text-ink/70 hover:text-ink"
+                    className="font-mono text-[12px] uppercase tracking-[0.14em] text-ink/80 hover:text-ink"
                   >
                     Cancel
                   </button>
@@ -203,7 +203,7 @@ export const FilmDetail = () => {
                 <button
                   type="button"
                   onClick={() => setConfirmDelete(true)}
-                  className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.14em] text-ink/60 transition-colors hover:text-ink"
+                  className="inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.14em] text-ink/70 transition-colors hover:text-ink"
                 >
                   <Trash2 size={11} /> Remove
                 </button>
@@ -217,14 +217,14 @@ export const FilmDetail = () => {
       {/*  II — My memory                                                   */}
       {/* ================================================================ */}
       <div className="shell">
-        <p className="border-b border-ink/10 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/45">
+        <p className="border-b border-ink/10 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/60">
           Artwork:{' '}
           {artwork ? (
             <a
               href={artworkUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="text-ink/50 underline decoration-ink/25 underline-offset-4 transition-colors hover:text-ink"
+              className="text-ink/60 underline decoration-ink/25 underline-offset-4 transition-colors hover:text-ink"
             >
               {artwork.poster?.provider === 'tmdb' || artwork.backdrop?.provider === 'tmdb'
                 ? 'TMDB'
@@ -252,32 +252,32 @@ export const FilmDetail = () => {
 
               <dl className="mt-8 space-y-4 border-t border-ink/15 pt-5">
                 <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">Your rating</dt>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">Your rating</dt>
                   <dd className="mt-1.5 flex items-baseline gap-2">
                     <span className="num text-[2rem] leading-none text-ink">
                       {record.rating.toFixed(1)}
                     </span>
-                    <span className="text-[13px] text-ink/40">/ 5</span>
+                    <span className="text-[13px] text-ink/55">/ 5</span>
                   </dd>
                   <Rating value={record.rating} size={10} tone="light" className="mt-2" />
                 </div>
                 <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">Watched</dt>
-                  <dd className="mt-1 text-[14px] text-ink/75">{formatLongDate(record.watchedAt)}</dd>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">Watched</dt>
+                  <dd className="mt-1 text-[14px] text-ink/80">{formatLongDate(record.watchedAt)}</dd>
                 </div>
                 <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">Status</dt>
-                  <dd className="mt-1 text-[14px] text-ink/75">
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">Status</dt>
+                  <dd className="mt-1 text-[14px] text-ink/80">
                     {STATUS_LABELS[record.status].label}
-                    <span className="ml-2 zh-label text-[12px] text-ink/40">
+                    <span className="ml-2 zh-label text-[12px] text-ink/55">
                       {STATUS_LABELS[record.status].zh}
                     </span>
                   </dd>
                 </div>
                 {record.feltLike && (
                   <div>
-                    <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">Felt like</dt>
-                    <dd className="mt-1 text-[14px] text-ink/75">{record.feltLike}</dd>
+                    <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">Felt like</dt>
+                    <dd className="mt-1 text-[14px] text-ink/80">{record.feltLike}</dd>
                   </div>
                 )}
               </dl>
@@ -292,21 +292,21 @@ export const FilmDetail = () => {
 
               <div className="mt-10 grid gap-8 border-t border-ink/15 pt-6 sm:grid-cols-[1.1fr_1fr]">
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">
                     Archive reading
                   </p>
-                  <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.14em] text-ink/35">
+                  <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.14em] text-ink/50">
                     {record.ai.extractedFrom === 'seed'
                       ? 'Sample archive · editorial reading'
                       : `Local extraction · confidence ${percent(record.ai.confidence)}`}
                   </p>
-                  <p className="mt-3 text-[14px] leading-relaxed text-ink/70">{record.ai.summary}</p>
+                  <p className="mt-3 text-[14px] leading-relaxed text-ink/80">{record.ai.summary}</p>
                 </div>
                 <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">
                     About this reading
                   </p>
-                  <p className="mt-3 text-[13px] leading-relaxed text-ink/50">
+                  <p className="mt-3 text-[13px] leading-relaxed text-ink/60">
                     Extracted by a transparent keyword-and-weight pass over your note and the film's
                     tags. It is not a model's opinion, and it is stored only in this browser.
                   </p>
@@ -339,9 +339,9 @@ export const FilmDetail = () => {
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {moods.map((mood) => (
-                    <span key={mood.id} className="tag border-ink/15 text-ink/65">
+                    <span key={mood.id} className="tag border-ink/15 text-ink/75">
                       {mood.label}
-                      <span className="zh-label text-[11px] text-taupe/60">{mood.zh}</span>
+                      <span className="zh-label text-[11px] text-taupe">{mood.zh}</span>
                     </span>
                   ))}
                 </div>
@@ -361,7 +361,7 @@ export const FilmDetail = () => {
                     <span className="font-display text-[clamp(1.7rem,3vw,2.6rem)] leading-none text-ink">
                       {theme.label}
                     </span>
-                    <span className="zh-label text-[12px] text-taupe/60">{theme.zh}</span>
+                    <span className="zh-label text-[12px] text-taupe">{theme.zh}</span>
                     <span className="ml-auto hidden max-w-[20rem] text-right text-[13px] leading-relaxed text-taupe sm:block">
                       {theme.blurb}
                     </span>
@@ -381,10 +381,10 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  IV — My taste connection                                         */}
       {/* ================================================================ */}
-      <section className="chapter--paper border-y border-ink/12">
+      <section className="chapter--paper border-y border-ink/10">
         <div className="shell py-16 lg:py-20">
           <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/12 pb-5">
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-5">
               <div>
                 <p className="artifact-label">
                   <b>IV</b> My taste connection
@@ -406,7 +406,7 @@ export const FilmDetail = () => {
               return (
                 <Reveal key={def.key} delay={40}>
                   <div className="flex items-baseline justify-between gap-4">
-                    <p className="text-[13px] uppercase tracking-[0.18em] text-ink/65">
+                    <p className="text-[13px] uppercase tracking-[0.18em] text-ink/75">
                       {def.label}
                     </p>
                     <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-taupe">
@@ -440,7 +440,7 @@ export const FilmDetail = () => {
                 </p>
                 <h2 className="mt-4 t-head text-ink">Films that answer this one.</h2>
               </div>
-              <p className="max-w-xs text-[13px] leading-relaxed text-ink/50">
+              <p className="max-w-xs text-[13px] leading-relaxed text-ink/60">
                 Selected by shared themes, not by genre or release year.
               </p>
             </div>
@@ -456,13 +456,13 @@ export const FilmDetail = () => {
                       <p className="font-display text-[1.35rem] leading-tight text-ink transition-colors group-hover:text-brass">
                         {item.film.title}
                       </p>
-                      <p className="mt-1 text-[12px] uppercase tracking-[0.14em] text-ink/45">
+                      <p className="mt-1 text-[12px] uppercase tracking-[0.14em] text-ink/60">
                         {item.film.director} · {item.film.year}
                       </p>
                     </div>
-                    <ArrowUpRight size={13} className="mt-1 shrink-0 text-ink/30 transition-colors group-hover:text-brass" />
+                    <ArrowUpRight size={13} className="mt-1 shrink-0 text-ink/45 transition-colors group-hover:text-brass" />
                   </div>
-                  <p className="mt-2 text-[13px] text-ink/55">
+                  <p className="mt-2 text-[13px] text-ink/65">
                     {item.shared
                       .slice(0, 2)
                       .map((t) => THEMES[t].label)
@@ -472,7 +472,7 @@ export const FilmDetail = () => {
               </Reveal>
             ))}
             {related.length === 0 && (
-              <p className="text-[14px] leading-relaxed text-ink/55 sm:col-span-3">
+              <p className="text-[14px] leading-relaxed text-ink/65 sm:col-span-3">
                 No film shares two themes with this one yet. Add another and the map will find the
                 connection.
               </p>
@@ -481,21 +481,21 @@ export const FilmDetail = () => {
 
           <div className="mt-14 grid gap-10 border-t border-ink/20 pt-8 lg:grid-cols-[1.2fr_0.8fr]">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">Cast</p>
-              <p className="mt-2 text-[14px] text-ink/70">{film.cast.join(' · ')}</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">Cast</p>
+              <p className="mt-2 text-[14px] text-ink/80">{film.cast.join(' · ')}</p>
             </div>
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/40">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink/55">
                 Evidence from other frames
               </p>
               <ul className="mt-3 space-y-4">
                 {evidence.map((item) => (
                   <li key={item.filmId} className="border-b border-ink/15 pb-3 last:border-0">
                     <Link to={`/archive/${item.filmId}`} className="group">
-                      <p className="font-display text-[15px] italic leading-relaxed text-ink/70 group-hover:text-ink">
+                      <p className="font-display text-[15px] italic leading-relaxed text-ink/80 group-hover:text-ink">
                         “{item.quote}”
                       </p>
-                      <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink/40">
+                      <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink/55">
                         {item.filmTitle} · {item.year}
                       </p>
                     </Link>

@@ -766,11 +766,11 @@ select.input option {
   gap: 0.35rem;
   padding: 0.35rem 0.7rem;
   border: 1px solid var(--line);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: inherit;
-  opacity: 0.8;
+  opacity: 1;
   background: transparent;
   border-radius: 0;
 }
@@ -1037,10 +1037,10 @@ input[type='range']::-moz-range-thumb {
     background:
       linear-gradient(
         180deg,
-        rgba(9, 9, 10, 0.8) 0%,
-        rgba(9, 9, 10, 0.64) 34%,
-        rgba(9, 9, 10, 0.8) 66%,
-        rgba(9, 9, 10, 0.97) 100%
+        rgba(9, 9, 10, 0.66) 0%,
+        rgba(9, 9, 10, 0.38) 32%,
+        rgba(9, 9, 10, 0.52) 64%,
+        rgba(9, 9, 10, 0.92) 100%
       ),
       linear-gradient(
         90deg,
@@ -1112,7 +1112,51 @@ input[type='range']::-moz-range-thumb {
 
 /* Dark modal surfaces: keep secondary copy readable on #1b1814. */
 [role='dialog'] {
+  color: #e9e0d0;
   --paper-muted: #c7bba8;
   --line: rgba(233, 224, 208, 0.22);
   --line-soft: rgba(233, 224, 208, 0.12);
+}
+
+[role='dialog'] .input {
+  color: #f2ebde;
+}
+[role='dialog'] .input::placeholder {
+  color: rgba(199, 187, 168, 0.6);
+}
+[role='dialog'] input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+}
+[role='dialog'] .tag {
+  opacity: 1;
+}
+[role='dialog'] .chip:hover:not(:disabled) {
+  border-color: rgba(233, 224, 208, 0.55);
+}
+[role='dialog'] .chip[data-active='true'] {
+  background: #e9e0d0;
+  border-color: #e9e0d0;
+  color: #1b1814;
+  opacity: 1;
+}
+[role='dialog'] .btn-primary {
+  background: #e9e0d0;
+  border-color: #e9e0d0;
+  color: #1b1814;
+}
+[role='dialog'] .btn-primary:hover:not(:disabled) {
+  background: #f7efe1;
+  border-color: #f7efe1;
+  color: #1b1814;
+}
+[role='dialog'] .btn-ghost {
+  border-color: rgba(233, 224, 208, 0.34);
+  opacity: 1;
+}
+[role='dialog'] .btn-ghost:hover:not(:disabled) {
+  border-color: rgba(233, 224, 208, 0.72);
+  background: rgba(233, 224, 208, 0.06);
+}
+[role='dialog'] .btn-quiet {
+  opacity: 0.8;
 }

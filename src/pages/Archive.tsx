@@ -147,13 +147,13 @@ export const Archive = () => {
             </p>
           </div>
 
-          <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-8 border-b border-ink/12 pb-8">
+          <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-8 border-b border-ink/10 pb-8">
             <div className="col-span-12 lg:col-span-8">
               <h1 className="font-display text-[clamp(3rem,7.6vw,6.8rem)] leading-[0.86] tracking-[-0.03em]">
                 The archive.
               </h1>
               <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-                <p className="zh-title text-[15px] text-ink/65">电影收藏</p>
+                <p className="zh-title text-[15px] text-ink/75">电影收藏</p>
                 <span className="hidden h-3 w-px bg-white/20 sm:block" />
                 <p className="measure text-[14px] leading-relaxed text-taupe">
                   Every film you kept, with the date, the rating, and the paragraph you wrote after
@@ -234,7 +234,7 @@ export const Archive = () => {
                     aria-pressed={view === mode}
                     className={cn(
                       'relative pb-1 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors',
-                      view === mode ? 'text-ink' : 'text-taupe/60 hover:text-ink',
+                      view === mode ? 'text-ink' : 'text-taupe hover:text-ink',
                     )}
                   >
                     {mode === 'grid' ? 'Shelf' : 'Index'}
@@ -416,7 +416,7 @@ export const Archive = () => {
                   <p className="artifact-label">
                     <b>{featured ? '02' : '01'}</b> The shelf
                   </p>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-taupe/60">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-taupe">
                     Click a frame to read the note
                   </p>
                 </div>
@@ -438,7 +438,7 @@ export const Archive = () => {
               <button
                 type="button"
                 onClick={() => openAdd()}
-                className="group mt-16 flex w-full items-center justify-between gap-4 border-t border-ink/12 pt-5 text-left"
+                className="group mt-16 flex w-full items-center justify-between gap-4 border-t border-ink/10 pt-5 text-left"
               >
                 <span className="flex items-center gap-5">
                   <Plus size={20} strokeWidth={1} className="text-brass transition-transform group-hover:rotate-90" />
@@ -480,7 +480,7 @@ export const Archive = () => {
         <section className="chapter--paper border-t border-ink/10">
           <div className="shell py-14 lg:py-20">
             <Reveal>
-              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/12 pb-4">
+              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-4">
                 <div>
                   <p className="artifact-label">
                     <b>Not yet archived</b>

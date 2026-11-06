@@ -115,7 +115,7 @@ export const Taste = () => {
     <div>
       <section className="chapter--paper relative overflow-hidden">
         <div className="shell pt-10 lg:pt-14">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/12 pb-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 pb-3">
             <p className="artifact-label">
               <b>04</b> My taste
             </p>
@@ -127,10 +127,10 @@ export const Taste = () => {
               <h1 className="zh-title text-[clamp(2.8rem,7vw,5.8rem)] leading-[0.98] text-ink">
                 AI 眼中的我
               </h1>
-              <p className="mt-3 font-display text-[clamp(1.7rem,3.2vw,2.8rem)] italic leading-[1.05] text-ink/65">
+              <p className="mt-3 font-display text-[clamp(1.7rem,3.2vw,2.8rem)] italic leading-[1.05] text-ink/75">
                 a reading in progress.
               </p>
-              <p className="measure mt-7 text-[15px] leading-[1.8] text-ink/65">
+              <p className="measure mt-7 text-[15px] leading-[1.8] text-ink/75">
                 {snapshot.filmCount} films and{' '}
                 {records.filter((r) => r.reflection.trim().length > 0).length} written notes produce
                 the profile below. It is a weighted interpretation of what you keep choosing — not a
@@ -193,22 +193,22 @@ export const Taste = () => {
       </section>
 
       <section className="mx-auto max-w-shell px-5 py-12 lg:px-10 lg:py-16">
-        <div className="grid gap-8 border-y border-ink/12 py-8 sm:grid-cols-[1fr_1fr] sm:gap-16">
+        <div className="grid gap-8 border-y border-ink/10 py-8 sm:grid-cols-[1fr_1fr] sm:gap-16">
           <div>
             <p className="artifact-label">
               <b>—</b> What this is
             </p>
-            <p className="mt-3 text-[14px] leading-[1.8] text-ink/65">
+            <p className="mt-3 text-[14px] leading-[1.8] text-ink/75">
               A transparent, local reading of your archive. Six axes are computed from ratings,
               note depth, and the themes that recur. Every claim links back to a sentence you wrote.
               Confidence reflects how much evidence exists — not how correct the AI is.
             </p>
           </div>
-          <div className="sm:border-l sm:border-ink/12 sm:pl-16">
+          <div className="sm:border-l sm:border-ink/10 sm:pl-16">
             <p className="artifact-label">
               <b>—</b> What this is not
             </p>
-            <p className="mt-3 text-[14px] leading-[1.8] text-ink/65">
+            <p className="mt-3 text-[14px] leading-[1.8] text-ink/75">
               Not a personality test, not an aesthetic ranking, and not a live language model. No
               text leaves this browser. “Not quite” and corrections are stored and visibly reduce
               the confidence of the reading they challenge.
@@ -235,7 +235,7 @@ export const Taste = () => {
             </div>
             <div className="space-y-3 border-l border-ink/10 pl-6 sm:pl-8">
               {summary.map((sentence, i) => (
-                <p key={i} className="text-[15px] leading-[1.8] text-ink/65">
+                <p key={i} className="text-[15px] leading-[1.8] text-ink/75">
                   {sentence}
                 </p>
               ))}
@@ -256,7 +256,7 @@ export const Taste = () => {
             </div>
             <div className="text-right">
               <p className="micro-sm text-taupe">Feedback given</p>
-              <p className="mt-1 text-[14px] text-ink/65">
+              <p className="mt-1 text-[14px] text-ink/75">
                 {feedbackCounts.agree} agree · {feedbackCounts['not-quite']} not quite ·{' '}
                 {feedbackCounts.corrected} corrections
               </p>
@@ -283,7 +283,7 @@ export const Taste = () => {
       {snapshot.topThemes.length > 0 && (
         <section className="chapter--paper border-y border-ink/10">
           <div className="mx-auto max-w-shell px-5 py-16 lg:px-10 lg:py-20">
-            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/12 pb-4">
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-4">
               <div>
                 <p className="artifact-label">
                   <b>02</b> Thematic recurrence
@@ -304,7 +304,7 @@ export const Taste = () => {
                       <p className="font-display text-[clamp(1.6rem,2.4vw,2.2rem)] leading-none text-ink">
                         {THEMES[theme.id].label}
                       </p>
-                      <span className="zh-label text-[12px] text-taupe/60">
+                      <span className="zh-label text-[12px] text-taupe">
                         {THEMES[theme.id].zh}
                       </span>
                     </div>
@@ -337,7 +337,7 @@ export const Taste = () => {
               <br />
               <span className="italic text-brass-soft">grows with the archive.</span>
             </h2>
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-ink/65">
+            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-ink/75">
               These are real snapshots, recomputed from the first N films at each milestone — not
               decorative copy. Each stage keeps the films it was built from, and each one can be
               agreed with, contested, or corrected.
@@ -348,7 +348,7 @@ export const Taste = () => {
             </p>
             <div className="mt-8 border-t border-ink/10 pt-5">
               <p className="micro-sm text-taupe">Latest stage</p>
-              <p className="mt-2 text-[14px] text-ink/65">
+              <p className="mt-2 text-[14px] text-ink/75">
                 {timeline[0]
                   ? `${timeline[0].filmCount} films · ${formatLongDate(timeline[0].at)} · ${percent(
                       timeline[0].confidence,
@@ -386,7 +386,7 @@ export const Taste = () => {
                   <p className="text-[12px] uppercase tracking-[0.16em] text-taupe">
                     {correction.scope.replace('dimension:', '').replace('timeline:', 'stage ')}
                   </p>
-                  <p className="mt-1.5 font-display text-lg italic leading-snug text-ink/65">
+                  <p className="mt-1.5 font-display text-lg italic leading-snug text-ink/75">
                     “{correction.text}”
                   </p>
                 </li>
