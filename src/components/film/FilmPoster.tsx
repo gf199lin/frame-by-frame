@@ -1,13 +1,14 @@
 import { useId, useState, type CSSProperties } from 'react'
 import type { Film } from '@/types'
 import { cn } from '@/lib/format'
+import { frameSrc, portraitPosition } from '@/lib/media'
 
 /**
- * Editorial poster system.
+ * Editorial frame masthead.
  *
- * Real artwork can be supplied through `film.posterUrl`; until then each film
- * receives a generated, palette-specific art print. Nothing depends on a
- * third-party image host, so the archive never shows broken posters.
+ * The archive ships its own photographic "memory frame" per film. If that
+ * image is missing (a film the visitor added themselves), we fall back to the
+ * generated art print so the shelf never shows a broken slot.
  */
 const PosterArt = ({ film }: { film: Film }) => {
   const rawId = useId()
@@ -568,17 +569,22 @@ export const FilmPoster = ({
   className,
   showTitle = true,
   eager = false,
+  position,
 }: {
   film: Film
   className?: string
   showTitle?: boolean
   eager?: boolean
+  position?: string
 }) => {
   const [failed, setFailed] = useState(false)
+  const [frameFailed, setFrameFailed] = useState(false)
   const style = {
     '--film-accent': film.palette.accent,
     backgroundColor: film.palette.deep,
   } as CSSProperties
+
+  const showPhoto = !frameFailed && !failed
 
   return (
     <div className={cn('poster-frame relative h-full w-full', className)} style={style}>
@@ -591,6 +597,16 @@ export const FilmPoster = ({
           referrerPolicy="no-referrer"
           onError={() => setFailed(true)}
         />
+      ) : showPhoto ? (
+        <img
+          src={frameSrc(film.id)}
+          alt={`A memory frame from ${film.title}`}
+          className="film-tone absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: position ?? portraitPosition(film.id) }}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+          onError={() => setFrameFailed(true)}
+        />
       ) : (
         <PosterArt film={film} />
       )}
@@ -599,34 +615,32 @@ export const FilmPoster = ({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(180deg, rgba(4,5,6,0.55) 0%, rgba(4,5,6,0) 24%, rgba(4,5,6,0) 52%, rgba(4,5,6,0.82) 100%)',
+            'linear-gradient(180deg, rgba(6,6,7,0.42) 0%, rgba(6,6,7,0) 22%, rgba(6,6,7,0) 46%, rgba(6,6,7,0.74) 82%, rgba(6,6,7,0.92) 100%)',
         }}
       />
       <div className="poster-grain pointer-events-none absolute inset-0" />
 
       {showTitle && (
         <>
-          <div className="absolute left-[5%] right-[5%] top-[5%] flex items-start justify-between gap-3">
-            <span className="poster-meta uppercase text-paper/65">
+          <div className="absolute left-[6%] right-[6%] top-[5%] flex items-start justify-between gap-3">
+            <span className="poster-meta uppercase text-paper/55">
               {film.year} · {film.country}
             </span>
-            <span className="poster-genre poster-meta text-right uppercase text-paper/45">
+            <span className="poster-genre poster-meta text-right uppercase text-paper/40">
               {film.genres[0]}
             </span>
           </div>
 
-          <div className="absolute bottom-[5%] left-[5%] right-[5%]">
-            <p className="poster-meta mb-2 uppercase text-paper/50">
-              {film.director && film.director !== 'Unknown director'
-                ? `A film by ${film.director}`
-                : 'A personal entry'}
-            </p>
+          <div className="absolute bottom-[5.5%] left-[6%] right-[6%]">
+            {film.director && film.director !== 'Unknown director' && (
+              <p className="poster-meta mb-2 uppercase text-paper/45">{film.director}</p>
+            )}
             <h3 className="poster-title font-display text-paper">{film.title}</h3>
-            <div className="mt-2 flex items-end justify-between gap-3">
+            <div className="mt-2 flex items-end justify-between gap-3 border-t border-white/20 pt-2">
               {film.titleZh && film.titleZh !== film.title && (
-                <p className="poster-title-zh text-paper/70">{film.titleZh}</p>
+                <p className="poster-title-zh text-paper/60">{film.titleZh}</p>
               )}
-              <p className="poster-meta whitespace-nowrap text-right uppercase text-paper/45">
+              <p className="poster-meta whitespace-nowrap text-right uppercase text-paper/40">
                 {film.runtime} min
               </p>
             </div>

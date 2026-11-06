@@ -4,23 +4,35 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ------------------------------------------------------------------ */
-/*  Design tokens                                                      */
-/* ------------------------------------------------------------------ */
+/* ==================================================================== */
+/*  FRAME BY FRAME — V3 art direction                                    */
+/*  A film annual, not a dashboard.                                     */
+/*  Type contrast, hairline rules, photographic frames, paper chapters.  */
+/* ==================================================================== */
+
 :root {
   --ink: #111111;
-  --ink-raised: #181818;
+  --ink-deep: #0b0b0b;
+  --ink-raised: #191919;
+  --ink-soft: #1f1f1f;
   --paper: #f2f0eb;
+  --paper-2: #e9e4da;
+  --paper-3: #ded8cc;
+  --paper-ink: #17130f;
   --paper-dim: #c9c5bd;
   --paper-muted: #929292;
-  --line: rgba(242, 240, 235, 0.15);
+  --line: rgba(242, 240, 235, 0.16);
   --line-soft: rgba(242, 240, 235, 0.08);
   --brass: #c83b35;
   --brass-soft: #e2625b;
+  --brass-ink: #a62d28;
   --film-accent: #c83b35;
   --film-accent-soft: rgba(200, 59, 53, 0.12);
   --film-ink: #f2f0eb;
-  --nav-h: 72px;
+  --nav-h: 68px;
+  --shell: 1560px;
+  --gutter: clamp(20px, 4.2vw, 64px);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -37,14 +49,15 @@ body {
   margin: 0;
   background-color: var(--ink);
   color: var(--paper);
-  font-family: Inter, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-family: Inter, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, -apple-system,
+    'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 400;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: rgba(200, 59, 53, 0.28);
+  background: rgba(200, 59, 53, 0.3);
   color: #fffdf7;
 }
 
@@ -53,7 +66,6 @@ body {
   outline-offset: 3px;
 }
 
-/* Thin, quiet scrollbars — part of the museum feel */
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(242, 240, 235, 0.18) transparent;
@@ -64,7 +76,6 @@ body {
 }
 *::-webkit-scrollbar-thumb {
   background: rgba(242, 240, 235, 0.16);
-  border-radius: 999px;
 }
 *::-webkit-scrollbar-track {
   background: transparent;
@@ -85,6 +96,363 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 /* ------------------------------------------------------------------ */
+/*  Layout                                                             */
+/* ------------------------------------------------------------------ */
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.shell-tight {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(16px, 2vw, 34px);
+}
+
+.chapter {
+  position: relative;
+}
+.chapter--ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+.chapter--night {
+  background: var(--ink-deep);
+  color: var(--paper);
+}
+.chapter--paper {
+  background: var(--paper);
+  color: var(--paper-ink);
+}
+.chapter--paper-2 {
+  background: var(--paper-2);
+  color: var(--paper-ink);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Type scale — deliberately few stops, very wide contrast            */
+/* ------------------------------------------------------------------ */
+.font-display {
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Georgia, serif;
+  font-weight: 400;
+}
+
+.t-mega {
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-size: clamp(3.6rem, 12.4vw, 11.5rem);
+  line-height: 0.84;
+  letter-spacing: -0.028em;
+  font-weight: 400;
+}
+
+.display-hero {
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Georgia, serif;
+  font-size: clamp(2.9rem, 8vw, 7.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.024em;
+  font-weight: 400;
+}
+
+.display-xl {
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Georgia, serif;
+  font-size: clamp(2.2rem, 4.6vw, 4.2rem);
+  line-height: 0.96;
+  letter-spacing: -0.018em;
+  font-weight: 400;
+}
+
+.t-head {
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-size: clamp(1.9rem, 3.4vw, 3.1rem);
+  line-height: 1;
+  letter-spacing: -0.012em;
+  font-weight: 400;
+}
+
+.t-sub {
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+
+.t-lead {
+  font-size: clamp(0.95rem, 1.15vw, 1.0625rem);
+  line-height: 1.7;
+  letter-spacing: -0.005em;
+}
+
+.t-body {
+  font-size: 0.875rem;
+  line-height: 1.75;
+}
+
+.t-small {
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+/* Chinese display — a quiet, modern grotesque with generous tracking */
+.zh-title {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.06;
+}
+
+.zh-label {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+}
+
+.micro {
+  font-size: 0.625rem;
+  line-height: 1.4;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.micro-sm {
+  font-size: 0.5625rem;
+  line-height: 1.4;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.num {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.measure {
+  max-width: 58ch;
+}
+.measure-tight {
+  max-width: 44ch;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Editorial furniture                                                */
+/* ------------------------------------------------------------------ */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.kicker::before {
+  content: '';
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+}
+.kicker--plain::before {
+  display: none;
+}
+
+.chapter--paper .kicker,
+.chapter--paper-2 .kicker,
+.paper-section .kicker,
+.on-paper .kicker {
+  color: var(--brass-ink);
+}
+
+.folio {
+  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.rule {
+  height: 1px;
+  width: 100%;
+  background: var(--line);
+}
+.rule--ink {
+  background: rgba(23, 19, 15, 0.16);
+}
+.rule--red {
+  background: var(--brass);
+}
+
+.hairline {
+  border-color: var(--line);
+}
+.hairline-soft {
+  border-color: var(--line-soft);
+}
+
+/* Big pull quote used between chapters */
+.pullquote {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(1.7rem, 3.4vw, 3.1rem);
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.dropcap::first-letter {
+  float: left;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 4.6em;
+  line-height: 0.72;
+  padding-right: 0.09em;
+  margin-top: 0.045em;
+  color: var(--brass);
+}
+
+/* A numbered artifact label, e.g. "02 — THE SHELF" */
+.artifact-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+.artifact-label b {
+  color: var(--brass);
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Photographic frames                                                */
+/* ------------------------------------------------------------------ */
+.still {
+  position: relative;
+  isolation: isolate;
+}
+.still img {
+  display: block;
+  transition:
+    transform 1.5s var(--ease),
+    filter 0.8s ease;
+  will-change: transform;
+}
+.still:hover img,
+.group:hover .still img {
+  transform: scale(1.035);
+}
+.still-edge {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  z-index: 2;
+}
+.chapter--paper .still-edge,
+.chapter--paper-2 .still-edge,
+.paper-section .still-edge {
+  box-shadow: inset 0 0 0 1px rgba(23, 19, 15, 0.16);
+}
+
+.film-tone {
+  filter: saturate(0.9) contrast(1.04) brightness(0.98);
+}
+
+/* Full-bleed image band */
+.bleed {
+  width: 100%;
+  max-width: 100vw;
+}
+
+.poster-frame {
+  position: relative;
+  overflow: hidden;
+  background: #171717;
+  isolation: isolate;
+  container-type: inline-size;
+}
+.poster-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  pointer-events: none;
+}
+.poster-frame img,
+.poster-frame svg {
+  transition:
+    transform 1.2s var(--ease),
+    filter 0.6s ease;
+}
+.poster-hover:hover .poster-frame img,
+.poster-hover:hover .poster-frame svg {
+  transform: scale(1.03);
+}
+
+.poster-title {
+  font-size: 7.2cqw;
+  line-height: 0.94;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);
+}
+.poster-title-zh {
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 2.9cqw;
+  letter-spacing: 0.16em;
+  font-weight: 300;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.poster-meta {
+  font-size: 2.1cqw;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  font-weight: 500;
+}
+.poster-genre {
+  display: none;
+}
+@container (min-width: 230px) {
+  .poster-genre {
+    display: block;
+  }
+}
+.poster-grain {
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* ------------------------------------------------------------------ */
 /*  Texture                                                            */
 /* ------------------------------------------------------------------ */
 .grain::after {
@@ -93,7 +461,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   inset: -50%;
   z-index: 80;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain-shift 8s steps(6) infinite;
 }
@@ -127,8 +495,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.16'/%3E%3C/svg%3E");
+  opacity: 0.45;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.14'/%3E%3C/svg%3E");
   mix-blend-mode: multiply;
 }
 .paper-texture > :not(.fixed) {
@@ -136,99 +504,72 @@ input[type='date']::-webkit-calendar-picker-indicator {
   z-index: 1;
 }
 
-/* Film-strip perforations */
 .filmstrip {
   background-image: radial-gradient(circle at 6px 50%, rgba(10, 10, 11, 0.9) 2.5px, transparent 3px);
   background-size: 18px 100%;
   background-repeat: repeat-x;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Typography helpers                                                 */
-/* ------------------------------------------------------------------ */
-.font-display {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Georgia, serif;
-  font-weight: 400;
-}
-
-.display-hero {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Georgia, serif;
-  font-size: clamp(3.2rem, 6.8vw, 7rem);
-  line-height: 0.92;
-  letter-spacing: -0.018em;
-}
-
-.display-xl {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Georgia, serif;
-  font-size: clamp(2.2rem, 4vw, 3.6rem);
-  line-height: 1;
-  letter-spacing: -0.012em;
-}
-
-.micro {
-  font-size: 0.625rem;
-  line-height: 1.4;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.micro-sm {
-  font-size: 0.5625rem;
-  line-height: 1.4;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-.num {
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.04em;
-  font-weight: 400;
-}
-
-.text-balance {
-  text-wrap: balance;
+/* Hairline column rules used in the archive index */
+.col-rule {
+  border-left: 1px solid var(--line);
 }
 
 /* ------------------------------------------------------------------ */
-/*  Surfaces                                                           */
+/*  Reveal on scroll                                                   */
 /* ------------------------------------------------------------------ */
-.hairline {
-  border-color: var(--line);
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
 }
-.hairline-soft {
-  border-color: var(--line-soft);
+.reveal.is-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
 }
 
+/* ------------------------------------------------------------------ */
+/*  Surfaces (legacy-friendly)                                         */
+/* ------------------------------------------------------------------ */
 .surface {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.026), rgba(255, 255, 255, 0.008));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.024), rgba(255, 255, 255, 0.006));
   border: 1px solid var(--line-soft);
 }
-
 .surface-hover {
   transition:
-    border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    border-color 0.5s var(--ease),
+    background-color 0.5s var(--ease);
 }
 .surface-hover:hover {
   border-color: rgba(237, 231, 220, 0.24);
-  background-color: rgba(255, 255, 255, 0.035);
+  background-color: rgba(255, 255, 255, 0.032);
 }
 
 .paper-sheet {
   background: #f2f0eb;
-  color: #171412;
+  color: var(--paper-ink);
+}
+
+.paper-section {
+  background: var(--paper);
+  color: var(--paper-ink);
+}
+.paper-section .micro,
+.paper-section .micro-sm {
+  color: #6f6a62;
 }
 
 .spotlight {
-  background: radial-gradient(
-    110% 86% at 70% 0%,
-    rgba(200, 59, 53, 0.09),
-    transparent 58%
-  );
+  background: radial-gradient(110% 86% at 70% 0%, rgba(200, 59, 53, 0.08), transparent 58%);
 }
 
 /* ------------------------------------------------------------------ */
@@ -238,18 +579,19 @@ input[type='date']::-webkit-calendar-picker-indicator {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
-  height: 2.75rem;
-  padding: 0 1.35rem;
-  font-size: 0.6875rem;
-  letter-spacing: 0.18em;
+  gap: 0.6rem;
+  height: 2.85rem;
+  padding: 0 1.45rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   font-weight: 500;
   border: 1px solid transparent;
+  border-radius: 0;
   transition:
-    background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.4s var(--ease),
+    color 0.4s var(--ease),
+    border-color 0.4s var(--ease),
     opacity 0.2s ease;
   white-space: nowrap;
   cursor: pointer;
@@ -273,11 +615,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .btn-ghost {
   background: transparent;
   color: var(--paper);
-  border-color: rgba(237, 231, 220, 0.24);
+  border-color: rgba(237, 231, 220, 0.26);
 }
 .btn-ghost:hover:not(:disabled) {
   background: rgba(237, 231, 220, 0.07);
-  border-color: rgba(237, 231, 220, 0.5);
+  border-color: rgba(237, 231, 220, 0.55);
 }
 
 .btn-quiet {
@@ -294,7 +636,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .btn-brass {
   background: rgba(200, 59, 53, 0.12);
-  border-color: rgba(200, 59, 53, 0.38);
+  border-color: rgba(200, 59, 53, 0.4);
   color: var(--brass-soft);
 }
 .btn-brass:hover:not(:disabled) {
@@ -390,6 +732,7 @@ select.input option {
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  border-radius: 0;
 }
 .chip:hover {
   border-color: rgba(237, 231, 220, 0.3);
@@ -405,13 +748,14 @@ select.input option {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  padding: 0.28rem 0.6rem;
+  padding: 0.3rem 0.62rem;
   border: 1px solid rgba(237, 231, 220, 0.16);
   font-size: 0.625rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--paper-dim);
   background: rgba(255, 255, 255, 0.02);
+  border-radius: 0;
 }
 
 .link-underline {
@@ -430,39 +774,27 @@ select.input option {
   background: currentColor;
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.45s var(--ease);
 }
 .link-underline:hover::after {
   transform: scaleX(1);
 }
 
-/* ------------------------------------------------------------------ */
-/*  Poster                                                             */
-/* ------------------------------------------------------------------ */
-.poster-frame {
-  position: relative;
-  overflow: hidden;
-  background: #171717;
-  isolation: isolate;
+/* Text link with a persistent rule — used heavily in V3 */
+.link-rule {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid currentColor;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 0.3s ease, gap 0.4s var(--ease);
 }
-.poster-frame::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
-  pointer-events: none;
-}
-.poster-frame img,
-.poster-frame svg {
-  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
-}
-.poster-hover:hover .poster-frame img,
-.poster-hover:hover .poster-frame svg {
-  transform: scale(1.035);
-}
-
-.gradient-fade-b {
-  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+.link-rule:hover {
+  gap: 0.95rem;
 }
 
 /* ------------------------------------------------------------------ */
@@ -470,9 +802,9 @@ select.input option {
 /* ------------------------------------------------------------------ */
 .graph-canvas {
   background:
-    radial-gradient(100% 80% at 50% 0%, rgba(200, 59, 53, 0.055), transparent 60%),
-    radial-gradient(80% 60% at 20% 100%, rgba(94, 124, 116, 0.06), transparent 60%),
-    #08090a;
+    radial-gradient(80% 70% at 50% 0%, rgba(200, 59, 53, 0.05), transparent 62%),
+    radial-gradient(70% 60% at 15% 100%, rgba(110, 143, 138, 0.05), transparent 60%),
+    #0c0c0c;
   cursor: grab;
   touch-action: none;
 }
@@ -514,7 +846,7 @@ select.input option {
   position: absolute;
   inset: 0 auto 0 0;
   background: linear-gradient(90deg, rgba(200, 59, 53, 0.35), var(--brass));
-  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: width 1s var(--ease);
 }
 
 .spot-dot {
@@ -525,7 +857,6 @@ select.input option {
   background: rgba(237, 231, 220, 0.5);
 }
 
-/* Custom range slider */
 input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
@@ -558,7 +889,7 @@ input[type='range']::-moz-range-thumb {
   background: var(--paper);
 }
 
-/* Paper themed overrides for the Reflection annual */
+/* Paper themed overrides */
 .on-paper {
   --paper: #171412;
   --paper-dim: #403c36;
@@ -609,143 +940,7 @@ input[type='range']::-moz-range-thumb {
   background: linear-gradient(90deg, rgba(176, 47, 42, 0.35), #b02f2a);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  body {
-    background: #fff;
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/*  Generated posters (container-relative typography)                  */
-/* ------------------------------------------------------------------ */
-.poster-frame {
-  container-type: inline-size;
-}
-.poster-title {
-  font-size: 7.6cqw;
-  line-height: 0.94;
-  letter-spacing: -0.012em;
-  text-wrap: balance;
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
-}
-.poster-title-zh {
-  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  font-size: 3cqw;
-  letter-spacing: 0.14em;
-  font-weight: 300;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.poster-meta {
-  font-size: 2.35cqw;
-  letter-spacing: 0.17em;
-  line-height: 1.4;
-  font-weight: 500;
-}
-.poster-genre {
-  display: none;
-}
-@container (min-width: 230px) {
-  .poster-genre {
-    display: block;
-  }
-}
-.poster-grain {
-  opacity: 0.16;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
-}
-
-.select-mini {
-  appearance: none;
-  height: 2rem;
-  padding: 0 1.55rem 0 0.65rem;
-  border: 1px solid var(--line);
-  background-color: transparent;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238C8577' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.55rem center;
-  color: var(--paper-dim);
-  font-size: 0.5625rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: border-color 0.3s ease, color 0.3s ease;
-}
-.select-mini:hover {
-  border-color: rgba(237, 231, 220, 0.32);
-  color: var(--paper);
-}
-.select-mini:focus {
-  outline: none;
-  border-color: rgba(200, 59, 53, 0.6);
-}
-.select-mini option {
-  background: #141518;
-  color: var(--paper);
-}
-
-
-/* ------------------------------------------------------------------ */
-/*  Cinematheque redesign utilities                                    */
-/* ------------------------------------------------------------------ */
-.accent-rule {
-  background: var(--brass);
-}
-
-.paper-section {
-  background: var(--paper);
-  color: #171412;
-}
-
-.paper-section .micro,
-.paper-section .micro-sm {
-  color: #6f6a62;
-}
-
-.hero-vignette {
-  background:
-    linear-gradient(90deg, rgba(17, 17, 17, 0.96) 0%, rgba(17, 17, 17, 0.78) 42%, rgba(17, 17, 17, 0.18) 78%, rgba(17, 17, 17, 0.35) 100%),
-    linear-gradient(180deg, rgba(17, 17, 17, 0.7) 0%, transparent 26%, transparent 62%, rgba(17, 17, 17, 0.92) 100%);
-}
-
-.poster-tab {
-  background: var(--brass);
-  color: #fffaf4;
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 9px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.frame-index {
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  color: var(--paper-muted);
-}
-
-/* Invert white hairlines when a paper block uses the legacy utility classes. */
+/* Inverted hairlines when a paper block uses legacy white utilities. */
 .on-paper .border-white\/10,
 .paper-section .border-white\/10 {
   border-color: rgba(23, 20, 18, 0.15) !important;
@@ -767,11 +962,105 @@ input[type='range']::-moz-range-thumb {
   background-color: rgba(23, 20, 18, 0.025) !important;
 }
 
-/* Small status marker used in archive cards and detail pages. */
 .status-dot {
   display: inline-block;
   width: 5px;
   height: 5px;
   border-radius: 999px;
   background: var(--brass);
+}
+
+.accent-rule {
+  background: var(--brass);
+}
+
+/* Legacy hero vignette, still used by the empty state */
+.hero-vignette {
+  background:
+    linear-gradient(90deg, rgba(17, 17, 17, 0.96) 0%, rgba(17, 17, 17, 0.76) 44%, rgba(17, 17, 17, 0.2) 80%, rgba(17, 17, 17, 0.4) 100%),
+    linear-gradient(180deg, rgba(17, 17, 17, 0.66) 0%, transparent 26%, transparent 60%, rgba(17, 17, 17, 0.92) 100%);
+}
+
+/* Editorial cover overlay: type sits in the dark left third of the frame */
+.cover-scrim {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(9, 9, 10, 0.94) 0%,
+      rgba(9, 9, 10, 0.79) 30%,
+      rgba(9, 9, 10, 0.24) 60%,
+      rgba(9, 9, 10, 0.04) 82%,
+      rgba(9, 9, 10, 0.18) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(9, 9, 10, 0.58) 0%,
+      rgba(9, 9, 10, 0.02) 32%,
+      rgba(9, 9, 10, 0.08) 62%,
+      rgba(9, 9, 10, 0.92) 100%
+    );
+}
+.cover-scrim--soft {
+  background:
+    linear-gradient(90deg, rgba(9, 9, 10, 0.9) 0%, rgba(9, 9, 10, 0.62) 40%, rgba(9, 9, 10, 0.1) 78%),
+    linear-gradient(180deg, rgba(9, 9, 10, 0.55) 0%, transparent 30%, rgba(9, 9, 10, 0.86) 100%);
+}
+
+.select-mini {
+  appearance: none;
+  height: 2rem;
+  padding: 0 1.55rem 0 0.65rem;
+  border: 1px solid var(--line);
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238C8577' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.55rem center;
+  color: var(--paper-dim);
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease;
+  border-radius: 0;
+}
+.select-mini:hover {
+  border-color: rgba(237, 231, 220, 0.32);
+  color: var(--paper);
+}
+.select-bare {
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  padding-left: 0;
+  height: 2.15rem;
+}
+.select-bare:hover {
+  border-color: rgba(237, 231, 220, 0.45);
+}
+.select-mini:focus {
+  outline: none;
+  border-color: rgba(200, 59, 53, 0.6);
+}
+.select-mini option {
+  background: #141518;
+  color: var(--paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
 }

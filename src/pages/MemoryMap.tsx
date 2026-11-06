@@ -80,25 +80,30 @@ export const MemoryMapPage = () => {
   }
 
   return (
-    <div className="mx-auto max-w-shell px-5 pb-20 pt-12 lg:px-10 lg:pt-16">
-      <div className="flex flex-wrap items-end justify-between gap-8">
+    <div className="shell pb-20 pt-10 lg:pt-14">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/12 pb-3">
+        <p className="artifact-label">
+          <b>03</b> Memory map
+        </p>
+        <p className="folio">A constellation, not a chart</p>
+      </div>
+
+      <div className="flex flex-wrap items-end justify-between gap-8 pt-7">
         <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="micro whitespace-nowrap text-brass/80">03 — Memory Map</p>
-            <span className="hidden h-px w-8 bg-white/20 sm:block" />
-            <p className="micro hidden text-paper-muted sm:block">A constellation, not a chart</p>
+          <h1 className="font-display text-[clamp(2.9rem,7.4vw,6.4rem)] leading-[0.86] tracking-[-0.03em]">
+            Memory map.
+          </h1>
+          <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
+            <p className="zh-title text-[14px] text-paper-dim">电影记忆地图</p>
+            <span className="hidden h-3 w-px bg-white/20 sm:block" />
+            <p className="measure text-[12.5px] leading-relaxed text-paper-muted">
+              Films are frames. Themes are the ground they share. Moods are how the memory felt.
+              Drag the map, pull a node, and follow a line until it explains something.
+            </p>
           </div>
-          <h1 className="display-hero mt-5">Memory map.</h1>
-          <p className="mt-4 max-w-2xl text-[13px] leading-relaxed text-paper-dim">
-            Films are frames. Themes are the ground they share. Moods are how the memory felt. Drag
-            the map, pull a node, and follow a line until it explains something.
-            <span className="mt-1 block text-paper-muted">
-              电影是节点，主题是共同的地面，情绪是记忆的质地。
-            </span>
-          </p>
         </div>
 
-        <dl className="grid grid-cols-2 gap-x-8 gap-y-3 text-left sm:grid-cols-4 sm:text-right">
+        <dl className="grid grid-cols-2 gap-x-10 gap-y-4 text-left sm:grid-cols-4 sm:text-right">
           {[
             ['Films', records.length],
             ['Themes', themeCount],
@@ -106,42 +111,56 @@ export const MemoryMapPage = () => {
             ['Shared links', linkCount],
           ].map(([label, value]) => (
             <div key={String(label)}>
-              <dt className="micro-sm text-paper-muted">{label}</dt>
-              <dd className="num mt-1 text-2xl leading-none text-paper">{String(value).padStart(2, '0')}</dd>
+              <dt className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">{label}</dt>
+              <dd className="num mt-1.5 text-[1.7rem] leading-none text-paper">
+                {String(value).padStart(2, '0')}
+              </dd>
             </div>
           ))}
         </dl>
       </div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-y border-white/10 py-4">
+      <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-y border-white/12 py-4">
         <GraphLegend showThemes={showThemes} showMoods={showMoods} />
-        <div className="flex items-center gap-2">
-          <span className="hidden text-[9px] uppercase tracking-[0.16em] text-paper-muted sm:inline">
+        <div className="flex items-center gap-3">
+          <span className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted sm:inline">
             Layers
           </span>
           <button
             type="button"
             onClick={() => setShowThemes((v) => !v)}
-            className="chip h-8 text-[9px]"
-            data-active={showThemes}
+            className="relative pb-0.5 font-mono text-[8px] uppercase tracking-[0.18em] transition-colors"
+            style={{ color: showThemes ? 'var(--paper)' : 'var(--paper-muted)' }}
             aria-pressed={showThemes}
           >
             Themes
+            <span
+              className="absolute inset-x-0 -bottom-px h-px bg-brass transition-transform"
+              style={{ transform: showThemes ? 'scaleX(1)' : 'scaleX(0)' }}
+            />
           </button>
           <button
             type="button"
             onClick={() => setShowMoods((v) => !v)}
-            className="chip h-8 text-[9px]"
-            data-active={showMoods}
+            className="relative pb-0.5 font-mono text-[8px] uppercase tracking-[0.18em] transition-colors"
+            style={{ color: showMoods ? 'var(--paper)' : 'var(--paper-muted)' }}
             aria-pressed={showMoods}
           >
             Moods
+            <span
+              className="absolute inset-x-0 -bottom-px h-px bg-brass transition-transform"
+              style={{ transform: showMoods ? 'scaleX(1)' : 'scaleX(0)' }}
+            />
           </button>
         </div>
       </div>
 
       <div className="relative mt-6">
-        <div className="relative h-[62vh] min-h-[480px] w-full border border-white/10 lg:h-[68vh] lg:min-h-[560px]">
+        <div className="relative h-[62vh] min-h-[480px] w-full border border-white/15 lg:h-[68vh] lg:min-h-[560px]">
+          <span className="pointer-events-none absolute -left-px -top-px z-10 h-3 w-3 border-l border-t border-brass/70" />
+          <span className="pointer-events-none absolute -right-px -top-px z-10 h-3 w-3 border-r border-t border-brass/70" />
+          <span className="pointer-events-none absolute -bottom-px -left-px z-10 h-3 w-3 border-b border-l border-brass/70" />
+          <span className="pointer-events-none absolute -bottom-px -right-px z-10 h-3 w-3 border-b border-r border-brass/70" />
           {graph.nodes.length > 0 ? (
             <MemoryGraphView
               graph={graph}
@@ -322,11 +341,11 @@ export const MemoryMapPage = () => {
           )}
 
           {!selected && (
-            <div className="pointer-events-none absolute right-4 top-4 hidden max-w-[230px] border border-white/10 bg-[#111111]/70 p-3 backdrop-blur lg:block">
-              <p className="flex items-center gap-2 text-[9px] uppercase tracking-[0.16em] text-brass/80">
+            <div className="pointer-events-none absolute right-5 top-5 hidden max-w-[240px] border-l border-brass/60 pl-4 lg:block">
+              <p className="flex items-center gap-2 font-mono text-[8px] uppercase tracking-[0.2em] text-brass">
                 <Info size={10} /> How to read
               </p>
-              <p className="mt-2 text-[11px] leading-relaxed text-paper-muted">
+              <p className="mt-2.5 text-[11px] leading-relaxed text-paper-dim">
                 Click a film to see its shared themes. Click a theme to see every film that carries
                 it. Drag a node to rearrange the constellation.
               </p>

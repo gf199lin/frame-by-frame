@@ -9,6 +9,7 @@ import {
 import { Maximize2, Minus, Plus } from 'lucide-react'
 import type { GraphEdge, GraphNode, MemoryGraph, Film } from '@/types'
 import { cn, truncate } from '@/lib/format'
+import { frameSrc } from '@/lib/media'
 
 type View = { x: number; y: number; k: number }
 type Point = { x: number; y: number }
@@ -303,8 +304,8 @@ export const MemoryGraphView = ({
             const labelY =
               node.kind === 'film'
                 ? below
-                  ? 36
-                  : -26
+                  ? 44
+                  : -34
                 : below
                   ? radiusOf(node) + 14
                   : -radiusOf(node) - 10
@@ -355,7 +356,7 @@ export const MemoryGraphView = ({
                 }}
               >
                 <circle
-                  r={node.kind === 'film' ? 27 : radiusOf(node) + 8}
+                  r={node.kind === 'film' ? 36 : radiusOf(node) + 8}
                   fill="transparent"
                 />
 
@@ -363,7 +364,7 @@ export const MemoryGraphView = ({
                   <circle
                     r={radiusOf(node) + 12}
                     fill="none"
-                    stroke="rgba(226,200,147,0.55)"
+                    stroke="rgba(200,59,53,0.6)"
                     strokeDasharray="2 5"
                     className="animate-breathe"
                   />
@@ -371,40 +372,45 @@ export const MemoryGraphView = ({
 
                 {node.kind === 'film' ? (
                   <>
+                    <clipPath id={`clip-${node.id.replace(/[^a-zA-Z0-9-]/g, '')}`}>
+                      <rect x={-23} y={-30} width={46} height={60} rx={0.5} />
+                    </clipPath>
+                    <g clipPath={`url(#clip-${node.id.replace(/[^a-zA-Z0-9-]/g, '')})`}>
+                      {film ? (
+                        <image
+                          href={frameSrc(film.id)}
+                          x={-40}
+                          y={-42}
+                          width={80}
+                          height={84}
+                          preserveAspectRatio="xMidYMid slice"
+                          opacity={isSelected || isHovered ? 1 : 0.86}
+                        />
+                      ) : (
+                        <rect x={-23} y={-30} width={46} height={60} fill="#181818" />
+                      )}
+                      <rect x={-23} y={-30} width={46} height={60} fill="#050505" opacity={0.16} />
+                    </g>
                     <rect
-                      x={-16}
-                      y={-22}
-                      width={32}
-                      height={44}
-                      fill={film?.palette.deep ?? '#181818'}
-                      stroke={film?.palette.accent ?? '#8C8577'}
-                      strokeOpacity={isSelected || isHovered ? 1 : 0.85}
-                      strokeWidth={isSelected || isHovered ? 1.6 : 1}
+                      x={-23}
+                      y={-30}
+                      width={46}
+                      height={60}
+                      fill="none"
+                      stroke={isSelected ? '#E2625B' : 'rgba(242,240,235,0.42)'}
+                      strokeWidth={isSelected ? 1.6 : 0.75}
                     />
-                    <rect
-                      x={-11}
-                      y={-16}
-                      width={22}
-                      height={12}
-                      fill={film?.palette.accent ?? '#8C8577'}
-                      opacity={0.3}
-                    />
-                    <line
-                      x1={-10}
-                      y1={10}
-                      x2={10}
-                      y2={10}
-                      stroke={film?.palette.accent ?? '#8C8577'}
-                      strokeOpacity={0.55}
-                    />
-                    <line
-                      x1={-10}
-                      y1={14}
-                      x2={4}
-                      y2={14}
-                      stroke={film?.palette.accent ?? '#8C8577'}
-                      strokeOpacity={0.35}
-                    />
+                    {isSelected && (
+                      <rect
+                        x={-26.5}
+                        y={-33.5}
+                        width={53}
+                        height={67}
+                        fill="none"
+                        stroke="rgba(200,59,53,0.5)"
+                        strokeWidth={0.6}
+                      />
+                    )}
                   </>
                 ) : node.kind === 'theme' ? (
                   <>
@@ -418,7 +424,7 @@ export const MemoryGraphView = ({
                       stroke={isSelected ? 'rgba(226,98,91,0.95)' : 'rgba(200,59,53,0.7)'}
                       strokeWidth={isSelected ? 1.5 : 0.8}
                     />
-                    <circle r={1.5} fill="#C3A064" />
+                    <circle r={1.5} fill="#F2F0EB" />
                   </>
                 ) : (
                   <circle

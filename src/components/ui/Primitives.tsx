@@ -13,8 +13,8 @@ export const SectionLabel = ({
   className?: string
 }) => (
   <div className={cn('flex items-center gap-3 text-paper-muted', className)}>
-    {index && <span className="font-mono text-[10px] tracking-[0.2em] text-brass/80">{index}</span>}
-    <span className="micro">{children}</span>
+    {index && <span className="font-mono text-[9px] tracking-[0.2em] text-brass">{index}</span>}
+    <span className="font-mono text-[9px] uppercase tracking-[0.24em]">{children}</span>
     <span className="h-px flex-1 bg-white/10" />
   </div>
 )
@@ -67,7 +67,7 @@ export const TextLink = ({
   <Link
     to={to}
     className={cn(
-      'link-underline micro text-paper-dim transition-colors hover:text-paper',
+      'link-rule text-paper-dim transition-colors hover:text-paper',
       className,
     )}
   >

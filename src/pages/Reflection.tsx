@@ -375,39 +375,71 @@ export const Reflection = () => {
 
   return (
     <div className="paper-sheet on-paper paper-texture">
-      <div className="mx-auto max-w-shell px-5 pb-20 pt-12 lg:px-10 lg:pt-16">
+      <div className="shell pb-8 pt-10 lg:pt-14">
         {/* Masthead */}
-        <div className="flex flex-wrap items-start justify-between gap-8 border-b border-[#171512]/25 pb-8">
-          <div>
-            <div className="flex items-center gap-3">
-              <p className="micro text-[#7a7264]">05 — Reflection</p>
-              <span className="h-px w-8 bg-[#171512]/25" />
-              <p className="micro text-[#7a7264]">The Annual</p>
-            </div>
-            <h1 className="mt-5 font-display text-6xl leading-[0.9] text-[#171512] sm:text-7xl lg:text-[96px]">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#171512]/25 pb-3">
+          <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#7a7264]">
+            05 — Reflection / The Annual
+          </p>
+          <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#7a7264]">
+            A printed record · {year}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-12 items-start gap-x-6 gap-y-10 pt-8">
+          <div className="col-span-12 lg:col-span-7 lg:pt-2">
+            <h1 className="font-display text-[clamp(3.2rem,7.8vw,6.4rem)] leading-[0.86] tracking-[-0.03em] text-[#171512]">
               The {year} Reel
             </h1>
-            <p className="mt-4 max-w-xl text-[13px] leading-relaxed text-[#3a3428]">
-              A printed record of what the year did to you in the dark. Months, moods, the frame you
-              kept, and the slow drift of your taste.
-              <span className="mt-1 block text-[#7a7264]">年度观影年鉴 · 可下载 / 可打印</span>
-            </p>
+            <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
+              <p className="zh-title text-[14px] text-[#3a3428]">年度观影年鉴</p>
+              <span className="hidden h-3 w-px bg-[#171512]/25 sm:block" />
+              <p className="max-w-xl text-[12.5px] leading-relaxed text-[#3a3428]">
+                A printed record of what the year did to you in the dark. Months, moods, the frame
+                you kept, and the slow drift of your taste.
+              </p>
+            </div>
+
+            <div className="mt-7 flex flex-wrap items-center gap-2">
+              <span className="mr-1 font-mono text-[8px] uppercase tracking-[0.2em] text-[#7a7264]">
+                Edition
+              </span>
+              {years.map((y) => (
+                <button
+                  key={y}
+                  type="button"
+                  onClick={() => setYear(y)}
+                  className="chip h-8 text-[9px]"
+                  data-active={year === y}
+                >
+                  {y}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {years.map((y) => (
-              <button
-                key={y}
-                type="button"
-                onClick={() => setYear(y)}
-                className="chip h-8 text-[9px]"
-                data-active={year === y}
-              >
-                {y}
-              </button>
-            ))}
-          </div>
+          {favorite && favoriteFilm && (
+            <div className="col-span-9 col-start-1 sm:col-span-6 lg:col-span-4 lg:col-start-9">
+              <div className="flex items-baseline justify-between border-b border-[#171512]/25 pb-2">
+                <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-[#7a7264]">
+                  The frame I kept
+                </p>
+                <p className="font-mono text-[8px] text-[#7a7264]">
+                  {favorite.rating.toFixed(1)} / 5
+                </p>
+              </div>
+              <div className="mt-3 aspect-[2/3] w-full max-w-[230px] overflow-hidden lg:ml-auto">
+                <FilmPoster film={favoriteFilm} />
+              </div>
+              <p className="mt-2.5 text-right font-mono text-[8px] uppercase tracking-[0.16em] text-[#7a7264]">
+                Cover · {favoriteFilm.year}
+              </p>
+            </div>
+          )}
         </div>
+      </div>
+
+      <div className="shell">
 
         {yearRecords.length === 0 ? (
           <div className="mt-16">
@@ -459,7 +491,7 @@ export const Reflection = () => {
                     <div key={month.month} className="group flex h-full flex-1 flex-col justify-end">
                       <div className="relative flex flex-1 items-end">
                         <div
-                          className="w-full bg-[#171512] transition-opacity duration-300 group-hover:opacity-70"
+                          className="mx-auto w-[62%] bg-[#171512]/85 transition-colors duration-300 group-hover:bg-[#b02f2a]"
                           style={{ height: `${Math.max(month.count > 0 ? 8 : 1, (month.count / maxMonth) * 100)}%` }}
                           title={`${month.label}: ${month.count} films · ${formatMinutes(month.minutes)}`}
                         />
@@ -518,22 +550,19 @@ export const Reflection = () => {
 
             {/* Favorite */}
             {favorite && favoriteFilm && (
-              <div className="mt-14 grid gap-8 border-t border-[#171512]/20 pt-10 lg:grid-cols-[0.3fr_1fr] lg:gap-14">
-                <div className="w-full max-w-[190px]">
-                  <div className="aspect-[2/3] w-full overflow-hidden">
-                    <FilmPoster film={favoriteFilm} />
-                  </div>
-                </div>
-                <div className="flex flex-col justify-center">
+              <div className="mt-14 grid gap-8 border-t border-[#171512]/20 pt-10 lg:grid-cols-12 lg:gap-12">
+                <div className="lg:col-span-7">
                   <p className="micro text-[#7a7264]">The frame I kept</p>
-                  <p className="mt-3 font-display text-4xl leading-none text-[#171512] sm:text-5xl">
+                  <p className="mt-4 font-display text-[clamp(2.2rem,4.4vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-[#171512]">
                     {favoriteFilm.title}
                   </p>
-                  <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-[#7a7264]">
+                  <p className="mt-3 text-[10px] uppercase tracking-[0.14em] text-[#7a7264]">
                     {favoriteFilm.director} · {favoriteFilm.year} · ★ {favorite.rating.toFixed(1)}
                   </p>
-                  <blockquote className="mt-6 max-w-3xl border-l border-[#b02f2a]/50 pl-5">
-                    <p className="font-display text-xl leading-relaxed text-[#2c2822] sm:text-2xl">
+                </div>
+                <div className="flex flex-col justify-center lg:col-span-5">
+                  <blockquote className="border-l border-[#b02f2a]/50 pl-5">
+                    <p className="font-display text-[clamp(1.1rem,1.8vw,1.5rem)] leading-[1.55] text-[#2c2822]">
                       “{favorite.reflection}”
                     </p>
                   </blockquote>

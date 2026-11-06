@@ -35,7 +35,7 @@ export const DimensionCard = ({
         <div className="flex items-baseline gap-4">
           <span className="font-mono text-[9px] tracking-[0.2em] text-brass/70">{def.index}</span>
           <div>
-            <h3 className="font-display text-2xl leading-none text-paper">{def.label}</h3>
+            <h3 className="font-display text-[1.8rem] leading-none text-paper">{def.label}</h3>
             <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.16em] text-paper-muted">
               <span>{def.labelZh}</span>
               <span className="h-2 w-px bg-white/20" />
@@ -48,7 +48,7 @@ export const DimensionCard = ({
           <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-paper-muted">
             Confidence
           </p>
-          <p className="num mt-0.5 text-xl text-paper">
+          <p className="num mt-0.5 text-[1.6rem] leading-none text-paper">
             {percent(score.confidence)}
             {adjustedConfidence !== score.confidence && (
               <span className="ml-2 font-sans text-[10px] text-paper-muted">

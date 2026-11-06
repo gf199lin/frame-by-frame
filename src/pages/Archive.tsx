@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { LayoutGrid, List, Plus, Search, SlidersHorizontal, X } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Plus, Search, X } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
-import { FilmCard, FilmIndexRow } from '@/components/film/FilmCard'
-import { FilmPoster } from '@/components/film/FilmPoster'
+import { FilmCard, FilmIndexRow, WaitingRoomCard } from '@/components/film/FilmCard'
+import { FilmStill } from '@/components/film/FilmStill'
 import { EmptyState } from '@/components/ui/Primitives'
 import { Rating } from '@/components/ui/Rating'
+import { Reveal } from '@/components/ui/Reveal'
 import { STATUS_LABELS } from '@/data/taxonomy'
-import { cn, formatMinutes } from '@/lib/format'
+import { cn, formatLongDate, formatMinutes } from '@/lib/format'
 import { filmById } from '@/lib/tasteEngine'
 import type { WatchStatus } from '@/types'
 
@@ -110,9 +111,9 @@ export const Archive = () => {
 
   if (records.length === 0) {
     return (
-      <div className="mx-auto max-w-shell px-5 py-20 lg:px-10">
-        <p className="micro text-brass">02 / My Archive</p>
-        <h1 className="display-xl mt-4">Nothing catalogued yet.</h1>
+      <div className="shell py-20">
+        <p className="kicker">02 / My Archive</p>
+        <h1 className="display-xl mt-5">Nothing catalogued yet.</h1>
         <EmptyState
           className="mt-12"
           title="The shelves are empty."
@@ -127,315 +128,400 @@ export const Archive = () => {
     )
   }
 
+  const featured = activeFilters === 0 && filtered.length > 0 ? filtered[0] : null
+  const shelf = featured ? filtered.slice(1) : filtered
+
   return (
-    <div className="mx-auto max-w-shell px-5 pb-20 pt-12 lg:px-10 lg:pt-16">
-      <div className="grid gap-8 lg:grid-cols-[1.25fr_0.75fr] lg:items-end">
-        <div>
-          <div className="flex items-center gap-3">
-            <p className="micro text-brass">02 / My Archive</p>
-            <span className="h-px w-8 bg-brass" />
-            <p className="micro text-paper-muted">{records.length} films kept</p>
-          </div>
-          <h1 className="display-hero mt-5">The archive.</h1>
-          <p className="mt-4 max-w-2xl text-[13px] leading-relaxed text-paper-dim">
-            Every film you have kept, with the date, the rating, and the paragraph you wrote after
-            the credits. Search it like a memory, not a spreadsheet.
-            <span className="mt-1 block text-paper-muted">你的全部电影记忆，按时间与情绪归档。</span>
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-end justify-between gap-8 lg:justify-end">
-          <div>
-            <p className="micro-sm text-paper-muted">Average rating</p>
-            <p className="num mt-1 text-4xl leading-none text-paper">
-              {snapshot.averageRating.toFixed(1)}
-              <span className="ml-1 text-sm text-paper-muted">/ 5</span>
+    <div>
+      {/* ================================================================ */}
+      {/*  Masthead                                                         */}
+      {/* ================================================================ */}
+      <section className="chapter--ink">
+        <div className="shell pt-10 lg:pt-14">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="artifact-label">
+              <b>02</b> My archive
             </p>
-            <Rating value={snapshot.averageRating} size={10} className="mt-2" />
-          </div>
-          <div>
-            <p className="micro-sm text-paper-muted">Time in the dark</p>
-            <p className="num mt-1 text-4xl leading-none text-paper">
-              {(snapshot.totalMinutes / 60).toFixed(1)}
-              <span className="ml-1 text-sm text-paper-muted">h</span>
+            <p className="folio">
+              {String(records.length).padStart(2, '0')} films kept · local storage
             </p>
-            <p className="mt-2 text-[10px] text-paper-muted">{formatMinutes(snapshot.totalMinutes)}</p>
           </div>
-          <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-            <Plus size={14} /> Add a Film
-          </button>
-        </div>
-      </div>
 
-      {/* Search and filters */}
-      <div className="mt-12 border-y border-white/10 py-5">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-          <label className="flex flex-1 items-center gap-3 border-b border-white/20 pb-2 focus-within:border-brass">
-            <Search size={15} className="text-paper-muted" />
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search titles, directors, notes, moods…"
-              className="w-full bg-transparent text-[14px] text-paper outline-none placeholder:text-paper-muted/50 focus-visible:outline-none"
-              aria-label="Search the archive"
-            />
-            {query && (
-              <button type="button" onClick={() => setQuery('')} aria-label="Clear search" className="text-paper-muted hover:text-paper">
-                <X size={13} />
-              </button>
-            )}
-          </label>
+          <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-8 border-b border-white/12 pb-8">
+            <div className="col-span-12 lg:col-span-8">
+              <h1 className="font-display text-[clamp(3rem,7.6vw,6.8rem)] leading-[0.86] tracking-[-0.03em]">
+                The archive.
+              </h1>
+              <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
+                <p className="zh-title text-[15px] text-paper-dim">电影收藏</p>
+                <span className="hidden h-3 w-px bg-white/20 sm:block" />
+                <p className="measure text-[12.5px] leading-relaxed text-paper-muted">
+                  Every film you kept, with the date, the rating, and the paragraph you wrote after
+                  the credits. Search it like a memory, not a spreadsheet.
+                </p>
+              </div>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <label className="flex items-center gap-2">
-              <span className="hidden text-[9px] uppercase tracking-[0.16em] text-paper-muted sm:inline">
-                Sort
-              </span>
-              <select
-                value={sort}
-                onChange={(event) => setSort(event.target.value as SortKey)}
-                className="select-mini w-[172px]"
-                aria-label="Sort films"
-              >
-                {(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
-                  <option key={key} value={key}>
-                    {SORT_LABELS[key]}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <div className="flex shrink-0 border border-white/15">
-              <button
-                type="button"
-                onClick={() => setView('grid')}
-                aria-label="Grid view"
-                aria-pressed={view === 'grid'}
-                className={cn('flex h-8 w-8 items-center justify-center transition-colors', view === 'grid' ? 'bg-brass text-white' : 'text-paper-muted hover:text-paper')}
-              >
-                <LayoutGrid size={13} />
-              </button>
-              <button
-                type="button"
-                onClick={() => setView('index')}
-                aria-label="Index view"
-                aria-pressed={view === 'index'}
-                className={cn('flex h-8 w-8 items-center justify-center transition-colors', view === 'index' ? 'bg-brass text-white' : 'text-paper-muted hover:text-paper')}
-              >
-                <List size={13} />
-              </button>
+            <div className="col-span-12 flex flex-wrap items-end justify-between gap-8 lg:col-span-4 lg:justify-end">
+              <div>
+                <p className="micro-sm text-paper-muted">Average rating</p>
+                <p className="num mt-1.5 text-[2.6rem] leading-none text-paper">
+                  {snapshot.averageRating.toFixed(1)}
+                  <span className="ml-1 text-[13px] text-paper-muted">/ 5</span>
+                </p>
+                <Rating value={snapshot.averageRating} size={9} className="mt-2" />
+              </div>
+              <div>
+                <p className="micro-sm text-paper-muted">Time in the dark</p>
+                <p className="num mt-1.5 text-[2.6rem] leading-none text-paper">
+                  {(snapshot.totalMinutes / 60).toFixed(1)}
+                  <span className="ml-1 text-[13px] text-paper-muted">h</span>
+                </p>
+                <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+                  {formatMinutes(snapshot.totalMinutes)}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="mr-1 hidden items-center gap-2 text-[9px] uppercase tracking-[0.16em] text-paper-muted sm:flex">
-            <SlidersHorizontal size={11} /> Genre
-          </span>
-          <button
-            type="button"
-            onClick={() => setGenre('all')}
-            className="chip h-8 text-[9px]"
-            data-active={genre === 'all'}
-          >
-            All
-          </button>
-          {genres.map((g) => (
-            <button
-              key={g}
-              type="button"
-              onClick={() => setGenre(genre === g ? 'all' : g)}
-              className="chip h-8 text-[9px]"
-              data-active={genre === g}
-            >
-              {g}
-            </button>
-          ))}
-
-          <span className="mx-2 hidden h-4 w-px bg-white/15 sm:block" />
-
-          <select
-            value={decade}
-            onChange={(event) => setDecade(event.target.value)}
-            className="select-mini"
-            aria-label="Filter by decade"
-          >
-            <option value="all">All decades</option>
-            {decades.map((d) => (
-              <option key={d} value={String(d)}>
-                {d}s
-              </option>
-            ))}
-          </select>
-          <select
-            value={rating}
-            onChange={(event) => setRating(event.target.value)}
-            className="select-mini"
-            aria-label="Filter by minimum rating"
-          >
-            <option value="all">Any rating</option>
-            <option value="3.5">3.5 and up</option>
-            <option value="4">4.0 and up</option>
-            <option value="4.5">4.5 and up</option>
-          </select>
-          <select
-            value={status}
-            onChange={(event) => setStatus(event.target.value as 'all' | WatchStatus)}
-            className="select-mini"
-            aria-label="Filter by status"
-          >
-            <option value="all">Any status</option>
-            {(Object.keys(STATUS_LABELS) as WatchStatus[]).map((key) => (
-              <option key={key} value={key}>
-                {STATUS_LABELS[key].label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3 text-[11px] text-paper-muted">
-            <span>{filtered.length} {filtered.length === 1 ? 'film' : 'films'}</span>
-            {activeFilters > 0 && <span>· filtered</span>}
-            <span className="hidden items-center gap-1.5 sm:inline-flex">
-              <span className="status-dot" /> watched / <span className="text-paper-dim">rewatch</span>
-            </span>
-          </div>
-          {activeFilters > 0 && (
-            <button
-              type="button"
-              onClick={clearAll}
-              className="text-[9px] uppercase tracking-[0.16em] text-paper-muted underline underline-offset-4 hover:text-paper"
-            >
-              Clear filters ({activeFilters})
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Results */}
-      {filtered.length === 0 ? (
-        <EmptyState
-          className="mt-12"
-          eyebrow="No matches"
-          title="Nothing in the archive answers to that."
-          description="Try a looser search, or add the film if it is missing."
-          action={
-            <div className="flex flex-wrap justify-center gap-3">
-              <button type="button" onClick={clearAll} className="btn btn-ghost">
-                Clear filters
-              </button>
-              <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-                <Plus size={13} /> Add a film
-              </button>
-            </div>
-          }
-        />
-      ) : view === 'grid' ? (
-        <>
-          <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-12 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-            {filtered.map(({ record, film }, index) => (
-              <FilmCard
-                key={record.id}
-                film={film}
-                record={record}
-                index={index + 1}
-                className={index % 7 === 3 ? 'lg:translate-y-8' : ''}
+          {/* Search line */}
+          <div className="flex flex-col gap-4 py-5 lg:flex-row lg:items-center lg:justify-between">
+            <label className="group flex flex-1 items-center gap-4">
+              <Search size={17} className="shrink-0 text-paper-muted" strokeWidth={1.4} />
+              <input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search titles, directors, notes, moods…"
+                className="w-full border-b border-white/20 bg-transparent pb-2 font-display text-[1.35rem] text-paper outline-none placeholder:text-paper-muted/45 focus:border-brass focus-visible:outline-none sm:text-[1.6rem]"
+                aria-label="Search the archive"
               />
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={() => openAdd()}
-            className="group mt-12 flex w-full items-center justify-between gap-4 border border-dashed border-white/20 px-5 py-4 text-left transition-colors hover:border-brass hover:bg-white/[0.02]"
-          >
-            <span className="flex items-center gap-4">
-              <Plus size={18} strokeWidth={1} className="text-brass transition-transform group-hover:scale-110" />
-              <span>
-                <span className="block font-display text-xl text-paper">Add a film to the archive</span>
-                <span className="mt-0.5 block text-[10px] uppercase tracking-[0.14em] text-paper-muted">
-                  A new frame, a new note, a new reading
-                </span>
-              </span>
-            </span>
-            <span className="micro text-brass">Open the entry form →</span>
-          </button>
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  aria-label="Clear search"
+                  className="text-paper-muted hover:text-paper"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </label>
 
-          <p className="mt-8 text-center text-[10px] uppercase tracking-[0.18em] text-paper-muted/60">
-            Click any poster to read the note, the themes, and how it sits in your taste
-          </p>
-        </>
-      ) : (
-        <div className="mt-8">
-          <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-white/20 pb-2 text-[9px] uppercase tracking-[0.18em] text-paper-muted sm:grid">
-            <span>No.</span>
-            <span>Frame</span>
-            <span>Film</span>
-            <span>Rating</span>
-            <span className="text-right">Watched</span>
-          </div>
-          {filtered.map(({ record, film }, index) => (
-            <FilmIndexRow key={record.id} film={film} record={record} index={index + 1} />
-          ))}
-        </div>
-      )}
+            <div className="flex shrink-0 flex-wrap items-center gap-4">
+              <label className="flex items-center gap-2">
+                <span className="font-mono text-[8px] uppercase tracking-[0.18em] text-paper-muted">Sort</span>
+                <select
+                  value={sort}
+                  onChange={(event) => setSort(event.target.value as SortKey)}
+                  className="select-mini select-bare w-[168px]"
+                  aria-label="Sort films"
+                >
+                  {(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
+                    <option key={key} value={key}>
+                      {SORT_LABELS[key]}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-      {/* The waiting room — catalogue titles not yet archived */}
-      {catalogOnly.length > 0 && (
-        <section className="mt-20 border-t border-white/10 pt-10">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="micro text-brass">Not yet archived</p>
-              <h2 className="mt-3 font-display text-4xl text-paper sm:text-5xl">The waiting room.</h2>
+              <div className="flex items-center gap-3 border-l border-white/15 pl-4">
+                {(['grid', 'index'] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setView(mode)}
+                    aria-label={`${mode} view`}
+                    aria-pressed={view === mode}
+                    className={cn(
+                      'relative pb-1 font-mono text-[8px] uppercase tracking-[0.18em] transition-colors',
+                      view === mode ? 'text-paper' : 'text-paper-muted/60 hover:text-paper',
+                    )}
+                  >
+                    {mode === 'grid' ? 'Shelf' : 'Index'}
+                    <span
+                      className={cn(
+                        'absolute inset-x-0 bottom-0 h-px bg-brass transition-transform duration-400',
+                        view === mode ? 'scale-x-100' : 'scale-x-0',
+                      )}
+                    />
+                  </button>
+                ))}
+              </div>
             </div>
-            <p className="max-w-sm text-[11px] leading-relaxed text-paper-muted">
-              Films already in the catalogue, waiting for a memory. Open one to record it.
-            </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
-            {catalogOnly.map((film) => (
-              <button
-                key={film.id}
-                type="button"
-                onClick={() => openAdd(film.id)}
-                className="poster-hover group text-left"
-              >
-                <div className="relative aspect-[2/3] overflow-hidden border border-white/10 opacity-80 transition-opacity group-hover:opacity-100">
-                  <FilmPoster film={film} showTitle={false} />
-                  <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-black/60 px-2 py-1.5 font-mono text-[8px] uppercase tracking-[0.14em] text-paper/80 backdrop-blur">
-                    To be seen <Plus size={10} className="text-brass" />
-                  </span>
+          {/* Filters — text, not pills */}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-white/10 py-4">
+            <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">Genre</span>
+            {['all', ...genres].map((g) => {
+              const active = genre === g
+              return (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGenre(g === 'all' ? 'all' : genre === g ? 'all' : g)}
+                  className={cn(
+                    'relative pb-0.5 text-[9px] uppercase tracking-[0.16em] transition-colors',
+                    active ? 'text-paper' : 'text-paper-muted/65 hover:text-paper',
+                  )}
+                  aria-pressed={active}
+                >
+                  {g === 'all' ? 'All' : g}
+                  <span
+                    className={cn(
+                      'absolute inset-x-0 -bottom-[2px] h-px bg-brass transition-transform',
+                      active ? 'scale-x-100' : 'scale-x-0',
+                    )}
+                  />
+                </button>
+              )
+            })}
+
+            <span className="mx-1 hidden h-3 w-px bg-white/15 sm:block" />
+
+            <select
+              value={decade}
+              onChange={(event) => setDecade(event.target.value)}
+              className="select-mini select-bare"
+              aria-label="Filter by decade"
+            >
+              <option value="all">All decades</option>
+              {decades.map((d) => (
+                <option key={d} value={String(d)}>
+                  {d}s
+                </option>
+              ))}
+            </select>
+            <select
+              value={rating}
+              onChange={(event) => setRating(event.target.value)}
+              className="select-mini select-bare"
+              aria-label="Filter by minimum rating"
+            >
+              <option value="all">Any rating</option>
+              <option value="3.5">3.5 and up</option>
+              <option value="4">4.0 and up</option>
+              <option value="4.5">4.5 and up</option>
+            </select>
+            <select
+              value={status}
+              onChange={(event) => setStatus(event.target.value as 'all' | WatchStatus)}
+              className="select-mini select-bare"
+              aria-label="Filter by status"
+            >
+              <option value="all">Any status</option>
+              {(Object.keys(STATUS_LABELS) as WatchStatus[]).map((key) => (
+                <option key={key} value={key}>
+                  {STATUS_LABELS[key].label}
+                </option>
+              ))}
+            </select>
+
+            <div className="ml-auto flex items-center gap-4">
+              <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-paper-muted">
+                {filtered.length} {filtered.length === 1 ? 'film' : 'films'}
+              </span>
+              {activeFilters > 0 && (
+                <button
+                  type="button"
+                  onClick={clearAll}
+                  className="font-mono text-[8px] uppercase tracking-[0.16em] text-brass underline underline-offset-4 hover:text-brass-soft"
+                >
+                  Clear ({activeFilters})
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/*  Featured film — full-bleed frame                                 */}
+      {/* ================================================================ */}
+      {featured && (
+        <section className="chapter--ink">
+          <div className="shell pb-14 pt-10 lg:pb-20">
+            <Reveal>
+              <div className="flex flex-wrap items-end justify-between gap-3 pb-4">
+                <p className="artifact-label">
+                  <b>Featured</b> The film at the centre of the shelf
+                </p>
+                <Link to={`/archive/${featured.film.id}`} className="link-rule text-brass hover:text-brass-soft">
+                  Open the entry <ArrowUpRight size={12} />
+                </Link>
+              </div>
+
+              <Link to={`/archive/${featured.film.id}`} className="group relative block">
+                <FilmStill
+                  film={featured.film}
+                  ratio="wide"
+                  className="w-full lg:h-[58vh] lg:max-h-[620px]"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/92 via-ink/20 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10">
+                  <div className="flex flex-wrap items-end justify-between gap-6">
+                    <div className="max-w-3xl">
+                      <p className="micro-sm text-paper/60">
+                        {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].label}
+                      </p>
+                      <h2 className="mt-2 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[0.94] tracking-[-0.02em] text-paper">
+                        {featured.film.title}
+                      </h2>
+                      <p className="mt-2 text-[9.5px] uppercase tracking-[0.2em] text-paper/60">
+                        {featured.film.director} · {featured.film.year} · {featured.film.genres.join(' / ')}
+                      </p>
+                      <p className="mt-4 line-clamp-2 max-w-xl font-display text-[1.05rem] italic leading-snug text-paper/70">
+                        “{featured.record.reflection}”
+                      </p>
+                    </div>
+                    <div className="hidden shrink-0 text-right sm:block">
+                      <Rating value={featured.record.rating} size={13} showValue />
+                      <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/60">
+                        {featured.film.runtime} min
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-3 border-t border-white/10 pt-2">
-                  <p className="truncate font-display text-base text-paper group-hover:text-brass-soft">
-                    {film.title}
-                  </p>
-                  <p className="mt-1 truncate text-[9px] uppercase tracking-[0.12em] text-paper-muted">
-                    {film.year} · {film.director}
-                  </p>
-                </div>
-              </button>
-            ))}
+              </Link>
+            </Reveal>
           </div>
         </section>
       )}
 
-      <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-6">
-        <p className="text-[11px] text-paper-muted">
-          Looking for a film that is not here?{' '}
-          <button
-            type="button"
-            onClick={() => openAdd()}
-            className="text-brass underline underline-offset-4 hover:text-brass-soft"
-          >
-            Add it to the archive
-          </button>
-          .
-        </p>
-        <Link to="/map" className="micro text-paper-dim hover:text-paper">
-          See them as a memory map →
-        </Link>
-      </div>
+      {/* ================================================================ */}
+      {/*  The shelf                                                        */}
+      {/* ================================================================ */}
+      <section className="chapter--night border-t border-white/10">
+        <div className="shell py-12 lg:py-16">
+          {filtered.length === 0 ? (
+            <EmptyState
+              eyebrow="No matches"
+              title="Nothing in the archive answers to that."
+              description="Try a looser search, or add the film if it is missing."
+              action={
+                <div className="flex flex-wrap justify-center gap-3">
+                  <button type="button" onClick={clearAll} className="btn btn-ghost">
+                    Clear filters
+                  </button>
+                  <button type="button" onClick={() => openAdd()} className="btn btn-primary">
+                    <Plus size={13} /> Add a film
+                  </button>
+                </div>
+              }
+            />
+          ) : view === 'grid' ? (
+            <>
+              <Reveal>
+                <div className="flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-4">
+                  <p className="artifact-label">
+                    <b>{featured ? '02' : '01'}</b> The shelf
+                  </p>
+                  <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted/60">
+                    Click a frame to read the note
+                  </p>
+                </div>
+              </Reveal>
+
+              <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+                {shelf.map(({ record, film }, index) => (
+                  <Reveal key={record.id} delay={(index % 4) * 45}>
+                    <FilmCard
+                      film={film}
+                      record={record}
+                      index={index + (featured ? 2 : 1)}
+                      className={index % 4 === 2 ? 'lg:translate-y-8' : ''}
+                    />
+                  </Reveal>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => openAdd()}
+                className="group mt-16 flex w-full items-center justify-between gap-4 border-t border-white/12 pt-5 text-left"
+              >
+                <span className="flex items-center gap-5">
+                  <Plus size={20} strokeWidth={1} className="text-brass transition-transform group-hover:rotate-90" />
+                  <span>
+                    <span className="block font-display text-[1.5rem] leading-none text-paper">
+                      Add a film to the archive
+                    </span>
+                    <span className="mt-1.5 block font-mono text-[8px] uppercase tracking-[0.2em] text-paper-muted">
+                      A new frame, a new note, a new reading
+                    </span>
+                  </span>
+                </span>
+                <span className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-brass sm:block">
+                  Open the entry form →
+                </span>
+              </button>
+            </>
+          ) : (
+            <div>
+              <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-white/20 pb-2 font-mono text-[8px] uppercase tracking-[0.18em] text-paper-muted sm:grid">
+                <span>No.</span>
+                <span>Frame</span>
+                <span>Film</span>
+                <span>Rating</span>
+                <span className="text-right">Watched</span>
+              </div>
+              {filtered.map(({ record, film }, index) => (
+                <FilmIndexRow key={record.id} film={film} record={record} index={index + 1} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/*  The waiting room                                                 */}
+      {/* ================================================================ */}
+      {catalogOnly.length > 0 && (
+        <section className="chapter--ink border-t border-white/10">
+          <div className="shell py-14 lg:py-20">
+            <Reveal>
+              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/12 pb-4">
+                <div>
+                  <p className="artifact-label">
+                    <b>Not yet archived</b>
+                  </p>
+                  <h2 className="mt-3 t-head">The waiting room.</h2>
+                </div>
+                <p className="max-w-sm text-[11px] leading-relaxed text-paper-muted">
+                  Films already in the catalogue, waiting for a memory. Open one to record it.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+              {catalogOnly.map((film, i) => (
+                <Reveal key={film.id} delay={(i % 6) * 40}>
+                  <WaitingRoomCard film={film} onPick={() => openAdd(film.id)} />
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="chapter--night border-t border-white/10">
+        <div className="shell flex flex-wrap items-center justify-between gap-4 py-8">
+          <p className="text-[11px] text-paper-muted">
+            Looking for a film that is not here?{' '}
+            <button
+              type="button"
+              onClick={() => openAdd()}
+              className="text-brass underline underline-offset-4 hover:text-brass-soft"
+            >
+              Add it to the archive
+            </button>
+            .
+          </p>
+          <Link to="/map" className="link-rule text-paper-dim hover:text-paper">
+            See them as a memory map <ArrowRight size={12} />
+          </Link>
+        </div>
+      </section>
     </div>
   )
 }

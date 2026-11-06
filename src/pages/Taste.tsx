@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Plus, Sparkles } from 'lucide-react'
+import { ArrowRight, Plus } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { useToast } from '@/components/ui/Toast'
@@ -113,35 +113,38 @@ export const Taste = () => {
 
   return (
     <div>
-      <section className="spotlight relative border-b border-white/10">
-        <div className="mx-auto max-w-shell px-5 pb-14 pt-12 lg:px-10 lg:pb-20 lg:pt-16">
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="micro text-brass/80">04 — My Taste</p>
-            <span className="h-px w-8 bg-white/20" />
-            <p className="micro text-paper-muted">An estimate, not a verdict</p>
+      <section className="chapter--ink relative overflow-hidden">
+        <div className="shell pt-10 lg:pt-14">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/12 pb-3">
+            <p className="artifact-label">
+              <b>04</b> My taste
+            </p>
+            <p className="folio">An estimate, not a verdict</p>
           </div>
 
-          <div className="mt-8 grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-20">
-            <div>
-              <h1 className="display-hero">
+          <div className="grid grid-cols-12 items-center gap-x-6 gap-y-12 py-12 lg:py-16">
+            <div className="col-span-12 lg:col-span-7">
+              <h1 className="zh-title text-[clamp(2.8rem,7vw,5.8rem)] leading-[0.98] text-paper">
                 AI 眼中的我
-                <br />
-                <span className="italic text-paper-dim">a reading in progress.</span>
               </h1>
-              <p className="mt-6 max-w-xl text-[13px] leading-relaxed text-paper-dim">
-                {snapshot.filmCount} films and {records.filter((r) => r.reflection.trim().length > 0).length}{' '}
-                written notes produce the profile below. It is a weighted interpretation of what you
-                keep choosing — not a score of how good your taste is, and not a finished portrait.
+              <p className="mt-3 font-display text-[clamp(1.7rem,3.2vw,2.8rem)] italic leading-[1.05] text-paper-dim">
+                a reading in progress.
+              </p>
+              <p className="measure mt-7 text-[13px] leading-[1.8] text-paper-dim">
+                {snapshot.filmCount} films and{' '}
+                {records.filter((r) => r.reflection.trim().length > 0).length} written notes produce
+                the profile below. It is a weighted interpretation of what you keep choosing — not a
+                score of how good your taste is, and not a finished portrait.
               </p>
 
-              <div className="mt-8 border-l border-brass/40 pl-5">
+              <div className="mt-8 border-l border-brass pl-5">
                 <p className="micro-sm text-brass/80">The reading</p>
-                <p className="mt-2 font-display text-3xl leading-tight text-paper sm:text-4xl">
+                <p className="mt-2 max-w-xl font-display text-[clamp(1.7rem,2.6vw,2.3rem)] leading-[1.15] text-paper">
                   {tasteSignature(snapshot)}
                 </p>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center gap-4">
+              <div className="mt-8 flex flex-wrap items-center gap-3">
                 <button type="button" onClick={() => openAdd()} className="btn btn-primary">
                   <Plus size={13} /> Add another frame
                 </button>
@@ -151,26 +154,36 @@ export const Taste = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center">
-              <TasteRadar
-                snapshot={snapshot}
-                size={440}
-                activeKey={activeKey}
-                onSelect={jumpTo}
-                className="mx-auto"
-              />
-              <div className="mt-6 grid w-full max-w-[420px] grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-4 text-center">
-                <div>
-                  <p className="num text-xl text-paper">{percent(snapshot.overallConfidence)}</p>
-                  <p className="micro-sm mt-1 text-paper-muted">confidence</p>
-                </div>
-                <div>
-                  <p className="num text-xl text-paper">{snapshot.filmCount}</p>
-                  <p className="micro-sm mt-1 text-paper-muted">films read</p>
-                </div>
-                <div>
-                  <p className="num text-xl text-paper">{feedbackCounts.agree + feedbackCounts['not-quite'] + feedbackCounts.corrected}</p>
-                  <p className="micro-sm mt-1 text-paper-muted">verdicts</p>
+            <div className="col-span-12 lg:col-span-5">
+              <div className="relative mx-auto w-full max-w-[460px]">
+                <TasteRadar
+                  snapshot={snapshot}
+                  size={440}
+                  activeKey={activeKey}
+                  onSelect={jumpTo}
+                  className="mx-auto"
+                />
+                <div className="mt-4 grid w-full grid-cols-3 divide-x divide-white/10 border-t border-white/10 pt-3 text-center">
+                  <div>
+                    <p className="num text-[1.35rem] text-paper">{percent(snapshot.overallConfidence)}</p>
+                    <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-paper-muted">
+                      confidence
+                    </p>
+                  </div>
+                  <div>
+                    <p className="num text-[1.35rem] text-paper">{snapshot.filmCount}</p>
+                    <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-paper-muted">
+                      films read
+                    </p>
+                  </div>
+                  <div>
+                    <p className="num text-[1.35rem] text-paper">
+                      {feedbackCounts.agree + feedbackCounts['not-quite'] + feedbackCounts.corrected}
+                    </p>
+                    <p className="mt-1 font-mono text-[8px] uppercase tracking-[0.18em] text-paper-muted">
+                      verdicts
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -178,21 +191,23 @@ export const Taste = () => {
         </div>
       </section>
 
-      <section className="mx-auto max-w-shell px-5 py-14 lg:px-10 lg:py-16">
-        <div className="grid gap-8 border border-white/10 bg-white/[0.015] p-6 sm:grid-cols-[1fr_1fr] lg:p-8">
+      <section className="mx-auto max-w-shell px-5 py-12 lg:px-10 lg:py-16">
+        <div className="grid gap-8 border-y border-white/12 py-8 sm:grid-cols-[1fr_1fr] sm:gap-16">
           <div>
-            <p className="micro flex items-center gap-2 text-brass/80">
-              <Sparkles size={11} /> What this is
+            <p className="artifact-label">
+              <b>—</b> What this is
             </p>
-            <p className="mt-3 text-[12px] leading-relaxed text-paper-dim">
+            <p className="mt-3 text-[12.5px] leading-[1.8] text-paper-dim">
               A transparent, local reading of your archive. Six axes are computed from ratings,
               note depth, and the themes that recur. Every claim links back to a sentence you wrote.
               Confidence reflects how much evidence exists — not how correct the AI is.
             </p>
           </div>
-          <div>
-            <p className="micro text-paper-muted">What this is not</p>
-            <p className="mt-3 text-[12px] leading-relaxed text-paper-dim">
+          <div className="sm:border-l sm:border-white/12 sm:pl-16">
+            <p className="artifact-label">
+              <b>—</b> What this is not
+            </p>
+            <p className="mt-3 text-[12.5px] leading-[1.8] text-paper-dim">
               Not a personality test, not an aesthetic ranking, and not a live language model. No
               text leaves this browser. “Not quite” and corrections are stored and visibly reduce
               the confidence of the reading they challenge.
@@ -201,10 +216,12 @@ export const Taste = () => {
         </div>
 
         {summary.length > 0 && (
-          <div className="mt-10 grid gap-8 lg:grid-cols-[0.55fr_1fr] lg:gap-16">
+          <div className="mt-12 grid gap-8 lg:grid-cols-[0.55fr_1fr] lg:gap-16">
             <div>
-              <p className="micro text-paper-muted">In a paragraph</p>
-              <p className="mt-3 font-display text-2xl leading-snug text-paper">
+              <p className="artifact-label">
+                <b>—</b> In a paragraph
+              </p>
+              <p className="mt-4 font-display text-[1.8rem] leading-snug text-paper">
                 {strongest?.def.label} is the loudest signal.
               </p>
               <p className="mt-2 text-[11px] leading-relaxed text-paper-muted">
@@ -217,7 +234,7 @@ export const Taste = () => {
             </div>
             <div className="space-y-3 border-l border-white/10 pl-6 sm:pl-8">
               {summary.map((sentence, i) => (
-                <p key={i} className="text-[13px] leading-relaxed text-paper-dim">
+                <p key={i} className="text-[13px] leading-[1.8] text-paper-dim">
                   {sentence}
                 </p>
               ))}
@@ -263,40 +280,44 @@ export const Taste = () => {
       </section>
 
       {snapshot.topThemes.length > 0 && (
-        <section className="border-y border-white/10 bg-[#181818]">
-          <div className="mx-auto max-w-shell px-5 py-14 lg:px-10 lg:py-16">
-            <div className="flex flex-wrap items-end justify-between gap-4">
+        <section className="chapter--night border-y border-white/10">
+          <div className="mx-auto max-w-shell px-5 py-16 lg:px-10 lg:py-20">
+            <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/12 pb-4">
               <div>
-                <SectionLabel index="02">Thematic recurrence</SectionLabel>
-                <p className="mt-4 max-w-lg text-[12px] leading-relaxed text-paper-muted">
-                  Themes are counted across every note, weighted by rating and depth. This is the
-                  ground the archive keeps returning to.
+                <p className="artifact-label">
+                  <b>02</b> Thematic recurrence
                 </p>
+                <h2 className="mt-4 t-head">The ground you keep returning to.</h2>
               </div>
               <TextLink to="/map">Trace them on the map</TextLink>
             </div>
 
-            <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid gap-x-16 lg:grid-cols-2">
               {snapshot.topThemes.map((theme, i) => (
-                <div key={theme.id} className="border-t border-white/10 pt-4">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <p className="font-display text-2xl text-paper">
-                      {THEMES[theme.id].label}
-                      <span className="ml-2 text-[11px] tracking-[0.1em] text-paper-muted">
+                <div key={theme.id} className="group border-b border-white/10 py-6">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <div className="flex items-baseline gap-4">
+                      <span className="font-mono text-[8px] tracking-[0.2em] text-brass/70">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <p className="font-display text-[clamp(1.6rem,2.4vw,2.2rem)] leading-none text-paper">
+                        {THEMES[theme.id].label}
+                      </p>
+                      <span className="zh-label text-[9px] text-paper-muted/60">
                         {THEMES[theme.id].zh}
                       </span>
-                    </p>
-                    <span className="font-mono text-[10px] text-paper-muted">
+                    </div>
+                    <span className="font-mono text-[9px] text-paper-muted">
                       {String(theme.count).padStart(2, '0')} films
                     </span>
                   </div>
-                  <div className="bar-track mt-3">
+                  <div className="bar-track mt-4">
                     <div
                       className="bar-fill"
-                      style={{ width: `${Math.max(12, theme.weight * 100)}%`, opacity: 1 - i * 0.1 }}
+                      style={{ width: `${Math.max(12, theme.weight * 100)}%`, opacity: 1 - i * 0.08 }}
                     />
                   </div>
-                  <p className="mt-2 text-[11px] leading-relaxed text-paper-muted">
+                  <p className="mt-2.5 text-[11px] leading-relaxed text-paper-muted">
                     {THEMES[theme.id].blurb}
                   </p>
                 </div>

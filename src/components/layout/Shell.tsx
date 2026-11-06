@@ -15,23 +15,27 @@ const NAV = [
 ]
 
 const Mark = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 28 28" className={className} aria-hidden="true">
-    <rect x="1" y="1" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1" />
-    <rect x="7" y="7" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="0.75" opacity="0.5" />
-    <rect x="11" y="11" width="6" height="6" fill="currentColor" opacity="0.9" />
-    <line x1="1" y1="1" x2="7" y2="7" stroke="currentColor" strokeWidth="0.6" opacity="0.4" />
-    <line x1="27" y1="27" x2="21" y2="21" stroke="currentColor" strokeWidth="0.6" opacity="0.4" />
+  <svg viewBox="0 0 30 30" className={className} aria-hidden="true">
+    <rect x="1" y="1" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="0.9" />
+    <rect x="6" y="6" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="0.6" opacity="0.45" />
+    <rect x="11" y="11" width="8" height="8" fill="currentColor" opacity="0.92" />
+    <line x1="1" y1="1" x2="6" y2="6" stroke="currentColor" strokeWidth="0.6" opacity="0.35" />
+    <line x1="29" y1="29" x2="24" y2="24" stroke="currentColor" strokeWidth="0.6" opacity="0.35" />
   </svg>
 )
 
-const Brand = () => (
+const Brand = ({ compact = false }: { compact?: boolean }) => (
   <Link to="/" className="group flex items-center gap-3" aria-label="Frame by Frame — home">
     <Mark className="h-7 w-7 text-paper transition-colors group-hover:text-brass" />
     <span className="flex flex-col">
-      <span className="font-display text-[20px] leading-none tracking-[0.01em] text-paper">
+      <span className="font-display text-[18px] leading-none tracking-[0.005em] text-paper sm:text-[21px]">
         Frame <span className="italic text-brass-soft">by</span> Frame
       </span>
-      <span className="micro-sm mt-1 hidden text-paper-muted sm:block">Private Cinema Archive · Est. 2026</span>
+      {!compact && (
+        <span className="mt-[5px] hidden font-mono text-[8px] uppercase tracking-[0.24em] text-paper-muted sm:block">
+          Private cinema archive · Est. 2026
+        </span>
+      )}
     </span>
   </Link>
 )
@@ -60,7 +64,6 @@ export const Shell = ({ children }: { children: ReactNode }) => {
 
   return (
     <div className="grain relative min-h-screen bg-ink">
-      <div className="h-[2px] w-full bg-brass" aria-hidden="true" />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[130] focus:bg-paper focus:px-4 focus:py-2 focus:text-ink"
@@ -68,35 +71,40 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         Skip to content
       </a>
 
-      <header className="sticky top-0 z-[60] border-b border-white/10 bg-ink/95 backdrop-blur-xl">
-        <div className="mx-auto flex h-[72px] max-w-shell items-center justify-between gap-6 px-5 lg:px-10">
-          <Brand />
+      <header className="sticky top-0 z-[60] bg-ink/92 backdrop-blur-xl">
+        <div className="h-px w-full bg-brass/70" aria-hidden="true" />
+        <div className="shell flex h-[68px] items-stretch justify-between gap-3 lg:gap-6">
+          <div className="flex items-center">
+            <Brand />
+          </div>
 
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
+          <nav className="hidden items-stretch lg:flex" aria-label="Primary">
             {NAV.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'group relative flex flex-col gap-[3px] py-2 transition-colors',
+                  'group relative flex flex-col justify-center border-l border-white/[0.07] px-5 transition-colors xl:px-6',
                   isActive(item.to) ? 'text-paper' : 'text-paper-muted hover:text-paper',
                 )}
               >
                 <span className="flex items-baseline gap-1.5">
                   <span
                     className={cn(
-                      'font-mono text-[8px] tracking-[0.14em]',
-                      isActive(item.to) ? 'text-brass' : 'text-paper-muted/60',
+                      'font-mono text-[7px] tracking-[0.14em]',
+                      isActive(item.to) ? 'text-brass' : 'text-paper-muted/50',
                     )}
                   >
                     {item.index}
                   </span>
-                  <span className="text-[10px] uppercase tracking-[0.2em]">{item.label}</span>
+                  <span className="text-[9.5px] uppercase tracking-[0.2em]">{item.label}</span>
                 </span>
-                <span className="text-[9px] tracking-[0.1em] text-paper-muted/60">{item.zh}</span>
+                <span className="mt-[3px] text-[8.5px] tracking-[0.14em] text-paper-muted/55">
+                  {item.zh}
+                </span>
                 <span
                   className={cn(
-                    'absolute -bottom-[1px] left-0 h-px w-full origin-left bg-brass transition-transform duration-500',
+                    'absolute inset-x-0 bottom-0 h-[2px] origin-left bg-brass transition-transform duration-500',
                     isActive(item.to) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-50',
                   )}
                 />
@@ -104,19 +112,22 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="hidden text-right xl:block">
-              <p className="font-mono text-[10px] tracking-[0.16em] text-paper-dim">
+              <p className="font-mono text-[9px] tracking-[0.18em] text-paper-dim">
                 {String(records.length).padStart(2, '0')} FILMS
               </p>
-              <p className="micro-sm mt-1 text-paper-muted/70">Local archive</p>
+              <p className="mt-1 font-mono text-[7.5px] uppercase tracking-[0.2em] text-paper-muted/60">
+                Local archive
+              </p>
             </div>
             <button
               type="button"
               onClick={() => openAdd()}
-              className="btn btn-primary h-10 px-4 text-[10px] sm:px-5"
+              className="btn btn-primary h-9 shrink-0 px-3 text-[9px] sm:px-5"
+              aria-label="Add a film"
             >
-              <Plus size={13} strokeWidth={1.5} />
+              <Plus size={13} strokeWidth={1.6} />
               <span className="hidden sm:inline">Add a Film</span>
               <span className="sm:hidden">Add</span>
             </button>
@@ -131,23 +142,20 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             </button>
           </div>
         </div>
+        <div className="h-px w-full bg-white/10" aria-hidden="true" />
       </header>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-[90] flex flex-col bg-[#111111] lg:hidden">
-          <div className="flex h-[72px] items-center justify-between border-b border-white/10 px-5">
-            <Brand />
-            <button
-              type="button"
-              onClick={() => setMobileOpen(false)}
-              className="icon-btn"
-              aria-label="Close menu"
-            >
+        <div className="fixed inset-0 z-[90] flex flex-col bg-[#0d0d0d] lg:hidden">
+          <div className="h-px w-full bg-brass/70" />
+          <div className="flex h-[68px] items-center justify-between border-b border-white/10 px-5">
+            <Brand compact />
+            <button type="button" onClick={() => setMobileOpen(false)} className="icon-btn" aria-label="Close menu">
               <X size={17} />
             </button>
           </div>
-          <nav className="flex-1 overflow-y-auto px-5 py-8" aria-label="Mobile">
-            {NAV.map((item, i) => (
+          <nav className="flex-1 overflow-y-auto px-5 py-6" aria-label="Mobile">
+            {NAV.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -155,15 +163,14 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   'flex items-baseline justify-between border-b border-white/10 py-5',
                   isActive(item.to) ? 'text-paper' : 'text-paper-dim',
                 )}
-                style={{ animationDelay: `${i * 45}ms` }}
               >
                 <span className="flex items-baseline gap-4">
                   <span className="font-mono text-[9px] tracking-[0.15em] text-brass/70">
                     {item.index}
                   </span>
-                  <span className="font-display text-4xl">{item.label}</span>
+                  <span className="font-display text-[2.1rem] leading-none">{item.label}</span>
                 </span>
-                <span className="micro-sm text-paper-muted">{item.zh}</span>
+                <span className="zh-label text-[9px] text-paper-muted">{item.zh}</span>
               </NavLink>
             ))}
           </nav>
@@ -171,7 +178,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             <button type="button" onClick={() => openAdd()} className="btn btn-primary w-full">
               <Plus size={14} /> Add a Film
             </button>
-            <p className="mt-4 text-center font-mono text-[10px] tracking-[0.14em] text-paper-muted">
+            <p className="mt-4 text-center font-mono text-[9px] tracking-[0.16em] text-paper-muted">
               {String(records.length).padStart(2, '0')} FILMS IN YOUR LOCAL ARCHIVE
             </p>
           </div>
@@ -184,32 +191,34 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         </div>
       )}
 
-      <main id="main" key={location.pathname} className="animate-fade-in">
+      <main id="main" key={location.pathname} className="overflow-x-hidden">
         {children}
       </main>
 
-      <footer className="border-t border-white/10 bg-[#0C0C0C]">
-        <div className="mx-auto max-w-shell px-5 py-16 lg:px-10 lg:py-20">
-          <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+      <footer className="chapter--night border-t border-white/10">
+        <div className="shell py-16 lg:py-20">
+          <div className="grid gap-12 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1fr] lg:gap-16">
             <div>
-              <p className="micro text-brass">Frame by Frame · Vol. 01</p>
-              <p className="mt-5 max-w-sm font-display text-4xl leading-[1.02] text-paper">
-                Every film leaves a frame. Every frame tells your story.
+              <p className="kicker">Frame by Frame · Vol. 01 / 2026</p>
+              <p className="mt-6 max-w-md font-display text-[2.3rem] leading-[1.02] tracking-[-0.02em] text-paper sm:text-[2.8rem]">
+                Every film leaves a frame.
+                <br />
+                <span className="italic text-paper-dim">Every frame tells your story.</span>
               </p>
-              <p className="mt-5 max-w-xs text-[12px] leading-relaxed text-paper-muted">
-                An independent archive of the films you keep, the notes you write, and the
-                person they reveal. Local-first; your archive lives in this browser, not on a server.
+              <p className="mt-5 max-w-xs text-[11.5px] leading-relaxed text-paper-muted">
+                An independent archive of the films you keep, the notes you write, and the person
+                they reveal. Local-first; your archive lives in this browser, not on a server.
               </p>
             </div>
 
-            <div>
-              <p className="micro text-paper-muted">The Museum</p>
+            <div className="lg:pl-6 lg:border-l lg:border-white/10">
+              <p className="micro-sm text-paper-muted">The Museum</p>
               <ul className="mt-5 space-y-3">
                 {NAV.map((item) => (
                   <li key={item.to}>
                     <Link
                       to={item.to}
-                      className="link-underline text-[12px] text-paper-dim transition-colors hover:text-paper"
+                      className="link-underline text-[11.5px] text-paper-dim transition-colors hover:text-paper"
                     >
                       {item.label}
                     </Link>
@@ -218,9 +227,9 @@ export const Shell = ({ children }: { children: ReactNode }) => {
               </ul>
             </div>
 
-            <div>
-              <p className="micro text-paper-muted">On the Record</p>
-              <ul className="mt-5 space-y-3 text-[12px] text-paper-dim">
+            <div className="lg:pl-6 lg:border-l lg:border-white/10">
+              <p className="micro-sm text-paper-muted">On the Record</p>
+              <ul className="mt-5 space-y-3 text-[11.5px] text-paper-dim">
                 <li>{String(records.length).padStart(2, '0')} films archived</li>
                 <li>Local storage · v1</li>
                 <li>No account required</li>
@@ -228,12 +237,15 @@ export const Shell = ({ children }: { children: ReactNode }) => {
               </ul>
             </div>
 
-            <div>
-              <p className="micro text-paper-muted">A Note on the AI</p>
-              <p className="mt-5 text-[12px] leading-relaxed text-paper-muted">
+            <div className="lg:pl-6 lg:border-l lg:border-white/10">
+              <p className="micro-sm text-paper-muted">A Note on the AI</p>
+              <p className="mt-5 text-[11.5px] leading-relaxed text-paper-muted">
                 The taste readings in this build are produced by a transparent local engine:
                 weighted ratings, note length, and theme overlap. No API key, no model call, and no
                 claim that a model has read your mind.
+              </p>
+              <p className="mt-4 text-[10px] leading-relaxed text-paper-muted/60">
+                Film frames are original editorial reconstructions, not official stills or posters.
               </p>
               <div className="mt-6">
                 {confirmReset ? (
@@ -265,7 +277,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   <button
                     type="button"
                     onClick={() => setConfirmReset(true)}
-                    className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-paper-muted transition-colors hover:text-paper"
+                    className="inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-paper-muted transition-colors hover:text-paper"
                   >
                     <RotateCcw size={11} /> Reset demo data
                   </button>
@@ -274,11 +286,9 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             </div>
           </div>
 
-          <div className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-6 text-[10px] uppercase tracking-[0.16em] text-paper-muted sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-6 font-mono text-[9px] uppercase tracking-[0.18em] text-paper-muted sm:flex-row sm:items-center sm:justify-between">
             <p>© 2026 Frame by Frame · A student prototype</p>
-            <p className="flex items-center gap-2">
-              Built for 滴普杯 · DeepWorks
-            </p>
+            <p>Built for 滴普杯 · DeepWorks</p>
           </div>
         </div>
       </footer>
