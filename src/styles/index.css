@@ -1023,6 +1023,27 @@ input[type='range']::-moz-range-thumb {
     linear-gradient(180deg, rgba(9, 9, 10, 0.55) 0%, transparent 30%, rgba(9, 9, 10, 0.86) 100%);
 }
 
+/* Narrow viewports crop the backdrop onto bright areas, so the scrim has to
+   become vertical and denser for the copy to stay legible. */
+@media (max-width: 1023px) {
+  .cover-scrim {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(9, 9, 10, 0.8) 0%,
+        rgba(9, 9, 10, 0.64) 34%,
+        rgba(9, 9, 10, 0.8) 66%,
+        rgba(9, 9, 10, 0.97) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(9, 9, 10, 0.66) 0%,
+        rgba(9, 9, 10, 0.46) 62%,
+        rgba(9, 9, 10, 0.4) 100%
+      );
+  }
+}
+
 .select-mini {
   appearance: none;
   height: 2rem;

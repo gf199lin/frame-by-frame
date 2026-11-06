@@ -161,7 +161,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                 to={item.to}
                 className={cn(
                   'flex items-baseline justify-between border-b border-ink/12 py-5',
-                  isActive(item.to) ? 'text-ink' : 'text-ink/60',
+                  isActive(item.to) ? 'text-ink' : 'text-ink/75',
                 )}
               >
                 <span className="flex items-baseline gap-4">
@@ -170,7 +170,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   </span>
                   <span className="font-display text-[2.1rem] leading-none">{item.label}</span>
                 </span>
-                <span className="zh-label text-[9px] text-taupe">{item.zh}</span>
+                <span className="zh-label text-[9px] text-ink/45">{item.zh}</span>
               </NavLink>
             ))}
           </nav>
