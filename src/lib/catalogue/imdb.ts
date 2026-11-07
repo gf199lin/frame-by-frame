@@ -127,6 +127,7 @@ export const searchImdb = async (term: string, signal?: AbortSignal): Promise<Ca
   const data = await request<CinemetaResponse>(url, signal)
   return (data.metas ?? [])
     .filter((meta) => !meta.type || meta.type === 'movie')
+    .filter((meta) => parseReleaseYear(meta.releaseInfo ?? meta.year) !== undefined)
     .map(toCatalogueFilm)
     .filter((film): film is CatalogueFilm => film !== null)
 }

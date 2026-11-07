@@ -147,7 +147,7 @@ export const Home = () => {
                 <button type="button" onClick={() => openAdd()} className="btn btn-primary">
                   <Plus size={14} /> Record a film
                 </button>
-                <Link to="/archive" className="btn btn-ghost border-paper/30 text-paper hover:border-paper/60">
+                <Link to="/archive" className="btn btn-ghost border-paper/45 text-paper hover:border-paper/75">
                   Enter the archive <ArrowRight size={13} />
                 </Link>
               </div>
