@@ -593,8 +593,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
   gap: 0.6rem;
   min-height: 3rem;
   padding: 0 1.6rem;
-  font-size: 0.8125rem;
-  letter-spacing: 0.14em;
+  font-size: 0.9375rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   font-weight: 500;
   border: 1px solid transparent;
@@ -626,8 +626,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .btn-ghost {
   background: transparent;
   color: inherit;
-  border-color: var(--line);
-  opacity: 0.9;
+  border-color: color-mix(in srgb, currentColor 34%, transparent);
+  opacity: 0.92;
 }
 .btn-ghost:hover:not(:disabled) {
   border-color: rgba(41, 37, 31, 0.5);
