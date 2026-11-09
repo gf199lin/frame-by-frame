@@ -224,5 +224,6 @@ npm.cmd run build
 - 已使用 `VITE_BASE=/frame-by-frame/` 执行 Pages 变体构建验证，`dist/index.html` 中的 JS/CSS 路径正确带上了 `/frame-by-frame/` 前缀。
 - 本地预览：`vite preview`，端口 `4173`。
 - GitHub Pages 工作流：`.github/workflows/deploy.yml`，在 `push` 到 `main` 或手动 `workflow_dispatch` 时构建并发布，构建时注入 `VITE_BASE=/frame-by-frame/`。
-- **本轮未执行 `git commit` / `git push`**，因此线上 <https://gf199lin.github.io/frame-by-frame/> 仍是旧版本；推送后 GitHub Actions 会自动发布新版本。
-- 若需要我直接提交并推送，请明确告知；我会先检查 `git diff`，只提交本次视觉改版相关文件。
+- **已部署**：提交 `0ba399f` 已推送到 `main`，GitHub Actions run `42626030103` 的 build 与 deploy 均成功（2026-11-09）。
+- 线上验证：<https://gf199lin.github.io/frame-by-frame/> 已返回 `theme-color=#F4EAD2` 与新构建资源；桌面 1440px 与真实 390px 视口均完成线上截图检查。
+- 线上深层链接（如 `/archive`）由工作流生成的 `404.html` 回退到 SPA，浏览器内路由正常。
