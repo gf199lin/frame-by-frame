@@ -50,14 +50,14 @@ const Yearbook = ({
 }) => {
   return (
     <div className="paper-sheet on-paper paper-texture relative px-7 py-10 sm:px-12 sm:py-14">
-      <div className="flex items-start justify-between border-b border-[#171512]/20 pb-4">
+      <div className="flex items-start justify-between border-b border-[#161c66]/20 pb-4">
         <div>
-          <p className="micro text-[#7a7264]">Frame by Frame · 年度特刊</p>
-          <p className="mt-2 font-zh-title text-[1.8rem] leading-tight text-[#171512]">一年，在帧与帧之间</p>
+          <p className="micro text-[#5a5f85]">Frame by Frame · 年度特刊</p>
+          <p className="mt-2 font-zh-title text-[1.8rem] leading-tight text-[#161c66]">一年，在帧与帧之间</p>
         </div>
         <div className="text-right">
-          <p className="num text-5xl leading-none text-[#171512]">{year}</p>
-          <p className="mt-1 text-[12px] tracking-[0.06em] text-[#7a7264]">{records.length} 部电影</p>
+          <p className="num text-5xl leading-none text-[#161c66]">{year}</p>
+          <p className="mt-1 text-[12px] tracking-[0.06em] text-[#5a5f85]">{records.length} 部电影</p>
         </div>
       </div>
 
@@ -69,30 +69,30 @@ const Yearbook = ({
           ['重看', String(records.filter((r) => r.status === 'rewatched').length).padStart(2, '0')],
         ].map(([label, value]) => (
           <div key={label}>
-            <p className="text-[12px] tracking-[0.04em] text-[#7a7264]">{label}</p>
-            <p className="num mt-1 text-3xl leading-none text-[#171512]">{value}</p>
+            <p className="text-[12px] tracking-[0.04em] text-[#5a5f85]">{label}</p>
+            <p className="num mt-1 text-3xl leading-none text-[#161c66]">{value}</p>
           </div>
         ))}
       </div>
 
       <div className="mt-10 grid gap-8 sm:grid-cols-[1.1fr_0.9fr]">
         <div>
-          <p className="micro text-[#7a7264]">这一年，用一段话说</p>
+          <p className="micro text-[#5a5f85]">这一年，用一段话说</p>
           <div className="mt-3 space-y-2">
             {summary.map((sentence, i) => (
-              <p key={i} className="text-[14px] leading-[1.9] text-[#2c2822]">
+              <p key={i} className="text-[14px] leading-[1.9] text-[#2a3068]">
                 {sentence}
               </p>
             ))}
           </div>
 
           <div className="mt-8">
-            <p className="micro text-[#7a7264]">反复回来的主题</p>
+            <p className="micro text-[#5a5f85]">反复回来的主题</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {themes.slice(0, 6).map((theme) => (
                 <span
                   key={theme.id}
-                  className="border border-[#171512]/25 px-2.5 py-1 text-[12px] tracking-[0.04em] text-[#3a3428]"
+                  className="border border-[#161c66]/25 px-2.5 py-1 text-[12px] tracking-[0.04em] text-[#3b4170]"
                 >
                   {THEMES[theme.id].zh} · {theme.count}
                 </span>
@@ -101,8 +101,8 @@ const Yearbook = ({
           </div>
 
           <div className="mt-6">
-            <p className="micro text-[#7a7264]">情绪</p>
-            <p className="mt-2 font-zh-title text-[1.5rem] leading-tight text-[#171512]">
+            <p className="micro text-[#5a5f85]">情绪</p>
+            <p className="mt-2 font-zh-title text-[1.5rem] leading-tight text-[#161c66]">
               {moods
                 .slice(0, 3)
                 .map((m) => MOODS[m.id].zh)
@@ -114,7 +114,7 @@ const Yearbook = ({
         <div>
           {favourite && (
             <div>
-              <p className="micro text-[#7a7264]">我留下的那一帧</p>
+              <p className="micro text-[#5a5f85]">我留下的那一帧</p>
               <div className="mt-3 flex gap-4">
                 <div className="w-[92px] shrink-0">
                   <div className="aspect-[2/3] w-full overflow-hidden">
@@ -122,21 +122,21 @@ const Yearbook = ({
                   </div>
                 </div>
                 <div>
-                  <p className="font-display text-2xl leading-none text-[#171512]">
+                  <p className="font-display text-2xl leading-none text-[#161c66]">
                     {favourite.film.title}
                   </p>
                   {favourite.film.titleZh && (
-                    <p className="mt-1 text-[13px] tracking-[0.04em] text-[#3a3428]">{favourite.film.titleZh}</p>
+                    <p className="mt-1 text-[13px] tracking-[0.04em] text-[#3b4170]">{favourite.film.titleZh}</p>
                   )}
-                  <p className="mt-1 text-[12px] tracking-[0.04em] text-[#7a7264]">
+                  <p className="mt-1 text-[12px] tracking-[0.04em] text-[#5a5f85]">
                     {favourite.film.director} · {favourite.film.year}
                   </p>
-                  <p className="mt-2 font-mono text-[13px] text-[#3a3428]">
+                  <p className="mt-2 font-mono text-[13px] text-[#3b4170]">
                     ★ {favourite.record.rating.toFixed(1)}
                   </p>
                 </div>
               </div>
-              <p className="mt-4 border-l border-[#29251f]/50 pl-3 font-zh-body text-[14px] leading-[1.85] text-[#3a3428]">
+              <p className="mt-4 border-l border-[#1d2379]/50 pl-3 font-zh-body text-[14px] leading-[1.85] text-[#3b4170]">
                 “{favourite.record.reflection}”
               </p>
             </div>
@@ -144,11 +144,11 @@ const Yearbook = ({
         </div>
       </div>
 
-      <div className="mt-12 flex flex-col justify-between gap-2 border-t border-[#171512]/20 pt-4 sm:flex-row sm:items-center">
-        <p className="text-[12px] tracking-[0.08em] text-[#7a7264]">
+      <div className="mt-12 flex flex-col justify-between gap-2 border-t border-[#161c66]/20 pt-4 sm:flex-row sm:items-center">
+        <p className="text-[12px] tracking-[0.08em] text-[#5a5f85]">
           本地生成 · Frame by Frame · {year}
         </p>
-        <p className="text-[12px] tracking-[0.08em] text-[#7a7264]">
+        <p className="text-[12px] tracking-[0.08em] text-[#5a5f85]">
           一份私人记录，不是公开调查
         </p>
       </div>
@@ -171,9 +171,9 @@ const buildYearbookHtml = (params: {
 <html lang="zh-CN"><head><meta charset="utf-8" />
 <title>Frame by Frame — ${year} 年度回顾</title>
 <style>
-  :root { --ink:#171412; --paper:#f2f0eb; --muted:#91816b; --line:rgba(23,20,18,.18); --brass:#29251f; }
+  :root { --ink:#161c66; --paper:#fdf6e2; --muted:#5a5f85; --line:rgba(29,35,121,.16); --brass:#1d2379; }
   * { box-sizing: border-box; }
-  body { margin:0; background:#0a0a0b; color:var(--ink); font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Georgia, serif; }
+  body { margin:0; background:#f4ead2; color:var(--ink); font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", Georgia, serif; }
   .sheet { max-width: 880px; margin: 32px auto; background: var(--paper); padding: 64px 72px; }
   .micro { font-family: "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif; font-size: 10px; letter-spacing: .16em; color: var(--muted); }
   h1, h2, h3 { font-weight: 600; margin: 0; }
@@ -183,7 +183,7 @@ const buildYearbookHtml = (params: {
   .num { font-size: 32px; line-height: 1; font-family: "IBM Plex Mono", Consolas, monospace; }
   .section { margin-top: 40px; }
   .cols { display:grid; grid-template-columns: 1.1fr .9fr; gap: 40px; }
-  p { font-size: 14px; line-height: 1.9; color: #2c2822; margin: 8px 0; }
+  p { font-size: 14px; line-height: 1.9; color: #2a3068; margin: 8px 0; }
   .quote { border-left: 1px solid var(--brass); padding-left: 16px; font-size: 14px; line-height: 1.9; }
   .tag { display:inline-block; border:1px solid rgba(23,21,18,.25); padding: 4px 9px; margin: 3px 4px 3px 0; font-size: 11px; letter-spacing:.04em; }
   .foot { margin-top: 48px; border-top:1px solid var(--line); padding-top:16px; display:flex; justify-content:space-between; }
@@ -356,14 +356,14 @@ export const Reflection = () => {
     return (
       <div className="paper-sheet on-paper paper-texture min-h-[70vh]">
         <div className="mx-auto max-w-shell px-5 py-20 lg:px-10">
-          <p className="micro text-[#7a7264]">05 — 年度回顾</p>
-          <h1 className="mt-4 font-zh-title text-[clamp(2.4rem,5vw,4.2rem)] leading-tight text-[#171512]">
+          <p className="micro text-[#5a5f85]">05 — 年度回顾</p>
+          <h1 className="mt-4 font-zh-title text-[clamp(2.4rem,5vw,4.2rem)] leading-tight text-[#161c66]">
             年度特刊还没有内容
           </h1>
           <div className="mt-12">
             <EmptyState
               tone="light"
-              className="border-[#171412]/20"
+              className="border-[#161c66]/20"
               title="一本年鉴，需要一年的帧"
               description="先添加第一部电影，然后再回来。年度回顾会把月份、主题、情绪，以及对你观影品味的解读，收进同一件可以打印的物件里。"
               action={
@@ -382,33 +382,34 @@ export const Reflection = () => {
 
   return (
     <div className="paper-sheet on-paper paper-texture">
-      <div className="shell pb-8 pt-10 lg:pt-14">
+      <div className="shell pt-6 lg:pt-10">
+        <div className="paper-card paper-card--offset relative overflow-hidden px-5 py-8 sm:px-8 lg:px-10 lg:py-10">
         {/* Masthead */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#171512]/25 pb-3">
-          <p className="text-[12.5px] tracking-[0.08em] text-[#7a7264]">
-            05 — 年度回顾 / 年度特刊
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#161c66]/20 pb-3">
+          <p className="text-[11.5px] uppercase tracking-[0.14em] text-[#5a5f85]">
+            Frame by Frame · 年度特刊
           </p>
-          <p className="text-[12.5px] tracking-[0.08em] text-[#7a7264]">
+          <p className="text-[12px] tracking-[0.06em] text-[#5a5f85]">
             一份可以打印的记录 · {year}
           </p>
         </div>
 
         <div className="grid grid-cols-12 items-start gap-x-6 gap-y-10 pt-8">
           <div className="col-span-12 lg:col-span-7 lg:pt-2">
-            <h1 className="font-zh-title text-[clamp(2.6rem,6.2vw,5.2rem)] leading-[1.08] tracking-[-0.01em] text-[#171512]">
+            <h1 className="font-zh-title text-[clamp(2.6rem,6vw,5rem)] leading-[1.06] tracking-[-0.01em] text-[#161c66]">
               {year} 年度片卷
             </h1>
-            <p className="mt-2 font-display text-[clamp(1.2rem,2.4vw,1.8rem)] italic leading-snug text-[#7a7264]">
+            <p className="mt-2 font-display text-[clamp(1.2rem,2.4vw,1.8rem)] italic leading-snug text-[#5a5f85]">
               The {year} Reel
             </p>
             <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-              <p className="text-[14.5px] leading-[1.9] text-[#3a3428]">
+              <p className="max-w-xl text-[14.5px] leading-[1.9] text-[#3b4170]">
                 一份关于「这一年在黑暗里发生了什么」的印刷记录：月份、情绪、你留下的那一帧，以及品味缓慢移动的轨迹。
               </p>
             </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-2">
-              <span className="mr-1 text-[12px] tracking-[0.06em] text-[#7a7264]">
+              <span className="mr-1 text-[12px] tracking-[0.05em] text-[#5a5f85]">
                 年份
               </span>
               {years.map((y) => (
@@ -427,22 +428,25 @@ export const Reflection = () => {
 
           {favorite && favoriteFilm && (
             <div className="col-span-9 col-start-1 sm:col-span-6 lg:col-span-4 lg:col-start-9">
-              <div className="flex items-baseline justify-between border-b border-[#171512]/25 pb-2">
-                <p className="text-[12.5px] tracking-[0.06em] text-[#7a7264]">
+              <div className="flex items-baseline justify-between border-b border-[#161c66]/20 pb-2">
+                <p className="text-[12px] tracking-[0.05em] text-[#5a5f85]">
                   我留下的那一帧
                 </p>
-                <p className="font-mono text-[12px] text-[#7a7264]">
+                <p className="font-mono text-[12px] text-[#5a5f85]">
                   {favorite.rating.toFixed(1)} / 5
                 </p>
               </div>
-              <div className="mt-3 aspect-[2/3] w-full max-w-[230px] overflow-hidden lg:ml-auto">
-                <FilmPoster film={favoriteFilm} showTitle={false} />
+              <div className="mount mt-4 ml-auto w-full max-w-[236px]">
+                <div className="aspect-[2/3] overflow-hidden rounded-[4px]">
+                  <FilmPoster film={favoriteFilm} showTitle={false} />
+                </div>
               </div>
-              <p className="mt-2.5 text-right text-[12px] tracking-[0.06em] text-[#7a7264]">
-                封面 · {favoriteFilm.year}
+              <p className="mt-2.5 text-right text-[11.5px] tracking-[0.05em] text-[#5a5f85]">
+                封面 · {favoriteFilm.title} / {favoriteFilm.year}
               </p>
             </div>
           )}
+        </div>
         </div>
       </div>
 
@@ -452,7 +456,7 @@ export const Reflection = () => {
           <div className="mt-16">
             <EmptyState
               tone="light"
-              className="border-[#171412]/20"
+              className="border-[#161c66]/20"
               title={`${year} 年还没有记录任何电影。`}
               description="换一个年份，或者添加一部观看日期在这一年内的电影。"
               action={
@@ -465,7 +469,7 @@ export const Reflection = () => {
         ) : (
           <>
             {/* Stats */}
-            <div className="mt-8 grid grid-cols-2 gap-y-8 border-b border-[#171512]/20 pb-8 sm:grid-cols-4">
+            <div className="mt-8 grid grid-cols-2 gap-y-8 border-b border-[#161c66]/20 pb-8 sm:grid-cols-4">
               {[
                 ['电影', String(yearRecords.length).padStart(2, '0'), `${months.filter((m) => m.count > 0).length} 个有记录的月份`],
                 ['累计观影', hours.toFixed(1), formatMinutes(yearSnapshot.totalMinutes)],
@@ -473,9 +477,9 @@ export const Reflection = () => {
                 ['重看', String(yearRecords.filter((r) => r.status === 'rewatched').length).padStart(2, '0'), '次重看'],
               ].map(([label, value, sub]) => (
                 <div key={label}>
-                  <p className="text-[12.5px] tracking-[0.04em] text-[#7a7264]">{label}</p>
-                  <p className="num mt-2 text-5xl leading-none text-[#171512]">{value}</p>
-                  <p className="mt-2 text-[12.5px] text-[#7a7264]">{sub}</p>
+                  <p className="text-[12.5px] tracking-[0.04em] text-[#5a5f85]">{label}</p>
+                  <p className="num mt-2 text-5xl leading-none text-[#161c66]">{value}</p>
+                  <p className="mt-2 text-[12.5px] text-[#5a5f85]">{sub}</p>
                 </div>
               ))}
             </div>
@@ -485,12 +489,12 @@ export const Reflection = () => {
               <div>
                 <div className="flex items-end justify-between gap-4">
                   <div>
-                    <p className="micro text-[#7a7264]">这一年，逐月来看</p>
-                    <p className="mt-2 font-zh-title text-[1.5rem] text-[#171512]">
+                    <p className="micro text-[#5a5f85]">这一年，逐月来看</p>
+                    <p className="mt-2 font-zh-title text-[1.5rem] text-[#161c66]">
                       {months.reduce((sum, m) => sum + m.count, 0)} 帧，{months.filter((m) => m.count > 0).length} 个月
                     </p>
                   </div>
-                  <p className="text-[12.5px] tracking-[0.06em] text-[#7a7264]">部电影</p>
+                  <p className="text-[12.5px] tracking-[0.06em] text-[#5a5f85]">部电影</p>
                 </div>
 
                 <div className="mt-8 flex h-52 items-end gap-2 sm:gap-3">
@@ -498,34 +502,34 @@ export const Reflection = () => {
                     <div key={month.month} className="group flex h-full flex-1 flex-col justify-end">
                       <div className="relative flex flex-1 items-end">
                         <div
-                          className="mx-auto w-[62%] bg-[#171512]/85 transition-colors duration-300 group-hover:bg-[#29251f]"
+                          className="mx-auto w-[62%] bg-[#161c66]/85 transition-colors duration-300 group-hover:bg-[#1d2379]"
                           style={{ height: `${Math.max(month.count > 0 ? 8 : 1, (month.count / maxMonth) * 100)}%` }}
                           title={`${month.label}：${month.count} 部电影 · ${formatMinutes(month.minutes)}`}
                         />
                       </div>
-                      <p className={`mt-2 text-center text-[12px] tracking-[0.02em] ${activeMonth?.month === month.month ? 'text-[#29251f]' : 'text-[#7a7264]'}`}>
+                      <p className={`mt-2 text-center text-[12px] tracking-[0.02em] ${activeMonth?.month === month.month ? 'text-[#1d2379]' : 'text-[#5a5f85]'}`}>
                         {month.label}
                       </p>
-                      <p className="mt-0.5 text-center font-mono text-[12px] text-[#7a7264]">
+                      <p className="mt-0.5 text-center font-mono text-[12px] text-[#5a5f85]">
                         {month.count > 0 ? month.count : '·'}
                       </p>
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 border-t border-[#171512]/15 pt-3 text-[12.5px] text-[#7a7264]">
+                <p className="mt-4 border-t border-[#161c66]/15 pt-3 text-[12.5px] text-[#5a5f85]">
                   柱子的高度是电影数量，不是评分。把鼠标停在柱子上，可以看到当月的观影时长。
                 </p>
               </div>
 
               <div>
-                <div className="flex items-end justify-between gap-3 border-b border-[#171512]/20 pb-3">
-                  <p className="micro text-[#7a7264]">
+                <div className="flex items-end justify-between gap-3 border-b border-[#161c66]/20 pb-3">
+                  <p className="micro text-[#5a5f85]">
                     {activeMonth ? `${monthName(activeMonth.records[0]?.watchedAt ?? `${year}-01-01`)} · 这个月` : '这个月'}
                   </p>
-                  <p className="font-mono text-[12.5px] text-[#7a7264]">{monthRecords.length} 部电影</p>
+                  <p className="font-mono text-[12.5px] text-[#5a5f85]">{monthRecords.length} 部电影</p>
                 </div>
                 {monthRecords.length > 0 ? (
-                  <ul className="mt-2 divide-y divide-[#171512]/15">
+                  <ul className="mt-2 divide-y divide-[#161c66]/15">
                     {monthRecords.map((record) => {
                       const film = filmById(films, record.filmId)
                       if (!film) return null
@@ -537,14 +541,14 @@ export const Reflection = () => {
                             </div>
                           </div>
                           <div className="min-w-0">
-                            <p className="font-display text-lg leading-tight text-[#171512]">{film.title}</p>
+                            <p className="font-display text-lg leading-tight text-[#161c66]">{film.title}</p>
                             {film.titleZh && (
-                              <p className="text-[12.5px] tracking-[0.04em] text-[#7a7264]">{film.titleZh}</p>
+                              <p className="text-[12.5px] tracking-[0.04em] text-[#5a5f85]">{film.titleZh}</p>
                             )}
-                            <p className="mt-0.5 text-[12px] tracking-[0.04em] text-[#7a7264]">
+                            <p className="mt-0.5 text-[12px] tracking-[0.04em] text-[#5a5f85]">
                               {formatLongDate(record.watchedAt)} · ★ {record.rating.toFixed(1)}
                             </p>
-                            <p className="mt-2 line-clamp-2 font-zh-body text-[13px] leading-[1.8] text-[#3a3428]">
+                            <p className="mt-2 line-clamp-2 font-zh-body text-[13px] leading-[1.8] text-[#3b4170]">
                               {record.reflection}
                             </p>
                           </div>
@@ -553,29 +557,29 @@ export const Reflection = () => {
                     })}
                   </ul>
                 ) : (
-                  <p className="mt-4 text-[14px] text-[#7a7264]">这个月还没有记录。</p>
+                  <p className="mt-4 text-[14px] text-[#5a5f85]">这个月还没有记录。</p>
                 )}
               </div>
             </div>
 
             {/* Favorite */}
             {favorite && favoriteFilm && (
-              <div className="mt-14 grid gap-8 border-t border-[#171512]/20 pt-10 lg:grid-cols-12 lg:gap-12">
+              <div className="mt-14 grid gap-8 border-t border-[#161c66]/20 pt-10 lg:grid-cols-12 lg:gap-12">
                 <div className="lg:col-span-7">
-                  <p className="micro text-[#7a7264]">我留下的那一帧</p>
-                  <p className="mt-4 font-display text-[clamp(2.2rem,4.4vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-[#171512]">
+                  <p className="micro text-[#5a5f85]">我留下的那一帧</p>
+                  <p className="mt-4 font-display text-[clamp(2.2rem,4.4vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-[#161c66]">
                     {favoriteFilm.title}
                   </p>
                   {favoriteFilm.titleZh && (
-                    <p className="mt-1 font-zh-title text-[1.2rem] text-[#3a3428]">{favoriteFilm.titleZh}</p>
+                    <p className="mt-1 font-zh-title text-[1.2rem] text-[#3b4170]">{favoriteFilm.titleZh}</p>
                   )}
-                  <p className="mt-3 text-[12.5px] tracking-[0.04em] text-[#7a7264]">
+                  <p className="mt-3 text-[12.5px] tracking-[0.04em] text-[#5a5f85]">
                     {favoriteFilm.director} · {favoriteFilm.year} · ★ {favorite.rating.toFixed(1)}
                   </p>
                 </div>
                 <div className="flex flex-col justify-center lg:col-span-5">
-                  <blockquote className="border-l border-[#29251f]/50 pl-5">
-                    <p className="font-zh-body text-[clamp(1rem,1.6vw,1.25rem)] leading-[1.9] text-[#2c2822]">
+                  <blockquote className="border-l border-[#1d2379]/50 pl-5">
+                    <p className="font-zh-body text-[clamp(1rem,1.6vw,1.25rem)] leading-[1.9] text-[#2a3068]">
                       “{favorite.reflection}”
                     </p>
                   </blockquote>
@@ -584,24 +588,24 @@ export const Reflection = () => {
             )}
 
             {/* Themes + moods */}
-            <div className="mt-14 grid gap-10 border-t border-[#171512]/20 pt-10 sm:grid-cols-2 lg:gap-20">
+            <div className="mt-14 grid gap-10 border-t border-[#161c66]/20 pt-10 sm:grid-cols-2 lg:gap-20">
               <div>
-                <p className="micro text-[#7a7264]">反复回来的主题</p>
+                <p className="micro text-[#5a5f85]">反复回来的主题</p>
                 <ul className="mt-5 space-y-3">
                   {themes.slice(0, 6).map((theme, i) => (
                     <li key={theme.id}>
                       <div className="flex items-baseline justify-between gap-3">
-                        <p className="font-zh-title text-[1.1rem] text-[#171512]">
+                        <p className="font-zh-title text-[1.1rem] text-[#161c66]">
                           {THEMES[theme.id].zh}
-                          <span className="ml-2 text-[10px] uppercase tracking-[0.1em] text-[#7a7264]">
+                          <span className="ml-2 text-[10px] uppercase tracking-[0.1em] text-[#5a5f85]">
                             {THEMES[theme.id].label}
                           </span>
                         </p>
-                        <span className="font-mono text-[12.5px] text-[#7a7264]">{theme.count}</span>
+                        <span className="font-mono text-[12.5px] text-[#5a5f85]">{theme.count}</span>
                       </div>
-                      <div className="mt-2 h-px w-full bg-[#171512]/12">
+                      <div className="mt-2 h-px w-full bg-[#161c66]/12">
                         <div
-                          className="h-px bg-[#171512]"
+                          className="h-px bg-[#161c66]"
                           style={{ width: `${Math.max(10, (theme.count / Math.max(themes[0]?.count ?? 1, 1)) * 100)}%`, opacity: 1 - i * 0.12 }}
                         />
                       </div>
@@ -610,24 +614,24 @@ export const Reflection = () => {
                 </ul>
               </div>
               <div>
-                <p className="micro text-[#7a7264]">这一年留下的情绪</p>
+                <p className="micro text-[#5a5f85]">这一年留下的情绪</p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {moods.slice(0, 8).map((mood) => (
                     <span
                       key={mood.id}
-                      className="border border-[#171512]/25 px-3 py-1.5 text-[12.5px] tracking-[0.04em] text-[#3a3428]"
+                      className="border border-[#161c66]/25 px-3 py-1.5 text-[12.5px] tracking-[0.04em] text-[#3b4170]"
                     >
-                      {MOODS[mood.id].zh} <span className="text-[#7a7264]">{mood.count}</span>
+                      {MOODS[mood.id].zh} <span className="text-[#5a5f85]">{mood.count}</span>
                     </span>
                   ))}
                 </div>
-                <p className="mt-6 max-w-sm text-[14px] leading-[1.9] text-[#3a3428]">
+                <p className="mt-6 max-w-sm text-[14px] leading-[1.9] text-[#3b4170]">
                   {moods[0]
                     ? `「${MOODS[moods[0].id].zh}」是这一年最主要的语气——它出现在 ${moods[0].count} 部电影里，常常和「${THEMES[themes[0]?.id ?? 'memory'].zh}」一起出现。`
                     : '还没有记录任何情绪。'}
                 </p>
                 {state.yearbookGenerations.length > 0 && (
-                  <p className="mt-6 border-t border-[#171512]/15 pt-4 text-[12px] tracking-[0.06em] text-[#7a7264]">
+                  <p className="mt-6 border-t border-[#161c66]/15 pt-4 text-[12px] tracking-[0.06em] text-[#5a5f85]">
                     这台设备已生成 {state.yearbookGenerations.length} 本年度特刊
                   </p>
                 )}
@@ -635,23 +639,23 @@ export const Reflection = () => {
             </div>
 
             {/* AI summary + shift */}
-            <div className="mt-14 grid gap-0 border-y border-[#171512]/20 lg:grid-cols-[1fr_1fr]">
-              <div className="border-b border-[#171512]/20 py-10 lg:border-b-0 lg:border-r lg:pr-12">
-                <p className="micro text-[#7a7264]">这一年读起来是什么样</p>
+            <div className="mt-14 grid gap-0 border-y border-[#161c66]/20 lg:grid-cols-[1fr_1fr]">
+              <div className="border-b border-[#161c66]/20 py-10 lg:border-b-0 lg:border-r lg:pr-12">
+                <p className="micro text-[#5a5f85]">这一年读起来是什么样</p>
                 <div className="mt-4 space-y-3">
                   {summary.map((sentence, i) => (
-                    <p key={i} className="text-[15px] leading-[1.95] text-[#2c2822]">
+                    <p key={i} className="text-[15px] leading-[1.95] text-[#2a3068]">
                       {sentence}
                     </p>
                   ))}
                 </div>
-                <p className="mt-5 text-[12.5px] leading-[1.8] text-[#7a7264]">
+                <p className="mt-5 text-[12.5px] leading-[1.8] text-[#5a5f85]">
                   这段总结只根据 {year} 年的记录重新计算。它是对偏好的估计，不是对品味的评判。
                 </p>
               </div>
 
               <div className="py-10 lg:pl-12">
-                <p className="micro text-[#7a7264]">漂移：上半年 → 下半年</p>
+                <p className="micro text-[#5a5f85]">漂移：上半年 → 下半年</p>
                 {first.length > 0 && second.length > 0 ? (
                   <ul className="mt-5 space-y-4">
                     {DIMENSIONS.slice(0, 5).map((def) => {
@@ -661,23 +665,23 @@ export const Reflection = () => {
                       const steady = Math.abs(delta) < 0.04
                       return (
                         <li key={def.key} className="grid grid-cols-[6.5rem_1fr_auto] items-center gap-4">
-                          <p className="text-[12.5px] tracking-[0.04em] text-[#3a3428]">
+                          <p className="text-[12.5px] tracking-[0.04em] text-[#3b4170]">
                             {def.labelZh}
                           </p>
                           <div className="relative h-4">
-                            <div className="absolute left-0 right-0 top-1/2 h-px bg-[#171512]/15" />
+                            <div className="absolute left-0 right-0 top-1/2 h-px bg-[#161c66]/15" />
                             <div
-                              className="absolute top-1/2 h-2 w-2 -translate-y-1/2 border border-[#171512]/40"
+                              className="absolute top-1/2 h-2 w-2 -translate-y-1/2 border border-[#161c66]/40"
                               style={{ left: `${Math.min(96, Math.max(4, before * 100))}%` }}
                               title={`上半年：${percent(before)}`}
                             />
                             <div
-                              className="absolute top-1/2 h-[6px] w-[6px] -translate-y-1/2 bg-[#29251f]"
+                              className="absolute top-1/2 h-[6px] w-[6px] -translate-y-1/2 bg-[#1d2379]"
                               style={{ left: `${Math.min(98, Math.max(2, after * 100))}%` }}
                               title={`下半年：${percent(after)}`}
                             />
                           </div>
-                          <p className="w-[4.8rem] text-right text-[12.5px] tracking-[0.04em] text-[#7a7264]">
+                          <p className="w-[4.8rem] text-right text-[12.5px] tracking-[0.04em] text-[#5a5f85]">
                             {steady ? '保持稳定' : delta > 0 ? '向外 / 上移' : '向内 / 下移'}
                           </p>
                         </li>
@@ -685,26 +689,26 @@ export const Reflection = () => {
                     })}
                   </ul>
                 ) : (
-                  <p className="mt-4 text-[14px] leading-[1.9] text-[#7a7264]">
+                  <p className="mt-4 text-[14px] leading-[1.9] text-[#5a5f85]">
                     要看出漂移，上半年和下半年各需要至少两部电影。
                   </p>
                 )}
-                <p className="mt-4 text-[12.5px] leading-[1.8] text-[#7a7264]">
+                <p className="mt-4 text-[12.5px] leading-[1.8] text-[#5a5f85]">
                   空心方框是上半年，实心方框是下半年。轴线从向内的一端延伸到向外的一端。
                 </p>
               </div>
             </div>
 
             {/* Yearbook CTA */}
-            <div className="mt-12 flex flex-col gap-6 border border-[#171512]/25 p-6 sm:flex-row sm:items-center sm:justify-between lg:p-8">
+            <div className="mt-12 flex flex-col gap-6 border border-[#161c66]/25 p-6 sm:flex-row sm:items-center sm:justify-between lg:p-8">
               <div>
-                <p className="micro flex items-center gap-2 text-[#7a7264]">
+                <p className="micro flex items-center gap-2 text-[#5a5f85]">
                   <Sparkles size={11} /> 可以拿在手里的物件
                 </p>
-                <p className="mt-2 font-zh-title text-[1.6rem] leading-tight text-[#171512]">
+                <p className="mt-2 font-zh-title text-[1.6rem] leading-tight text-[#161c66]">
                   把 {year} 年做成一本年度特刊。
                 </p>
-                <p className="mt-2 max-w-lg text-[14px] leading-[1.9] text-[#3a3428]">
+                <p className="mt-2 max-w-lg text-[14px] leading-[1.9] text-[#3b4170]">
                   一页可以留下的年鉴：数字、主题、你留下的那一帧，以及对你观影品味的解读。本地生成，可下载为 HTML，也可直接打印。
                 </p>
               </div>
@@ -723,7 +727,7 @@ export const Reflection = () => {
       {/* Generation overlay */}
       {generating &&
         createPortal(
-          <div className="fixed inset-0 z-[110] flex flex-col items-center justify-center bg-[#1b1814]/96 px-6 text-center backdrop-blur">
+          <div className="fixed inset-0 z-[110] flex flex-col items-center justify-center bg-[#121750]/96 px-6 text-center backdrop-blur">
             <p className="micro text-paper-dim">正在排版年度特刊</p>
             <p className="mt-4 font-zh-title text-[2rem] text-paper sm:text-[2.6rem]">一年，在帧与帧之间</p>
             <div className="mt-10 w-full max-w-sm space-y-3 text-left">
@@ -779,7 +783,7 @@ export const Reflection = () => {
             favourite={favorite && favoriteFilm ? { record: favorite, film: favoriteFilm } : null}
             hours={hours}
           />
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border border-paper/15 bg-[#211e19] p-4">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-[8px] border border-paper/15 bg-[#1a2170] p-4">
             <p className="max-w-md text-[12.5px] leading-[1.8] text-paper-dim">
               下载的文件是自包含的，可以直接打印。里面只有你的电影名称、评分和笔记。
             </p>
@@ -793,7 +797,7 @@ export const Reflection = () => {
             </div>
           </div>
           {printBlocked && (
-            <p className="mt-2 text-[12.5px] leading-[1.8] text-[#c7bba8]">
+            <p className="mt-2 text-[12.5px] leading-[1.8] text-[#cbc8d9]">
               打印窗口被浏览器拦截了。请允许弹出窗口，或者先下载 HTML 再打印。
             </p>
           )}

@@ -34,7 +34,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className="pointer-events-auto flex items-start gap-3 border border-paper/15 bg-[#211e19]/95 px-4 py-3 shadow-2xl backdrop-blur-md animate-fade-up"
+            className="pointer-events-auto flex items-start gap-3 rounded-[10px] border border-paper/20 bg-ink/95 px-4 py-3 shadow-2xl backdrop-blur-md animate-fade-up"
             role="status"
           >
             <span className="mt-[2px] text-paper/60">

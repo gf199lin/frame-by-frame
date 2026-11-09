@@ -8,6 +8,7 @@ import { EmptyState } from '@/components/ui/Primitives'
 import { Rating } from '@/components/ui/Rating'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { buildMemoryGraph } from '@/lib/graph'
+import { recordsSorted } from '@/lib/tasteEngine'
 import { MOODS, THEMES } from '@/data/taxonomy'
 import { cn, formatShortDate } from '@/lib/format'
 import type { GraphNode, MoodId, ThemeId } from '@/types'
@@ -161,7 +162,7 @@ export const MemoryMapPage = () => {
       </div>
 
       <div className="relative mt-6">
-        <div className="relative h-[62vh] min-h-[480px] w-full border border-ink/20 lg:h-[68vh] lg:min-h-[560px]">
+        <div className="relative h-[66vh] min-h-[600px] w-full border border-ink/20 lg:h-[68vh] lg:min-h-[600px]">
           <span className="pointer-events-none absolute -left-px -top-px z-10 h-3 w-3 border-l border-t border-brass/70" />
           <span className="pointer-events-none absolute -right-px -top-px z-10 h-3 w-3 border-r border-t border-brass/70" />
           <span className="pointer-events-none absolute -bottom-px -left-px z-10 h-3 w-3 border-b border-l border-brass/70" />
@@ -174,17 +175,17 @@ export const MemoryMapPage = () => {
               onSelect={(node: GraphNode | null) => setSelectedId(node?.id ?? null)}
             />
           ) : (
-            <div className="flex h-full items-center justify-center bg-[#211e19]">
-              <p className="text-[14px] text-paper-dim">
+            <div className="flex h-full items-center justify-center bg-paper-sheet">
+              <p className="text-[14px] text-taupe">
                 打开一个图层，地图就会重新出现。
               </p>
             </div>
           )}
 
           {selected && (
-            <aside className="absolute bottom-4 left-4 top-4 z-10 w-[min(21rem,calc(100%-2rem))] overflow-y-auto border border-paper/20 bg-[#211e19]/95 p-5 backdrop-blur-md animate-fade-in">
+            <aside className="absolute bottom-4 left-4 top-4 z-10 w-[min(21rem,calc(100%-2rem))] overflow-y-auto rounded-[10px] border border-ink/15 bg-paper-sheet/95 p-5 text-ink shadow-lift backdrop-blur-md animate-fade-in">
               <div className="flex items-start justify-between gap-3">
-                <p className="text-[12px] tracking-[0.06em] text-brass/80">
+                <p className="text-[12px] tracking-[0.05em] text-ocean/80">
                   {selected.kind === 'film'
                     ? '电影节点'
                     : selected.kind === 'theme'
@@ -194,7 +195,7 @@ export const MemoryMapPage = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedId(null)}
-                  className="text-paper-dim transition-colors hover:text-paper"
+                  className="text-taupe transition-colors hover:text-ink"
                   aria-label="清除选择"
                 >
                   <X size={13} />
@@ -205,61 +206,61 @@ export const MemoryMapPage = () => {
                 <>
                   <div className="mt-4 flex gap-3">
                     <Link to={`/archive/${selectedFilm.id}`} className="w-[74px] shrink-0">
-                      <div className="aspect-[2/3] w-full overflow-hidden">
+                      <div className="aspect-[2/3] w-full overflow-hidden rounded-[3px]">
                         <FilmPoster film={selectedFilm} showTitle={false} />
                       </div>
                     </Link>
                     <div>
                       <Link
                         to={`/archive/${selectedFilm.id}`}
-                        className="font-display text-2xl leading-tight text-paper hover:text-paper/70"
+                        className="font-display text-2xl leading-tight text-ink hover:text-ocean"
                       >
                         {selectedFilm.title}
                       </Link>
                       {selectedFilm.titleZh && (
-                        <p className="mt-0.5 text-[13px] tracking-[0.04em] text-paper-dim">{selectedFilm.titleZh}</p>
+                        <p className="mt-0.5 text-[13px] tracking-[0.03em] text-ink/60">{selectedFilm.titleZh}</p>
                       )}
-                      <p className="mt-1 text-[12px] tracking-[0.04em] text-paper-dim">
+                      <p className="mt-1 text-[12px] tracking-[0.03em] text-taupe">
                         {selectedFilm.year} · {selectedFilm.director}
                       </p>
-                      <Rating value={selectedRecord.rating} size={9} className="mt-2" />
+                      <Rating value={selectedRecord.rating} size={9} tone="light" className="mt-2" />
                     </div>
                   </div>
-                  <p className="mt-4 border-t border-paper/15 pt-3 font-zh-body text-[14px] leading-[1.85] text-paper-dim">
+                  <p className="mt-4 border-t border-ink/10 pt-3 font-zh-body text-[14px] leading-[1.85] text-ink/80">
                     “{selectedRecord.reflection}”
                   </p>
-                  <p className="mt-3 text-[12.5px] text-paper-dim">
+                  <p className="mt-3 text-[12.5px] text-taupe">
                     观看于 {formatShortDate(selectedRecord.watchedAt)}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {selectedRecord.themes.slice(0, 4).map((t) => (
-                      <span key={t} className="tag text-[12px]">
+                      <span key={t} className="tag text-[12px] text-ink/75">
                         {THEMES[t].zh}
                       </span>
                     ))}
                   </div>
                   <Link
                     to={`/archive/${selectedFilm.id}`}
-                    className="mt-5 inline-flex items-center gap-2 text-[12px] tracking-[0.06em] text-paper/70 hover:text-paper"
+                    className="mt-5 inline-flex items-center gap-2 text-[12px] tracking-[0.05em] text-ocean hover:underline hover:underline-offset-4"
                   >
                     查看观影记忆 <ArrowUpRight size={11} />
                   </Link>
                 </>
               ) : selected.kind === 'theme' ? (
                 <>
-                  <h3 className="mt-3 font-zh-title text-[1.6rem] text-paper">
+                  <h3 className="mt-3 font-zh-title text-[1.6rem] text-ink">
                     {themeDef?.zh ?? selected.label}
                   </h3>
-                  <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-paper-dim">
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.1em] text-taupe">
                     {themeDef?.label ?? selected.sublabel}
                   </p>
-                  <p className="mt-3 text-[14px] leading-[1.85] text-paper-dim">
+                  <p className="mt-3 text-[14px] leading-[1.85] text-ink/75">
                     {themeDef?.blurbZh}
                   </p>
-                  <p className="mt-4 text-[12.5px] tracking-[0.04em] text-paper-dim">
+                  <p className="mt-4 text-[12.5px] tracking-[0.03em] text-taupe">
                     {relatedFilms.length} 部电影承载这个主题
                   </p>
-                  <ul className="mt-3 divide-y divide-white/10">
+                  <ul className="mt-3 divide-y divide-ink/10">
                     {relatedFilms.map(({ film }) => (
                       <li key={film.id}>
                         <button
@@ -270,14 +271,14 @@ export const MemoryMapPage = () => {
                           }}
                           className="group flex w-full items-center gap-3 py-2.5 text-left"
                         >
-                          <span className="relative block h-10 w-7 shrink-0 overflow-hidden">
+                          <span className="relative block h-10 w-7 shrink-0 overflow-hidden rounded-[1px]">
                             <FilmPoster film={film} showTitle={false} />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate font-display text-sm text-paper group-hover:text-paper">
+                            <span className="block truncate font-display text-sm text-ink group-hover:text-ocean">
                               {film.title}
                             </span>
-                            <span className="text-[12px] text-paper-dim">{film.year}</span>
+                            <span className="text-[12px] text-taupe">{film.year}</span>
                           </span>
                         </button>
                       </li>
@@ -286,16 +287,16 @@ export const MemoryMapPage = () => {
                 </>
               ) : (
                 <>
-                  <h3 className="mt-3 font-zh-title text-[1.6rem] text-paper">
+                  <h3 className="mt-3 font-zh-title text-[1.6rem] text-ink">
                     {moodDef?.zh ?? selected.label}
                   </h3>
-                  <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-paper-dim">
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.1em] text-taupe">
                     {moodDef?.label ?? selected.sublabel}
                   </p>
-                  <p className="mt-3 text-[14px] leading-[1.85] text-paper-dim">
+                  <p className="mt-3 text-[14px] leading-[1.85] text-ink/75">
                     一种被 {relatedFilms.length} 部电影共享的感受。线是虚线，因为情绪是质地，不是议题。
                   </p>
-                  <ul className="mt-3 divide-y divide-white/10">
+                  <ul className="mt-3 divide-y divide-ink/10">
                     {relatedFilms.map(({ film }) => (
                       <li key={film.id}>
                         <button
@@ -306,14 +307,14 @@ export const MemoryMapPage = () => {
                           }}
                           className="group flex w-full items-center gap-3 py-2.5 text-left"
                         >
-                          <span className="relative block h-10 w-7 shrink-0 overflow-hidden">
+                          <span className="relative block h-10 w-7 shrink-0 overflow-hidden rounded-[1px]">
                             <FilmPoster film={film} showTitle={false} />
                           </span>
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate font-display text-sm text-paper group-hover:text-paper">
+                            <span className="block truncate font-display text-sm text-ink group-hover:text-ocean">
                               {film.title}
                             </span>
-                            <span className="text-[12px] text-paper-dim">{film.year}</span>
+                            <span className="text-[12px] text-taupe">{film.year}</span>
                           </span>
                         </button>
                       </li>
@@ -323,8 +324,8 @@ export const MemoryMapPage = () => {
               )}
 
               {selected.kind === 'film' && relatedFilms.length > 0 && (
-                <div className="mt-5 border-t border-paper/15 pt-4">
-                  <p className="text-[12px] tracking-[0.06em] text-paper-dim">共同的地面</p>
+                <div className="mt-5 border-t border-ink/10 pt-4">
+                  <p className="text-[12px] tracking-[0.05em] text-taupe">共同的地面</p>
                   <ul className="mt-2 space-y-2">
                     {relatedFilms.slice(0, 4).map(({ film, reason }) => (
                       <li key={film.id}>
@@ -334,10 +335,10 @@ export const MemoryMapPage = () => {
                             const node = graph.nodes.find((n) => n.filmId === film.id)
                             if (node) setSelectedId(node.id)
                           }}
-                          className="text-left text-[13px] leading-[1.8] text-paper-dim hover:text-paper"
+                          className="text-left text-[13px] leading-[1.8] text-ink/70 hover:text-ink"
                         >
-                          <span className="text-paper-dim">{film.title}</span>
-                          {reason && <span className="block text-[12.5px]">{reason}</span>}
+                          <span className="text-ink/80">{film.title}</span>
+                          {reason && <span className="block text-[12.5px] text-taupe">{reason}</span>}
                         </button>
                       </li>
                     ))}
@@ -352,7 +353,7 @@ export const MemoryMapPage = () => {
               <p className="flex items-center gap-2 text-[12px] tracking-[0.06em] text-brass">
                 <Info size={10} /> 怎么读这张地图
               </p>
-              <p className="mt-2.5 text-[13px] leading-[1.85] text-paper-dim">
+              <p className="mt-2.5 text-[13px] leading-[1.85] text-ink/70">
                 点一部电影，看它与哪些主题相连；点一个主题，看所有承载它的电影。
                 拖动节点，可以重新排列这片星座。
               </p>
@@ -367,6 +368,49 @@ export const MemoryMapPage = () => {
           <p className="font-mono tracking-[0.04em]">
             {graph.nodes.length} 个节点 · {graph.edges.length} 条连线
           </p>
+        </div>
+      </div>
+
+      <div className="mt-12">
+        <div className="flex flex-wrap items-end justify-between gap-3 border-b border-ink/15 pb-3">
+          <p className="artifact-label">
+            <b>索引</b> 最近的三段记忆
+          </p>
+          <Link to="/archive" className="link-rule text-ink/70 hover:text-ink">
+            查看全部片库 <ArrowUpRight size={11} />
+          </Link>
+        </div>
+        <div className="mt-5 grid gap-5 sm:grid-cols-3">
+          {recordsSorted(records)
+            .slice(0, 3)
+            .map((record) => {
+              const film = films.find((item) => item.id === record.filmId)
+              if (!film) return null
+              return (
+                <Link
+                  key={record.id}
+                  to={`/archive/${film.id}`}
+                  className="group flex gap-4 rounded-[10px] border border-ink/10 bg-paper-sheet p-3 transition-colors hover:border-ink/25"
+                >
+                  <div className="w-[58px] shrink-0 overflow-hidden rounded-[2px]">
+                    <div className="aspect-[2/3]">
+                      <FilmPoster film={film} showTitle={false} />
+                    </div>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-display text-[1.05rem] leading-tight text-ink group-hover:text-ocean">
+                      {film.title}
+                    </p>
+                    <p className="mt-0.5 text-[11.5px] tracking-[0.03em] text-taupe">
+                      {formatShortDate(record.watchedAt)}
+                    </p>
+                    <p className="mt-2 line-clamp-2 font-zh-body text-[12.5px] leading-[1.7] text-ink/70">
+                      {record.reflection}
+                    </p>
+                  </div>
+                </Link>
+              )
+            })}
         </div>
       </div>
 

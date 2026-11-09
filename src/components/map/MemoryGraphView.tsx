@@ -259,7 +259,7 @@ export const MemoryGraphView = ({
         <g transform={`translate(${view.x} ${view.y}) scale(${view.k})`}>
           {/* faint orbit guides */}
           {size.w > 0 && (
-            <g fill="none" stroke="rgba(233,224,208,0.06)">
+            <g fill="none" stroke="rgba(29,35,121,0.1)">
               <ellipse cx={size.w / 2} cy={size.h / 2} rx={size.w * 0.37} ry={size.h * 0.34} />
               <ellipse cx={size.w / 2} cy={size.h / 2} rx={size.w * 0.245} ry={size.h * 0.245} />
               <ellipse cx={size.w / 2} cy={size.h / 2} rx={size.w * 0.115} ry={size.h * 0.125} />
@@ -276,16 +276,16 @@ export const MemoryGraphView = ({
               selectedId !== null && (edge.source === selectedId || edge.target === selectedId)
             const stroke =
               edge.kind === 'film-film'
-                ? 'rgba(199,187,168,0.28)'
+                ? 'rgba(29,35,121,0.3)'
                 : edge.kind === 'film-theme'
-                  ? 'rgba(199,187,168,0.34)'
-                  : 'rgba(145,129,107,0.32)'
+                  ? 'rgba(29,35,121,0.24)'
+                  : 'rgba(90,95,133,0.26)'
             return (
               <path
                 key={edge.id}
                 d={edgePath(edge, a, b)}
                 fill="none"
-                stroke={active ? 'rgba(233,224,208,0.92)' : stroke}
+                stroke={active ? 'rgba(29,35,121,0.95)' : stroke}
                 strokeWidth={active ? 1.4 : edge.kind === 'film-film' ? 1 : 0.7}
                 strokeDasharray={edge.kind === 'film-mood' ? '2 5' : undefined}
                 opacity={dim ? 0.07 : 1}
@@ -311,11 +311,11 @@ export const MemoryGraphView = ({
                   : -radiusOf(node) - 10
             const labelSize = node.kind === 'film' ? (size.w < 640 ? 10.5 : 11.5) : node.kind === 'theme' ? 11.5 : 11
             const showLabel =
-              node.kind === 'film' ||
               isSelected ||
               isHovered ||
               view.k > 1.35 ||
-              (node.kind === 'theme' && size.w >= 640 && labelledThemes.has(node.id))
+              (size.w >= 640 &&
+                (node.kind === 'film' || (node.kind === 'theme' && labelledThemes.has(node.id))))
 
             return (
               <g
@@ -364,7 +364,7 @@ export const MemoryGraphView = ({
                   <circle
                     r={radiusOf(node) + 12}
                     fill="none"
-                    stroke="rgba(199,187,168,0.55)"
+                    stroke="rgba(29,35,121,0.4)"
                     strokeDasharray="2 5"
                     className="animate-breathe"
                   />
@@ -373,10 +373,10 @@ export const MemoryGraphView = ({
                 {node.kind === 'film' ? (
                   <>
                     <clipPath id={`clip-${node.id.replace(/[^a-zA-Z0-9-]/g, '')}`}>
-                      <rect x={-23} y={-30} width={46} height={60} rx={0.5} />
+                      <rect x={-23} y={-30} width={46} height={60} rx={2} />
                     </clipPath>
                     <g clipPath={`url(#clip-${node.id.replace(/[^a-zA-Z0-9-]/g, '')})`}>
-                      <rect x={-23} y={-30} width={46} height={60} fill="#181818" />
+                      <rect x={-23} y={-30} width={46} height={60} fill="#fdf6e2" />
                       {film && (
                         <image
                           href={frameSrc(film, 'w342')}
@@ -385,19 +385,20 @@ export const MemoryGraphView = ({
                           width={80}
                           height={84}
                           preserveAspectRatio="xMidYMid slice"
-                          opacity={isSelected || isHovered ? 1 : 0.86}
+                          opacity={isSelected || isHovered ? 1 : 0.9}
                         />
                       )}
-                      <rect x={-23} y={-30} width={46} height={60} fill="#050505" opacity={0.16} />
+                      <rect x={-23} y={-30} width={46} height={60} fill="#161c66" opacity={0.08} />
                     </g>
                     <rect
                       x={-23}
                       y={-30}
                       width={46}
                       height={60}
+                      rx={2}
                       fill="none"
-                      stroke={isSelected ? '#E9E0D0' : 'rgba(233,224,208,0.42)'}
-                      strokeWidth={isSelected ? 1.6 : 0.75}
+                      stroke={isSelected ? '#1d2379' : 'rgba(29,35,121,0.38)'}
+                      strokeWidth={isSelected ? 1.6 : 0.9}
                     />
                     {isSelected && (
                       <rect
@@ -405,9 +406,10 @@ export const MemoryGraphView = ({
                         y={-33.5}
                         width={53}
                         height={67}
+                        rx={3}
                         fill="none"
-                        stroke="rgba(199,187,168,0.45)"
-                        strokeWidth={0.6}
+                        stroke="rgba(29,35,121,0.32)"
+                        strokeWidth={0.7}
                       />
                     )}
                   </>
@@ -419,18 +421,18 @@ export const MemoryGraphView = ({
                       width={radiusOf(node) * 2}
                       height={radiusOf(node) * 2}
                       transform="rotate(45)"
-                      fill="rgba(199,187,168,0.14)"
-                      stroke={isSelected ? 'rgba(233,224,208,0.95)' : 'rgba(199,187,168,0.65)'}
-                      strokeWidth={isSelected ? 1.5 : 0.8}
+                      fill="rgba(29,35,121,0.08)"
+                      stroke={isSelected ? 'rgba(29,35,121,0.95)' : 'rgba(29,35,121,0.55)'}
+                      strokeWidth={isSelected ? 1.5 : 0.9}
                     />
-                    <circle r={1.5} fill="#E9E0D0" />
+                    <circle r={1.5} fill="#1d2379" />
                   </>
                 ) : (
                   <circle
                     r={radiusOf(node)}
-                    fill="rgba(145,129,107,0.22)"
-                    stroke={isSelected ? 'rgba(233,224,208,0.95)' : 'rgba(145,129,107,0.7)'}
-                    strokeWidth={isSelected ? 1.4 : 0.8}
+                    fill="rgba(90,95,133,0.12)"
+                    stroke={isSelected ? 'rgba(29,35,121,0.95)' : 'rgba(90,95,133,0.55)'}
+                    strokeWidth={isSelected ? 1.4 : 0.9}
                   />
                 )}
 
@@ -438,10 +440,10 @@ export const MemoryGraphView = ({
                   <text
                     y={labelY}
                     textAnchor="middle"
-                    fill={isSelected ? '#E9E0D0' : 'rgba(233,224,208,0.8)'}
-                    stroke="#1b1814"
-                    strokeWidth={3.5}
-                    strokeOpacity={0.85}
+                    fill={isSelected ? '#1d2379' : 'rgba(22,28,102,0.82)'}
+                    stroke="#f4ead2"
+                    strokeWidth={4}
+                    strokeOpacity={0.9}
                     paintOrder="stroke"
                     strokeLinejoin="round"
                     style={{
@@ -454,7 +456,7 @@ export const MemoryGraphView = ({
                           : "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
                     }}
                   >
-                    {truncate(node.label, node.kind === 'film' ? (size.w < 640 ? 13 : 20) : 15)}
+                    {truncate(node.label, node.kind === 'film' ? (size.w < 640 ? 14 : 26) : 15)}
                   </text>
                 )}
               </g>
@@ -464,10 +466,10 @@ export const MemoryGraphView = ({
       </svg>
 
       <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
-        <p className="hidden font-mono text-[12px] uppercase tracking-[0.16em] text-paper-muted/70 sm:block">
+        <p className="hidden font-mono text-[11.5px] uppercase tracking-[0.13em] text-taupe/75 sm:block">
           拖动平移 · 滚轮缩放 · 拖动节点 · 点击查看关系
         </p>
-        <div className="pointer-events-auto flex items-center gap-1 border border-paper/15 bg-[#1b1814]/85 p-1 text-paper backdrop-blur">
+        <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-ink/15 bg-paper-sheet/90 p-1 text-ink shadow-card backdrop-blur">
           <button type="button" onClick={() => zoomBy(1.22)} className="icon-btn h-8 w-8 border-0" aria-label="放大">
             <Plus size={13} />
           </button>
@@ -489,11 +491,11 @@ export const MemoryGraphView = ({
       </div>
 
       {selectedNode && (
-        <div className="pointer-events-none absolute left-4 top-4 max-w-[220px] border border-paper/15 bg-[#1b1814]/80 px-3 py-2 backdrop-blur">
-          <p className="micro-sm text-paper/55">
+        <div className="pointer-events-none absolute left-4 top-4 max-w-[220px] rounded-[8px] border border-ink/15 bg-paper-sheet/90 px-3 py-2 shadow-card backdrop-blur">
+          <p className="micro-sm text-ink/50">
             {selectedNode.kind === 'film' ? '电影' : selectedNode.kind === 'theme' ? '主题' : '情绪'}
           </p>
-          <p className="mt-1 font-display text-lg leading-tight text-paper">{selectedNode.label}</p>
+          <p className="mt-1 font-display text-lg leading-tight text-ink">{selectedNode.label}</p>
         </div>
       )}
     </div>
@@ -501,22 +503,22 @@ export const MemoryGraphView = ({
 }
 
 export const GraphLegend = ({ showThemes, showMoods }: { showThemes: boolean; showMoods: boolean }) => (
-  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] tracking-[0.04em] text-paper-muted">
+  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] tracking-[0.03em] text-taupe">
     <span className="flex items-center gap-2">
-      <span className="inline-block h-3 w-2.5 border border-brass/70" /> 电影
+      <span className="inline-block h-3 w-2.5 rounded-[1px] border border-ocean/70" /> 电影
     </span>
     {showThemes && (
       <span className="flex items-center gap-2">
-        <span className="inline-block h-2 w-2 rotate-45 border border-brass/60 bg-brass/20" /> 主题
+        <span className="inline-block h-2 w-2 rotate-45 border border-ocean/60 bg-ocean/15" /> 主题
       </span>
     )}
     {showMoods && (
       <span className="flex items-center gap-2">
-        <span className="inline-block h-2 w-2 rounded-full border border-[#8FABA4]/70" /> 情绪
+        <span className="inline-block h-2 w-2 rounded-full border border-taupe/60" /> 情绪
       </span>
     )}
     <span className="flex items-center gap-2">
-      <span className="inline-block h-px w-4 bg-paper/40" /> 共同主题
+      <span className="inline-block h-px w-4 bg-ink/35" /> 共同主题
     </span>
   </div>
 )

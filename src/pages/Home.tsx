@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight, Plus, Sparkles } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
-import { FilmPoster } from '@/components/film/FilmPoster'
 import { FilmStill } from '@/components/film/FilmStill'
+import { FilmPoster } from '@/components/film/FilmPoster'
 import { Rating } from '@/components/ui/Rating'
 import { TasteRadar } from '@/components/taste/TasteRadar'
 import { Reveal } from '@/components/ui/Reveal'
@@ -14,7 +14,6 @@ import type { TasteSnapshot } from '@/types'
 import { THEMES, zhGenres } from '@/data/taxonomy'
 import { formatLongDate, formatMinutes, percent } from '@/lib/format'
 import { frameSrc } from '@/lib/media'
-import { backdropOf } from '@/lib/artwork'
 
 const ISSUE = [
   { no: '01', label: '最新一帧', en: 'The latest frame', href: '#latest' },
@@ -60,45 +59,61 @@ export const Home = () => {
     .sort((a, b) => b.confidence - a.confidence)[0]
   const showRadar = profile.dimensions.filter((item) => item.sufficient).length >= 2
 
-  // A real backdrop for the cover. If the newest film only has a poster, fall
-  // back to the first catalogue film with a verified TMDB backdrop.
-  const coverFilm =
-    latest?.film && backdropOf(latest.film) ? latest.film : films.find((f) => backdropOf(f))
-
+  // The cover shows a real still from the newest film, with a poster crop
+  // alongside it.
   if (records.length === 0) {
     return (
-      <div className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
-        <img
-          src={frameSrc('manchester')}
-          alt="《海边的曼彻斯特》（2016）官方剧照"
-          className="absolute inset-0 h-full w-full object-cover opacity-60"
+      <div className="relative isolate overflow-hidden border-b border-ink/10">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-48 -top-56 h-[40rem] w-[40rem] rounded-full bg-[radial-gradient(circle,rgba(62,74,150,0.14),rgba(62,74,150,0)_66%)]"
         />
-        <div className="absolute inset-0 hero-vignette" />
-        <div className="shell relative py-24 lg:py-32">
-          <p className="kicker">Frame by Frame · 私人电影记忆博物馆</p>
-          <h1 className="mt-7 max-w-4xl font-display text-[clamp(2.4rem,6.2vw,5rem)] leading-[0.96] tracking-[-0.022em] text-paper">
-            Every Film
-            <br />
-            Leaves a Frame
-          </h1>
-          <p className="mt-5 max-w-2xl font-display text-[clamp(1.15rem,2vw,1.7rem)] italic leading-snug text-paper-dim">
-            Every film leaves a frame. Every frame tells your story.
-          </p>
-          <p className="mt-6 max-w-lg text-[16px] leading-[1.9] text-paper-dim">
-            这里收藏你看过的电影、写下的感受，以及它们慢慢显现出的审美偏好。
-            <span className="mt-2 block text-paper-muted">不是待看清单，而是一座属于你的电影记忆博物馆。</span>
-          </p>
-          <EmptyState
-            className="mt-14 max-w-2xl border-white/15"
-            eyebrow="片库还是空的"
-            title="还缺你的第一帧"
-            description="添加一部你真正看过的电影，用自己的话写一段感受，然后看片库如何开始读取你。"
-            action={
-              <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-                <Plus size={14} /> 添加第一部电影
-              </button>
-            }
-          />
+        <div className="shell relative py-16 lg:py-24">
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-center lg:gap-10">
+            <div className="lg:col-span-7">
+              <p className="kicker">Frame by Frame · 私人电影记忆博物馆</p>
+              <h1 className="mt-7 max-w-4xl font-display text-[clamp(2.6rem,6.4vw,5.2rem)] leading-[0.92] tracking-[-0.026em] text-ink">
+                Every Film
+                <br />
+                Leaves a Frame
+              </h1>
+              <p className="mt-6 max-w-2xl font-display text-[clamp(1.15rem,2vw,1.65rem)] italic leading-snug text-ink/55">
+                Every film leaves a frame. Every frame tells your story.
+              </p>
+              <p className="mt-6 max-w-lg text-[16px] leading-[1.9] text-ink/70">
+                这里收藏你看过的电影、写下的感受，以及它们慢慢显现出的审美偏好。
+                <span className="mt-2 block text-taupe">不是待看清单，而是一座属于你的电影记忆博物馆。</span>
+              </p>
+              <EmptyState
+                className="mt-12 max-w-2xl border-ink/20"
+                eyebrow="片库还是空的"
+                title="还缺你的第一帧"
+                tone="light"
+                description="添加一部你真正看过的电影，用自己的话写一段感受，然后看片库如何开始读取你。"
+                action={
+                  <button type="button" onClick={() => openAdd()} className="btn btn-primary">
+                    <Plus size={14} /> 添加第一部电影
+                  </button>
+                }
+              />
+            </div>
+
+            <div className="lg:col-span-5">
+              <figure className="mount mx-auto max-w-[360px]">
+                <img
+                  src={frameSrc('manchester')}
+                  alt="《海边的曼彻斯特》（2016）官方剧照"
+                  className="aspect-[4/3] w-full rounded-[4px] object-cover"
+                  loading="eager"
+                  decoding="async"
+                />
+                <figcaption className="flex items-baseline justify-between px-1 pb-0.5 pt-2 text-[11px] tracking-[0.04em] text-taupe">
+                  <span>《海边的曼彻斯特》</span>
+                  <span>Still / 2016</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -109,102 +124,107 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  COVER                                                            */}
       {/* ================================================================ */}
-      <section className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
-        <img
-          src={coverFilm ? frameSrc(coverFilm) : frameSrc('manchester')}
-          alt={
-            coverFilm
-              ? `${coverFilm.title}（${coverFilm.year}）官方剧照`
-              : '官方电影剧照'
-          }
-          className="absolute inset-0 h-full w-full object-cover object-[58%_center]"
-          style={{ filter: 'brightness(1.05) saturate(0.92) contrast(1.02)' }}
-          loading="eager"
-          decoding="async"
-        />
-        <div className="absolute inset-0 cover-scrim" />
+      <section className="relative">
+        <div className="shell pt-6 lg:pt-10">
+          <div className="paper-card paper-card--offset relative overflow-hidden px-5 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-14">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-28 -top-32 h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(29,35,121,0.09),rgba(29,35,121,0)_68%)]"
+            />
 
-        <div className="shell relative flex min-h-[calc(100vh-69px)] flex-col">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-white/15 py-3">
-            <span className="micro-sm text-paper/70">Frame by Frame</span>
-            <span className="h-px w-10 bg-paper/60" />
-            <span className="text-[12px] tracking-[0.08em] text-paper-muted">私人电影记忆博物馆</span>
-            <span className="folio ml-auto">
-              第一卷 — {year}
-            </span>
-          </div>
+            <div className="relative grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-8">
+              <div className="lg:col-span-7">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-ink/10 pb-4">
+                  <span className="micro-sm text-ink/55">Frame by Frame</span>
+                  <span className="h-px w-8 bg-ink/30" />
+                  <span className="text-[12px] tracking-[0.06em] text-taupe">私人电影记忆博物馆</span>
+                  <span className="folio ml-auto">第一卷 — {year}</span>
+                </div>
 
-          <div className="grid flex-1 grid-cols-1 gap-y-12 py-12 lg:grid-cols-12 lg:items-center lg:gap-x-6 lg:py-16">
-            <div className="lg:col-span-8">
-              <p className="kicker">私人电影记忆博物馆 · 第一卷</p>
-              <h1 className="mt-6 font-display text-[clamp(2.5rem,6.8vw,5.9rem)] leading-[0.95] tracking-[-0.022em] text-paper text-balance">
-                Every Film
-                <br />
-                Leaves a Frame
-              </h1>
-              <p className="mt-5 max-w-[34rem] font-display text-[clamp(1.15rem,2.1vw,1.85rem)] italic leading-snug text-paper-dim">
-                Every film leaves a frame. Every frame tells your story.
-              </p>
-
-              <div className="mt-9 max-w-[46rem] border-t border-white/20 pt-5">
-                <p className="zh-prose w-full max-w-[35rem] text-paper-dim">
-                  这里收藏你看过的电影、写下的感受，以及它们慢慢显现出的审美偏好。
-                  不是待看清单，也不是评分网站，而是一个留给那些成为记忆一部分的电影的房间。
+                <p className="kicker mt-7">一个人的电影刊物 · Vol. 01</p>
+                <h1 className="mt-5 font-display text-[clamp(2.7rem,6.6vw,5.8rem)] leading-[0.92] tracking-[-0.03em] text-ink text-balance">
+                  Every Film
+                  <br />
+                  Leaves a Frame
+                </h1>
+                <p className="mt-5 max-w-[30rem] font-display text-[clamp(1.1rem,1.8vw,1.55rem)] italic leading-snug text-ink/55">
+                  Every film leaves a frame. Every frame tells your story.
                 </p>
+
+                <div className="mt-7 max-w-[34rem] border-t border-ink/10 pt-5">
+                  <p className="zh-prose w-full max-w-[33rem] text-ink/75">
+                    这里收藏你看过的电影、写下的感受，以及它们慢慢显现出的审美偏好。
+                    不是待看清单，也不是评分网站，而是一个留给那些成为记忆一部分的电影的房间。
+                  </p>
+                </div>
+
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  <button type="button" onClick={() => openAdd()} className="btn btn-primary">
+                    <Plus size={14} /> 记录一部电影
+                  </button>
+                  <Link to="/archive" className="btn btn-ghost text-ink">
+                    进入我的片库 <ArrowRight size={13} />
+                  </Link>
+                </div>
+
+                <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-2 border-t border-ink/10 pt-4 text-[12.5px] tracking-[0.04em] text-taupe">
+                  <span>
+                    <b className="num text-[15px] font-normal text-ink">{records.length}</b> 部电影
+                  </span>
+                  <span>
+                    <b className="num text-[15px] font-normal text-ink">{hours.toFixed(1)}</b> 小时
+                  </span>
+                  <span>
+                    <b className="num text-[15px] font-normal text-ink">{themeCount}</b> 个主题
+                  </span>
+                  <span className="ml-auto hidden text-[12px] text-taupe/70 sm:block">向下滚动，进入片库 ↓</span>
+                </div>
               </div>
 
-              <div className="mt-9 flex flex-wrap items-center gap-3">
-                <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-                  <Plus size={14} /> 记录一部电影
-                </button>
-                <Link to="/archive" className="btn btn-ghost border-paper/45 text-paper hover:border-paper/75">
-                  进入我的片库 <ArrowRight size={13} />
-                </Link>
-              </div>
-            </div>
-
-            {latest?.film && (
-              <div className="w-full max-w-[240px] lg:col-span-3 lg:col-start-10 lg:max-w-none">
-                <Link to={`/archive/${latest.film.id}`} className="group block">
-                  <div className="mb-3 flex items-baseline justify-between border-b border-white/20 pb-2">
-                    <span className="flex items-center gap-2 text-[12px] tracking-[0.06em] text-paper-muted">
-                      <span className="status-dot" /> 最近收录
-                    </span>
-                    <span className="folio text-brass">
-                      第 {String(records.length).padStart(3, '0')} 帧
-                    </span>
-                  </div>
-                  <div className="aspect-[2/3] w-full max-w-[240px] overflow-hidden shadow-[0_40px_110px_rgba(0,0,0,0.7)] lg:ml-auto">
-                    <FilmPoster film={latest.film} showTitle={false} eager />
-                  </div>
-                  <div className="mt-4 max-w-[240px] border-t border-white/15 pt-3 lg:ml-auto">
-                    <p className="font-display text-xl leading-tight text-paper">{latest.film.title}</p>
-                    {latest.film.titleZh && (
-                      <p className="mt-1 text-[14px] tracking-[0.04em] text-paper-dim">{latest.film.titleZh}</p>
-                    )}
-                    <div className="mt-2 flex items-center justify-between gap-3">
-                      <p className="text-[12px] tracking-[0.04em] text-paper-muted">
-                        {formatLongDate(latest.record.watchedAt)}
-                      </p>
-                      <Rating value={latest.record.rating} size={10} showValue />
+              {latest?.film && (
+                <div className="lg:col-span-5">
+                  <Link to={`/archive/${latest.film.id}`} className="group relative mx-auto flex max-w-[420px] items-end justify-center pb-4 pl-4 sm:pb-8 sm:pl-8">
+                    <div className="absolute -left-3 top-5 hidden w-[45%] -rotate-3 sm:block">
+                      <div className="mount mount--tight">
+                        <FilmStill film={latest.film} ratio="photo" />
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </div>
-            )}
-          </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/15 py-4">
-            <p className="text-[12.5px] tracking-[0.06em] text-paper-muted">
-              {records.length} 部电影
-              <span className="mx-2 text-white/25">/</span>
-              {hours.toFixed(1)} 小时
-              <span className="mx-2 text-white/25">/</span>
-              {themeCount} 个主题
-            </p>
-            <p className="text-[12px] tracking-[0.08em] text-paper-muted/60">
-              向下滚动，进入片库 ↓
-            </p>
+                    <div className="relative z-10 w-[70%] max-w-[268px]">
+                      <div className="mount">
+                        <div className="aspect-[2/3] overflow-hidden rounded-[4px]">
+                          <FilmPoster film={latest.film} showTitle={false} eager />
+                        </div>
+                        <div className="flex items-center justify-between gap-3 px-1 pb-0.5 pt-2">
+                          <span className="truncate text-[11px] tracking-[0.05em] text-taupe">
+                            最新收录 · {latest.film.year}
+                          </span>
+                          <span className="shrink-0 font-mono text-[10.5px] text-taupe">
+                            {String(records.length).padStart(3, '0')}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 text-center">
+                        <p className="font-display text-[1.35rem] leading-tight text-ink transition-colors group-hover:text-ocean">
+                          {latest.film.title}
+                        </p>
+                        {latest.film.titleZh && (
+                          <p className="mt-0.5 font-serif text-[13.5px] tracking-[0.03em] text-ink/60">
+                            {latest.film.titleZh}
+                          </p>
+                        )}
+                        <div className="mt-2 flex items-center justify-center gap-3 text-[12px] tracking-[0.03em] text-taupe">
+                          <span>{formatLongDate(latest.record.watchedAt)}</span>
+                          <span className="h-3 w-px bg-ink/15" aria-hidden="true" />
+                          <Rating value={latest.record.rating} size={10} showValue />
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -212,35 +232,31 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  ISSUE CONTENTS                                                   */}
       {/* ================================================================ */}
-      <section className="chapter--paper border-b border-ink/10">
-        <div className="shell">
-          <div className="grid grid-cols-2 lg:grid-cols-4">
-            {ISSUE.map((item, i) => (
-              <a
-                key={item.no}
-                href={item.href}
-                className={`group flex items-baseline justify-between gap-3 border-ink/10 py-5 pr-4 transition-colors hover:text-ink ${
-                  i === 0 ? 'lg:border-l-0' : 'border-l'
-                } ${i < 2 ? 'border-b lg:border-b-0' : ''} ${i % 2 === 1 ? 'border-l' : ''} pl-4 lg:pl-6`}
-              >
-                <span className="flex items-baseline gap-3">
-                  <span className="font-mono text-[11px] tracking-[0.2em] text-brass">{item.no}</span>
-                  <span>
-                    <span className="font-zh-title block text-[1.15rem] leading-none text-ink/80 transition-colors group-hover:text-ink">
-                      {item.label}
-                    </span>
-                    <span className="mt-1.5 block text-[10px] uppercase tracking-[0.16em] text-taupe">
-                      {item.en}
-                    </span>
+      <section className="shell pb-10 pt-6 lg:pb-14">
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-card border border-ink/10 bg-ink/10 lg:grid-cols-4">
+          {ISSUE.map((item) => (
+            <a
+              key={item.no}
+              href={item.href}
+              className="group flex items-baseline justify-between gap-3 bg-paper-sheet px-4 py-4 transition-colors hover:bg-paper-soft sm:px-5 sm:py-5"
+            >
+              <span className="flex items-baseline gap-3">
+                <span className="font-mono text-[11px] tracking-[0.16em] text-brass">{item.no}</span>
+                <span>
+                  <span className="font-zh-title block text-[1.1rem] leading-none text-ink/85 transition-colors group-hover:text-ink">
+                    {item.label}
+                  </span>
+                  <span className="mt-1.5 block text-[10px] uppercase tracking-[0.13em] text-taupe">
+                    {item.en}
                   </span>
                 </span>
-                <ArrowUpRight
-                  size={13}
-                  className="shrink-0 text-taupe/40 transition-all group-hover:-translate-y-0.5 group-hover:text-brass"
-                />
-              </a>
-            ))}
-          </div>
+              </span>
+              <ArrowUpRight
+                size={13}
+                className="shrink-0 text-taupe/40 transition-all group-hover:-translate-y-0.5 group-hover:text-brass"
+              />
+            </a>
+          ))}
         </div>
       </section>
 
@@ -517,41 +533,43 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  THE RECORD — oversized numbers, no cards                         */}
       {/* ================================================================ */}
-      <section className="chapter--ink border-t border-paper/15">
-        <div className="shell py-16 lg:py-20">
-          <Reveal>
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <p className="artifact-label">
-                <b>04</b> 片库记录
-              </p>
-              <p className="max-w-xs text-right text-[13px] leading-[1.8] text-paper-dim">
-                这些数字来自你的片库。它记录的是注意力，而不是成就。
-              </p>
-            </div>
-          </Reveal>
+      <section className="shell py-6 lg:py-8">
+        <div className="ink-panel">
+          <div className="px-6 py-12 sm:px-10 lg:px-12 lg:py-14">
+            <Reveal>
+              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-paper/15 pb-5">
+                <p className="artifact-label">
+                  <b>04</b> 片库记录
+                </p>
+                <p className="max-w-xs text-right text-[13px] leading-[1.8] text-paper-dim">
+                  这些数字来自你的片库。它记录的是注意力，而不是成就。
+                </p>
+              </div>
+            </Reveal>
 
-          <dl className="mt-8 grid grid-cols-2 gap-y-10 border-y border-paper/10 py-10 lg:grid-cols-4">
-            {[
-              { label: '片库电影', en: 'Films kept', value: String(records.length).padStart(2, '0'), sub: '已收录' },
-              { label: '累计观影', en: 'Hours in the dark', value: hours.toFixed(1), sub: formatMinutes(snapshot.totalMinutes) },
-              { label: '出现主题', en: 'Themes found', value: String(themeCount).padStart(2, '0'), sub: '反复出现' },
-              {
-                label: '解读置信度',
-                en: 'Reading confidence',
-                value: `${Math.round(snapshot.overallConfidence * 100)}%`,
-                sub: '是估计，不是判决',
-              },
-            ].map((stat, i) => (
-              <Reveal key={stat.label} delay={i * 60} className={i > 0 ? 'lg:border-l lg:border-paper/10 lg:pl-8' : ''}>
-                <dt className="text-[13px] font-medium tracking-[0.04em] text-paper-dim">{stat.label}</dt>
-                <dd className="num mt-3 text-[clamp(2.6rem,5vw,4.4rem)] leading-[0.9] text-paper">
-                  {stat.value}
-                </dd>
-                <dd className="mt-2 text-[11px] uppercase tracking-[0.14em] text-paper-dim/55">{stat.en}</dd>
-                <dd className="mt-1 text-[12.5px] text-paper-dim/70">{stat.sub}</dd>
-              </Reveal>
-            ))}
-          </dl>
+            <dl className="mt-2 grid grid-cols-2 gap-y-10 py-8 lg:grid-cols-4">
+              {[
+                { label: '片库电影', en: 'Films kept', value: String(records.length).padStart(2, '0'), sub: '已收录' },
+                { label: '累计观影', en: 'Hours in the dark', value: hours.toFixed(1), sub: formatMinutes(snapshot.totalMinutes) },
+                { label: '出现主题', en: 'Themes found', value: String(themeCount).padStart(2, '0'), sub: '反复出现' },
+                {
+                  label: '解读置信度',
+                  en: 'Reading confidence',
+                  value: `${Math.round(snapshot.overallConfidence * 100)}%`,
+                  sub: '是估计，不是判决',
+                },
+              ].map((stat, i) => (
+                <Reveal key={stat.label} delay={i * 60} className={i > 0 ? 'lg:border-l lg:border-paper/15 lg:pl-8' : ''}>
+                  <dt className="text-[13px] font-medium tracking-[0.04em] text-paper-dim">{stat.label}</dt>
+                  <dd className="num mt-3 text-[clamp(2.4rem,4.6vw,4rem)] leading-[0.9] text-paper">
+                    {stat.value}
+                  </dd>
+                  <dd className="mt-2 text-[10.5px] uppercase tracking-[0.12em] text-paper-dim/60">{stat.en}</dd>
+                  <dd className="mt-1 text-[12.5px] text-paper-dim/75">{stat.sub}</dd>
+                </Reveal>
+              ))}
+            </dl>
+          </div>
         </div>
       </section>
 
@@ -654,55 +672,57 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  CLOSING SPREAD                                                   */}
       {/* ================================================================ */}
-      <section className="relative isolate overflow-hidden bg-ink text-paper [--brass:#e9e0d0]">
-        {favouriteFilm && (
-          <img
-            src={frameSrc(favouriteFilm)}
-            alt={`${favouriteFilm.title}（${favouriteFilm.year}）官方剧照`}
-            className="absolute inset-0 h-full w-full object-cover object-[60%_center] opacity-30"
-            loading="lazy"
-            decoding="async"
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/85 to-ink/40" />
-        <div className="shell relative py-20 lg:py-28">
-          <div className="max-w-3xl">
-            <p className="kicker">让片卷继续转</p>
-            <h2 className="mt-5 font-zh-title text-[clamp(2.2rem,5vw,4.2rem)] leading-[1.12] tracking-[-0.01em] text-paper">
-              昨晚看了
-              <br />
-              <span className="text-paper-dim">哪一部？</span>
-            </h2>
-            <p className="mt-5 max-w-md text-[14.5px] leading-[1.9] text-paper-dim">
-              一部电影，一段诚实的文字。片库会在所有页面同时更新。
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-                <Plus size={14} /> 添加电影
-              </button>
-              <Link to="/reflection" className="btn btn-ghost">
-                查看年度回顾 <ArrowRight size={13} />
-              </Link>
+      <section className="shell pb-6 pt-4 lg:pb-10">
+        <div className="ink-panel relative overflow-hidden">
+          {favouriteFilm && (
+            <img
+              src={frameSrc(favouriteFilm)}
+              alt={`${favouriteFilm.title}（${favouriteFilm.year}）官方剧照`}
+              className="absolute inset-0 h-full w-full object-cover object-[60%_center] opacity-25"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-r from-ocean via-ocean/90 to-ocean/35" />
+          <div className="relative px-6 py-16 sm:px-10 lg:px-12 lg:py-20">
+            <div className="max-w-3xl">
+              <p className="kicker">让片卷继续转</p>
+              <h2 className="mt-5 font-zh-title text-[clamp(2.1rem,4.6vw,3.9rem)] leading-[1.14] tracking-[-0.01em] text-paper">
+                昨晚看了
+                <br />
+                <span className="text-paper-dim">哪一部？</span>
+              </h2>
+              <p className="mt-5 max-w-md text-[14.5px] leading-[1.9] text-paper-dim">
+                一部电影，一段诚实的文字。片库会在所有页面同时更新。
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button type="button" onClick={() => openAdd()} className="btn btn-primary bg-paper text-ink hover:bg-paper-soft">
+                  <Plus size={14} /> 添加电影
+                </button>
+                <Link to="/reflection" className="btn btn-ghost">
+                  查看年度回顾 <ArrowRight size={13} />
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="overflow-hidden border-t border-paper/10 py-3">
-          <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap">
-            {[...ordered, ...ordered].map((record, i) => {
-              const film = filmById(films, record.filmId)
-              if (!film) return null
-              return (
-                <span
-                  key={`${record.id}-${i}`}
-                  className="flex items-center gap-8 font-mono text-[12px] uppercase tracking-[0.2em] text-paper-dim/50"
-                >
-                  {film.title}
-                  {film.titleZh && <span className="text-[12px] tracking-[0.1em] text-paper-dim/40">{film.titleZh}</span>}
-                  <span className="text-brass">✳</span>
-                </span>
-              )
-            })}
+          <div className="relative overflow-hidden border-t border-paper/15 py-3">
+            <div className="flex w-max animate-marquee items-center gap-8 whitespace-nowrap">
+              {[...ordered, ...ordered].map((record, i) => {
+                const film = filmById(films, record.filmId)
+                if (!film) return null
+                return (
+                  <span
+                    key={`${record.id}-${i}`}
+                    className="flex items-center gap-8 font-mono text-[11.5px] uppercase tracking-[0.16em] text-paper-dim/55"
+                  >
+                    {film.title}
+                    {film.titleZh && <span className="text-[11.5px] tracking-[0.08em] text-paper-dim/45">{film.titleZh}</span>}
+                    <span className="text-sand">✳</span>
+                  </span>
+                )
+              })}
+            </div>
           </div>
         </div>
       </section>

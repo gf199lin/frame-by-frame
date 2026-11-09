@@ -37,13 +37,13 @@ export const DimensionCard = ({
             <h3 className="font-zh-title text-[1.6rem] leading-tight text-ink">{def.labelZh}</h3>
             <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[12px] tracking-[0.06em] text-taupe">
               <span className="uppercase tracking-[0.12em]">{def.label}</span>
-              <span className="h-2 w-px bg-white/20" />
+              <span className="h-2 w-px bg-ink/15" />
               <span>
                 {sufficient ? `${score.sampleCount} 部电影的证据` : '样本不足'}
               </span>
               {score.lastUpdatedAt && (
                 <>
-                  <span className="h-2 w-px bg-white/20" />
+                  <span className="h-2 w-px bg-ink/15" />
                   <span>{formatLongDate(score.lastUpdatedAt.slice(0, 10))}</span>
                 </>
               )}

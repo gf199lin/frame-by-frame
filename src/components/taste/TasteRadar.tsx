@@ -65,11 +65,11 @@ export const TasteRadar = ({
   tone?: 'dark' | 'light'
 }) => {
   const values = snapshot.dimensionScores.map((d) => d.value)
-  const gridColor = tone === 'light' ? 'rgba(41,37,31,0.18)' : 'rgba(242,240,235,0.12)'
-  const axisColor = tone === 'light' ? 'rgba(41,37,31,0.26)' : 'rgba(242,240,235,0.15)'
-  const labelColor = tone === 'light' ? 'rgba(41,37,31,0.72)' : 'rgba(242,240,235,0.62)'
-  const subLabelColor = tone === 'light' ? 'rgba(145,129,107,0.85)' : 'rgba(201,197,189,0.55)'
-  const pointColor = tone === 'light' ? '#29251F' : '#E9E0D0'
+  const gridColor = tone === 'light' ? 'rgba(29,35,121,0.14)' : 'rgba(248,242,227,0.12)'
+  const axisColor = tone === 'light' ? 'rgba(29,35,121,0.24)' : 'rgba(248,242,227,0.15)'
+  const labelColor = tone === 'light' ? 'rgba(22,28,102,0.78)' : 'rgba(248,242,227,0.62)'
+  const subLabelColor = tone === 'light' ? 'rgba(90,95,133,0.85)' : 'rgba(195,201,230,0.55)'
+  const pointColor = tone === 'light' ? '#161c66' : '#FDF6E2'
   const animated = useAnimatedValues(values, mini ? 500 : 900)
   const center = size / 2
   const radius = size * (mini ? 0.33 : 0.31)
@@ -95,8 +95,8 @@ export const TasteRadar = ({
       >
         <defs>
           <radialGradient id="radar-fill">
-            <stop offset="0%" stopColor="#29251F" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#29251F" stopOpacity="0.045" />
+            <stop offset="0%" stopColor="#161c66" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#161c66" stopOpacity="0.045" />
           </radialGradient>
         </defs>
 
@@ -132,14 +132,14 @@ export const TasteRadar = ({
               y1={center}
               x2={outer[0]}
               y2={outer[1]}
-              stroke={activeKey === dim.key ? 'rgba(41,37,31,0.7)' : axisColor}
+              stroke={activeKey === dim.key ? 'rgba(29,35,121,0.7)' : axisColor}
               strokeWidth={activeKey === dim.key ? 1.2 : 0.6}
             />
           )
         })}
 
-        <polygon points={polygon} fill="url(#radar-fill)" stroke="rgba(41,37,31,0.92)" strokeWidth="1.2" />
-        <polygon points={polygon} fill="none" stroke="rgba(145,129,107,0.25)" strokeWidth="4" />
+        <polygon points={polygon} fill="url(#radar-fill)" stroke="rgba(29,35,121,0.92)" strokeWidth="1.2" />
+        <polygon points={polygon} fill="none" stroke="rgba(92,99,144,0.25)" strokeWidth="4" />
 
         {animated.map((value, i) => {
           const [x, y] = point(value, i)
@@ -174,7 +174,7 @@ export const TasteRadar = ({
                   y={y}
                   textAnchor={anchor}
                   className="micro-sm"
-                  fill={activeKey === dim.key ? '#29251F' : labelColor}
+                  fill={activeKey === dim.key ? '#161c66' : labelColor}
                   style={{ letterSpacing: '0.04em', fontSize: size * 0.028, fontWeight: 500 }}
                 >
                   {SHORT[dim.key]}
@@ -183,7 +183,7 @@ export const TasteRadar = ({
                   x={x}
                   y={y + size * 0.033}
                   textAnchor={anchor}
-                  fill={activeKey === dim.key ? 'rgba(41,37,31,0.9)' : subLabelColor}
+                  fill={activeKey === dim.key ? 'rgba(29,35,121,0.9)' : subLabelColor}
                   style={{ fontSize: size * 0.025, fontFamily: "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}
                 >
                   {lean}
@@ -232,7 +232,7 @@ export const PoleAxis = ({
           />
         )}
         <div
-          className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-ink shadow-[0_0_10px_rgba(41,37,31,0.25)]"
+          className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-ink shadow-[0_0_10px_rgba(29,35,121,0.25)]"
           style={{ left: `${pct}%` }}
           title="你的片库"
         />
@@ -291,7 +291,7 @@ export const ShiftRadar = ({
             })
             .join(' ')}
           fill="none"
-          stroke="rgba(242,240,235,0.1)"
+          stroke="rgba(248,242,227,0.1)"
           strokeWidth="0.6"
         />
       ))}
@@ -304,16 +304,16 @@ export const ShiftRadar = ({
             y1={center}
             x2={x}
             y2={y}
-            stroke="rgba(242,240,235,0.12)"
+            stroke="rgba(248,242,227,0.12)"
             strokeWidth="0.6"
           />
         )
       })}
-      <polygon points={beforePoints} fill="none" stroke="rgba(242,240,235,0.4)" strokeWidth="0.9" strokeDasharray="2 4" />
-      <polygon points={afterPoints} fill="rgba(199,187,168,0.16)" stroke="rgba(233,224,208,0.92)" strokeWidth="1.1" />
+      <polygon points={beforePoints} fill="none" stroke="rgba(248,242,227,0.4)" strokeWidth="0.9" strokeDasharray="2 4" />
+      <polygon points={afterPoints} fill="rgba(195,201,230,0.16)" stroke="rgba(248,242,227,0.92)" strokeWidth="1.1" />
       {DIMENSIONS.map((dim, i) => {
         const [x, y] = point(after[dim.key], i)
-        return <circle key={dim.key} cx={x} cy={y} r={2} fill="#E9E0D0" />
+        return <circle key={dim.key} cx={x} cy={y} r={2} fill="#FDF6E2" />
       })}
     </svg>
   )

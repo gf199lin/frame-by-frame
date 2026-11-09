@@ -21,7 +21,7 @@ export const HowAISeesMe = ({
 
   return (
     <div className="relative">
-      <div className="absolute bottom-0 left-[27px] top-2 w-px bg-white/10 sm:left-[35px]" aria-hidden="true" />
+      <div className="absolute bottom-0 left-[27px] top-2 w-px bg-ink/10 sm:left-[35px]" aria-hidden="true" />
 
       <ol className="space-y-0">
         {ordered.map((stage) => {

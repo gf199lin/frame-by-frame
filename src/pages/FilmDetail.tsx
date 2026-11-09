@@ -5,6 +5,7 @@ import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { useToast } from '@/components/ui/Toast'
 import { FilmStill } from '@/components/film/FilmStill'
+import { FilmPoster } from '@/components/film/FilmPoster'
 import { Rating } from '@/components/ui/Rating'
 import { Reveal } from '@/components/ui/Reveal'
 import { PoleAxis } from '@/components/taste/TasteRadar'
@@ -47,7 +48,7 @@ export const FilmDetail = () => {
   if (!record) {
     return (
       <div>
-        <div className="relative text-paper [--brass:#e9e0d0]">
+        <div className="relative text-paper [--brass:#fdf6e2]">
           <FilmStill film={film} ratio="free" className="h-[46vh] min-h-[300px] w-full" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/30" />
           <div className="shell absolute inset-x-0 bottom-0 pb-8">
@@ -129,7 +130,7 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  I — The film                                                     */}
       {/* ================================================================ */}
-      <section className="relative mt-5 text-paper [--brass:#e9e0d0]">
+      <section className="relative mt-5 text-paper [--brass:#fdf6e2]">
         <div className="relative">
           <FilmStill film={film} ratio="free" eager className="h-[54vh] min-h-[340px] w-full lg:h-[66vh]" />
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/25 to-ink/35" />
@@ -434,22 +435,26 @@ export const FilmDetail = () => {
             {related.map((item, i) => (
               <Reveal key={item.film.id} delay={i * 60}>
                 <Link to={`/archive/${item.film.id}`} className="group block">
-                  <FilmStill film={item.film} ratio="photo" tone="paper" />
-                  <div className="mt-3 flex items-start justify-between gap-3 border-t border-ink/20 pt-2.5">
+                  <div className="mount mx-auto max-w-[230px]">
+                    <div className="aspect-[2/3] overflow-hidden rounded-[4px]">
+                      <FilmPoster film={item.film} showTitle={false} />
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-start justify-between gap-3 border-t border-ink/15 pt-2.5">
                     <div>
-                      <p className="font-display text-[1.35rem] leading-tight text-ink transition-colors group-hover:text-brass">
+                      <p className="font-display text-[1.2rem] leading-tight text-ink transition-colors group-hover:text-ocean">
                         {item.film.title}
                       </p>
                       {item.film.titleZh && (
-                        <p className="mt-0.5 text-[13px] tracking-[0.04em] text-ink/55">{item.film.titleZh}</p>
+                        <p className="mt-0.5 text-[12.5px] tracking-[0.03em] text-ink/55">{item.film.titleZh}</p>
                       )}
-                      <p className="mt-1 text-[12px] tracking-[0.04em] text-ink/60">
+                      <p className="mt-1 text-[11.5px] tracking-[0.03em] text-ink/60">
                         {directorOf(item.film)} · {item.film.year}
                       </p>
                     </div>
-                    <ArrowUpRight size={13} className="mt-1 shrink-0 text-ink/45 transition-colors group-hover:text-brass" />
+                    <ArrowUpRight size={13} className="mt-1 shrink-0 text-ink/40 transition-colors group-hover:text-ocean" />
                   </div>
-                  <p className="mt-2 text-[13px] text-ink/65">
+                  <p className="mt-2 text-[12.5px] text-ink/65">
                     {item.shared
                       .slice(0, 2)
                       .map((t) => THEMES[t].zh)

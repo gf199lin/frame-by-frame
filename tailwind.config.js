@@ -5,50 +5,68 @@ export default {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#29251F',
-          900: '#211E19',
-          800: '#332E27',
-          700: '#3D372F',
-          600: '#4A4238',
-          500: '#5A5045',
+          DEFAULT: '#161C66',
+          900: '#10154A',
+          800: '#141A5E',
+          700: '#1D2379',
+          600: '#2A3189',
+          500: '#3C4497',
         },
         paper: {
-          DEFAULT: '#E9E0D0',
-          warm: '#E3D9C8',
-          deep: '#D8CCB8',
-          dim: '#C7BBA8',
-          muted: 'var(--paper-muted, #6B5F4E)',
+          DEFAULT: '#F4EAD2',
+          warm: '#EFE3C8',
+          deep: '#E6D8B9',
+          dim: '#CBC8D9',
+          sheet: '#FDF6E2',
+          soft: '#FAF1DC',
+          muted: 'var(--paper-muted, #5A5F85)',
         },
-        // `brass` keeps its class name for continuity, but it now carries the
-        // dark-brown accent. No red exists anywhere in the palette.
+        // `brass` keeps its historical class name; it now carries the ocean
+        // blue accent shared with the personal homepage.
         brass: {
-          DEFAULT: '#29251F',
-          soft: '#4A4236',
-          deep: '#181510',
+          DEFAULT: '#2A3189',
+          soft: '#3C4497',
+          deep: '#1D2379',
         },
         accent: {
-          DEFAULT: '#29251F',
-          soft: '#4A4236',
-          deep: '#181510',
+          DEFAULT: '#2A3189',
+          soft: '#3C4497',
+          deep: '#1D2379',
         },
-        archive: '#C7BBA8',
-        taupe: '#6B5F4E',
-        ash: '#6B5F4E',
+        ocean: {
+          DEFAULT: '#1D2379',
+          deep: '#121750',
+          soft: '#2A3189',
+        },
+        sand: '#B98B63',
+        archive: '#E6D8B9',
+        taupe: '#5A5F85',
+        ash: '#757AA0',
       },
       fontFamily: {
         display: ['"Instrument Serif"', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', 'serif'],
-        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
+        serif: ['"Noto Serif SC"', '"Songti SC"', 'STSong', 'SimSun', 'Georgia', 'serif'],
+        sans: ['Inter', '"Noto Sans SC"', 'system-ui', '-apple-system', 'Segoe UI', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       letterSpacing: {
-        micro: '0.26em',
-        wide2: '0.14em',
+        micro: '0.2em',
+        wide2: '0.12em',
       },
       fontSize: {
         micro: ['0.625rem', { lineHeight: '1.2' }],
       },
       maxWidth: {
         shell: '1560px',
+      },
+      borderRadius: {
+        card: '12px',
+        sheet: '18px',
+      },
+      boxShadow: {
+        card: '0 18px 44px rgba(29, 35, 121, 0.10)',
+        lift: '0 26px 60px rgba(29, 35, 121, 0.14)',
+        print: '10px 12px 0 rgba(29, 35, 121, 0.06), 0 20px 44px rgba(29, 35, 121, 0.10)',
       },
       transitionTimingFunction: {
         cinema: 'cubic-bezier(0.22, 1, 0.36, 1)',

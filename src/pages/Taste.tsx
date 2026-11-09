@@ -5,6 +5,7 @@ import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { useToast } from '@/components/ui/Toast'
 import { TasteRadar } from '@/components/taste/TasteRadar'
+import { FilmPoster } from '@/components/film/FilmPoster'
 import { DimensionCard } from '@/components/taste/DimensionCard'
 import { HowAISeesMe } from '@/components/taste/HowAISeesMe'
 import { EmptyState, SectionLabel, TextLink } from '@/components/ui/Primitives'
@@ -142,7 +143,7 @@ export const Taste = () => {
                 AI 眼中的我
               </h1>
               <p className="mt-3 font-display text-[clamp(1.5rem,3vw,2.5rem)] italic leading-[1.05] text-ink/75">
-                a reading in progress.
+                a reading in progress
               </p>
               <p className="measure mt-7 text-[15.5px] leading-[1.95] text-ink/75">
                 {profile.filmCount} 部电影 · {profile.acceptedCount} 条已确认的 AI 分析 ·{' '}
@@ -180,47 +181,53 @@ export const Taste = () => {
             </div>
 
             <div className="col-span-12 lg:col-span-5">
-              <div className="relative mx-auto w-full max-w-[460px]">
-                {showRadar ? (
-                  <TasteRadar
-                    snapshot={radarSnapshot}
-                    size={440}
-                    activeKey={activeKey}
-                    onSelect={jumpTo}
-                    tone="light"
-                    className="mx-auto"
-                  />
-                ) : (
-                  <div className="flex min-h-[320px] flex-col justify-center border border-dashed border-ink/20 px-8 py-10 text-center">
-                    <p className="font-zh-title text-[1.35rem] leading-[1.5] text-ink">
-                      还没有可以画出的形状。
-                    </p>
-                    <p className="mt-3 text-[13.5px] leading-[1.9] text-taupe">
-                      雷达图只显示你确认过的 AI 证据。没有证据时，我们不会用虚构数字把它填满。
-                    </p>
-                    {pending.length > 0 && (
-                      <p className="mt-4 text-[13px] text-ink/70">
-                        下面有 {pending.length} 条分析等待你确认。
+              <div className="paper-card relative mx-auto w-full max-w-[480px] p-4 sm:p-6">
+                <div className="flex items-center justify-between border-b border-ink/10 pb-2.5">
+                  <p className="micro-sm text-ink/50">Taste fingerprint</p>
+                  <p className="font-mono text-[10.5px] tracking-[0.06em] text-taupe">六维 · 只读已确认</p>
+                </div>
+                <div className="relative mt-3">
+                  {showRadar ? (
+                    <TasteRadar
+                      snapshot={radarSnapshot}
+                      size={430}
+                      activeKey={activeKey}
+                      onSelect={jumpTo}
+                      tone="light"
+                      className="mx-auto"
+                    />
+                  ) : (
+                    <div className="flex min-h-[300px] flex-col justify-center rounded-[8px] border border-dashed border-ink/20 px-8 py-10 text-center">
+                      <p className="font-zh-title text-[1.35rem] leading-[1.5] text-ink">
+                        还没有可以画出的形状。
                       </p>
-                    )}
-                  </div>
-                )}
-                <div className="mt-4 grid w-full grid-cols-3 divide-x divide-ink/10 border-t border-ink/10 pt-3 text-center">
+                      <p className="mt-3 text-[13.5px] leading-[1.9] text-taupe">
+                        雷达图只显示你确认过的 AI 证据。没有证据时，我们不会用虚构数字把它填满。
+                      </p>
+                      {pending.length > 0 && (
+                        <p className="mt-4 text-[13px] text-ink/70">
+                          下面有 {pending.length} 条分析等待你确认。
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+                <div className="mt-3 grid w-full grid-cols-3 divide-x divide-ink/10 border-t border-ink/10 pt-3 text-center">
                   <div>
                     <p className="num text-[1.35rem] text-ink">{percent(profile.overallConfidence)}</p>
-                    <p className="mt-1 text-[12.5px] tracking-[0.04em] text-taupe">整体置信度</p>
+                    <p className="mt-1 text-[12px] tracking-[0.03em] text-taupe">整体置信度</p>
                   </div>
                   <div>
                     <p className="num text-[1.35rem] text-ink">{profile.acceptedCount}</p>
-                    <p className="mt-1 text-[12.5px] tracking-[0.04em] text-taupe">已确认分析</p>
+                    <p className="mt-1 text-[12px] tracking-[0.03em] text-taupe">已确认分析</p>
                   </div>
                   <div>
                     <p className="num text-[1.35rem] text-ink">{profile.filmCount}</p>
-                    <p className="mt-1 text-[12.5px] tracking-[0.04em] text-taupe">已读电影</p>
+                    <p className="mt-1 text-[12px] tracking-[0.03em] text-taupe">已读电影</p>
                   </div>
                 </div>
                 {profile.updatedAt && (
-                  <p className="mt-3 flex items-center justify-center gap-1.5 text-[12.5px] text-taupe">
+                  <p className="mt-3 flex items-center justify-center gap-1.5 text-[12px] text-taupe">
                     <Clock size={10} /> 最近更新 {formatLongDate(profile.updatedAt.slice(0, 10))}
                   </p>
                 )}
@@ -395,35 +402,62 @@ export const Taste = () => {
             </div>
 
             <div className="mt-4 grid gap-x-16 lg:grid-cols-2">
-              {profile.topThemes.map((theme, i) => (
-                <div key={theme.id} className="group border-b border-ink/10 py-6">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <div className="flex items-baseline gap-4">
-                      <span className="font-mono text-[12px] tracking-[0.2em] text-brass/70">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <p className="font-zh-title text-[clamp(1.35rem,2.2vw,1.9rem)] leading-none text-ink">
-                        {THEMES[theme.id]?.zh ?? theme.id}
-                      </p>
-                      <span className="text-[12px] uppercase tracking-[0.1em] text-taupe">
-                        {THEMES[theme.id]?.label ?? theme.id}
-                      </span>
+              {profile.topThemes.map((theme, i) => {
+                const themeFilms = records
+                  .filter((record) => record.themes.includes(theme.id))
+                  .map((record) => films.find((film) => film.id === record.filmId))
+                  .filter((film): film is NonNullable<typeof film> => Boolean(film))
+                  .slice(0, Math.max(1, Math.min(3, theme.count)))
+
+                return (
+                  <div key={theme.id} className="group border-b border-ink/10 py-6">
+                    <div className="flex items-start justify-between gap-5">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline gap-4">
+                          <span className="font-mono text-[12px] tracking-[0.16em] text-brass/70">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                          <p className="font-zh-title text-[clamp(1.35rem,2.2vw,1.9rem)] leading-none text-ink">
+                            {THEMES[theme.id]?.zh ?? theme.id}
+                          </p>
+                          <span className="text-[11px] uppercase tracking-[0.08em] text-taupe">
+                            {THEMES[theme.id]?.label ?? theme.id}
+                          </span>
+                          <span className="ml-auto font-mono text-[11.5px] text-taupe">
+                            {String(theme.count).padStart(2, '0')} 部
+                          </span>
+                        </div>
+                        <p className="mt-3 max-w-md text-[13px] leading-[1.85] text-taupe">
+                          {THEMES[theme.id]?.blurbZh ?? ''}
+                        </p>
+                      </div>
+
+                      {themeFilms.length > 0 && (
+                        <div className="flex shrink-0 gap-1.5">
+                          {themeFilms.map((film) => (
+                            <Link
+                              key={film.id}
+                              to={`/archive/${film.id}`}
+                              className="block w-[48px] overflow-hidden rounded-[2px] ring-1 ring-ink/10 transition-transform duration-300 hover:-translate-y-1"
+                              aria-label={`${film.title}，这个主题的代表电影`}
+                            >
+                              <span className="block aspect-[2/3]">
+                                <FilmPoster film={film} showTitle={false} />
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    <span className="font-mono text-[12px] text-taupe">
-                      {String(theme.count).padStart(2, '0')} 部
-                    </span>
+                    <div className="mt-4 h-px w-full bg-ink/10">
+                      <div
+                        className="h-px bg-ocean/70"
+                        style={{ width: `${Math.max(10, theme.weight * 100)}%`, opacity: 1 - i * 0.1 }}
+                      />
+                    </div>
                   </div>
-                  <div className="bar-track mt-4">
-                    <div
-                      className="bar-fill"
-                      style={{ width: `${Math.max(12, theme.weight * 100)}%`, opacity: 1 - i * 0.08 }}
-                    />
-                  </div>
-                  <p className="mt-2.5 text-[13px] leading-[1.85] text-taupe">
-                    {THEMES[theme.id]?.blurbZh ?? ''}
-                  </p>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </section>

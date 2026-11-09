@@ -7,7 +7,7 @@ type StarProps = {
   emptyColor?: string
 }
 
-const Star = ({ fill, size, className, emptyColor = 'rgba(242,240,235,0.2)' }: StarProps) => {
+const Star = ({ fill, size, className, emptyColor = 'rgba(248,242,227,0.2)' }: StarProps) => {
   const id = `star-${Math.round(fill * 100)}-${size}-${(emptyColor ?? '').replace(/[^a-zA-Z0-9]/g, '')}`
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true" className={className}>
@@ -30,7 +30,7 @@ export const Rating = ({
   size = 13,
   showValue = false,
   className,
-  tone = 'dark',
+  tone = 'light',
 }: {
   value: number
   size?: number
@@ -47,7 +47,7 @@ export const Rating = ({
             key={i}
             fill={Math.max(0, Math.min(1, value - i))}
             size={size}
-            emptyColor={light ? 'rgba(23,20,18,0.2)' : 'rgba(242,240,235,0.2)'}
+            emptyColor={light ? 'rgba(29,35,121,0.2)' : 'rgba(253,246,226,0.22)'}
           />
         ))}
       </span>

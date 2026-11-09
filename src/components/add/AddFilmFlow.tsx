@@ -91,10 +91,10 @@ const AI_PHASES = [
 ] as const
 
 const PALETTES: Film['palette'][] = [
-  { base: '#16212B', deep: '#0A1016', accent: '#8FA7B4', soft: '#283843', paper: '#E4DCCB' },
-  { base: '#241A20', deep: '#120C10', accent: '#C79A88', soft: '#3C2A32', paper: '#EADCCB' },
-  { base: '#14201A', deep: '#08110C', accent: '#9AAE86', soft: '#26362C', paper: '#E2D9C6' },
-  { base: '#1B1A2B', deep: '#0C0B16', accent: '#A9A0CF', soft: '#2C2A44', paper: '#E8E0D2' },
+  { base: '#1B2168', deep: '#121747', accent: '#AEB6D9', soft: '#2B3280', paper: '#F8F2E3' },
+  { base: '#2A2F66', deep: '#171B4E', accent: '#C3B49A', soft: '#3A3F75', paper: '#F6EFDF' },
+  { base: '#21304F', deep: '#121C33', accent: '#A9B7C9', soft: '#2C3D60', paper: '#F3EEDF' },
+  { base: '#3A3557', deep: '#1F1B33', accent: '#C0AFA4', soft: '#4A4468', paper: '#F7F1E3' },
 ]
 
 const MOTIFS: PosterMotif[] = ['orbit', 'shore', 'stage', 'dome', 'forest', 'mind', 'signal', 'city']
@@ -501,7 +501,7 @@ export const AddFilmFlow = ({
       labelledBy="add-film-title"
       className="my-0 min-h-full sm:min-h-0"
     >
-      <div className="sticky top-0 z-20 border-b border-white/10 bg-[#1b1814] px-5 py-4 pr-14 sm:px-8 sm:pr-16">
+      <div className="sticky top-0 z-20 border-b border-white/10 bg-[#161c66] px-5 py-4 pr-14 sm:px-8 sm:pr-16">
         <div className="flex items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3">
             <span className="font-mono text-[14px] tracking-[0.18em] text-paper">
@@ -1178,7 +1178,7 @@ export const AddFilmFlow = ({
                         setConsent(event.target.checked)
                         setAiConsent(event.target.checked)
                       }}
-                      className="mt-0.5 h-4 w-4 accent-[#c9a86a]"
+                      className="mt-0.5 h-4 w-4 accent-[#b98b63]"
                     />
                     <span className="text-[13.5px] leading-[1.7] text-paper-dim">
                       允许把这部电影的笔记发送给在线 AI 服务（可选）。只会发送这部片的信息、这次笔记和少量相关旧片摘要，不会发送整个片库。
@@ -1481,7 +1481,7 @@ export const AddFilmFlow = ({
                   {formatLongDate(pending.record.watchedAt)} ·{' '}
                   {STATUS_LABELS[pending.record.status].zh}
                 </p>
-                <Rating value={pending.record.rating} className="mt-2" />
+                <Rating value={pending.record.rating} tone="dark" className="mt-2" />
               </div>
 
               {pending.analysis.related_films.length > 0 && (

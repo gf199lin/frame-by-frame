@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, Plus, Search, X } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { FilmCard, FilmIndexRow, WaitingRoomCard } from '@/components/film/FilmCard'
-import { FilmStill } from '@/components/film/FilmStill'
+import { FilmPoster } from '@/components/film/FilmPoster'
 import { EmptyState } from '@/components/ui/Primitives'
 import { Rating } from '@/components/ui/Rating'
 import { Reveal } from '@/components/ui/Reveal'
@@ -154,7 +154,7 @@ export const Archive = () => {
                 我的片库
               </h1>
               <p className="mt-2 font-display text-[clamp(1.5rem,2.8vw,2.4rem)] italic leading-none text-ink/50">
-                The archive.
+                The archive
               </p>
               <p className="measure mt-4 text-[15.5px] leading-[1.9] text-taupe">
                 每一部留下的电影，都带着观看日期、评分，以及你在片尾字幕之后写下的那一段话。
@@ -277,7 +277,7 @@ export const Archive = () => {
               )
             })}
 
-            <span className="mx-1 hidden h-3 w-px bg-white/15 sm:block" />
+            <span className="mx-1 hidden h-3 w-px bg-ink/15 sm:block" />
 
             <select
               value={decade}
@@ -336,56 +336,70 @@ export const Archive = () => {
       </section>
 
       {/* ================================================================ */}
-      {/*  Featured film — full-bleed frame                                 */}
+      {/*  Featured film — the print on the wall                            */}
       {/* ================================================================ */}
       {featured && (
-        <section className="chapter--ink">
-          <div className="shell pb-14 pt-10 lg:pb-20">
+        <section className="chapter--paper">
+          <div className="shell pb-10 pt-2 lg:pb-14">
             <Reveal>
-              <div className="flex flex-wrap items-end justify-between gap-3 pb-4">
-                <p className="artifact-label">
-                  <b>本期精选</b> 片库中央的那部电影
-                </p>
-                <Link to={`/archive/${featured.film.id}`} className="link-rule text-brass hover:text-brass-soft">
-                  打开完整记录 <ArrowUpRight size={12} />
-                </Link>
-              </div>
+              <div className="paper-card paper-card--offset overflow-hidden p-4 sm:p-6 lg:p-8">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 pb-3">
+                  <p className="artifact-label">
+                    <b>本期精选</b> 片库中央的那部电影
+                  </p>
+                  <Link to={`/archive/${featured.film.id}`} className="link-rule text-brass hover:text-ink">
+                    打开完整记录 <ArrowUpRight size={12} />
+                  </Link>
+                </div>
 
-              <Link to={`/archive/${featured.film.id}`} className="group relative block">
-                <FilmStill
-                  film={featured.film}
-                  ratio="wide"
-                  className="w-full lg:h-[58vh] lg:max-h-[620px]"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/55 to-ink/5" />
-                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10">
-                  <div className="flex flex-wrap items-end justify-between gap-6">
-                    <div className="max-w-3xl">
-                      <p className="text-[12.5px] tracking-[0.06em] text-paper/60">
-                        {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].zh}
-                      </p>
-                      <h2 className="mt-2 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[0.94] tracking-[-0.02em] text-paper">
+                <div className="mt-6 grid gap-8 lg:grid-cols-[250px_1fr] lg:gap-12">
+                  <Link to={`/archive/${featured.film.id}`} className="group mx-auto block w-full max-w-[250px]">
+                    <div className="mount">
+                      <div className="aspect-[2/3] overflow-hidden rounded-[4px]">
+                        <FilmPoster film={featured.film} showTitle={false} eager />
+                      </div>
+                    </div>
+                  </Link>
+
+                  <div className="flex flex-col justify-center">
+                    <p className="text-[12px] tracking-[0.06em] text-taupe">
+                      {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].zh}
+                    </p>
+                    <Link to={`/archive/${featured.film.id}`} className="group mt-3">
+                      <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-ocean">
                         {featured.film.title}
                       </h2>
-                      {featured.film.titleZh && (
-                        <p className="mt-1 text-[15px] tracking-[0.04em] text-paper/70">{featured.film.titleZh}</p>
-                      )}
-                      <p className="mt-2 text-[12.5px] tracking-[0.08em] text-paper/60">
-                        {featured.film.director} · {featured.film.year} · {zhGenres(featured.film.genres)}
+                    </Link>
+                    {featured.film.titleZh && (
+                      <p className="mt-1.5 font-zh-title text-[1.05rem] tracking-[0.04em] text-ink/65">
+                        {featured.film.titleZh}
                       </p>
-                      <p className="mt-4 line-clamp-2 max-w-xl font-zh-body text-[15px] leading-[1.9] text-paper/75">
+                    )}
+                    <p className="mt-2 text-[12.5px] tracking-[0.06em] text-taupe">
+                      {featured.film.director} · {featured.film.year} · {zhGenres(featured.film.genres)}
+                    </p>
+
+                    <blockquote className="mt-6 border-l-2 border-ink/70 pl-5">
+                      <p className="line-clamp-3 max-w-2xl font-zh-body text-[15.5px] leading-[1.95] text-ink/80">
                         “{featured.record.reflection}”
                       </p>
-                    </div>
-                    <div className="hidden shrink-0 text-right sm:block">
-                      <Rating value={featured.record.rating} size={13} showValue />
-                      <p className="mt-2 text-[12px] tracking-[0.04em] text-paper/60">
+                    </blockquote>
+
+                    <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-ink/10 pt-4">
+                      <Rating value={featured.record.rating} size={12} showValue />
+                      <span className="text-[12px] tracking-[0.04em] text-taupe">
                         {formatMinutes(featured.film.runtime)}
-                      </p>
+                      </span>
+                      <Link
+                        to={`/archive/${featured.film.id}`}
+                        className="ml-auto inline-flex items-center gap-2 text-[12.5px] tracking-[0.04em] text-ocean hover:underline hover:underline-offset-4"
+                      >
+                        读这篇观影笔记 <ArrowUpRight size={11} />
+                      </Link>
                     </div>
                   </div>
                 </div>
-              </Link>
+              </div>
             </Reveal>
           </div>
         </section>
@@ -425,14 +439,13 @@ export const Archive = () => {
                 </div>
               </Reveal>
 
-              <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="poster-wall mt-9">
                 {shelf.map(({ record, film }, index) => (
-                  <Reveal key={record.id} delay={(index % 4) * 45}>
+                  <Reveal key={record.id} delay={(index % 5) * 40}>
                     <FilmCard
                       film={film}
                       record={record}
                       index={index + (featured ? 2 : 1)}
-                      className={index % 4 === 2 ? 'lg:translate-y-8' : ''}
                     />
                   </Reveal>
                 ))}
@@ -507,20 +520,20 @@ export const Archive = () => {
         </section>
       )}
 
-      <section className="chapter--night border-t border-paper/10">
-        <div className="shell flex flex-wrap items-center justify-between gap-4 py-8">
-          <p className="text-[13.5px] leading-relaxed text-paper-dim">
+      <section className="shell pb-10 pt-2">
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-card border border-ink/10 bg-paper-sheet px-5 py-4">
+          <p className="text-[13.5px] leading-relaxed text-ink/75">
             找不到想找的电影？{' '}
             <button
               type="button"
               onClick={() => openAdd()}
-              className="text-paper underline decoration-paper/40 underline-offset-4 hover:text-paper/80"
+              className="text-ocean underline decoration-ocean/35 underline-offset-4 hover:decoration-ocean"
             >
               把它添加到片库
             </button>
             。
           </p>
-          <Link to="/map" className="link-rule text-paper-dim hover:text-paper">
+          <Link to="/map" className="link-rule text-ink/70 hover:text-ink">
             在记忆地图中查看它们 <ArrowRight size={12} />
           </Link>
         </div>
