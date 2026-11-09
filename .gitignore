@@ -12,6 +12,7 @@ node_modules/
 *.key
 
 # --- local session data (never commit) ---
+.wrangler/
 .deepworks/tmp/
 data/user-memory/
 data/pending/
@@ -31,6 +32,7 @@ build/
 out/
 .next/
 *.tsbuildinfo
+.wrangler/
 
 # --- python ---
 __pycache__/

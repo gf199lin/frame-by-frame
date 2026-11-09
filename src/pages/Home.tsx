@@ -8,13 +8,9 @@ import { Rating } from '@/components/ui/Rating'
 import { TasteRadar } from '@/components/taste/TasteRadar'
 import { Reveal } from '@/components/ui/Reveal'
 import { EmptyState } from '@/components/ui/Primitives'
-import {
-  filmById,
-  favoriteRecord,
-  recordsSorted,
-  summarizeTaste,
-  tasteSignature,
-} from '@/lib/tasteEngine'
+import { filmById, favoriteRecord, recordsSorted } from '@/lib/tasteEngine'
+import { sampleStateCopy } from '@/lib/ai/tasteProfile'
+import type { TasteSnapshot } from '@/types'
 import { THEMES, zhGenres } from '@/data/taxonomy'
 import { formatLongDate, formatMinutes, percent } from '@/lib/format'
 import { frameSrc } from '@/lib/media'
@@ -34,7 +30,7 @@ const STATUS_TEXT: Record<string, string> = {
 }
 
 export const Home = () => {
-  const { records, films, snapshot } = useAppStore()
+  const { records, films, snapshot, profile } = useAppStore()
   const { openAdd } = useAddFilm()
 
   const ordered = recordsSorted(records)
@@ -50,10 +46,19 @@ export const Home = () => {
   const hours = snapshot.totalMinutes / 60
   const year = new Date().getFullYear()
 
-  const strongest = [...snapshot.dimensionScores].sort(
-    (a, b) => b.strength * (0.5 + b.confidence) - a.strength * (0.5 + a.confidence),
-  )[0]
-  const summary = summarizeTaste(snapshot)
+  const radarSnapshot: TasteSnapshot = {
+    filmCount: profile.filmCount,
+    dimensionScores: profile.dimensions,
+    overallConfidence: profile.overallConfidence,
+    topThemes: profile.topThemes,
+    topMoods: profile.topMoods,
+    averageRating: profile.averageRating,
+    totalMinutes: snapshot.totalMinutes,
+  }
+  const strongest = [...profile.dimensions]
+    .filter((item) => item.sufficient)
+    .sort((a, b) => b.confidence - a.confidence)[0]
+  const showRadar = profile.dimensions.filter((item) => item.sufficient).length >= 2
 
   // A real backdrop for the cover. If the newest film only has a poster, fall
   // back to the first catalogue film with a verified TMDB backdrop.
@@ -558,17 +563,30 @@ export const Home = () => {
           <div className="grid grid-cols-12 gap-x-6 gap-y-12">
             <Reveal className="col-span-12 lg:col-span-5 xl:col-span-4">
               <div className="relative">
-                <TasteRadar snapshot={snapshot} size={380} tone="light" />
-                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-                  <p className="num text-[3rem] leading-none text-ink">
-                    {Math.round(snapshot.overallConfidence * 100)}
-                    <span className="text-lg text-ink/55">%</span>
-                  </p>
-                  <p className="mt-1.5 text-[12px] tracking-[0.06em] text-ink/60">置信度</p>
-                </div>
+                {showRadar ? (
+                  <>
+                    <TasteRadar snapshot={radarSnapshot} size={380} tone="light" />
+                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                      <p className="num text-[3rem] leading-none text-ink">
+                        {Math.round(profile.overallConfidence * 100)}
+                        <span className="text-lg text-ink/55">%</span>
+                      </p>
+                      <p className="mt-1.5 text-[12px] tracking-[0.06em] text-ink/60">置信度</p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex min-h-[320px] flex-col justify-center border border-dashed border-ink/20 px-8 py-10 text-center">
+                    <p className="font-zh-title text-[1.35rem] leading-[1.5] text-ink">
+                      还没有可以画出的形状。
+                    </p>
+                    <p className="mt-3 text-[13.5px] leading-[1.9] text-ink/60">
+                      雷达图只使用你确认过的 AI 证据。证据不足时，我们不会用虚构数字把它填满。
+                    </p>
+                  </div>
+                )}
               </div>
               <p className="mt-2 text-center text-[12.5px] leading-relaxed text-ink/60">
-                六条轴线，来自评分、笔记深度与反复出现的主题。
+                六条轴线，只来自你确认过的分析证据。
               </p>
             </Reveal>
 
@@ -577,10 +595,10 @@ export const Home = () => {
                 <b>05</b> 审美解读
               </p>
               <h2 className="mt-5 font-zh-title text-[clamp(1.9rem,3.6vw,3rem)] leading-[1.25] tracking-[-0.01em] text-ink">
-                {tasteSignature(snapshot)}
+                {profile.signature}
               </h2>
               <p className="measure mt-5 text-[15.5px] leading-[1.95] text-ink/75">
-                {summary[0]} {summary[1] ?? ''}
+                {sampleStateCopy[profile.sampleState]}
               </p>
 
               <div className="mt-9 grid gap-8 border-t border-ink/15 pt-6 sm:grid-cols-2">
@@ -594,15 +612,15 @@ export const Home = () => {
                       ? `${strongest.def.label} · ${percent(
                           strongest.value < 0.5 ? 1 - strongest.value : strongest.value,
                         )} 偏向「${strongest.value < 0.5 ? strongest.def.lowZh : strongest.def.highZh}」`
-                      : '再写几篇笔记，方向就会显现。'}
+                      : `确认几部电影后，方向才会显现；目前有 ${profile.pendingCount} 条分析等待确认。`}
                   </p>
                 </div>
 
-                {snapshot.topThemes.length > 0 && (
+                {profile.topThemes.length > 0 && (
                   <div>
                     <p className="text-[12px] tracking-[0.06em] text-ink/55">你反复回到的主题</p>
                     <ul className="mt-2.5 space-y-1.5">
-                      {snapshot.topThemes.slice(0, 4).map((theme) => (
+                      {profile.topThemes.slice(0, 4).map((theme) => (
                         <li key={theme.id} className="flex items-baseline justify-between gap-3 border-b border-ink/10 pb-1.5">
                           <span className="text-[14px] text-ink/80">
                             {THEMES[theme.id].zh}
@@ -625,7 +643,7 @@ export const Home = () => {
                   查看完整观影品味 <ArrowRight size={12} />
                 </Link>
                 <p className="flex items-center gap-2 text-[12.5px] text-ink/55">
-                  <Sparkles size={10} /> 本地计算，未调用外部模型。
+                  <Sparkles size={10} /> 只使用你确认过的 AI 证据。
                 </p>
               </div>
             </Reveal>

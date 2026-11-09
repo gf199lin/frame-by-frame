@@ -123,7 +123,7 @@ export const Taste = () => {
     { agree: 0, 'not-quite': 0, corrected: 0 } as Record<DimensionFeedback['verdict'], number>,
   )
 
-  const showRadar = profile.acceptedCount > 0
+  const showRadar = profile.dimensions.filter((item) => item.sufficient).length >= 2
 
   return (
     <div>
