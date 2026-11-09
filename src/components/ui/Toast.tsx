@@ -45,7 +45,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
               type="button"
               onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
               className="text-paper-dim transition-colors hover:text-paper"
-              aria-label="Dismiss"
+              aria-label="关闭提示"
             >
               <X size={12} />
             </button>

@@ -254,7 +254,7 @@ export const MemoryGraphView = ({
         onPointerUp={endPointer}
         onPointerCancel={endPointer}
         role="application"
-        aria-label="Interactive memory map. Drag the background to pan, scroll to zoom, click a node for context."
+        aria-label="可交互的记忆地图。拖动空白处平移，滚轮缩放，点击节点查看关系。"
       >
         <g transform={`translate(${view.x} ${view.y}) scale(${view.k})`}>
           {/* faint orbit guides */}
@@ -309,7 +309,7 @@ export const MemoryGraphView = ({
                 : below
                   ? radiusOf(node) + 14
                   : -radiusOf(node) - 10
-            const labelSize = node.kind === 'film' ? (size.w < 640 ? 9.5 : 10.5) : node.kind === 'theme' ? 8.5 : 8
+            const labelSize = node.kind === 'film' ? (size.w < 640 ? 10.5 : 11.5) : node.kind === 'theme' ? 11.5 : 11
             const showLabel =
               node.kind === 'film' ||
               isSelected ||
@@ -326,7 +326,7 @@ export const MemoryGraphView = ({
                 className="graph-node"
                 tabIndex={0}
                 role="button"
-                aria-label={`${node.kind}: ${node.label}`}
+                aria-label={`${{ film: '电影', theme: '主题', mood: '情绪' }[node.kind]}：${node.label}`}
                 onPointerDown={(event) => {
                   event.stopPropagation()
                   const world = toWorld(event.clientX, event.clientY)
@@ -446,12 +446,12 @@ export const MemoryGraphView = ({
                     strokeLinejoin="round"
                     style={{
                       fontSize: labelSize,
-                      letterSpacing: node.kind === 'film' ? '0.02em' : '0.12em',
+                      letterSpacing: node.kind === 'film' ? '0.02em' : '0.04em',
                       textTransform: node.kind === 'film' ? 'none' : 'uppercase',
                       fontFamily:
                         node.kind === 'film'
                           ? 'Instrument Serif, Georgia, serif'
-                          : 'Inter, system-ui, sans-serif',
+                          : "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif",
                     }}
                   >
                     {truncate(node.label, node.kind === 'film' ? (size.w < 640 ? 13 : 20) : 15)}
@@ -465,13 +465,13 @@ export const MemoryGraphView = ({
 
       <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
         <p className="hidden font-mono text-[12px] uppercase tracking-[0.16em] text-paper-muted/70 sm:block">
-          Drag to pan · scroll to zoom · drag a node · click for context
+          拖动平移 · 滚轮缩放 · 拖动节点 · 点击查看关系
         </p>
         <div className="pointer-events-auto flex items-center gap-1 border border-paper/15 bg-[#1b1814]/85 p-1 text-paper backdrop-blur">
-          <button type="button" onClick={() => zoomBy(1.22)} className="icon-btn h-8 w-8 border-0" aria-label="Zoom in">
+          <button type="button" onClick={() => zoomBy(1.22)} className="icon-btn h-8 w-8 border-0" aria-label="放大">
             <Plus size={13} />
           </button>
-          <button type="button" onClick={() => zoomBy(1 / 1.22)} className="icon-btn h-8 w-8 border-0" aria-label="Zoom out">
+          <button type="button" onClick={() => zoomBy(1 / 1.22)} className="icon-btn h-8 w-8 border-0" aria-label="缩小">
             <Minus size={13} />
           </button>
           <button
@@ -481,7 +481,7 @@ export const MemoryGraphView = ({
               setDragged({})
             }}
             className="icon-btn h-8 w-8 border-0"
-            aria-label="Reset view"
+            aria-label="重置视图"
           >
             <Maximize2 size={12} />
           </button>
@@ -491,7 +491,7 @@ export const MemoryGraphView = ({
       {selectedNode && (
         <div className="pointer-events-none absolute left-4 top-4 max-w-[220px] border border-paper/15 bg-[#1b1814]/80 px-3 py-2 backdrop-blur">
           <p className="micro-sm text-paper/55">
-            {selectedNode.kind === 'film' ? 'Film' : selectedNode.kind === 'theme' ? 'Theme' : 'Mood'}
+            {selectedNode.kind === 'film' ? '电影' : selectedNode.kind === 'theme' ? '主题' : '情绪'}
           </p>
           <p className="mt-1 font-display text-lg leading-tight text-paper">{selectedNode.label}</p>
         </div>
@@ -501,22 +501,22 @@ export const MemoryGraphView = ({
 }
 
 export const GraphLegend = ({ showThemes, showMoods }: { showThemes: boolean; showMoods: boolean }) => (
-  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] uppercase tracking-[0.14em] text-paper-muted">
+  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] tracking-[0.04em] text-paper-muted">
     <span className="flex items-center gap-2">
-      <span className="inline-block h-3 w-2.5 border border-brass/70" /> Film
+      <span className="inline-block h-3 w-2.5 border border-brass/70" /> 电影
     </span>
     {showThemes && (
       <span className="flex items-center gap-2">
-        <span className="inline-block h-2 w-2 rotate-45 border border-brass/60 bg-brass/20" /> Theme
+        <span className="inline-block h-2 w-2 rotate-45 border border-brass/60 bg-brass/20" /> 主题
       </span>
     )}
     {showMoods && (
       <span className="flex items-center gap-2">
-        <span className="inline-block h-2 w-2 rounded-full border border-[#8FABA4]/70" /> Mood
+        <span className="inline-block h-2 w-2 rounded-full border border-[#8FABA4]/70" /> 情绪
       </span>
     )}
     <span className="flex items-center gap-2">
-      <span className="inline-block h-px w-4 bg-paper/40" /> Shared ground
+      <span className="inline-block h-px w-4 bg-paper/40" /> 共同主题
     </span>
   </div>
 )

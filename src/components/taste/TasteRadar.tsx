@@ -4,21 +4,21 @@ import { DIMENSIONS } from '@/data/taxonomy'
 import { cn } from '@/lib/format'
 
 const SHORT: Record<DimensionKey, string> = {
-  narrative: 'Narrative',
-  emotion: 'Emotion',
-  thematic: 'Theme',
-  visual: 'Visual',
-  character: 'Character',
-  ending: 'Ending',
+  narrative: '叙事',
+  emotion: '情绪',
+  thematic: '主题',
+  visual: '视觉',
+  character: '人物',
+  ending: '结局',
 }
 
 const LEAN: Record<DimensionKey, [string, string]> = {
-  narrative: ['slow-burn', 'propulsive'],
-  emotion: ['restrained', 'cathartic'],
-  thematic: ['inward', 'outward'],
-  visual: ['naturalistic', 'composed'],
-  character: ['character-led', 'ensemble'],
-  ending: ['unresolved', 'hopeful'],
+  narrative: ['慢热', '推进'],
+  emotion: ['克制', '浓烈'],
+  thematic: ['向内', '向外'],
+  visual: ['自然', '风格化'],
+  character: ['人物驱动', '群像'],
+  ending: ['未解', '希望'],
 }
 
 const useAnimatedValues = (target: number[], duration = 850) => {
@@ -91,7 +91,7 @@ export const TasteRadar = ({
         viewBox={`0 0 ${size} ${size}`}
         className="h-auto w-full overflow-visible"
         role="img"
-        aria-label="Taste profile radar chart — six dimensions, positions on their axes"
+        aria-label="观影品味雷达图——六个维度在各自轴线上的位置"
       >
         <defs>
           <radialGradient id="radar-fill">
@@ -157,7 +157,7 @@ export const TasteRadar = ({
             const anchor =
               Math.abs(Math.cos(angle)) < 0.25 ? 'middle' : Math.cos(angle) > 0 ? 'start' : 'end'
             const value = snapshot.dimensionScores[i]?.value ?? 0.5
-            const lean = value < 0.44 ? LEAN[dim.key][0] : value > 0.56 ? LEAN[dim.key][1] : 'balanced'
+            const lean = value < 0.44 ? LEAN[dim.key][0] : value > 0.56 ? LEAN[dim.key][1] : '平衡'
             return (
               <g
                 key={dim.key}
@@ -175,7 +175,7 @@ export const TasteRadar = ({
                   textAnchor={anchor}
                   className="micro-sm"
                   fill={activeKey === dim.key ? '#29251F' : labelColor}
-                  style={{ letterSpacing: '0.16em', fontSize: size * 0.022 }}
+                  style={{ letterSpacing: '0.04em', fontSize: size * 0.028, fontWeight: 500 }}
                 >
                   {SHORT[dim.key]}
                 </text>
@@ -184,7 +184,7 @@ export const TasteRadar = ({
                   y={y + size * 0.033}
                   textAnchor={anchor}
                   fill={activeKey === dim.key ? 'rgba(41,37,31,0.9)' : subLabelColor}
-                  style={{ fontSize: size * 0.022, fontStyle: 'italic', fontFamily: 'Instrument Serif, Georgia, serif' }}
+                  style={{ fontSize: size * 0.025, fontFamily: "'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif" }}
                 >
                   {lean}
                 </text>
@@ -228,17 +228,17 @@ export const PoleAxis = ({
           <div
             className="absolute top-1/2 h-[10px] w-[10px] -translate-x-1/2 -translate-y-1/2 border border-ink/45 bg-transparent"
             style={{ left: `${filmPct}%` }}
-            title="This film"
+            title="这部电影"
           />
         )}
         <div
           className="absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 bg-ink shadow-[0_0_10px_rgba(41,37,31,0.25)]"
           style={{ left: `${pct}%` }}
-          title="Your archive"
+          title="你的片库"
         />
       </div>
       {showLabels && (
-        <div className="mt-1 flex justify-between gap-2 text-[12px] uppercase tracking-[0.12em] text-taupe">
+        <div className="mt-1 flex justify-between gap-2 text-[12px] tracking-[0.04em] text-taupe">
           <span>{low}</span>
           <span className="text-right">{high}</span>
         </div>
@@ -278,7 +278,7 @@ export const ShiftRadar = ({
       className="h-auto w-full shrink-0"
       style={{ maxWidth: size }}
       role="img"
-      aria-label="Taste profile before and after this film"
+      aria-label="加入这部电影前后的观影品味对比"
     >
       {[0.33, 0.66, 1].map((tick) => (
         <polygon

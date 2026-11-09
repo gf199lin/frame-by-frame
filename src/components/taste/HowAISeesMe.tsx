@@ -40,8 +40,8 @@ export const HowAISeesMe = ({
                     <span className="block font-display text-xl leading-none text-ink sm:text-2xl">
                       {String(stage.filmCount).padStart(2, '0')}
                     </span>
-                    <span className="mt-1 block text-[11px] uppercase tracking-[0.16em] text-taupe">
-                      films
+                    <span className="mt-1 block text-[11px] tracking-[0.04em] text-taupe">
+                      部电影
                     </span>
                   </span>
                 </span>
@@ -49,22 +49,22 @@ export const HowAISeesMe = ({
 
               <div className={cn('border-t pt-5', isLatest ? 'border-brass/30' : 'border-ink/10')}>
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <p className="micro-sm text-brass/80">
-                    {stage.filmCount === 1 ? 'After 1 film' : `After ${stage.filmCount} films`}
+                  <p className="text-[12px] tracking-[0.06em] text-brass/80">
+                    {stage.filmCount === 1 ? '看过第 1 部之后' : `看过 ${stage.filmCount} 部之后`}
                   </p>
-                  <p className="font-mono text-[12px] tracking-[0.14em] text-taupe">
-                    {formatShortDate(stage.at)} · confidence {Math.round(stage.confidence * 100)}%
+                  <p className="font-mono text-[12px] tracking-[0.04em] text-taupe">
+                    {formatShortDate(stage.at)} · 置信度 {Math.round(stage.confidence * 100)}%
                   </p>
                 </div>
-                <h4 className="mt-2 font-display text-xl leading-snug text-ink sm:text-2xl">
+                <h4 className="mt-2 font-zh-title text-[1.2rem] leading-snug text-ink sm:text-[1.35rem]">
                   {stage.headline}
                 </h4>
-                <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-ink/75">
+                <p className="mt-2 max-w-2xl text-[15px] leading-[1.9] text-ink/75">
                   {stage.body}
                 </p>
                 {stage.topTheme && (
-                  <p className="mt-2 text-[12.5px] uppercase tracking-[0.16em] text-taupe">
-                    Recurring theme · <span className="text-brass/70">{THEMES[stage.topTheme].label}</span>
+                  <p className="mt-2 text-[12.5px] tracking-[0.04em] text-taupe">
+                    反复出现的主题 · <span className="text-brass/70">{THEMES[stage.topTheme].zh}</span>
                   </p>
                 )}
 
@@ -73,7 +73,7 @@ export const HowAISeesMe = ({
                     <>
                       <span
                         className={cn(
-                          'inline-flex items-center gap-1.5 border px-2.5 py-1 text-[12px] uppercase tracking-[0.14em]',
+                          'inline-flex items-center gap-1.5 border px-2.5 py-1 text-[12px] tracking-[0.04em]',
                           state.verdict === 'agree'
                             ? 'border-brass/40 bg-brass/10 text-brass-soft'
                             : 'border-ink/25 text-ink/75',
@@ -81,10 +81,10 @@ export const HowAISeesMe = ({
                       >
                         {state.verdict === 'agree' ? <Check size={10} /> : <X size={10} />}
                         {state.verdict === 'agree'
-                          ? 'You agreed'
+                          ? '你同意了'
                           : state.verdict === 'not-quite'
-                            ? 'Not quite'
-                            : 'Corrected'}
+                            ? '不太像'
+                            : '已修正'}
                       </span>
                       {state.correction && (
                         <span className="text-[13px] italic text-taupe">“{state.correction}”</span>
@@ -95,9 +95,9 @@ export const HowAISeesMe = ({
                           setEditing(editing === stage.id ? null : stage.id)
                           setText(state.correction ?? '')
                         }}
-                        className="text-[12px] uppercase tracking-[0.14em] text-taupe underline underline-offset-4 hover:text-ink"
+                        className="text-[12px] tracking-[0.04em] text-taupe underline underline-offset-4 hover:text-ink"
                       >
-                        Revise
+                        修改
                       </button>
                     </>
                   ) : (
@@ -107,14 +107,14 @@ export const HowAISeesMe = ({
                         onClick={() => onFeedback(stage.id, 'agree')}
                         className="chip h-7 gap-1 text-[12px]"
                       >
-                        <Check size={10} /> I agree
+                        <Check size={10} /> 我同意
                       </button>
                       <button
                         type="button"
                         onClick={() => onFeedback(stage.id, 'not-quite')}
                         className="chip h-7 gap-1 text-[12px]"
                       >
-                        <X size={10} /> Not quite
+                        <X size={10} /> 不太像
                       </button>
                       <button
                         type="button"
@@ -124,7 +124,7 @@ export const HowAISeesMe = ({
                         }}
                         className="chip h-7 gap-1 text-[12px]"
                       >
-                        <Pencil size={9} /> Let me correct you
+                        <Pencil size={9} /> 让我来纠正
                       </button>
                     </>
                   )}
@@ -136,8 +136,8 @@ export const HowAISeesMe = ({
                       value={text}
                       onChange={(event) => setText(event.target.value)}
                       rows={2}
-                      className="input input-boxed text-[14px] leading-relaxed"
-                      placeholder="What did it get wrong?"
+                      className="input input-boxed text-[14.5px] leading-[1.8]"
+                      placeholder="它哪里读错了？"
                     />
                     <div className="mt-2 flex gap-2">
                       <button
@@ -148,16 +148,16 @@ export const HowAISeesMe = ({
                           setEditing(null)
                           setText('')
                         }}
-                        className="btn btn-primary h-8 px-3 text-[12px]"
+                        className="btn btn-primary h-8 px-3 text-[12.5px]"
                       >
-                        Save
+                        保存
                       </button>
                       <button
                         type="button"
                         onClick={() => setEditing(null)}
-                        className="btn btn-quiet h-8 text-[12px]"
+                        className="btn btn-quiet h-8 text-[12.5px]"
                       >
-                        Cancel
+                        取消
                       </button>
                     </div>
                   </div>

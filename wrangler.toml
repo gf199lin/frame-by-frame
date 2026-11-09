@@ -1,0 +1,18 @@
+name = "frame-by-frame-ai"
+main = "server/worker.ts"
+compatibility_date = "2026-11-01"
+
+# Secrets (never in this file):
+#   wrangler secret put DEEPSEEK_API_KEY
+#
+# Non-secret configuration:
+[vars]
+ALLOWED_ORIGINS = "https://gf199lin.github.io,http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173"
+AI_MODEL = "deepseek-chat"
+DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+AI_TIMEOUT_MS = "45000"
+
+[observability]
+enabled = true
+
+# The Worker is a pure API: no static assets, no bindings.

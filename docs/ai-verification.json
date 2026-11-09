@@ -1,0 +1,128 @@
+{
+  "generatedAt": "2026-11-09T01:37:35.611Z",
+  "ok": true,
+  "stub": false,
+  "validation": "passed",
+  "schemaVersion": 1,
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "promptVersion": "fbf-ai-1.0.0",
+  "latencyMs": 8780,
+  "wallClockMs": 8781,
+  "attempts": 1,
+  "inputChars": 135,
+  "request": {
+    "film": {
+      "id": "verify-manchester",
+      "title": "Manchester by the Sea",
+      "titleZh": "海边的曼彻斯特",
+      "year": 2016,
+      "director": "Kenneth Lonergan",
+      "genres": [
+        "Drama"
+      ],
+      "runtime": 137,
+      "logline": "A man returns to his hometown after his brother dies."
+    },
+    "rating": 4.5,
+    "feltLike": "restrained",
+    "noteSha256": "c8cc91e20a6f02e6c2351c1420cffc116155ed560d82d9bd01f0641432844b14",
+    "sampleNote": "重看的时候，最打动我的不是那句“我走不出来”，而是他在警局里突然去夺警察的枪。那一刻我才明白，他不是在悲伤，他是在为自己还活着而受罚。整部电影几乎没有让人哭出来的场面，可我一直屏着呼吸。我喜欢它没有给一个和解的结尾：冬天过去了，但有些东西没有被修好，只是被允许继续存在。",
+    "historyIds": [
+      "verify-history-1",
+      "verify-history-2"
+    ]
+  },
+  "analysis": {
+    "summary": "你在这部电影里真正在意的，不是那句被反复引用的台词，而是警局里夺枪那一瞬间——你把它读成一个人在为「还活着」受罚，这是你自己的理解，不是电影明说的。你反复提到整部片几乎没有让人哭出来的场面，却让你一直屏着呼吸，说明你被克制的情绪表达方式抓住，而不是被宣泄打动。结尾你明确喜欢它不给和解：冬天过去，但有些东西只是被允许继续存在。",
+    "observed_emotions": [
+      {
+        "mood": "restrained",
+        "evidence": "你主动标注 restrained，并写「整部电影几乎没有让人哭出来的场面，可我一直屏着呼吸」"
+      },
+      {
+        "mood": "melancholy",
+        "evidence": "你强调「有些东西没有被修好，只是被允许继续存在」，语气是低回的而非释然的"
+      }
+    ],
+    "themes_identified": [
+      {
+        "theme": "grief",
+        "evidence": "你把主角的状态重新定义为「不是在悲伤，他是在为自己还活着而受罚」，说明你在意的是悲伤如何变成一种持续的自我惩罚"
+      },
+      {
+        "theme": "loss",
+        "evidence": "结尾你说「冬天过去了，但有些东西没有被修好」，你关注的是失去之后无法修复的那部分"
+      }
+    ],
+    "focus": {
+      "narrative": [
+        "你被一个具体瞬间（警局夺枪）而不是被情节推进带走，说明你更在意结构里被留出的那个停顿",
+        "你注意到整部片「几乎没有让人哭出来的场面」，说明你对影片如何抑制情绪释放有整体感知"
+      ],
+      "character": [
+        "你把主角的行为读成「为自己还活着而受罚」，关注的是人物内在动机而非外部事件",
+        "你重看时最打动你的不是台词而是动作，说明你更被表演/行为细节而非语言说服"
+      ],
+      "visual": []
+    },
+    "liked": [
+      "警局里突然去夺警察的枪那一幕，以及你从中读出的「为还活着而受罚」",
+      "整部电影克制、不让人哭出来的情绪处理方式",
+      "结尾不给和解：冬天过去，但有些东西没有被修好，只是被允许继续存在"
+    ],
+    "disliked": [],
+    "preference_evidence": [
+      {
+        "dimension_id": "emotion",
+        "direction": "low",
+        "strength": 0.8,
+        "confidence": 0.7,
+        "evidence": "你主动标注 restrained，并明确说「整部电影几乎没有让人哭出来的场面，可我一直屏着呼吸」，说明你被收着的情绪表达抓住",
+        "quote": "整部电影几乎没有让人哭出来的场面，可我一直屏着呼吸"
+      },
+      {
+        "dimension_id": "ending",
+        "direction": "low",
+        "strength": 0.8,
+        "confidence": 0.7,
+        "evidence": "你明确说喜欢它没有给一个和解的结尾，并接受「有些东西没有被修好，只是被允许继续存在」",
+        "quote": "我喜欢它没有给一个和解的结尾：冬天过去了，但有些东西没有被修好，只是被允许继续存在"
+      },
+      {
+        "dimension_id": "character",
+        "direction": "low",
+        "strength": 0.6,
+        "confidence": 0.55,
+        "evidence": "你重看时最打动你的是警局夺枪这个动作，并把它读成人物内在的自我惩罚，说明你被单个复杂人物的内在状态吸引",
+        "quote": "他不是在悲伤，他是在为自己还活着而受罚"
+      },
+      {
+        "dimension_id": "narrative",
+        "direction": "low",
+        "strength": 0.4,
+        "confidence": 0.4,
+        "evidence": "你被一个停顿式的瞬间而不是事件推进打动，且在意影片整体对情绪释放的抑制，暗示你更适应慢而内向的推进",
+        "quote": "最打动我的不是那句“我走不出来”，而是他在警局里突然去夺警察的枪"
+      }
+    ],
+    "uncertainties": [
+      "你没有直接谈论画面、摄影或声音，视觉维度没有证据",
+      "你只提到一个具体场景，无法判断你对整体叙事节奏的态度",
+      "「为自己还活着而受罚」是你自己的解读，不能据此推断你偏爱某种主题类型"
+    ],
+    "confidence": 0.55,
+    "related_films": [
+      {
+        "film_id": "verify-history-1",
+        "relationship": "same-mood",
+        "explanation": "两部片都让你在克制的情绪里停留，而不是被推向宣泄；你此前对《暖暖内含光》的 wistful 感受与这次屏住呼吸的体验相近"
+      },
+      {
+        "film_id": "verify-history-2",
+        "relationship": "same-theme",
+        "explanation": "《晒后假日》同样围绕记忆与家庭中无法修复的部分，与你这次接受「有些东西只是被允许继续存在」的结尾态度相似"
+      }
+    ]
+  }
+}

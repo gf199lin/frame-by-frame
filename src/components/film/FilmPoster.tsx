@@ -2,6 +2,8 @@ import { useState, type CSSProperties } from 'react'
 import type { Film } from '@/types'
 import { cn } from '@/lib/format'
 import { imageSrcSet, imageUrl, resolveFilmArtwork } from '@/lib/artwork'
+import { zhCountry, zhGenre } from '@/data/taxonomy'
+import { directorOf } from '@/data/filmCopy'
 
 /**
  * Film poster.
@@ -20,7 +22,7 @@ const PosterPlaceholder = ({ film }: { film: Film }) => {
         aria-hidden="true"
       />
       <div className="relative flex items-start justify-between gap-2">
-        <span className="poster-meta uppercase tracking-[0.2em] text-paper/35">No poster</span>
+        <span className="poster-meta tracking-[0.12em] text-paper/35">暂无海报</span>
         <span className="poster-meta text-right uppercase tracking-[0.16em] text-paper/25">
           {artwork?.tmdbId ? `TMDB ${artwork.tmdbId}` : 'FbF'}
         </span>
@@ -28,7 +30,7 @@ const PosterPlaceholder = ({ film }: { film: Film }) => {
 
       <div className="relative">
         <p className="poster-meta mb-2 uppercase tracking-[0.18em] text-paper/50">
-          Official artwork unavailable
+          暂无官方图片
         </p>
         <h3 className="poster-title font-display text-paper/90">{film.title}</h3>
         <p className="poster-meta mt-2 uppercase tracking-[0.16em] text-paper/35">
@@ -71,7 +73,7 @@ export const FilmPoster = ({
           src={source}
           srcSet={srcSet}
           sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 280px"
-          alt={`${film.title} (${film.year}) official poster`}
+          alt={`${film.title}（${film.year}）官方海报`}
           width={poster?.width ?? 500}
           height={poster?.height ?? 750}
           className="film-tone absolute inset-0 h-full w-full object-cover"
@@ -98,16 +100,16 @@ export const FilmPoster = ({
         <>
           <div className="absolute left-[6%] right-[6%] top-[5%] flex items-start justify-between gap-3">
             <span className="poster-meta uppercase text-paper/55">
-              {film.year} · {film.country}
+              {film.year} · {zhCountry(film.country)}
             </span>
             <span className="poster-genre poster-meta text-right uppercase text-paper/40">
-              {film.genres[0]}
+              {zhGenre(film.genres[0])}
             </span>
           </div>
 
           <div className="absolute bottom-[5.5%] left-[6%] right-[6%]">
             {film.director && film.director !== 'Unknown director' && (
-              <p className="poster-meta mb-2 uppercase text-paper/45">{film.director}</p>
+              <p className="poster-meta mb-2 tracking-[0.06em] text-paper/45">{directorOf(film)}</p>
             )}
             <h3 className="poster-title font-display text-paper">{film.title}</h3>
             <div className="mt-2 flex items-end justify-between gap-3 border-t border-white/20 pt-2">
@@ -115,7 +117,7 @@ export const FilmPoster = ({
                 <p className="poster-title-zh text-paper/60">{film.titleZh}</p>
               )}
               <p className="poster-meta whitespace-nowrap text-right uppercase text-paper/40">
-                {film.runtime} min
+                {film.runtime} 分钟
               </p>
             </div>
           </div>

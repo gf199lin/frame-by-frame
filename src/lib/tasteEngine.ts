@@ -182,59 +182,58 @@ export const computeSnapshot = (records: WatchRecord[], films: Film[]): TasteSna
 }
 
 /* ------------------------------------------------------------------ */
-/*  Language                                                           */
+/*  Language — Chinese-first                                           */
 /* ------------------------------------------------------------------ */
 export const polePhrase = (key: DimensionKey, value: number): string => {
-  const def = DIMENSION_MAP[key]
   const low = {
-    narrative: 'slow-burn, interior storytelling',
-    emotion: 'restrained emotional expression',
-    thematic: 'inward themes — memory, grief, the self',
-    visual: 'naturalistic, tactile images',
-    character: 'character-driven transformation',
-    ending: 'bittersweet or unresolved endings',
+    narrative: '慢热、向内的叙事',
+    emotion: '克制、含蓄的情绪表达',
+    thematic: '向内、私人化的主题（记忆、哀悼、自我）',
+    visual: '自然、带有触感的影像',
+    character: '人物驱动、强调转变的故事',
+    ending: '苦涩、未必闭合的结局',
   }[key]
   const high = {
-    narrative: 'propulsive, plot-forward structures',
-    emotion: 'heightened, cathartic feeling',
-    thematic: 'outward themes — freedom, justice, the world',
-    visual: 'stylised, composed frames',
-    character: 'ensemble, situational storytelling',
-    ending: 'resolved, hopeful endings',
+    narrative: '推进感强、情节驱动的结构',
+    emotion: '浓烈、宣泄式的情绪',
+    thematic: '向外、面向世界的主题（自由、正义、他者）',
+    visual: '风格化、讲究构图的画面',
+    character: '群像、处境式的叙事',
+    ending: '闭合、留有希望的结局',
   }[key]
   if (value < 0.42) return low
   if (value > 0.58) return high
-  return `a balance between ${def.low.toLowerCase()} and ${def.high.toLowerCase()}`
+  const def = DIMENSION_MAP[key]
+  return `在「${def.lowZh}」与「${def.highZh}」之间保持平衡`
 }
 
 export const leanPhrase = (score: DimensionScore): string => {
-  if (score.strength < 0.12) return `no strong lean on ${score.def.label.toLowerCase()}`
-  const side = score.value < 0.5 ? score.def.low : score.def.high
-  return side.toLowerCase()
+  if (score.strength < 0.12) return `在${score.def.labelZh}上没有明显倾向`
+  return score.value < 0.5 ? score.def.lowZh : score.def.highZh
 }
 
 export const tasteSignature = (snapshot: TasteSnapshot): string => {
-  if (snapshot.filmCount === 0) return 'Nothing on the record yet.'
+  if (snapshot.filmCount === 0) return '还没有留下任何记录。'
   const ranked = [...snapshot.dimensionScores]
     .filter((d) => d.key !== 'thematic' && d.strength > 0.14)
     .sort((a, b) => b.strength * (0.4 + b.confidence) - a.strength * (0.4 + a.confidence))
     .slice(0, 3)
   const words = ranked.map((d) => {
     const short: Record<string, [string, string]> = {
-      narrative: ['slow-burn', 'propulsive'],
-      emotion: ['restrained', 'cathartic'],
-      visual: ['naturalistic', 'composed'],
-      character: ['character-led', 'ensemble-minded'],
-      ending: ['unresolved', 'hopeful'],
+      narrative: ['慢热', '强情节'],
+      emotion: ['克制', '浓烈'],
+      visual: ['自然的影像', '讲究构图'],
+      character: ['人物驱动', '群像感'],
+      ending: ['不急着闭合', '愿意给出希望'],
     }
     const pair = short[d.key]
     return pair ? (d.value < 0.5 ? pair[0] : pair[1]) : ''
   })
   const theme = snapshot.topThemes[0]
-  const themeWord = theme ? `${THEMES[theme.id].label.toLowerCase()}-haunted` : ''
+  const themeWord = theme ? `一次次回到「${THEMES[theme.id].zh}」` : ''
   const all = [words[0], words[1], themeWord, words[2]].filter(Boolean)
-  if (all.length === 0) return 'Still forming — no strong lean yet.'
-  return all.join(', ')
+  if (all.length === 0) return '还在成形——暂时没有明显的倾向。'
+  return all.join('、')
 }
 
 export const summarizeTaste = (snapshot: TasteSnapshot): string[] => {
@@ -249,28 +248,26 @@ export const summarizeTaste = (snapshot: TasteSnapshot): string[] => {
 
   const sentences: string[] = []
   sentences.push(
-    `Across ${snapshot.filmCount} recorded ${
-      snapshot.filmCount === 1 ? 'film' : 'films'
-    }, the clearest signal is a lean toward ${polePhrase(first.key, first.value)}.`,
+    `在你记录的 ${snapshot.filmCount} 部电影里，最清晰的信号是${polePhrase(first.key, first.value)}。`,
   )
   if (second && second.confidence > 0.25) {
     sentences.push(
-      `A second thread is ${polePhrase(second.key, second.value)}${
-        Math.abs(second.value - 0.5) < 0.08 ? ', though that reading is still faint' : ''
-      }.`,
+      `第二条线索是${polePhrase(second.key, second.value)}${
+        Math.abs(second.value - 0.5) < 0.08 ? '，不过目前还很微弱' : ''
+      }。`,
     )
   }
   if (theme) {
     sentences.push(
-      `${THEMES[theme.id].label} appears in ${theme.count} ${
-        theme.count === 1 ? 'film' : 'films'
-      } you kept${mood ? `, usually arriving as ${MOODS[mood.id].label.toLowerCase()}` : ''}.`,
+      `「${THEMES[theme.id].zh}」出现在 ${theme.count} 部你留下的电影里${
+        mood ? `，常常以「${MOODS[mood.id].zh}」的方式出现` : ''
+      }。`,
     )
   }
   sentences.push(
-    `This is an estimate drawn from your ratings and notes — confidence ${Math.round(
+    `这份解读来自你的评分和笔记，目前置信度 ${Math.round(
       snapshot.overallConfidence * 100,
-    )}%. It should change as you do.`,
+    )}%。它会随着你一起改变。`,
   )
   return sentences
 }
@@ -279,12 +276,131 @@ export const summarizeTaste = (snapshot: TasteSnapshot): string[] => {
 /*  Evidence                                                           */
 /* ------------------------------------------------------------------ */
 const KEYWORDS: Record<DimensionKey, string[]> = {
-  narrative: ['structure', 'pace', 'pacing', 'slow', 'editing', 'timeline', 'scene', 'epilogue', 'chapter', 'story', 'minutes'],
-  emotion: ['cry', 'cried', 'feel', 'feeling', 'grief', 'moved', 'broke', 'held', 'anger', 'tender', 'restrained', 'quiet'],
-  thematic: ['memory', 'loss', 'grief', 'identity', 'freedom', 'love', 'time', 'hope', 'meaning', 'about', 'world'],
-  visual: ['image', 'shot', 'frame', 'light', 'colour', 'color', 'symmetry', 'visual', 'picture', 'composition', 'scene'],
-  character: ['character', 'performance', 'actor', 'protagonist', 'person', 'role', 'self', 'father', 'he ', 'she '],
-  ending: ['ending', 'end', 'last', 'final', 'epilogue', 'credits', 'close', 'resolution', 'rain', 'look'],
+  narrative: [
+    'structure',
+    'pace',
+    'pacing',
+    'slow',
+    'editing',
+    'timeline',
+    'scene',
+    'epilogue',
+    'chapter',
+    'story',
+    'minutes',
+    '节奏',
+    '结构',
+    '剪辑',
+    '时间线',
+    '场景',
+    '段落',
+    '长镜头',
+    '缓慢',
+  ],
+  emotion: [
+    'cry',
+    'cried',
+    'feel',
+    'feeling',
+    'grief',
+    'moved',
+    'broke',
+    'held',
+    'anger',
+    'tender',
+    'restrained',
+    'quiet',
+    '哭',
+    '眼泪',
+    '感动',
+    '难过',
+    '情绪',
+    '愤怒',
+    '温柔',
+    '克制',
+    '安静',
+  ],
+  thematic: [
+    'memory',
+    'loss',
+    'grief',
+    'identity',
+    'freedom',
+    'love',
+    'time',
+    'hope',
+    'meaning',
+    'about',
+    'world',
+    '记忆',
+    '失去',
+    '告别',
+    '身份',
+    '自由',
+    '爱',
+    '时间',
+    '希望',
+    '意义',
+    '世界',
+  ],
+  visual: [
+    'image',
+    'shot',
+    'frame',
+    'light',
+    'colour',
+    'color',
+    'symmetry',
+    'visual',
+    'picture',
+    'composition',
+    'scene',
+    '画面',
+    '镜头',
+    '光线',
+    '颜色',
+    '色彩',
+    '构图',
+    '影像',
+    '摄影',
+  ],
+  character: [
+    'character',
+    'performance',
+    'actor',
+    'protagonist',
+    'person',
+    'role',
+    'self',
+    'father',
+    'mother',
+    '人物',
+    '角色',
+    '表演',
+    '演员',
+    '主角',
+    '父亲',
+    '母亲',
+  ],
+  ending: [
+    'ending',
+    'end',
+    'last',
+    'final',
+    'epilogue',
+    'credits',
+    'close',
+    'resolution',
+    'rain',
+    'look',
+    '结局',
+    '最后',
+    '结尾',
+    '片尾',
+    '字幕',
+    '收束',
+    '留白',
+  ],
 }
 
 export const pickEvidenceQuote = (record: WatchRecord, key: DimensionKey): string => {
@@ -338,16 +454,16 @@ export const getEvidence = (
 /*  Timeline                                                           */
 /* ------------------------------------------------------------------ */
 const timelineHeadline = (confidence: number): string => {
-  if (confidence < 0.3) return 'A shape worth testing'
-  if (confidence < 0.42) return 'A reading with direction'
-  if (confidence < 0.56) return 'A recognisable sensibility'
-  return 'A museum with a point of view'
+  if (confidence < 0.3) return '一个值得验证的轮廓'
+  if (confidence < 0.42) return '一个开始有方向的解读'
+  if (confidence < 0.56) return '一种可以辨认的审美'
+  return '一座有自己观点的博物馆'
 }
 
 const hedge = (confidence: number): string => {
-  if (confidence < 0.3) return 'It is early, but'
-  if (confidence < 0.55) return 'The pattern is still forming:'
-  return 'The archive now says:'
+  if (confidence < 0.3) return '现在还很早，但'
+  if (confidence < 0.55) return '轮廓还在形成：'
+  return '你的片库现在显示：'
 }
 
 export const buildTimeline = (
@@ -378,46 +494,48 @@ export const buildTimeline = (
     const firstFilm = filmById(films, slice[0].filmId)
     const lastFilm = filmById(films, slice[slice.length - 1].filmId)
     const confidencePct = Math.round(snapshot.overallConfidence * 100)
-    const title = (film: Film | undefined) => film?.title ?? 'a film'
+    const title = (film: Film | undefined) => film?.title ?? '一部电影'
     const themeLine = theme
-      ? `${THEMES[theme.id].label} appears in ${theme.count} of them`
-      : 'No single theme dominates yet'
+      ? `「${THEMES[theme.id].zh}」出现在其中 ${theme.count} 部里`
+      : '暂时还没有一个主题占据主导'
 
     let body: string
     if (count === 1) {
-      body = `You started with ${title(firstFilm)}. ${hedge(
+      body = `你从《${title(firstFilm)}》开始。${hedge(
         snapshot.overallConfidence,
-      )} you respond to ${polePhrase(strongest.key, strongest.value)}.`
+      )}你对${polePhrase(strongest.key, strongest.value)}有反应。`
     } else if (count <= 3) {
-      body = `${count} ${count === 1 ? 'film' : 'films'} is enough for a first hypothesis: ${polePhrase(
+      body = `${count} 部电影已经足够形成第一个假设：${polePhrase(
         strongest.key,
         strongest.value,
-      )}. ${themeLine}${mood ? `, and they tend to leave you ${MOODS[mood.id].label.toLowerCase()}` : ''}.`
+      )}。${themeLine}${mood ? `，而它们通常让你感到「${MOODS[mood.id].zh}」` : ''}。`
     } else if (count <= 5) {
-      body = `Two threads are forming: ${polePhrase(strongest.key, strongest.value)} and ${polePhrase(
+      body = `两条线索正在形成：${polePhrase(strongest.key, strongest.value)}，以及${polePhrase(
         second.key,
         second.value,
-      )}.${theme ? ` They meet around ${THEMES[theme.id].label}.` : ''} The reading is still provisional.`
+      )}。${theme ? `它们在「${THEMES[theme.id].zh}」附近交汇。` : ''}这份解读仍然是暂时的。`
     } else if (count <= 8) {
-      body = `${themeLine}, which stops looking like coincidence. The strongest signal remains ${polePhrase(
+      body = `${themeLine}，这已经不像巧合。最强的信号仍然是${polePhrase(
         strongest.key,
         strongest.value,
-      )}, and the most recent frame is ${title(lastFilm)}.`
+      )}，而最近的一帧是《${title(lastFilm)}》。`
     } else if (count <= 12) {
-      body = `Stable enough to test: ${tasteSignature(snapshot)}. ${themeLine}, and the archive keeps choosing ${
-        mood ? MOODS[mood.id].label.toLowerCase() : 'the same register'
-      }. Confidence is ${confidencePct}%.`
+      body = `已经稳定到可以被检验：${tasteSignature(snapshot)}。${themeLine}，片库也一再选择「${
+        mood ? MOODS[mood.id].zh : '同一种语气'
+      }」。置信度 ${confidencePct}%。`
     } else {
-      body = `The museum now has a point of view: ${tasteSignature(snapshot)}.${
-        theme ? ` ${THEMES[theme.id].label} remains the ground, with ${THEMES[secondTheme?.id ?? theme.id].label.toLowerCase()} close behind.` : ''
-      } Each new note tightens the reading rather than replacing it.`
+      body = `这座博物馆已经有了自己的观点：${tasteSignature(snapshot)}。${
+        theme
+          ? `「${THEMES[theme.id].zh}」仍然是底色，「${THEMES[secondTheme?.id ?? theme.id].zh}」紧随其后。`
+          : ''
+      }每一条新笔记都会让解读更紧，而不是把它替换掉。`
     }
 
     stages.push({
       id: `stage-${count}`,
       filmCount: count,
       at: slice[slice.length - 1].watchedAt,
-      headline: count === 1 ? 'The first frame' : timelineHeadline(snapshot.overallConfidence),
+      headline: count === 1 ? '第一帧' : timelineHeadline(snapshot.overallConfidence),
       body,
       topTheme: theme?.id,
       confidence: snapshot.overallConfidence,
@@ -442,7 +560,7 @@ export const monthlyStats = (
   films: Film[],
   year: number,
 ): Array<{ month: number; label: string; count: number; minutes: number; average: number; records: WatchRecord[] }> => {
-  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const labels = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
   return labels.map((label, index) => {
     const monthRecords = records
       .filter((r) => {
@@ -488,9 +606,9 @@ export const splitPeriods = (records: WatchRecord[]) => {
 
 export const describeShift = (before: number, after: number): string => {
   const delta = after - before
-  if (Math.abs(delta) < 0.035) return 'held steady'
-  const moved = Math.abs(delta) >= 0.09 ? 'shifted clearly' : 'drifted'
-  return `${moved} ${delta > 0 ? 'toward the outward / heightened side' : 'toward the inward / restrained side'}`
+  if (Math.abs(delta) < 0.035) return '保持稳定'
+  const moved = Math.abs(delta) >= 0.09 ? '明显转向' : '轻微偏向'
+  return `${moved}${delta > 0 ? '向外、更外放的一侧' : '向内、更克制的一侧'}`
 }
 
 export const formatStageDate = (iso: string): string => formatLongDate(iso)

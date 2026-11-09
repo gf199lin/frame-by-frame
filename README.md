@@ -3,10 +3,11 @@
 **AI-Powered Personal Cinema Memory Museum**
 *Every film leaves a frame. Every frame tells your story.*
 
-Frame by Frame 是一个面向大学生的个人电影记忆博物馆。它不是电影推荐站，也不是豆瓣替代品，而是一个记录观影经历、理解个人审美、积累电影记忆的本地优先前端原型。
+Frame by Frame 是一个面向大学生的个人电影记忆博物馆。它不是电影推荐站，也不是豆瓣替代品，而是一个记录观影经历、理解个人审美、积累电影记忆的本地优先应用。
 
-> 当前阶段：**Phase 1 — 前端 MVP，全部数据与"AI 分析"均在浏览器本地完成。**
-> 没有接入真实后端、登录系统或大模型。界面对此有明确标注，不会把本地规则伪装成真实 AI 调用。
+> 当前阶段：**AI Core V1 — 已接入真实大模型分析。**
+> 笔记与片库仍保存在浏览器本地；只有你主动授权后，单次笔记才会发送到服务端，由服务端调用 DeepSeek。模型密钥只存在服务端，不会进入前端构建。
+> 每条分析都带原文引文、置信度与不确定性；在你接受之前，不会计入六维画像。
 
 ---
 
@@ -16,80 +17,88 @@ Frame by Frame 是一个面向大学生的个人电影记忆博物馆。它不�
 
 ```bash
 npm install
-npm run dev
+npm run dev          # 前端 http://localhost:5173
 ```
 
-打开终端输出的地址（默认 `http://localhost:5173`）。
+要让 AI 分析真正工作，另开一个终端启动本地 API：
+
+```bash
+# .env（已被 .gitignore 忽略）
+# DEEPSEEK_API_KEY=sk-...
+npm run ai:dev       # http://127.0.0.1:8787
+```
+
+开发环境下前端默认请求 `http://127.0.0.1:8787`；也可用 `VITE_AI_API_BASE` 指向已部署的 Worker。
 
 其他命令：
 
 ```bash
-npm run build      # 类型检查 + 生产构建（输出到 dist/）
-npm run preview    # 预览生产构建
-npm run typecheck  # 仅类型检查
+npm run build        # 类型检查 + 生产构建（dist/）
+npm run preview      # 预览生产构建
+npm run typecheck    # 仅类型检查
+npm run test:unit    # 前端测试（21 个）
+npm run test:server  # 后端测试（30 个）
+npm run ai:verify    # 真实模型验证，写入 docs/ai-verification.json
+npm run worker:dev   # Wrangler 本地 Worker
+npm run worker:deploy
 ```
 
-> 如果 PowerShell 因执行策略阻止 `npm.ps1`，请改用 `npm.cmd install` / `npm.cmd run dev`，或调整执行策略。这是本机环境问题，不是项目问题。
+> 如果 PowerShell 因执行策略阻止 `npm.ps1`，请改用 `npm.cmd install` / `npm.cmd run dev`。这是本机环境问题，不是项目问题。
 
 字体通过 Google Fonts 加载（Instrument Serif / Inter）。离线时会回退到 Palatino / Georgia 与系统无衬线字体，布局与功能不受影响。
 
 ---
 
-## 已实现的页面与交互
+## 页面与交互
 
 | 页面 | 路由 | 关键内容 |
 |---|---|---|
 | **My Cinema** | `/` | 杂志式封面、累计电影数、最近观看、最新笔记、AI 观察、快速新增 |
-| **My Archive** | `/archive` | 海报网格 / 索引视图、搜索、类型 / 年代 / 评分 / 状态筛选、排序、片目详情入口 |
-| **Film Detail** | `/archive/:filmId` | 基本信息、个人笔记、评分、AI 主题与情绪、审美坐标、关联影片、编辑 / 删除 |
-| **Memory Map** | `/map` | 40 节点交互图谱：电影外环、主题中环、情绪核心；拖拽、平移、缩放、节点选择与关系高亮 |
-| **My Taste** | `/taste` | 六维审美雷达、维度解读、证据引文、置信度、逐维反馈、How AI Sees Me 时间线 |
-| **Reflection** | `/reflection` | 纸质年鉴视觉、本月记录、年度统计、月度柱状图、年度最爱、主题 / 情绪、前后半程审美漂移 |
-| **Add a Film** | 全局弹窗 | 搜索 → 确认 → 评分 / 日期 / 状态 / 笔记 → 五阶段模拟分析 → 结果并真实写回 |
+| **My Archive** | `/archive` | 海报网格 / 索引视图、搜索、筛选、排序、片目详情入口 |
+| **Film Detail** | `/archive/:filmId` | 基本信息、个人笔记、评分、AI 分析（接受 / 修改 / 拒绝 / 逐条移除 / 重新分析）、关联影片 |
+| **Memory Map** | `/map` | 40 节点交互图谱：电影外环、主题中环、情绪核心 |
+| **My Taste** | `/taste` | 六维画像、证据引文与置信度、样本不足提示、待确认队列、逐维反馈、画像变化历史 |
+| **Reflection** | `/reflection` | 纸质年鉴视觉、月度记录、年度统计、主题 / 情绪、审美漂移 |
+| **Add a Film** | 全局弹窗 | 搜索 → 确认 → 评分 / 日期 / 状态 / 笔记 → 授权 → 真实分析 → 逐条审阅并写回 |
 
 ### Add a Film 五步
 
-1. **Find the film** — 从 16 部片目中搜索未归档电影；搜不到时可手工录入。
+1. **Find the film** — 搜索片目；搜不到时可手工录入。
 2. **Confirm** — 海报、年份、导演、片长、类型。
 3. **Your memory** — 0.5 星粒度评分、观影日期、状态、个人笔记、可选情绪。
-4. **Analysis** — 五个确定性阶段（识别影片 → 理解笔记 → 提取主题情绪 → 对比旧记忆 → 重算画像）。
-5. **Result** — 新主题 / 情绪、与旧片的关联、审美维度变化、置信度变化、**before / after 雷达图**，并立即写入 localStorage。
+4. **Analysis** — 授权后将本次记录发送给服务端；失败时不会伪造结果，可重试或先保存记录。
+5. **Result** — 摘要、情绪、主题及证据、偏好证据与原句、不确定性、关联影片、模型来源；接受后才计入画像。
 
-提交后会真实更新：首页统计与最近记录、档案、详情、记忆地图节点、审美雷达、时间线阶段、Reflection 统计与年鉴。
+提交后会真实更新：首页统计与最近记录、档案、详情、记忆地图节点、审美画像与变化历史。
 
 ---
 
-## 本地数据与"AI"说明
+## AI 分析如何工作
 
-### 持久化
+完整设计、契约与部署说明见 **[docs/ai-core.md](docs/ai-core.md)**。
 
-- localStorage key：`fbf.state.v1`（版本 `1`）
-- 首次打开自动注入 10 部示例电影；片目库共 16 部（另外 6 部只能通过 Add a Film 加入）。
-- 新增、编辑、删除、反馈、纠错、年鉴生成记录都会持久化。
-- 页脚 **Reset demo data** 可恢复 10 部示例数据。
-- 多标签页之间通过 `storage` 事件同步。
-- 若浏览器禁用 localStorage，导航下方会显示明确警告，记录只在当前会话内有效。
+- **模型**：DeepSeek `deepseek-chat`，服务端调用；响应中的实际模型名会记录在 provenance 中。
+- **服务端**：同一份 Fetch handler 运行在 Cloudflare Workers（生产）与 Node（本地），核心在 `server/core/`。
+- **校验**：枚举必须来自词表；`quote` 必须逐字出现在笔记中，否则丢弃引文；`related_films` 只能引用随请求提供的有限历史；两次尝试仍不合规则返回 422，不写入结果。
+- **隐私**：日志只记录长度、耗时与错误码，不记录笔记正文；请求体上限 64KB；限流 12 次/分钟、80 次/天（单 isolate 内存实现）。
+- **画像**：只统计 `accepted` / `edited` 的分析；`n ≥ 3` 且置信度与一致性达标才给出方向，否则显示"样本不足"。
+- **可撤销**：拒绝或删除分析不影响原始记录；"这条不像我"会立即从画像中移除该贡献。
 
-### "AI"到底是什么
+`docs/ai-verification.json` 保存最近一次真实调用的证据（模型、耗时、结构校验结果、4 条偏好证据、不确定性），可直接复现核查。
 
-本阶段的审美画像由 `src/lib/tasteEngine.ts` 中的**确定性本地引擎**计算，不调用模型、不需要 API Key：
+---
 
-- 每条记录的权重来自评分与笔记长度。
-- 六个维度是每条影片自身审美签名（0–1 轴位置）的加权平均。
-- 主题偏好由主题在"内向 ↔ 外向"轴上的映射聚合。
-- 置信度由样本量、笔记深度、记录间一致性共同决定，上限 94%。
-- 主题 / 情绪由 `src/lib/analyst.ts` 的关键词规则 + 影片标签提取，并保留原始笔记作为证据。
-- "Not quite" / "Let me correct you" 会降低该维度展示置信度，并保存用户原话。
+## 本地数据与持久化
 
-所有相关页面都明确写出：**这是基于记录的偏好估计，不是客观审美水平，也不是真实大模型判断。**
-
-示例片目、评分与笔记是为演示而写的虚构数据，界面标注为 *Sample archive* / *A personal record, not a published survey*。
+- localStorage key：`fbf.state.v1`（内部 `version: 2`；v1 数据会在读取时无损迁移，key 保持不变以免丢失旧档案）。
+- 首次打开自动注入 10 部示例电影；示例解读由编辑撰写（`provider: seed`），界面标注"非模型输出"，需要你确认后才计入画像。
+- 新增、编辑、删除、反馈、纠错、画像变化历史都会持久化。
+- 页脚 **Reset demo data** 可恢复示例数据。
+- 多标签页之间通过 `storage` 事件同步；存储不可用时导航下方会显示明确警告。
 
 ### 海报
 
-没有使用第三方图片接口。每部影片根据自身色板与视觉母题生成 editorial SVG 海报（`src/components/film/FilmPoster.tsx`），因此不会出现裂图。首页 Hero 使用本地 `public/images/hero-cinema.jpg`（AI 生成、已裁掉生成水印），不依赖外部图床。
-
-`Film.posterUrl` 已预留真实图片来源；若图片加载失败，会自动回退到生成海报。接入 TMDB 等来源时只需补齐该字段并遵守其授权要求。
+海报来自 TMDB 官方影片图片或经过核验的本地副本；加载失败时回退到原创 poster study，避免裂图。首页 Hero 使用本地 `public/images/hero-cinema.jpg`。
 
 ---
 
@@ -98,107 +107,70 @@ npm run typecheck  # 仅类型检查
 ```
 .
 ├─ docs/
-│  ├─ agent-skill-spec.md          # 既有智能层规格（下一阶段）
-│  └─ frontend-architecture.md     # 前端数据契约与后端接入建议
-├─ public/
-│  ├─ favicon.svg
-│  └─ images/hero-cinema.jpg      # AI-generated cinema still used on the Home cover
+│  ├─ ai-core.md                  # AI Core V1：架构、契约、部署、限制
+│  ├─ ai-verification.json        # 真实模型调用证据
+│  ├─ agent-skill-spec.md
+│  └─ frontend-architecture.md
+├─ server/
+│  ├─ app.ts                      # 路由、CORS、限流、错误映射
+│  ├─ worker.ts                   # Cloudflare Workers 入口
+│  ├─ node.ts                     # 本地 Node 入口
+│  └─ core/                       # contract / prompt / validate / service / provider …
+├─ scripts/
+│  └─ verify-ai.ts                # 真实模型验证脚本
 ├─ src/
-│  ├─ components/
-│  │  ├─ add/       AddFilmFlow / AddFilmProvider
-│  │  ├─ film/      FilmPoster / FilmCard / FilmIndexRow
-│  │  ├─ layout/    Shell / ErrorBoundary
-│  │  ├─ map/       MemoryGraphView / GraphLegend
-│  │  ├─ taste/     TasteRadar / ShiftRadar / DimensionCard / HowAISeesMe
-│  │  └─ ui/        Modal / Rating / Toast / Primitives
-│  ├─ data/         films.ts（16 部片目）/ seed.ts（10 条记录）/ taxonomy.ts
-│  ├─ lib/          analyst.ts / tasteEngine.ts / graph.ts / storage.ts / format.ts
-│  ├─ pages/        Home / Archive / FilmDetail / MemoryMap / Taste / Reflection / NotFound
-│  ├─ store/        AppStore.tsx（Context + reducer + 派生数据）
-│  ├─ styles/       index.css（设计系统、纸张、颗粒、海报、图谱）
-│  ├─ types.ts      领域模型与分析契约
-│  ├─ App.tsx       路由与 Provider
-│  └─ main.tsx
-├─ index.html
-├─ package.json
-├─ tailwind.config.js
-├─ postcss.config.js
-├─ tsconfig.json
-└─ vite.config.ts
+│  ├─ components/                 # add / film / layout / map / taste / ui
+│  ├─ data/                       # films / seed / seedAnalyses / taxonomy
+│  ├─ lib/ai/                     # client / validate / history / tasteProfile / adapter
+│  ├─ lib/                        # tasteEngine / graph / storage / format
+│  ├─ pages/                      # Home / Archive / FilmDetail / MemoryMap / Taste / Reflection
+│  ├─ store/AppStore.tsx
+│  ├─ types.ts
+│  └─ App.tsx
+├─ outputs/ai-core-verification/  # 界面走查截图
+├─ wrangler.toml
+├─ tsconfig.server.json
+├─ vitest.config.ts
+└─ package.json
 ```
 
-技术栈：React 18 · TypeScript 5.7 · Vite 6 · Tailwind CSS 3.4 · React Router 6 · lucide-react。
-图表与图谱均为手写 SVG / CSS，没有引入额外图表库。
+技术栈：React 18 · TypeScript 5.7 · Vite 6 · Tailwind CSS 3.4 · React Router 6 · lucide-react · Vitest · Cloudflare Workers。
 
 ---
 
-## 演示脚本（验收路径）
+## 验收路径
 
-1. 首页点击 **Add a Film**，搜索一部尚未归档的片目（例如 `Whiplash`、`Moonlight`、`Arrival`，或手工输入 `Aftersun`）。
-2. 确认影片 → 给评分（建议与你平时的选择拉开差距以便观察变化）→ 写下真实感受 → **Analyse this memory**。
-3. 观察五个分析阶段与结果页：主题、情绪、关联影片、before/after 雷达、置信度变化。
-4. 点击 **See My Taste**：雷达、六维证据、时间线新增的 "After N films" 阶段都已更新。
-5. 在任一维度点击 **Not quite** 或 **Let me correct you**，确认反馈被保存且置信度下降。
-6. 返回 Archive 查看新卡片；打开 Memory Map，新节点与关系已出现；打开 Reflection 查看统计与年鉴。
-7. 重新加载页面，确认记录仍在。
+1. 启动 `npm run ai:dev` 与 `npm run dev`，打开 `http://localhost:5173`。
+2. 进入任意影片详情，勾选授权，点击 **重新分析**；等待真实模型返回（约 10–30 秒）。
+3. 检查摘要、情绪、主题、偏好证据、原文引文、不确定性与来源是否为 `deepseek`。
+4. 点击 **接受并纳入画像**；刷新页面确认仍然生效。
+5. 打开 **My Taste**：待确认数量减少，维度卡片显示证据与置信度；点击 **不太像** 观察置信度变化。
+6. 回到详情页点击 **拒绝这次分析**，确认它不再影响画像。
 
-### 已实际验证（开发环境）
+### 已实际验证
 
-- 类型检查 `tsc --noEmit` 通过；生产构建通过（JS ≈ 404.4 kB / gzip ≈ 118.9 kB）。
-- 浏览器控制台错误：0。
-- 已跑通：新增 Moonlight（10 → 11 条）、手工新增 Aftersun、编辑既有记录（不产生重复）、删除入口、搜索无结果空状态、地图节点点击 / 平移 / 滚轮缩放 / 拖拽、审美反馈与纠错持久化、年鉴生成与 HTML 下载（已检查下载文件内容）、记录删除、390px 移动端无横向溢出。
-- 移动端已检查首页、菜单、档案、审美、地图、详情、反思页。
-
-另外用 `vite preview` 验证了生产构建的深层路由（如 `/archive/manchester`）。
-这些验证以本地脚本与人工检查完成，未作为自动化测试套件提交。
+- `tsc -b` 与 `tsc -p tsconfig.server.json`：0 错误。
+- 生产构建通过：JS 482 kB / gzip 149 kB。
+- 自动化测试：**51 个全部通过**（前端 21、后端 30）。
+- 真实模型调用：`deepseek / deepseek-flash`，约 8.8 秒，4 条偏好证据，引文全部可回溯；未涉及维度进入 uncertainties。
+- 浏览器走查：真实分析 → 待确认 → 接受 → 刷新持久化 → 品味页待确认减少 → 维度反馈 → 拒绝；页面控制台 0 错误。截图见 `outputs/ai-core-verification/`。
 
 ---
 
 ## Phase 2 视觉改版（2026-11）
 
-- 方向：Cinematheque / 私人电影资料馆，辅助现代电影品牌；黑白灰为主、低饱和红 #C83B35 点缀。
-- 首页：本地 AI-generated cinema still 作为全屏 Hero，海报叠放、品牌大字、统计条；下方切换暖白编辑式版面。
-- Archive：海报优先的 5 列资料馆墙，悬停显示笔记/评分/状态；新增 “The waiting room” 展示 6 部未归档片目。
-- Film Detail：深色 feature spread + 暖白 “The note / Archive reading” 跨页 + 深色六维坐标 + 暖白关联与证据。
-- Taste / Reflection / Map / Add Film：统一到同一套字体、发丝线、红色选中态与纸面变量。
-- 官方海报不可用；当前使用原创 poster studies 与一张 AI-generated Hero still（已裁掉生成水印），不是官方物料。
+- 方向：Cinematheque / 私人电影资料馆；黑白灰为主、低饱和红 #C83B35 点缀。
+- 首页：本地 cinema still 作为全屏 Hero；下方切换暖白编辑式版面。
+- Archive：海报优先的资料馆墙，悬停显示笔记 / 评分 / 状态。
+- Film Detail：深色 feature spread + 暖白 "The note" 跨页 + 深色六维坐标。
+- Taste / Reflection / Map / Add Film：统一字体、发丝线、红色选中态与纸面变量。
 
 ---
 
-## 已完成 / 未完成
-
-### 已完成
-
-- 五个主页面 + 影片详情 + 404。
-- 统一设计系统：炭黑 #111 / 暖白 #F2F0EB / 低饱和红 #C83B35、Serif 展示字、Monospace 数字、胶片颗粒、细分割线、深浅交替页面。
-- 10 部互相有关联的示例电影、完整笔记、主题 / 情绪 / 叙事 / 人物标签；另有 6 部待归档片目，Archive 新增 “The waiting room” 区块。
-- 每部影片的专属生成海报 + 图片失败回退；首页使用本地 AI-generated cinema still 作为品牌 Hero。
-- Add a Film 全流程真实写回；分析结果由输入内容与历史记录计算。
-- 六维审美画像、证据引文、置信度、逐维反馈与纠错时间线。
-- 可拖拽 / 缩放 / 选择节点的记忆图谱，节点与边均由记录派生。
-- Reflection 年度统计、月度图表、审美漂移、年鉴生成 / 下载 / 打印。
-- localStorage 持久化、跨标签页同步、重置演示数据、存储不可用提示。
-- 加载态（启动 / 分析 / 年鉴）、空状态（档案 / 筛选 / 图谱 / 画像 / 年鉴）、错误边界。
-
-### 本阶段明确未做
+## 尚未完成
 
 - 真实注册 / 登录、多用户、云端同步。
-- PostgreSQL / FastAPI 后端。
-- 真实 AI 模型或 DeepWorks Agent 工作流调用。
+- 全局限流（当前为单 isolate 内存实现，多实例需 KV / Durable Object）。
+- 公开部署前的访问控制与配额体系。
 - 个性化推荐 feed、社交 / 社区功能。
-- 真实票房 / 影评 / 用户调查数据；示例笔记均为演示而写。
-- 官方电影海报或 TMDB 图片（已预留 `posterUrl`；当前使用原创 poster studies 与一张 AI-generated Hero still，不是官方物料）。
-- 自动化测试套件与 CI。
-
----
-
-## 下一阶段建议
-
-1. **先接后端，再接模型**：用 FastAPI + PostgreSQL 复刻 `src/types.ts` 的数据契约；把 `analyseDraft` 的同步规则替换为服务端异步分析任务（`POST /records` → `job_id` → SSE 推送五阶段）。
-2. **保留确定性计算**：主题权重、六维分数、置信度、时间线 diff 继续由服务端代码计算；LLM 只负责"从笔记抽取证据"和"把证据讲成人话"，每条结论必须能指回原句（参见 `docs/agent-skill-spec.md`）。
-3. **认证与迁移**：匿名本地数据 → 登录后合并到账户；localStorage 作为离线缓存。
-4. **推荐**：基于已有主题 / 情绪向量做"有理由的 3 条"推荐，而不是黑盒排序。
-5. **真实海报**：接入 TMDB 图片时补 `posterUrl`，保留生成海报作为 fallback，并补齐版权署名。
-6. **质量**：为 `tasteEngine` / `analyst` / `graph` 增加单元测试；用 Playwright 固化当前演示路径。
-
-更细的接口、表结构与迁移建议见 [docs/frontend-architecture.md](docs/frontend-architecture.md)。
+- 把浏览器走查固化为 CI 中的端到端测试。

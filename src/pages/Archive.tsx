@@ -8,7 +8,7 @@ import { FilmStill } from '@/components/film/FilmStill'
 import { EmptyState } from '@/components/ui/Primitives'
 import { Rating } from '@/components/ui/Rating'
 import { Reveal } from '@/components/ui/Reveal'
-import { STATUS_LABELS } from '@/data/taxonomy'
+import { STATUS_LABELS, zhGenre, zhGenres } from '@/data/taxonomy'
 import { cn, formatLongDate, formatMinutes } from '@/lib/format'
 import { filmById } from '@/lib/tasteEngine'
 import type { WatchStatus } from '@/types'
@@ -16,12 +16,12 @@ import type { WatchStatus } from '@/types'
 type SortKey = 'recent' | 'added' | 'rating' | 'title' | 'year' | 'runtime'
 
 const SORT_LABELS: Record<SortKey, string> = {
-  recent: 'Recently watched',
-  added: 'Recently added',
-  rating: 'Highest rated',
-  title: 'Title A–Z',
-  year: 'Release year',
-  runtime: 'Longest film',
+  recent: '最近观看',
+  added: '最近添加',
+  rating: '评分最高',
+  title: '片名 A–Z',
+  year: '上映年份',
+  runtime: '片长最长',
 }
 
 export const Archive = () => {
@@ -112,15 +112,16 @@ export const Archive = () => {
   if (records.length === 0) {
     return (
       <div className="shell py-20">
-        <p className="kicker">02 / My Archive</p>
-        <h1 className="display-xl mt-5">Nothing catalogued yet.</h1>
+        <p className="kicker">02 / 我的片库</p>
+        <h1 className="display-xl mt-5">片库里还没有电影。</h1>
         <EmptyState
           className="mt-12"
-          title="The shelves are empty."
-          description="Your archive is a list of films you have actually finished, abandoned, or returned to. Start with one."
+          eyebrow="片库是空的"
+          title="这里还没有收藏电影"
+          description="添加第一部电影，开始建立你的私人电影记忆博物馆。你真正看完、没有看完或反复重看的电影，都会在这里留下位置。"
           action={
             <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-              <Plus size={14} /> Add a film
+              <Plus size={14} /> 添加第一部电影
             </button>
           }
         />
@@ -140,31 +141,30 @@ export const Archive = () => {
         <div className="shell pt-10 lg:pt-14">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="artifact-label">
-              <b>02</b> My archive
+              <b>02</b> 我的片库
             </p>
             <p className="folio">
-              {String(records.length).padStart(2, '0')} films kept · local storage
+              {records.length} 部电影 · 保存在这台设备
             </p>
           </div>
 
           <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-8 border-b border-ink/10 pb-8">
             <div className="col-span-12 lg:col-span-8">
-              <h1 className="font-display text-[clamp(3rem,7.6vw,6.8rem)] leading-[0.86] tracking-[-0.03em]">
-                The archive.
+              <h1 className="font-zh-title text-[clamp(2.8rem,6.6vw,5.6rem)] leading-[1.06] tracking-[-0.01em]">
+                我的片库。
               </h1>
-              <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-                <p className="zh-title text-[15px] text-ink/75">电影收藏</p>
-                <span className="hidden h-3 w-px bg-white/20 sm:block" />
-                <p className="measure text-[14px] leading-relaxed text-taupe">
-                  Every film you kept, with the date, the rating, and the paragraph you wrote after
-                  the credits. Search it like a memory, not a spreadsheet.
-                </p>
-              </div>
+              <p className="mt-2 font-display text-[clamp(1.5rem,2.8vw,2.4rem)] italic leading-none text-ink/50">
+                The archive.
+              </p>
+              <p className="measure mt-4 text-[15.5px] leading-[1.9] text-taupe">
+                每一部留下的电影，都带着观看日期、评分，以及你在片尾字幕之后写下的那一段话。
+                像检索记忆一样检索它，而不是像表格。
+              </p>
             </div>
 
             <div className="col-span-12 flex flex-wrap items-end justify-between gap-8 lg:col-span-4 lg:justify-end">
               <div>
-                <p className="micro-sm text-taupe">Average rating</p>
+                <p className="text-[12px] tracking-[0.06em] text-taupe">平均评分</p>
                 <p className="num mt-1.5 text-[2.6rem] leading-none text-ink">
                   {snapshot.averageRating.toFixed(1)}
                   <span className="ml-1 text-[15px] text-taupe">/ 5</span>
@@ -172,12 +172,12 @@ export const Archive = () => {
                 <Rating value={snapshot.averageRating} size={9} className="mt-2" />
               </div>
               <div>
-                <p className="micro-sm text-taupe">Time in the dark</p>
+                <p className="text-[12px] tracking-[0.06em] text-taupe">累计观影时长</p>
                 <p className="num mt-1.5 text-[2.6rem] leading-none text-ink">
                   {(snapshot.totalMinutes / 60).toFixed(1)}
-                  <span className="ml-1 text-[15px] text-taupe">h</span>
+                  <span className="ml-1 text-[15px] text-taupe">小时</span>
                 </p>
-                <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.14em] text-taupe">
+                <p className="mt-2 text-[12px] tracking-[0.04em] text-taupe">
                   {formatMinutes(snapshot.totalMinutes)}
                 </p>
               </div>
@@ -191,15 +191,15 @@ export const Archive = () => {
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search titles, directors, notes, moods…"
-                className="w-full border-b border-ink/20 bg-transparent pb-2 font-display text-[1.35rem] text-ink outline-none placeholder:text-taupe/45 focus:border-brass focus-visible:outline-none sm:text-[1.6rem]"
-                aria-label="Search the archive"
+                placeholder="搜索片名、导演、笔记或情绪……"
+                className="w-full border-b border-ink/20 bg-transparent pb-2 font-zh-body text-[1.15rem] text-ink outline-none placeholder:text-taupe/45 focus:border-brass focus-visible:outline-none sm:text-[1.35rem]"
+                aria-label="搜索我的片库"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery('')}
-                  aria-label="Clear search"
+                  aria-label="清空搜索"
                   className="text-taupe hover:text-ink"
                 >
                   <X size={14} />
@@ -209,12 +209,12 @@ export const Archive = () => {
 
             <div className="flex shrink-0 flex-wrap items-center gap-4">
               <label className="flex items-center gap-2">
-                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-taupe">Sort</span>
+                <span className="text-[12.5px] tracking-[0.04em] text-taupe">排序</span>
                 <select
                   value={sort}
                   onChange={(event) => setSort(event.target.value as SortKey)}
-                  className="select-mini select-bare w-[168px]"
-                  aria-label="Sort films"
+                  className="select-mini select-bare w-[150px]"
+                  aria-label="排序方式"
                 >
                   {(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
                     <option key={key} value={key}>
@@ -230,14 +230,14 @@ export const Archive = () => {
                     key={mode}
                     type="button"
                     onClick={() => setView(mode)}
-                    aria-label={`${mode} view`}
+                    aria-label={mode === 'grid' ? '海报视图' : '索引视图'}
                     aria-pressed={view === mode}
                     className={cn(
-                      'relative pb-1 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors',
+                      'relative pb-1 text-[12px] tracking-[0.04em] transition-colors',
                       view === mode ? 'text-ink' : 'text-taupe hover:text-ink',
                     )}
                   >
-                    {mode === 'grid' ? 'Shelf' : 'Index'}
+                    {mode === 'grid' ? '海报' : '索引'}
                     <span
                       className={cn(
                         'absolute inset-x-0 bottom-0 h-px bg-brass transition-transform duration-400',
@@ -252,7 +252,7 @@ export const Archive = () => {
 
           {/* Filters — text, not pills */}
           <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-ink/10 py-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-taupe">Genre</span>
+            <span className="text-[13px] tracking-[0.04em] text-taupe">类型</span>
             {['all', ...genres].map((g) => {
               const active = genre === g
               return (
@@ -261,12 +261,12 @@ export const Archive = () => {
                   type="button"
                   onClick={() => setGenre(g === 'all' ? 'all' : genre === g ? 'all' : g)}
                   className={cn(
-                    'relative pb-0.5 text-[12px] uppercase tracking-[0.16em] transition-colors',
+                    'relative pb-0.5 text-[13.5px] tracking-[0.03em] transition-colors',
                     active ? 'text-ink' : 'text-taupe/65 hover:text-ink',
                   )}
                   aria-pressed={active}
                 >
-                  {g === 'all' ? 'All' : g}
+                  {g === 'all' ? '全部' : zhGenre(g)}
                   <span
                     className={cn(
                       'absolute inset-x-0 -bottom-[2px] h-px bg-brass transition-transform',
@@ -283,12 +283,12 @@ export const Archive = () => {
               value={decade}
               onChange={(event) => setDecade(event.target.value)}
               className="select-mini select-bare"
-              aria-label="Filter by decade"
+              aria-label="按年代筛选"
             >
-              <option value="all">All decades</option>
+              <option value="all">全部年代</option>
               {decades.map((d) => (
                 <option key={d} value={String(d)}>
-                  {d}s
+                  {d} 年代
                 </option>
               ))}
             </select>
@@ -296,38 +296,38 @@ export const Archive = () => {
               value={rating}
               onChange={(event) => setRating(event.target.value)}
               className="select-mini select-bare"
-              aria-label="Filter by minimum rating"
+              aria-label="按最低评分筛选"
             >
-              <option value="all">Any rating</option>
-              <option value="3.5">3.5 and up</option>
-              <option value="4">4.0 and up</option>
-              <option value="4.5">4.5 and up</option>
+              <option value="all">全部评分</option>
+              <option value="3.5">3.5 分以上</option>
+              <option value="4">4.0 分以上</option>
+              <option value="4.5">4.5 分以上</option>
             </select>
             <select
               value={status}
               onChange={(event) => setStatus(event.target.value as 'all' | WatchStatus)}
               className="select-mini select-bare"
-              aria-label="Filter by status"
+              aria-label="按观看状态筛选"
             >
-              <option value="all">Any status</option>
+              <option value="all">全部状态</option>
               {(Object.keys(STATUS_LABELS) as WatchStatus[]).map((key) => (
                 <option key={key} value={key}>
-                  {STATUS_LABELS[key].label}
+                  {STATUS_LABELS[key].zh}
                 </option>
               ))}
             </select>
 
             <div className="ml-auto flex items-center gap-4">
-              <span className="font-mono text-[12px] uppercase tracking-[0.14em] text-taupe">
-                {filtered.length} {filtered.length === 1 ? 'film' : 'films'}
+              <span className="text-[12.5px] tracking-[0.04em] text-taupe">
+                {filtered.length} 部电影
               </span>
               {activeFilters > 0 && (
                 <button
                   type="button"
                   onClick={clearAll}
-                  className="font-mono text-[11px] uppercase tracking-[0.16em] text-brass underline underline-offset-4 hover:text-brass-soft"
+                  className="text-[12px] tracking-[0.04em] text-brass underline underline-offset-4 hover:text-brass-soft"
                 >
-                  Clear ({activeFilters})
+                  清空筛选（{activeFilters}）
                 </button>
               )}
             </div>
@@ -344,10 +344,10 @@ export const Archive = () => {
             <Reveal>
               <div className="flex flex-wrap items-end justify-between gap-3 pb-4">
                 <p className="artifact-label">
-                  <b>Featured</b> The film at the centre of the shelf
+                  <b>本期精选</b> 片库中央的那部电影
                 </p>
                 <Link to={`/archive/${featured.film.id}`} className="link-rule text-brass hover:text-brass-soft">
-                  Open the entry <ArrowUpRight size={12} />
+                  打开完整记录 <ArrowUpRight size={12} />
                 </Link>
               </div>
 
@@ -361,23 +361,26 @@ export const Archive = () => {
                 <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8 lg:p-10">
                   <div className="flex flex-wrap items-end justify-between gap-6">
                     <div className="max-w-3xl">
-                      <p className="micro-sm text-paper/60">
-                        {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].label}
+                      <p className="text-[12.5px] tracking-[0.06em] text-paper/60">
+                        {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].zh}
                       </p>
                       <h2 className="mt-2 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[0.94] tracking-[-0.02em] text-paper">
                         {featured.film.title}
                       </h2>
-                      <p className="mt-2 text-[12.5px] uppercase tracking-[0.2em] text-paper/60">
-                        {featured.film.director} · {featured.film.year} · {featured.film.genres.join(' / ')}
+                      {featured.film.titleZh && (
+                        <p className="mt-1 text-[15px] tracking-[0.04em] text-paper/70">{featured.film.titleZh}</p>
+                      )}
+                      <p className="mt-2 text-[12.5px] tracking-[0.08em] text-paper/60">
+                        {featured.film.director} · {featured.film.year} · {zhGenres(featured.film.genres)}
                       </p>
-                      <p className="mt-4 line-clamp-2 max-w-xl font-display text-[1.05rem] italic leading-snug text-paper/70">
+                      <p className="mt-4 line-clamp-2 max-w-xl font-zh-body text-[15px] leading-[1.9] text-paper/75">
                         “{featured.record.reflection}”
                       </p>
                     </div>
                     <div className="hidden shrink-0 text-right sm:block">
                       <Rating value={featured.record.rating} size={13} showValue />
-                      <p className="mt-2 font-mono text-[12px] uppercase tracking-[0.16em] text-paper/60">
-                        {featured.film.runtime} min
+                      <p className="mt-2 text-[12px] tracking-[0.04em] text-paper/60">
+                        {formatMinutes(featured.film.runtime)}
                       </p>
                     </div>
                   </div>
@@ -395,16 +398,16 @@ export const Archive = () => {
         <div className="shell py-12 lg:py-16">
           {filtered.length === 0 ? (
             <EmptyState
-              eyebrow="No matches"
-              title="Nothing in the archive answers to that."
-              description="Try a looser search, or add the film if it is missing."
+              eyebrow="没有匹配结果"
+              title="没有找到符合条件的电影"
+              description="换一个更宽松的关键词，或者把这部电影添加到片库。"
               action={
                 <div className="flex flex-wrap justify-center gap-3">
                   <button type="button" onClick={clearAll} className="btn btn-ghost">
-                    Clear filters
+                    清空筛选
                   </button>
                   <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-                    <Plus size={13} /> Add a film
+                    <Plus size={13} /> 添加电影
                   </button>
                 </div>
               }
@@ -414,10 +417,10 @@ export const Archive = () => {
               <Reveal>
                 <div className="flex flex-wrap items-end justify-between gap-3 border-b border-ink/10 pb-4">
                   <p className="artifact-label">
-                    <b>{featured ? '02' : '01'}</b> The shelf
+                    <b>{featured ? '02' : '01'}</b> 片库陈列
                   </p>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-taupe">
-                    Click a frame to read the note
+                  <p className="text-[12px] tracking-[0.04em] text-taupe">
+                    点击海报，查看这篇观影笔记
                   </p>
                 </div>
               </Reveal>
@@ -443,27 +446,27 @@ export const Archive = () => {
                 <span className="flex items-center gap-5">
                   <Plus size={20} strokeWidth={1} className="text-brass transition-transform group-hover:rotate-90" />
                   <span>
-                    <span className="block font-display text-[1.5rem] leading-none text-ink">
-                      Add a film to the archive
+                    <span className="block font-zh-title text-[1.3rem] leading-snug text-ink">
+                      添加一部电影到片库
                     </span>
-                    <span className="mt-1.5 block font-mono text-[11px] uppercase tracking-[0.2em] text-taupe">
-                      A new frame, a new note, a new reading
+                    <span className="mt-1.5 block text-[12px] tracking-[0.06em] text-taupe">
+                      新的一帧，一段新的笔记，一次新的解读
                     </span>
                   </span>
                 </span>
-                <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-brass sm:block">
-                  Open the entry form →
+                <span className="hidden text-[12px] tracking-[0.06em] text-brass sm:block">
+                  打开添加表单 →
                 </span>
               </button>
             </>
           ) : (
             <div>
-              <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-ink/20 pb-2 font-mono text-[11px] uppercase tracking-[0.18em] text-taupe sm:grid">
-                <span>No.</span>
-                <span>Frame</span>
-                <span>Film</span>
-                <span>Rating</span>
-                <span className="text-right">Watched</span>
+              <div className="hidden grid-cols-[3.5rem_7rem_1fr_8rem_7rem] gap-4 border-b border-ink/20 pb-2 text-[12px] tracking-[0.06em] text-taupe sm:grid">
+                <span>编号</span>
+                <span>画面</span>
+                <span>电影</span>
+                <span>评分</span>
+                <span className="text-right">观看日期</span>
               </div>
               {filtered.map(({ record, film }, index) => (
                 <FilmIndexRow key={record.id} film={film} record={record} index={index + 1} />
@@ -483,12 +486,12 @@ export const Archive = () => {
               <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-4">
                 <div>
                   <p className="artifact-label">
-                    <b>Not yet archived</b>
+                    <b>尚未收录</b>
                   </p>
-                  <h2 className="mt-3 t-head">The waiting room.</h2>
+                  <h2 className="mt-3 t-head">候场室。</h2>
                 </div>
-                <p className="max-w-sm text-[13px] leading-relaxed text-taupe">
-                  Films already in the catalogue, waiting for a memory. Open one to record it.
+                <p className="max-w-sm text-[13.5px] leading-[1.85] text-taupe">
+                  这些电影已经在片目里，只差一段属于你的记忆。打开其中一部，就可以开始记录。
                 </p>
               </div>
             </Reveal>
@@ -506,19 +509,19 @@ export const Archive = () => {
 
       <section className="chapter--night border-t border-paper/10">
         <div className="shell flex flex-wrap items-center justify-between gap-4 py-8">
-          <p className="text-[13px] text-paper-dim">
-            Looking for a film that is not here?{' '}
+          <p className="text-[13.5px] leading-relaxed text-paper-dim">
+            找不到想找的电影？{' '}
             <button
               type="button"
               onClick={() => openAdd()}
               className="text-paper underline decoration-paper/40 underline-offset-4 hover:text-paper/80"
             >
-              Add it to the archive
+              把它添加到片库
             </button>
-            .
+            。
           </p>
           <Link to="/map" className="link-rule text-paper-dim hover:text-paper">
-            See them as a memory map <ArrowRight size={12} />
+            在记忆地图中查看它们 <ArrowRight size={12} />
           </Link>
         </div>
       </section>

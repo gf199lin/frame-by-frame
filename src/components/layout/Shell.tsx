@@ -5,14 +5,7 @@ import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { cn } from '@/lib/format'
 import { useLockBody } from '@/components/ui/Toast'
-
-const NAV = [
-  { to: '/', label: 'My Cinema', zh: '我的影院', index: '01' },
-  { to: '/archive', label: 'My Archive', zh: '电影档案', index: '02' },
-  { to: '/map', label: 'Memory Map', zh: '记忆地图', index: '03' },
-  { to: '/taste', label: 'My Taste', zh: 'AI 眼中的我', index: '04' },
-  { to: '/reflection', label: 'Reflection', zh: '电影回忆', index: '05' },
-]
+import { NAV, filmCount, pageTitle } from '@/i18n/zh-CN'
 
 const Mark = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 30 30" className={className} aria-hidden="true">
@@ -25,15 +18,15 @@ const Mark = ({ className }: { className?: string }) => (
 )
 
 const Brand = ({ compact = false }: { compact?: boolean }) => (
-  <Link to="/" className="group flex items-center gap-3" aria-label="Frame by Frame — home">
+  <Link to="/" className="group flex items-center gap-3" aria-label="Frame by Frame — 返回首页">
     <Mark className="h-7 w-7 text-ink transition-colors group-hover:text-taupe" />
     <span className="flex flex-col">
       <span className="font-display text-[20px] leading-none tracking-[0.005em] text-ink sm:text-[23px]">
         Frame <span className="italic text-taupe">by</span> Frame
       </span>
       {!compact && (
-        <span className="mt-[6px] hidden font-mono text-[10px] uppercase tracking-[0.18em] text-taupe sm:block">
-          Private cinema archive · Est. 2026
+        <span className="mt-[6px] hidden text-[12px] tracking-[0.08em] text-taupe sm:block">
+          私人电影记忆博物馆 · Est. 2026
         </span>
       )}
     </span>
@@ -54,9 +47,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
     const current = NAV.find((item) =>
       item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to),
     )
-    document.title = current
-      ? `${current.label} · Frame by Frame`
-      : 'Frame by Frame — A Personal Cinema Memory Museum'
+    document.title = pageTitle(current?.label)
   }, [location.pathname])
 
   const isActive = (to: string) =>
@@ -68,7 +59,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[130] focus:bg-paper focus:px-4 focus:py-2 focus:text-ink"
       >
-        Skip to content
+        跳到主要内容
       </a>
 
       <header className="sticky top-0 z-[60] border-b border-ink/10 bg-paper/90 backdrop-blur-xl">
@@ -78,7 +69,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             <Brand />
           </div>
 
-          <nav className="hidden items-stretch xl:flex" aria-label="Primary">
+          <nav className="hidden items-stretch xl:flex" aria-label="主导航">
             {NAV.map((item) => (
               <NavLink
                 key={item.to}
@@ -97,10 +88,17 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   >
                     {item.index}
                   </span>
-                  <span className={cn("text-[15px] uppercase leading-none tracking-[0.1em]", isActive(item.to) && "font-medium")}>{item.label}</span>
+                  <span
+                    className={cn(
+                      'font-zh-ui text-[15.5px] leading-none tracking-[0.04em]',
+                      isActive(item.to) ? 'font-semibold text-ink' : 'font-medium',
+                    )}
+                  >
+                    {item.label}
+                  </span>
                 </span>
-                <span className="mt-[5px] text-[12px] tracking-[0.08em] text-taupe">
-                  {item.zh}
+                <span className="mt-[6px] text-[10px] uppercase tracking-[0.16em] text-taupe/85">
+                  {item.en}
                 </span>
                 <span
                   className={cn(
@@ -114,28 +112,26 @@ export const Shell = ({ children }: { children: ReactNode }) => {
 
           <div className="flex items-center gap-4">
             <div className="hidden text-right 2xl:block">
-              <p className="font-mono text-[12px] tracking-[0.18em] text-ink/80">
-                {String(records.length).padStart(2, '0')} FILMS
+              <p className="text-[12.5px] font-medium tracking-[0.04em] text-ink/80">
+                {filmCount(records.length)}
               </p>
-              <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-taupe/85">
-                Local archive
-              </p>
+              <p className="mt-1 text-[11px] tracking-[0.12em] text-taupe/85">本地片库</p>
             </div>
             <button
               type="button"
               onClick={() => openAdd()}
-              className="btn btn-primary h-10 shrink-0 px-3 text-[12.5px] sm:px-5"
-              aria-label="Add a film"
+              className="btn btn-primary h-10 shrink-0 px-3 text-[13.5px] sm:px-5"
+              aria-label="添加电影"
             >
               <Plus size={13} strokeWidth={1.6} />
-              <span className="hidden sm:inline">Add a Film</span>
-              <span className="sm:hidden">Add</span>
+              <span className="hidden sm:inline">添加电影</span>
+              <span className="sm:hidden">添加</span>
             </button>
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
               className="icon-btn xl:hidden"
-              aria-label="Open menu"
+              aria-label="打开菜单"
               aria-expanded={mobileOpen}
             >
               <Menu size={17} />
@@ -150,17 +146,17 @@ export const Shell = ({ children }: { children: ReactNode }) => {
           <div className="h-px w-full bg-ink/55" />
           <div className="flex h-[76px] items-center justify-between border-b border-ink/10 px-5">
             <Brand compact />
-            <button type="button" onClick={() => setMobileOpen(false)} className="icon-btn" aria-label="Close menu">
+            <button type="button" onClick={() => setMobileOpen(false)} className="icon-btn" aria-label="关闭菜单">
               <X size={17} />
             </button>
           </div>
-          <nav className="flex-1 overflow-y-auto px-5 py-6" aria-label="Mobile">
+          <nav className="flex-1 overflow-y-auto px-5 py-6" aria-label="移动端导航">
             {NAV.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
                 className={cn(
-                  'flex items-baseline justify-between border-b border-ink/10 py-6',
+                  'flex items-center justify-between border-b border-ink/10 py-5',
                   isActive(item.to) ? 'text-ink' : 'text-ink/80',
                 )}
               >
@@ -168,26 +164,31 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   <span className="font-mono text-[12px] tracking-[0.15em] text-taupe">
                     {item.index}
                   </span>
-                  <span className="font-display text-[2.1rem] leading-none">{item.label}</span>
+                  <span>
+                    <span className="font-zh-title block text-[1.75rem] leading-none">{item.label}</span>
+                    <span className="mt-2 block text-[10.5px] uppercase tracking-[0.18em] text-taupe">
+                      {item.en}
+                    </span>
+                  </span>
                 </span>
-                <span className="zh-label text-[13px] text-ink/70">{item.zh}</span>
+                {isActive(item.to) && <span className="h-1.5 w-1.5 rounded-full bg-ink" aria-hidden="true" />}
               </NavLink>
             ))}
           </nav>
           <div className="border-t border-ink/10 px-5 py-6">
             <button type="button" onClick={() => openAdd()} className="btn btn-primary w-full">
-              <Plus size={14} /> Add a Film
+              <Plus size={14} /> 添加电影
             </button>
-            <p className="mt-4 text-center font-mono text-[12px] tracking-[0.16em] text-taupe">
-              {String(records.length).padStart(2, '0')} FILMS IN YOUR LOCAL ARCHIVE
+            <p className="mt-4 text-center text-[12.5px] tracking-[0.08em] text-taupe">
+              {filmCount(records.length)} · 保存在这台设备
             </p>
           </div>
         </div>
       )}
 
       {!storageAvailable && (
-        <div className="border-b border-ink/25 bg-ink/[0.06] px-5 py-2 text-center text-[12px] uppercase tracking-[0.16em] text-ink">
-          Local storage is unavailable — records will not survive a refresh in this browser.
+        <div className="border-b border-ink/25 bg-ink/[0.06] px-5 py-2 text-center text-[12.5px] tracking-[0.04em] text-ink">
+          浏览器本地存储不可用，刷新页面后本次记录将无法保留。
         </div>
       )}
 
@@ -199,26 +200,25 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         <div className="shell py-16 lg:py-20">
           <div className="grid gap-12 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1fr] lg:gap-16">
             <div>
-              <p className="kicker">Frame by Frame · Vol. 01 / 2026</p>
+              <p className="kicker">Frame by Frame · 第一卷 / 2026</p>
               <p className="mt-6 max-w-md font-display text-[2.3rem] leading-[1.02] tracking-[-0.02em] text-paper sm:text-[2.8rem]">
                 Every film leaves a frame.
                 <br />
                 <span className="italic text-paper-dim">Every frame tells your story.</span>
               </p>
-              <p className="mt-5 max-w-xs text-[13.5px] leading-relaxed text-paper-dim">
-                An independent archive of the films you keep, the notes you write, and the person
-                they reveal. Local-first; your archive lives in this browser, not on a server.
+              <p className="mt-5 max-w-xs text-[14px] leading-[1.9] text-paper-dim">
+                每一部电影都留下一帧，每一帧都在讲述你的故事。这是一座只属于你的电影记忆博物馆：片库、笔记与审美解读都保存在这台设备上，不会上传到服务器。
               </p>
             </div>
 
-            <div className="lg:pl-6 lg:border-l lg:border-paper/15">
-              <p className="micro-sm text-paper-dim">The Museum</p>
+            <div className="lg:border-l lg:border-paper/15 lg:pl-6">
+              <p className="text-[12.5px] font-medium tracking-[0.08em] text-paper-dim">馆内导航</p>
               <ul className="mt-5 space-y-3">
                 {NAV.map((item) => (
                   <li key={item.to}>
                     <Link
                       to={item.to}
-                      className="link-underline text-[13.5px] text-paper-dim transition-colors hover:text-paper"
+                      className="link-underline text-[14px] text-paper-dim transition-colors hover:text-paper"
                     >
                       {item.label}
                     </Link>
@@ -227,37 +227,32 @@ export const Shell = ({ children }: { children: ReactNode }) => {
               </ul>
             </div>
 
-            <div className="lg:pl-6 lg:border-l lg:border-paper/15">
-              <p className="micro-sm text-paper-dim">On the Record</p>
-              <ul className="mt-5 space-y-3 text-[13.5px] text-paper-dim">
-                <li>{String(records.length).padStart(2, '0')} films archived</li>
-                <li>Local storage · v1</li>
-                <li>No account required</li>
-                <li className="text-paper-dim">Mock AI · not a live model</li>
+            <div className="lg:border-l lg:border-paper/15 lg:pl-6">
+              <p className="text-[12.5px] font-medium tracking-[0.08em] text-paper-dim">片库记录</p>
+              <ul className="mt-5 space-y-3 text-[14px] leading-relaxed text-paper-dim">
+                <li>{filmCount(records.length)}已收录</li>
+                <li>本地存储 · 版本 2</li>
+                <li>无需注册账号</li>
+                <li className="text-paper-dim">仅在你授权后调用在线 AI，随时可关闭</li>
               </ul>
             </div>
 
-            <div className="lg:pl-6 lg:border-l lg:border-paper/15">
-              <p className="micro-sm text-paper-dim">A Note on the AI</p>
-              <p className="mt-5 text-[13.5px] leading-relaxed text-paper-dim">
-                The taste readings in this build are produced by a transparent local engine:
-                weighted ratings, note length, and theme overlap. No API key, no model call, and no
-                claim that a model has read your mind.
+            <div className="lg:border-l lg:border-paper/15 lg:pl-6">
+              <p className="text-[12.5px] font-medium tracking-[0.08em] text-paper-dim">关于 AI</p>
+              <p className="mt-5 text-[13.5px] leading-[1.9] text-paper-dim">
+                只有你主动授权后，才会把这一次记录发送给已配置的在线 AI 服务，生成情绪、主题和六维证据。未授权或服务未连接时不会生成任何 AI 解读；你的原始笔记始终只保存在本机。每条判断都带有置信度与原句依据，你可以同意、质疑或修正。
               </p>
-              <p className="mt-4 text-[12.5px] leading-relaxed text-paper-dim/60">
-                Posters and scene images are official film artwork sourced from TMDB where
-                available, or a verified local copy of the official release poster. Artwork © the
-                respective rights holders; shown for identification only. No generated imagery is
-                used for a real film.
+              <p className="mt-4 text-[12.5px] leading-[1.8] text-paper-dim/60">
+                你的笔记默认只保存在本机浏览器。勾选同意后，单次分析所需的笔记、评分和少量相关旧片摘要才会发送给在线 AI 服务；模型密钥只保存在服务端。海报与剧照来自 TMDB 的官方影片图片，或经过核验的官方海报本地副本。
               </p>
-              <p className="mt-2 text-[12.5px] leading-relaxed text-paper-dim/50">
-                This product uses the TMDB API but is not endorsed or certified by TMDB.
+              <p className="mt-2 text-[12.5px] leading-[1.8] text-paper-dim/50">
+                本产品使用 TMDB API，但未获得 TMDB 的认可或认证。
               </p>
               <div className="mt-6">
                 {confirmReset ? (
                   <div className="border border-paper/20 p-3">
-                    <p className="text-[13px] leading-relaxed text-paper-dim">
-                      Reset to the ten sample films? Your own records will be removed.
+                    <p className="text-[13px] leading-[1.8] text-paper-dim">
+                      要恢复为十部示例电影吗？你自己添加的记录将被移除。
                     </p>
                     <div className="mt-3 flex gap-2">
                       <button
@@ -268,14 +263,14 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                         }}
                         className="btn btn-primary h-8 px-3 text-[12px]"
                       >
-                        Reset
+                        恢复示例
                       </button>
                       <button
                         type="button"
                         onClick={() => setConfirmReset(false)}
                         className="btn btn-ghost h-8 px-3 text-[12px]"
                       >
-                        Cancel
+                        取消
                       </button>
                     </div>
                   </div>
@@ -283,18 +278,18 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   <button
                     type="button"
                     onClick={() => setConfirmReset(true)}
-                    className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] text-paper-dim transition-colors hover:text-paper"
+                    className="inline-flex items-center gap-2 text-[12px] tracking-[0.08em] text-paper-dim transition-colors hover:text-paper"
                   >
-                    <RotateCcw size={11} /> Reset demo data
+                    <RotateCcw size={11} /> 恢复示例数据
                   </button>
                 )}
               </div>
             </div>
           </div>
 
-          <div className="mt-16 flex flex-col gap-3 border-t border-paper/15 pt-6 font-mono text-[12px] uppercase tracking-[0.18em] text-paper-dim sm:flex-row sm:items-center sm:justify-between">
-            <p>© 2026 Frame by Frame · A student prototype</p>
-            <p>Built for 滴普杯 · DeepWorks</p>
+          <div className="mt-16 flex flex-col gap-3 border-t border-paper/15 pt-6 text-[12px] tracking-[0.08em] text-paper-dim sm:flex-row sm:items-center sm:justify-between">
+            <p>© 2026 Frame by Frame · 学生原型</p>
+            <p>为滴普杯 · DeepWorks 而作</p>
           </div>
         </div>
       </footer>

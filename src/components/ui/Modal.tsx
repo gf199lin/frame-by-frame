@@ -46,7 +46,7 @@ export const Modal = ({
     <div className="fixed inset-0 z-[100] flex items-stretch justify-center overflow-y-auto bg-black/75 p-0 backdrop-blur-[6px] sm:items-start sm:p-6">
       <button
         type="button"
-        aria-label="Close dialog"
+        aria-label="关闭对话框"
         className="absolute inset-0 cursor-default"
         onClick={onClose}
         tabIndex={-1}
@@ -65,7 +65,7 @@ export const Modal = ({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="关闭"
             className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center border border-paper/30 bg-[#211e19]/90 text-paper-dim shadow-lg backdrop-blur transition-colors hover:border-paper/60 hover:text-paper"
           >
             <X size={16} />

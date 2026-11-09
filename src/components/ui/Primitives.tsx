@@ -14,7 +14,7 @@ export const SectionLabel = ({
 }) => (
   <div className={cn('flex items-center gap-3 text-taupe', className)}>
     {index && <span className="font-mono text-[12px] tracking-[0.2em] text-brass">{index}</span>}
-    <span className="font-mono text-[12px] uppercase tracking-[0.24em]">{children}</span>
+    <span className="font-zh-ui text-[12.5px] tracking-[0.08em]">{children}</span>
     <span className="h-px flex-1 bg-white/10" />
   </div>
 )
@@ -44,9 +44,9 @@ export const EmptyState = ({
       )}
     >
       {eyebrow && <p className={cn('micro mb-4', light ? 'text-brass' : 'text-brass/80')}>{eyebrow}</p>}
-      <h3 className={cn('font-display text-3xl', light ? 'text-ink' : 'text-ink')}>{title}</h3>
+      <h3 className={cn('font-zh-title text-[1.7rem] leading-snug', light ? 'text-ink' : 'text-ink')}>{title}</h3>
       {description && (
-        <p className={cn('mt-3 max-w-md text-sm leading-relaxed', light ? 'text-ink/70' : 'text-ink-dim')}>
+        <p className={cn('mt-3 max-w-md text-[15px] leading-[1.85]', light ? 'text-ink/70' : 'text-ink-dim')}>
           {description}
         </p>
       )}

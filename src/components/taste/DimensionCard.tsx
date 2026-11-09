@@ -1,20 +1,18 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Check, MessageSquare, Pencil, X } from 'lucide-react'
-import type { DimensionFeedback, DimensionScore, EvidenceQuote } from '@/types'
-import { cn, percent } from '@/lib/format'
+import type { DimensionFeedback, DimensionProfile } from '@/types'
+import { cn, formatLongDate, percent } from '@/lib/format'
 import { PoleAxis } from './TasteRadar'
 import { Rating } from '../ui/Rating'
 
 export const DimensionCard = ({
   score,
-  evidence,
   feedback,
   onFeedback,
   className,
 }: {
-  score: DimensionScore
-  evidence: EvidenceQuote[]
+  score: DimensionProfile
   feedback?: DimensionFeedback
   onFeedback: (verdict: DimensionFeedback['verdict'], correction?: string) => void
   className?: string
@@ -22,12 +20,13 @@ export const DimensionCard = ({
   const [correcting, setCorrecting] = useState(false)
   const [text, setText] = useState('')
   const def = score.def
-  const leaning = score.value < 0.5 ? def.low : def.high
+  const leaning = score.value < 0.5 ? def.lowZh : def.highZh
   const leanPct = Math.round((score.value < 0.5 ? 1 - score.value : score.value) * 100)
   const adjustedConfidence =
     feedback?.verdict === 'corrected' || feedback?.verdict === 'not-quite'
       ? score.confidence * 0.84
       : score.confidence
+  const sufficient = score.sufficient
 
   return (
     <article className={cn('group border-t border-ink/10 py-7', className)}>
@@ -35,19 +34,25 @@ export const DimensionCard = ({
         <div className="flex items-baseline gap-4">
           <span className="font-mono text-[12px] tracking-[0.2em] text-brass/70">{def.index}</span>
           <div>
-            <h3 className="font-display text-[1.8rem] leading-none text-ink">{def.label}</h3>
-            <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[12.5px] uppercase tracking-[0.16em] text-taupe">
-              <span>{def.labelZh}</span>
+            <h3 className="font-zh-title text-[1.6rem] leading-tight text-ink">{def.labelZh}</h3>
+            <p className="mt-1.5 flex flex-wrap items-center gap-2 text-[12px] tracking-[0.06em] text-taupe">
+              <span className="uppercase tracking-[0.12em]">{def.label}</span>
               <span className="h-2 w-px bg-white/20" />
-              <span>{score.thin ? 'Still learning' : 'Reading established'}</span>
+              <span>
+                {sufficient ? `${score.sampleCount} 部电影的证据` : '样本不足'}
+              </span>
+              {score.lastUpdatedAt && (
+                <>
+                  <span className="h-2 w-px bg-white/20" />
+                  <span>{formatLongDate(score.lastUpdatedAt.slice(0, 10))}</span>
+                </>
+              )}
             </p>
           </div>
         </div>
 
         <div className="text-right">
-          <p className="font-mono text-[12px] uppercase tracking-[0.16em] text-taupe">
-            Confidence
-          </p>
+          <p className="text-[12px] tracking-[0.06em] text-taupe">置信度</p>
           <p className="num mt-0.5 text-[1.6rem] leading-none text-ink">
             {percent(score.confidence)}
             {adjustedConfidence !== score.confidence && (
@@ -61,30 +66,36 @@ export const DimensionCard = ({
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[1.3fr_1fr]">
         <div>
-          <PoleAxis value={score.value} low={def.low} high={def.high} />
+          <PoleAxis value={score.value} low={def.lowZh} high={def.highZh} />
           <div className="mt-4 flex items-baseline justify-between gap-4">
-            <p className="text-[14px] leading-relaxed text-ink/75">
-              Your archive leans{' '}
-              <span className="text-brass-soft">{leanPct}% toward {leaning.toLowerCase()}</span>.
+            <p className="text-[14.5px] leading-[1.85] text-ink/75">
+              {sufficient ? (
+                <>你的片库有 {leanPct}% 偏向「{leaning}」。</>
+              ) : (
+                <>
+                  目前只有 {score.sampleCount} 部电影的可用证据，还不足以判断你偏向「{leaning}」。
+                  继续记录，或确认更多 AI 分析。
+                </>
+              )}
               {' '}
               {def.note}
             </p>
-            <span className="shrink-0 font-mono text-[12.5px] text-taupe">
-              {score.strength < 0.15 ? 'faint' : score.strength < 0.4 ? 'clear' : 'strong'}
+            <span className="shrink-0 text-[12px] tracking-[0.06em] text-taupe">
+              {!sufficient ? '不下结论' : score.strength < 0.15 ? '微弱' : score.strength < 0.4 ? '清晰' : '强烈'}
             </span>
           </div>
 
           {feedback ? (
             <div className="mt-4 flex items-start gap-2 border-l border-brass/40 pl-3">
-              <span className="mt-[2px] text-[12px] uppercase tracking-[0.16em] text-brass">
+              <span className="mt-[2px] text-[12px] tracking-[0.06em] text-brass">
                 {feedback.verdict === 'agree'
-                  ? 'You agreed'
+                  ? '你同意了'
                   : feedback.verdict === 'not-quite'
-                    ? 'You pushed back'
-                    : 'You corrected this'}
+                    ? '你提出了异议'
+                    : '你做了修正'}
               </span>
               {feedback.correction && (
-                <p className="text-[13px] leading-relaxed text-ink/75">“{feedback.correction}”</p>
+                <p className="text-[13.5px] leading-relaxed text-ink/75">“{feedback.correction}”</p>
               )}
             </div>
           ) : null}
@@ -94,37 +105,37 @@ export const DimensionCard = ({
               type="button"
               onClick={() => onFeedback('agree')}
               className={cn(
-                'chip h-8 gap-1.5 text-[12px]',
+                'chip h-8 gap-1.5 text-[12.5px]',
                 feedback?.verdict === 'agree' && 'border-brass/40 bg-brass/10 text-brass-soft',
               )}
             >
-              <Check size={11} /> I agree
+              <Check size={11} /> 我同意
             </button>
             <button
               type="button"
               onClick={() => onFeedback('not-quite')}
               className={cn(
-                'chip h-8 gap-1.5 text-[12px]',
+                'chip h-8 gap-1.5 text-[12.5px]',
                 feedback?.verdict === 'not-quite' && 'border-ink/40 text-ink',
               )}
             >
-              <X size={11} /> Not quite
+              <X size={11} /> 不太像
             </button>
             <button
               type="button"
               onClick={() => setCorrecting((v) => !v)}
-              className="chip h-8 gap-1.5 text-[12px]"
+              className="chip h-8 gap-1.5 text-[12.5px]"
             >
-              <Pencil size={10} /> Let me correct you
+              <Pencil size={10} /> 让我来纠正
             </button>
           </div>
 
           {correcting && (
             <div className="mt-3">
               <label className="field-label" htmlFor={`correction-${def.key}`}>
-                <span>In your words</span>
-                <span className="normal-case tracking-normal text-taupe">
-                  Stored locally, not sent anywhere
+                <span>用你自己的话说</span>
+                <span className="text-[12px] font-normal tracking-normal text-taupe">
+                  只保存在本地
                 </span>
               </label>
               <textarea
@@ -132,8 +143,8 @@ export const DimensionCard = ({
                 value={text}
                 onChange={(event) => setText(event.target.value)}
                 rows={3}
-                className="input input-boxed text-[14px] leading-relaxed"
-                placeholder={`e.g. “I'm not drawn to ${def.low.toLowerCase()} — I just rewatch films from my childhood.”`}
+                className="input input-boxed text-[14.5px] leading-[1.8]"
+                placeholder={`例如：“我并不是偏爱${def.lowZh}，我只是会反复重看童年的电影。”`}
               />
               <div className="mt-2 flex items-center gap-2">
                 <button
@@ -144,16 +155,16 @@ export const DimensionCard = ({
                     setCorrecting(false)
                     setText('')
                   }}
-                  className="btn btn-primary h-8 px-3 text-[12px]"
+                  className="btn btn-primary h-8 px-3 text-[12.5px]"
                 >
-                  Save correction
+                  保存修正
                 </button>
                 <button
                   type="button"
                   onClick={() => setCorrecting(false)}
-                  className="btn btn-quiet h-8 text-[12px]"
+                  className="btn btn-quiet h-8 text-[12.5px]"
                 >
-                  Cancel
+                  取消
                 </button>
               </div>
             </div>
@@ -161,30 +172,35 @@ export const DimensionCard = ({
         </div>
 
         <div className="border-l-0 border-ink/10 lg:border-l lg:pl-5">
-          <p className="flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] text-taupe">
-            <MessageSquare size={10} /> Evidence from your notes
+          <p className="flex items-center gap-2 text-[12px] tracking-[0.06em] text-taupe">
+            <MessageSquare size={10} /> AI 给出的依据
           </p>
           <ul className="mt-3 space-y-4">
-            {evidence.map((item) => (
-              <li key={item.filmId}>
+            {score.aiEvidence.map((item) => (
+              <li key={`${item.recordId}-${item.dimension}`}>
                 <Link
                   to={`/archive/${item.filmId}`}
                   className="group/quote block border-b border-ink/[0.07] pb-3 last:border-0"
                 >
-                  <p className="font-display text-[15px] italic leading-relaxed text-ink/75 transition-colors group-hover/quote:text-ink">
-                    “{item.quote}”
-                  </p>
-                  <p className="mt-2 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-taupe">
+                  {item.quote && (
+                    <p className="font-zh-body text-[14.5px] leading-[1.85] text-ink/75 transition-colors group-hover/quote:text-ink">
+                      “{item.quote}”
+                    </p>
+                  )}
+                  <p className="mt-2 text-[12.5px] leading-[1.7] text-taupe">{item.evidence}</p>
+                  <p className="mt-2 flex flex-wrap items-center gap-2 text-[12px] tracking-[0.04em] text-taupe">
                     <span className="text-brass/80">{item.filmTitle}</span>
                     <span>·</span>
                     <Rating value={item.rating} size={8} />
+                    <span>·</span>
+                    <span>判断置信度 {percent(item.confidence)}</span>
                   </p>
                 </Link>
               </li>
             ))}
-            {evidence.length === 0 && (
-              <li className="text-[13px] leading-relaxed text-taupe">
-                Record a film with a written note and the evidence will appear here.
+            {score.aiEvidence.length === 0 && (
+              <li className="text-[13.5px] leading-[1.85] text-taupe">
+                这个维度还没有被你确认过的证据。确认一条 AI 分析后，依据会出现在这里。
               </li>
             )}
           </ul>

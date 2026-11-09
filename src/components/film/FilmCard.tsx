@@ -1,14 +1,15 @@
 import { Link } from 'react-router-dom'
 import { Bookmark, Star } from 'lucide-react'
 import type { Film, WatchRecord } from '@/types'
-import { STATUS_LABELS } from '@/data/taxonomy'
+import { STATUS_LABELS, zhGenres } from '@/data/taxonomy'
+import { directorOf } from '@/data/filmCopy'
 import { cn, formatRating, formatShortDate } from '@/lib/format'
 import { FilmPoster } from './FilmPoster'
 import { FilmStill } from './FilmStill'
 import { Rating } from '../ui/Rating'
 
 const statusText = (record: WatchRecord) =>
-  record.status === 'rewatched' ? 'Rewatch' : record.status === 'abandoned' ? 'Unfinished' : 'Watched'
+  record.status === 'rewatched' ? '重看' : record.status === 'abandoned' ? '未看完' : '看过'
 
 /**
  * The shelf entry: a wide memory frame, a hairline, then a small typographic
@@ -31,7 +32,7 @@ export const FilmCard = ({
     <Link
       to={`/archive/${film.id}`}
       className={cn('group block', className)}
-      aria-label={`${film.title}, ${film.year}, rated ${record.rating} out of 5`}
+      aria-label={`${film.title}，${film.year}，评分 ${record.rating} 分（满分 5 分）`}
     >
       <div className="relative">
         <FilmStill film={film} ratio="photo" />
@@ -44,17 +45,17 @@ export const FilmCard = ({
 
         <div className="absolute inset-0 flex flex-col justify-between bg-gradient-to-t from-black/90 via-black/20 to-transparent p-4 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
           <div className="flex items-center justify-between">
-            <span className="micro-sm text-paper/75">{STATUS_LABELS[record.status].label}</span>
+            <span className="text-[12px] tracking-[0.06em] text-paper/80">{STATUS_LABELS[record.status].zh}</span>
             <span className="inline-flex items-center gap-1 font-mono text-[12.5px] text-paper/80">
               <Star size={9} className="fill-brass text-brass" /> {formatRating(record.rating)}
             </span>
           </div>
           <div>
-            <p className="line-clamp-3 font-display text-[1.15rem] leading-snug text-paper/90">
+            <p className="line-clamp-3 font-zh-body text-[14.5px] leading-[1.8] text-paper/90">
               {record.reflection}
             </p>
-            <span className="micro-sm mt-3 inline-flex items-center gap-1.5 text-paper">
-              <Bookmark size={10} /> Open memory
+            <span className="mt-3 inline-flex items-center gap-1.5 text-[12px] tracking-[0.06em] text-paper">
+              <Bookmark size={10} /> 查看观影记忆
             </span>
           </div>
         </div>
@@ -70,13 +71,16 @@ export const FilmCard = ({
           >
             {film.title}
           </h3>
-          <p className="mt-1 truncate text-[12.5px] uppercase tracking-[0.14em] text-taupe">
-            {film.director} · {film.year}
+          {film.titleZh && (
+            <p className="mt-0.5 truncate text-[13px] tracking-[0.04em] text-ink/60">{film.titleZh}</p>
+          )}
+          <p className="mt-1 truncate text-[12px] tracking-[0.04em] text-taupe">
+            {directorOf(film)} · {film.year}
           </p>
         </div>
         <div className="shrink-0 text-right">
           <Rating value={record.rating} size={9} />
-          <p className="mt-1.5 font-mono text-[12px] tracking-[0.1em] text-taupe">
+          <p className="mt-1.5 font-mono text-[12px] tracking-[0.04em] text-taupe">
             {formatShortDate(record.watchedAt)}
           </p>
         </div>
@@ -108,14 +112,19 @@ export const FilmIndexRow = ({
       <span className="block truncate font-display text-[1.15rem] text-ink group-hover:text-taupe">
         {film.title}
       </span>
-      <span className="mt-0.5 block truncate text-[12.5px] uppercase tracking-[0.12em] text-taupe">
-        {film.director} · {film.year} · {film.genres.join(' / ')}
+      {film.titleZh && (
+        <span className="mt-0.5 block truncate text-[12.5px] tracking-[0.04em] text-ink/55">
+          {film.titleZh}
+        </span>
+      )}
+      <span className="mt-0.5 block truncate text-[12px] tracking-[0.04em] text-taupe">
+        {directorOf(film)} · {film.year} · {zhGenres(film.genres)}
       </span>
     </span>
     <span className="justify-self-end sm:justify-self-start">
       <Rating value={record.rating} size={9} showValue />
     </span>
-    <span className="hidden text-right font-mono text-[12px] uppercase tracking-[0.12em] text-taupe sm:block">
+    <span className="hidden text-right font-mono text-[12px] tracking-[0.04em] text-taupe sm:block">
       {formatShortDate(record.watchedAt)}
       <span className="mt-1 flex items-center justify-end gap-1 text-[11px] text-taupe">
         <span className="status-dot" />
@@ -135,8 +144,8 @@ export const WaitingRoomCard = ({
   <button type="button" onClick={onPick} className="group block text-left">
     <div className="relative">
       <FilmStill film={film} ratio="photo" className="opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
-      <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/60 px-2 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-paper/75 backdrop-blur">
-        To be seen
+      <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-ink/60 px-2 py-1.5 text-[11.5px] tracking-[0.04em] text-paper/80 backdrop-blur">
+        待收录
         <span className="text-brass">+</span>
       </span>
     </div>
@@ -144,8 +153,11 @@ export const WaitingRoomCard = ({
       <p className="truncate font-display text-[1.05rem] leading-tight text-ink/80 transition-colors group-hover:text-ink">
         {film.title}
       </p>
-      <p className="mt-0.5 truncate text-[12px] uppercase tracking-[0.12em] text-taupe/80">
-        {film.year} · {film.director}
+      {film.titleZh && (
+        <p className="truncate text-[12.5px] tracking-[0.04em] text-ink/55">{film.titleZh}</p>
+      )}
+      <p className="mt-0.5 truncate text-[12px] tracking-[0.04em] text-taupe/80">
+        {film.year} · {directorOf(film)}
       </p>
     </div>
   </button>

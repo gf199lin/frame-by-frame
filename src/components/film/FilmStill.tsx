@@ -69,8 +69,8 @@ export const FilmStill = ({
           sizes="(max-width: 640px) 100vw, (max-width: 1280px) 90vw, 1400px"
           alt={
             isPosterFallback
-              ? `${film.title} (${film.year}) official poster artwork`
-              : `${film.title} (${film.year}) official still`
+              ? `${film.title}（${film.year}）官方海报`
+              : `${film.title}（${film.year}）官方剧照`
           }
           width={image?.width ?? 1280}
           height={image?.height ?? 720}
@@ -109,7 +109,7 @@ export const FilmStill = ({
                 tone === 'paper' ? 'text-ink/60' : 'text-paper/40',
               )}
             >
-              Image unavailable
+              图片暂不可用
             </p>
             <p
               className={cn(

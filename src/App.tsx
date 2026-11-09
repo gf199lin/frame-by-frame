@@ -17,16 +17,16 @@ const BootScreen = () => (
     <div className="w-full max-w-[280px]">
       <div className="flex items-center justify-between">
         <p className="micro text-paper/50">Frame by Frame</p>
-        <p className="micro-sm text-paper-muted">Est. 2026</p>
+        <p className="micro-sm text-paper-muted">始于 2026</p>
       </div>
-      <p className="mt-5 font-display text-3xl leading-none text-paper">
-        Opening the archive<span className="text-paper">.</span>
+      <p className="mt-5 font-zh-title text-3xl leading-tight text-paper">
+        正在打开你的片库<span className="text-paper">。</span>
       </p>
       <div className="relative mt-8 h-px w-full overflow-hidden bg-white/15">
         <div className="absolute inset-y-0 left-0 w-1/3 animate-[boot_1.1s_ease-in-out_infinite] bg-paper" />
       </div>
-      <p className="mt-4 text-[12.5px] leading-relaxed text-paper-muted">
-        Reading your local archive. Nothing is sent to a server.
+      <p className="mt-4 text-[13px] leading-[1.8] text-paper-muted">
+        正在读取保存在这台设备上的片库，不会向服务器发送任何内容。
       </p>
     </div>
     <style>{`

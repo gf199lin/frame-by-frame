@@ -23,6 +23,9 @@ export type DimensionDef = {
   highZh: string
   question: string
   note: string
+  /** Chinese-first UI copy for the same dimension. */
+  questionZh?: string
+  noteZh?: string
 }
 
 export type ThemeId =
@@ -137,6 +140,8 @@ export type Film = {
   language: string
   tagline: string
   logline: string
+  /** 简体中文剧情简介；缺失时回退到原始英文 logline。 */
+  loglineZh?: string
   cast: string[]
   motif: PosterMotif
   palette: FilmPalette
@@ -165,6 +170,14 @@ export type AIMeta = {
   summary: string
   extractedFrom: 'seed' | 'local-engine' | 'backend'
   confidence: number
+  /**
+   * AI Core V1. Optional so that records written by the v1 storage schema keep
+   * loading unchanged: a missing value means "legacy record, never analysed".
+   */
+  status?: 'complete' | 'failed' | 'skipped' | 'pending'
+  model?: string
+  promptVersion?: string
+  analysedAt?: string
 }
 
 export type WatchRecord = {
@@ -199,6 +212,96 @@ export type TimelineVerdict = {
 export type TasteFeedbackMap = Partial<Record<DimensionKey, DimensionFeedback>>
 export type TimelineFeedbackMap = Record<string, TimelineVerdict>
 
+/* ------------------------------------------------------------------ */
+/*  AI Core V1 — analyses, evidence and corrections                    */
+/*  Original user data (records) is never overwritten by these types.   */
+/* ------------------------------------------------------------------ */
+
+export type TasteDirection = 'low' | 'high' | 'neutral'
+
+export type AIAnalysisVerdict = 'unreviewed' | 'accepted' | 'edited' | 'rejected'
+
+export type AIModelMeta = {
+  provider: string
+  model: string
+  promptVersion: string
+  analyzedAt: string
+  latencyMs?: number
+  inputChars?: number
+}
+
+/** One traceable claim that a film says something about one taste axis. */
+export type TasteContribution = {
+  dimension_id: DimensionKey
+  direction: TasteDirection
+  /** 0..1 — how strongly this single film leans toward `direction`. */
+  strength: number
+  /** 0..1 — model self-assessment for this specific claim. */
+  confidence: number
+  /** Why the model believes this, grounded in the user's own words. */
+  evidence: string
+  /** A short verbatim fragment of the user's note, when available. */
+  quote?: string
+  /** User can remove an individual claim without rejecting the whole analysis. */
+  userStatus?: 'kept' | 'removed'
+}
+
+export type AIObservedEmotion = { mood: MoodId; evidence: string }
+export type AIThemeFinding = { theme: ThemeId; evidence: string }
+
+export type AIRelatedFilm = {
+  filmId: string
+  relationship: string
+  explanation: string
+}
+
+export type AIFilmAnalysis = {
+  schemaVersion: 1
+  recordId: string
+  filmId: string
+  status: 'complete'
+  summary: string
+  observed_emotions: AIObservedEmotion[]
+  themes_identified: AIThemeFinding[]
+  narrative_observations: string[]
+  character_observations: string[]
+  visual_observations: string[]
+  liked: string[]
+  disliked: string[]
+  preference_evidence: TasteContribution[]
+  uncertainties: string[]
+  confidence: number
+  related_films: AIRelatedFilm[]
+  model: AIModelMeta
+  review: {
+    verdict: AIAnalysisVerdict
+    /** The user's own wording when they correct the reading. */
+    note?: string
+    updatedAt: string
+  }
+}
+
+export type TasteProfileEventChange = {
+  dimension: DimensionKey
+  before: number
+  after: number
+  beforeConfidence: number
+  afterConfidence: number
+}
+
+/** Append-only log of why the taste profile moved. */
+export type TasteProfileEvent = {
+  id: string
+  at: string
+  recordId?: string
+  filmTitle?: string
+  kind: 'accept' | 'edit' | 'reject' | 'delete' | 'correction'
+  filmCount: number
+  acceptedCount: number
+  changes: TasteProfileEventChange[]
+  reason: string
+}
+
 export type AppState = {
   version: number
   /** Seed records and user records live in one list. */
@@ -210,6 +313,14 @@ export type AppState = {
   /** Free-form notes the user writes when correcting the AI. */
   corrections: Array<{ id: string; scope: string; text: string; createdAt: string }>
   yearbookGenerations: string[]
+  /** AI analyses keyed by record id (one per record, replaceable). */
+  analyses: AIFilmAnalysis[]
+  /** Why the six-dimension profile changed over time. */
+  profileHistory: TasteProfileEvent[]
+  settings: {
+    /** Explicit consent before private notes are sent to the model. */
+    allowAiNotes: boolean
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -301,6 +412,60 @@ export type TasteSnapshot = {
   topMoods: Array<{ id: MoodId; weight: number; count: number }>
   averageRating: number
   totalMinutes: number
+}
+
+/* ------------------------------------------------------------------ */
+/*  AI-backed taste profile (derived, never persisted as raw numbers)   */
+/* ------------------------------------------------------------------ */
+
+export type TasteEvidence = {
+  recordId: string
+  filmId: string
+  filmTitle: string
+  year: number
+  rating: number
+  /** Short fragment of the user's note that grounds the claim. */
+  quote: string
+  /** The model's reason for this claim. */
+  evidence: string
+  dimension: DimensionKey
+  direction: TasteDirection
+  strength: number
+  confidence: number
+  analysedAt: string
+}
+
+/**
+ * Extends the legacy read model so existing radar/card components keep
+ * working while the data behind them comes from real AI evidence.
+ */
+export type DimensionProfile = DimensionScore & {
+  /** -1 (low pole) .. +1 (high pole), the signed evidence average. */
+  lean: number
+  sampleCount: number
+  /** False when there is not enough accepted evidence to make a claim. */
+  sufficient: boolean
+  lastUpdatedAt: string | null
+  aiEvidence: TasteEvidence[]
+  userVerdict?: DimensionFeedback['verdict']
+}
+
+export type TasteSampleState = 'empty' | 'insufficient' | 'forming' | 'stable'
+
+export type TasteProfile = {
+  filmCount: number
+  analysedCount: number
+  acceptedCount: number
+  pendingCount: number
+  dimensions: DimensionProfile[]
+  overallConfidence: number
+  sampleState: TasteSampleState
+  updatedAt: string | null
+  signature: string
+  summary: string[]
+  topThemes: TasteSnapshot['topThemes']
+  topMoods: TasteSnapshot['topMoods']
+  averageRating: number
 }
 
 export type TimelineStage = {

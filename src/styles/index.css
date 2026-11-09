@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -33,6 +33,14 @@
   --shell: 1560px;
   --gutter: clamp(20px, 4.2vw, 64px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Chinese-first type stacks. Latin stays editorial; CJK stays legible. */
+  --font-editorial: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-zh: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC',
+    sans-serif;
+  --font-ui: Inter, 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui,
+    -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Noto Sans SC', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 * {
@@ -49,8 +57,8 @@ body {
   margin: 0;
   background-color: var(--paper);
   color: var(--ink);
-  font-family: Inter, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, -apple-system,
-    'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-ui);
+  font-size: 16px;
   font-weight: 400;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
@@ -153,13 +161,63 @@ input[type='date']::-webkit-calendar-picker-indicator {
 /*  Type scale — deliberately few stops, very wide contrast            */
 /* ------------------------------------------------------------------ */
 .font-display {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'PingFang SC',
-    'Hiragino Sans GB', 'Microsoft YaHei', Georgia, serif;
+  font-family: var(--font-editorial);
   font-weight: 400;
 }
 
+/* 中文主标题：清晰的现代黑体，不做过细、过小的复古处理。 */
+.font-zh-title,
+.zh-title {
+  font-family: var(--font-zh);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.14;
+}
+
+/* 中文界面标签与导航。 */
+.font-zh-ui {
+  font-family: var(--font-zh);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.font-zh-body {
+  font-family: var(--font-zh);
+  letter-spacing: 0.01em;
+}
+
+/* 中文正文：16–18px，行高 1.85，中英混排时更从容。 */
+.zh-prose {
+  font-family: var(--font-zh);
+  font-size: 16.5px;
+  line-height: 1.9;
+  letter-spacing: 0.01em;
+}
+
+.zh-prose-sm {
+  font-family: var(--font-zh);
+  font-size: 15px;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+}
+
+.zh-caption {
+  font-family: var(--font-zh);
+  font-size: 14px;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+.zh-eyebrow {
+  font-family: var(--font-zh);
+  font-size: 12.5px;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
 .t-mega {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Noto Sans SC', Georgia, serif;
   font-size: clamp(3.6rem, 12.4vw, 11.5rem);
   line-height: 0.84;
   letter-spacing: -0.028em;
@@ -185,7 +243,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .t-head {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Noto Sans SC', Georgia, serif;
   font-size: clamp(1.9rem, 3.4vw, 3.1rem);
   line-height: 1;
   letter-spacing: -0.012em;
@@ -193,7 +251,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .t-sub {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Noto Sans SC', Georgia, serif;
   font-size: clamp(1.25rem, 1.8vw, 1.6rem);
   line-height: 1.2;
   letter-spacing: -0.005em;
@@ -215,18 +273,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
   line-height: 1.7;
 }
 
-/* Chinese display — a quiet, modern grotesque with generous tracking */
-.zh-title {
-  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  line-height: 1.06;
-}
-
+/* 中文辅助标签：字距略宽，但不过度拉散。 */
 .zh-label {
-  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  font-family: var(--font-zh);
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.12em;
 }
 
 .micro {
@@ -246,7 +297,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .num {
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
   font-weight: 400;
@@ -270,9 +321,9 @@ input[type='date']::-webkit-calendar-picker-indicator {
   display: inline-flex;
   align-items: center;
   gap: 0.85rem;
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.18em;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--brass);
 }
@@ -295,10 +346,10 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .folio {
-  font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: none;
   color: var(--paper-muted);
 }
 
@@ -343,12 +394,14 @@ input[type='date']::-webkit-calendar-picker-indicator {
 /* A numbered artifact label, e.g. "02 — THE SHELF" */
 .artifact-label {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.9rem;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-family: var(--font-zh);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  font-weight: 500;
   color: var(--paper-muted);
 }
 .artifact-label b {
@@ -434,10 +487,10 @@ input[type='date']::-webkit-calendar-picker-indicator {
   text-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);
 }
 .poster-title-zh {
-  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-  font-size: 2.9cqw;
-  letter-spacing: 0.14em;
-  font-weight: 400;
+  font-family: var(--font-zh);
+  font-size: 3.1cqw;
+  letter-spacing: 0.08em;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -592,10 +645,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
   justify-content: center;
   gap: 0.6rem;
   min-height: 3rem;
-  padding: 0 1.6rem;
+  padding: 0 1.5rem;
+  font-family: var(--font-ui);
   font-size: 0.9375rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-transform: none;
   font-weight: 500;
   border: 1px solid transparent;
   border-radius: 0;
@@ -640,7 +694,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   border-color: transparent;
   padding: 0 0.5rem;
   height: 2.35rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.06em;
   opacity: 0.62;
 }
 .btn-quiet:hover:not(:disabled) {
@@ -682,9 +736,11 @@ input[type='date']::-webkit-calendar-picker-indicator {
   align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
   color: var(--paper-muted);
   margin-bottom: 0.7rem;
 }
@@ -735,14 +791,15 @@ select.input option {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  height: 2.35rem;
-  padding: 0 0.95rem;
+  height: 2.5rem;
+  padding: 0 1rem;
   border: 1px solid var(--line);
   background: transparent;
   color: inherit;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-ui);
+  font-size: 0.8125rem;
+  letter-spacing: 0.03em;
+  text-transform: none;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
@@ -766,9 +823,10 @@ select.input option {
   gap: 0.35rem;
   padding: 0.35rem 0.7rem;
   border: 1px solid var(--line);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
   color: inherit;
   opacity: 1;
   background: transparent;
@@ -804,10 +862,11 @@ select.input option {
   gap: 0.6rem;
   padding-bottom: 0.35rem;
   border-bottom: 1px solid currentColor;
-  font-family: 'IBM Plex Mono', ui-monospace, monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-family: var(--font-zh);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
   transition: color 0.3s ease, gap 0.4s var(--ease);
 }
 .link-rule:hover {
@@ -1053,17 +1112,18 @@ input[type='range']::-moz-range-thumb {
 
 .select-mini {
   appearance: none;
-  height: 2rem;
-  padding: 0 1.55rem 0 0.65rem;
+  height: 2.25rem;
+  padding: 0 1.55rem 0 0.7rem;
   border: 1px solid var(--line);
   background-color: transparent;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238C8577' fill='none' stroke-width='1.2'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.55rem center;
   color: var(--paper-muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
   cursor: pointer;
   transition: border-color 0.3s ease, color 0.3s ease;
   border-radius: 0;
@@ -1159,4 +1219,24 @@ input[type='range']::-moz-range-thumb {
 }
 [role='dialog'] .btn-quiet {
   opacity: 0.8;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Chinese-first responsive tuning                                    */
+/* ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  .btn {
+    padding-inline: 1.1rem;
+    letter-spacing: 0.04em;
+  }
+  .zh-title {
+    line-height: 1.2;
+  }
+  .artifact-label {
+    font-size: 0.78rem;
+    gap: 0.6rem;
+  }
+  .field-label {
+    font-size: 0.78rem;
+  }
 }

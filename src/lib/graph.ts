@@ -64,8 +64,8 @@ export const buildMemoryGraph = (
       nodes.set(themeNodeId(id), {
         id: themeNodeId(id),
         kind: 'theme',
-        label: THEMES[id].label,
-        sublabel: THEMES[id].zh,
+        label: THEMES[id].zh,
+        sublabel: THEMES[id].label,
         weight: 0.3 + (agg.weight / maxTheme) * 0.7,
         degree: agg.count,
       })
@@ -76,8 +76,8 @@ export const buildMemoryGraph = (
       nodes.set(moodNodeId(id), {
         id: moodNodeId(id),
         kind: 'mood',
-        label: MOODS[id].label,
-        sublabel: MOODS[id].zh,
+        label: MOODS[id].zh,
+        sublabel: MOODS[id].label,
         weight: 0.25 + (agg.weight / maxMood) * 0.55,
         degree: agg.count,
       })
@@ -122,15 +122,15 @@ export const buildMemoryGraph = (
       const titleB = filmById(films, b.filmId)?.title ?? 'A film'
       const labels = shared
         .slice(0, 3)
-        .map((t) => THEMES[t].label)
-        .join(', ')
+        .map((t) => THEMES[t].zh)
+        .join('、')
       filmLinks.push({
         id: `link-${a.filmId}-${b.filmId}`,
         source: filmNodeId(a.filmId),
         target: filmNodeId(b.filmId),
         kind: 'film-film',
         weight: Math.min(1, shared.length / 4),
-        reason: `${titleA} and ${titleB} share ${labels}.`,
+        reason: `《${titleA}》与《${titleB}》共享「${labels}」。`,
       })
     }
   }

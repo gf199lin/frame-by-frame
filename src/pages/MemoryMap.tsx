@@ -10,7 +10,7 @@ import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { buildMemoryGraph } from '@/lib/graph'
 import { MOODS, THEMES } from '@/data/taxonomy'
 import { cn, formatShortDate } from '@/lib/format'
-import type { GraphNode } from '@/types'
+import type { GraphNode, MoodId, ThemeId } from '@/types'
 
 export const MemoryMapPage = () => {
   const { records, films } = useAppStore()
@@ -28,6 +28,10 @@ export const MemoryMapPage = () => {
   const themeCount = graph.nodes.filter((n) => n.kind === 'theme').length
   const moodCount = graph.nodes.filter((n) => n.kind === 'mood').length
   const linkCount = graph.edges.filter((e) => e.kind === 'film-film').length
+
+  const selectedRef = selected ? selected.id.split(':')[1] : ''
+  const themeDef = selected?.kind === 'theme' ? THEMES[selectedRef as ThemeId] : undefined
+  const moodDef = selected?.kind === 'mood' ? MOODS[selectedRef as MoodId] : undefined
 
   const relatedFilms = useMemo(() => {
     if (!selected) return []
@@ -63,15 +67,16 @@ export const MemoryMapPage = () => {
   if (records.length === 0) {
     return (
       <div className="mx-auto max-w-shell px-5 py-20 lg:px-10">
-        <p className="micro text-brass/80">03 — Memory Map</p>
-        <h1 className="display-xl mt-4">The map is dark.</h1>
+        <p className="micro text-brass/80">03 — 记忆地图</p>
+        <h1 className="mt-4 font-zh-title text-[clamp(2.2rem,4.6vw,4rem)] leading-tight">地图还没有亮起来。</h1>
         <EmptyState
           className="mt-12"
-          title="No constellation yet."
-          description="The memory map draws itself from your films, their themes, and how they made you feel. Add two or three records and connections will appear."
+          eyebrow="还没有星图"
+          title="这片星座还没有形成。"
+          description="记忆地图会从你的电影、它们的主题，以及它们带给你的感受中自行绘制。添加两三部电影之后，连接就会出现。"
           action={
             <button type="button" onClick={() => openAdd()} className="btn btn-primary">
-              Add a film
+              添加电影
             </button>
           }
         />
@@ -83,35 +88,35 @@ export const MemoryMapPage = () => {
     <div className="shell pb-20 pt-10 lg:pt-14">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 pb-3">
         <p className="artifact-label">
-          <b>03</b> Memory map
+          <b>03</b> 记忆地图
         </p>
-        <p className="folio">A constellation, not a chart</p>
+        <p className="folio">是一片星座，不是一张图表</p>
       </div>
 
       <div className="flex flex-wrap items-end justify-between gap-8 pt-7">
         <div>
-          <h1 className="font-display text-[clamp(2.9rem,7.4vw,6.4rem)] leading-[0.86] tracking-[-0.03em]">
-            Memory map.
+          <h1 className="font-zh-title text-[clamp(2.5rem,6.4vw,5.4rem)] leading-[1.08] tracking-[-0.01em]">
+            记忆地图。
           </h1>
-          <div className="mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-            <p className="zh-title text-[15px] text-ink/75">电影记忆地图</p>
+          <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-taupe">Memory Map</p>
             <span className="hidden h-3 w-px bg-white/20 sm:block" />
-            <p className="measure text-[14px] leading-relaxed text-taupe">
-              Films are frames. Themes are the ground they share. Moods are how the memory felt.
-              Drag the map, pull a node, and follow a line until it explains something.
+            <p className="measure text-[14px] leading-[1.9] text-taupe">
+              电影是一帧帧画面，主题是它们共享的地面，情绪是记忆摸起来的手感。
+              拖动地图、拉动节点，沿着一条线走，直到它解释了什么。
             </p>
           </div>
         </div>
 
         <dl className="grid grid-cols-2 gap-x-10 gap-y-4 text-left sm:grid-cols-4 sm:text-right">
           {[
-            ['Films', records.length],
-            ['Themes', themeCount],
-            ['Moods', moodCount],
-            ['Shared links', linkCount],
+            ['电影', records.length],
+            ['主题', themeCount],
+            ['情绪', moodCount],
+            ['共同关系', linkCount],
           ].map(([label, value]) => (
             <div key={String(label)}>
-              <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-taupe">{label}</dt>
+              <dt className="text-[12px] tracking-[0.04em] text-taupe">{label}</dt>
               <dd className="num mt-1.5 text-[1.7rem] leading-none text-ink">
                 {String(value).padStart(2, '0')}
               </dd>
@@ -123,17 +128,17 @@ export const MemoryMapPage = () => {
       <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-y border-ink/10 py-4">
         <GraphLegend showThemes={showThemes} showMoods={showMoods} />
         <div className="flex items-center gap-3">
-          <span className="hidden font-mono text-[11px] uppercase tracking-[0.2em] text-taupe sm:inline">
-            Layers
+          <span className="hidden text-[12px] tracking-[0.04em] text-taupe sm:inline">
+            图层
           </span>
           <button
             type="button"
             onClick={() => setShowThemes((v) => !v)}
-            className="relative pb-0.5 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors"
-            style={{ color: showThemes ? 'var(--paper)' : 'var(--paper-muted)' }}
+            className="relative pb-0.5 text-[12px] tracking-[0.04em] transition-colors"
+            style={{ color: showThemes ? 'var(--ink)' : 'var(--taupe)' }}
             aria-pressed={showThemes}
           >
-            Themes
+            主题
             <span
               className="absolute inset-x-0 -bottom-px h-px bg-brass transition-transform"
               style={{ transform: showThemes ? 'scaleX(1)' : 'scaleX(0)' }}
@@ -142,11 +147,11 @@ export const MemoryMapPage = () => {
           <button
             type="button"
             onClick={() => setShowMoods((v) => !v)}
-            className="relative pb-0.5 font-mono text-[11px] uppercase tracking-[0.18em] transition-colors"
-            style={{ color: showMoods ? 'var(--paper)' : 'var(--paper-muted)' }}
+            className="relative pb-0.5 text-[12px] tracking-[0.04em] transition-colors"
+            style={{ color: showMoods ? 'var(--ink)' : 'var(--taupe)' }}
             aria-pressed={showMoods}
           >
-            Moods
+            情绪
             <span
               className="absolute inset-x-0 -bottom-px h-px bg-brass transition-transform"
               style={{ transform: showMoods ? 'scaleX(1)' : 'scaleX(0)' }}
@@ -171,7 +176,7 @@ export const MemoryMapPage = () => {
           ) : (
             <div className="flex h-full items-center justify-center bg-[#211e19]">
               <p className="text-[14px] text-paper-dim">
-                Turn a layer back on to see the map.
+                打开一个图层，地图就会重新出现。
               </p>
             </div>
           )}
@@ -179,18 +184,18 @@ export const MemoryMapPage = () => {
           {selected && (
             <aside className="absolute bottom-4 left-4 top-4 z-10 w-[min(21rem,calc(100%-2rem))] overflow-y-auto border border-paper/20 bg-[#211e19]/95 p-5 backdrop-blur-md animate-fade-in">
               <div className="flex items-start justify-between gap-3">
-                <p className="micro-sm text-brass/80">
+                <p className="text-[12px] tracking-[0.06em] text-brass/80">
                   {selected.kind === 'film'
-                    ? 'Film node'
+                    ? '电影节点'
                     : selected.kind === 'theme'
-                      ? 'Theme node'
-                      : 'Mood node'}
+                      ? '主题节点'
+                      : '情绪节点'}
                 </p>
                 <button
                   type="button"
                   onClick={() => setSelectedId(null)}
                   className="text-paper-dim transition-colors hover:text-paper"
-                  aria-label="Clear selection"
+                  aria-label="清除选择"
                 >
                   <X size={13} />
                 </button>
@@ -211,45 +216,48 @@ export const MemoryMapPage = () => {
                       >
                         {selectedFilm.title}
                       </Link>
-                      <p className="mt-1 text-[12.5px] uppercase tracking-[0.12em] text-paper-dim">
+                      {selectedFilm.titleZh && (
+                        <p className="mt-0.5 text-[13px] tracking-[0.04em] text-paper-dim">{selectedFilm.titleZh}</p>
+                      )}
+                      <p className="mt-1 text-[12px] tracking-[0.04em] text-paper-dim">
                         {selectedFilm.year} · {selectedFilm.director}
                       </p>
                       <Rating value={selectedRecord.rating} size={9} className="mt-2" />
                     </div>
                   </div>
-                  <p className="mt-4 border-t border-paper/15 pt-3 text-[14px] leading-relaxed text-paper-dim">
+                  <p className="mt-4 border-t border-paper/15 pt-3 font-zh-body text-[14px] leading-[1.85] text-paper-dim">
                     “{selectedRecord.reflection}”
                   </p>
                   <p className="mt-3 text-[12.5px] text-paper-dim">
-                    Watched {formatShortDate(selectedRecord.watchedAt)}
+                    观看于 {formatShortDate(selectedRecord.watchedAt)}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {selectedRecord.themes.slice(0, 4).map((t) => (
                       <span key={t} className="tag text-[12px]">
-                        {THEMES[t].label}
+                        {THEMES[t].zh}
                       </span>
                     ))}
                   </div>
                   <Link
                     to={`/archive/${selectedFilm.id}`}
-                    className="micro mt-5 inline-flex items-center gap-2 text-paper/70 hover:text-paper"
+                    className="mt-5 inline-flex items-center gap-2 text-[12px] tracking-[0.06em] text-paper/70 hover:text-paper"
                   >
-                    Open memory <ArrowUpRight size={11} />
+                    查看观影记忆 <ArrowUpRight size={11} />
                   </Link>
                 </>
               ) : selected.kind === 'theme' ? (
                 <>
-                  <h3 className="mt-3 font-display text-3xl text-paper">
-                    {THEMES[selected.label as keyof typeof THEMES]?.label ?? selected.label}
+                  <h3 className="mt-3 font-zh-title text-[1.6rem] text-paper">
+                    {themeDef?.zh ?? selected.label}
                   </h3>
-                  <p className="mt-1 text-[13px] tracking-[0.12em] text-paper-dim">
-                    {THEMES[selected.label as keyof typeof THEMES]?.zh ?? selected.sublabel}
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-paper-dim">
+                    {themeDef?.label ?? selected.sublabel}
                   </p>
-                  <p className="mt-3 text-[14px] leading-relaxed text-paper-dim">
-                    {THEMES[selected.label as keyof typeof THEMES]?.blurb}
+                  <p className="mt-3 text-[14px] leading-[1.85] text-paper-dim">
+                    {themeDef?.blurbZh}
                   </p>
-                  <p className="mt-4 text-[12.5px] uppercase tracking-[0.16em] text-paper-dim">
-                    {relatedFilms.length} films hold this theme
+                  <p className="mt-4 text-[12.5px] tracking-[0.04em] text-paper-dim">
+                    {relatedFilms.length} 部电影承载这个主题
                   </p>
                   <ul className="mt-3 divide-y divide-white/10">
                     {relatedFilms.map(({ film }) => (
@@ -278,15 +286,14 @@ export const MemoryMapPage = () => {
                 </>
               ) : (
                 <>
-                  <h3 className="mt-3 font-display text-3xl text-paper">
-                    {MOODS[selected.label as keyof typeof MOODS]?.label ?? selected.label}
+                  <h3 className="mt-3 font-zh-title text-[1.6rem] text-paper">
+                    {moodDef?.zh ?? selected.label}
                   </h3>
-                  <p className="mt-1 text-[13px] tracking-[0.12em] text-paper-dim">
-                    {MOODS[selected.label as keyof typeof MOODS]?.zh ?? selected.sublabel}
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.12em] text-paper-dim">
+                    {moodDef?.label ?? selected.sublabel}
                   </p>
-                  <p className="mt-3 text-[14px] leading-relaxed text-paper-dim">
-                    A felt register shared by {relatedFilms.length} films. The line is dashed because
-                    mood is a texture, not a topic.
+                  <p className="mt-3 text-[14px] leading-[1.85] text-paper-dim">
+                    一种被 {relatedFilms.length} 部电影共享的感受。线是虚线，因为情绪是质地，不是议题。
                   </p>
                   <ul className="mt-3 divide-y divide-white/10">
                     {relatedFilms.map(({ film }) => (
@@ -317,7 +324,7 @@ export const MemoryMapPage = () => {
 
               {selected.kind === 'film' && relatedFilms.length > 0 && (
                 <div className="mt-5 border-t border-paper/15 pt-4">
-                  <p className="micro-sm text-paper-dim">Shared ground</p>
+                  <p className="text-[12px] tracking-[0.06em] text-paper-dim">共同的地面</p>
                   <ul className="mt-2 space-y-2">
                     {relatedFilms.slice(0, 4).map(({ film, reason }) => (
                       <li key={film.id}>
@@ -327,7 +334,7 @@ export const MemoryMapPage = () => {
                             const node = graph.nodes.find((n) => n.filmId === film.id)
                             if (node) setSelectedId(node.id)
                           }}
-                          className="text-left text-[13px] leading-relaxed text-paper-dim hover:text-paper"
+                          className="text-left text-[13px] leading-[1.8] text-paper-dim hover:text-paper"
                         >
                           <span className="text-paper-dim">{film.title}</span>
                           {reason && <span className="block text-[12.5px]">{reason}</span>}
@@ -341,25 +348,24 @@ export const MemoryMapPage = () => {
           )}
 
           {!selected && (
-            <div className="pointer-events-none absolute right-5 top-5 hidden max-w-[240px] border-l border-brass/60 pl-4 lg:block">
-              <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-brass">
-                <Info size={10} /> How to read
+            <div className="pointer-events-none absolute right-5 top-5 hidden max-w-[250px] border-l border-brass/60 pl-4 lg:block">
+              <p className="flex items-center gap-2 text-[12px] tracking-[0.06em] text-brass">
+                <Info size={10} /> 怎么读这张地图
               </p>
-              <p className="mt-2.5 text-[13px] leading-relaxed text-paper-dim">
-                Click a film to see its shared themes. Click a theme to see every film that carries
-                it. Drag a node to rearrange the constellation.
+              <p className="mt-2.5 text-[13px] leading-[1.85] text-paper-dim">
+                点一部电影，看它与哪些主题相连；点一个主题，看所有承载它的电影。
+                拖动节点，可以重新排列这片星座。
               </p>
             </div>
           )}
         </div>
 
-        <div className={cn('mt-3 flex flex-wrap items-center justify-between gap-2 text-[12.5px] text-taupe')}>
+        <div className={cn('mt-3 flex flex-wrap items-center justify-between gap-2 text-[12.5px] leading-relaxed text-taupe')}>
           <p>
-            Node size reflects rating weight or how many notes carry that theme. Solid lines between
-            films require at least two shared themes.
+            节点大小反映评分权重，或有多少篇笔记带着这个主题。电影之间的实线，至少需要两个共同主题。
           </p>
-          <p className="font-mono uppercase tracking-[0.14em]">
-            {graph.nodes.length} nodes · {graph.edges.length} edges
+          <p className="font-mono tracking-[0.04em]">
+            {graph.nodes.length} 个节点 · {graph.edges.length} 条连线
           </p>
         </div>
       </div>
@@ -367,21 +373,21 @@ export const MemoryMapPage = () => {
       <div className="mt-14 grid gap-8 border-t border-ink/10 pt-10 sm:grid-cols-3">
         {[
           {
-            title: 'Films',
-            body: "A rectangle with the film's own palette. The solid lines between films mean at least two themes overlap — not that they are the same film.",
+            title: '电影',
+            body: '带电影自身色调的矩形。电影之间的实线表示至少有两个主题重叠——不是说明它们是同一部电影。',
           },
           {
-            title: 'Themes',
-            body: 'Diamonds weighted by recurrence. Memory and Loss are close neighbours here because your notes keep putting them in the same room.',
+            title: '主题',
+            body: '按复现次数加权的菱形。「记忆」和「失去」在你这里靠得很近，因为你的笔记总把它们放进同一个房间。',
           },
           {
-            title: 'Moods',
-            body: 'Dashed lines mark texture rather than topic: how a film felt, not what it argued. Two films can share a mood and nothing else.',
+            title: '情绪',
+            body: '虚线标记的是质地，而不是议题：电影让你感觉如何，而不是它论证了什么。两部电影可以只有情绪相同。',
           },
         ].map((item) => (
           <div key={item.title}>
-            <p className="micro text-brass/80">{item.title}</p>
-            <p className="mt-3 text-[14px] leading-relaxed text-taupe">{item.body}</p>
+            <p className="text-[12px] tracking-[0.06em] text-brass/80">{item.title}</p>
+            <p className="mt-3 text-[14px] leading-[1.9] text-taupe">{item.body}</p>
           </div>
         ))}
       </div>

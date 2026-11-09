@@ -1,5 +1,7 @@
 import type { AppState, WatchRecord } from '@/types'
 import { STORAGE_VERSION } from './taxonomy'
+import { FILMS } from './films'
+import { buildSeedAnalyses } from './seedAnalyses'
 
 const seed = (
   id: string,
@@ -30,8 +32,8 @@ const seed = (
 })
 
 /**
- * Demo archive. Notes are written for the prototype, not sourced from real
- * viewers — the interface never presents them as survey data.
+ * 演示片库。笔记为原型撰写，并非真实观众调查数据。
+ * 中文笔记同时用于验证本地 AI 分析对中文文本的读取能力。
  */
 export const SEED_RECORDS: WatchRecord[] = [
   seed(
@@ -43,8 +45,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['memory', 'family', 'identity', 'coming-of-age', 'loss'],
     ['tender', 'cathartic', 'warmth', 'playful'],
     'tender',
-    'Watched this on a low day and expected comfort; instead the memory dump sequence made me grieve childhood. The idea that sadness is the one who can sit with you is simple and true. I rated it lower than I expected, but I think about it more than films I rated higher.',
-    'You rated this below your average, yet your notes return to it. The memory-dump sequence is the only place where the film lets loss stay loss.',
+    '那天心情很低落，本想找一部电影安慰自己，结果记忆倾倒的那一段让我为童年难过。悲伤才是那个能陪你坐下来的人——这个想法简单，却真实。我给的分数比预想低，但我想到它的次数，比很多高分电影都多。',
+    '你给它的评分低于平均水平，笔记却一次次回到它。记忆倾倒那场戏，是整部电影唯一允许「失去」保持原样的地方。',
     0.58,
   ),
   seed(
@@ -56,8 +58,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['hope', 'friendship', 'freedom', 'time', 'justice'],
     ['hopeful', 'cathartic', 'warmth', 'quiet'],
     'hopeful',
-    'I resisted this for years because everyone calls it the greatest film. Then the rain scene got me anyway. What surprised me is how patient it is — twenty years of small rituals before the escape. Hope here is not a slogan, it is a maintenance schedule.',
-    'You respond to hope when it is shown as routine rather than as a speech. The twenty-year patience matters more to you than the escape itself.',
+    '很多年我都不肯看，因为所有人都说它是最伟大的电影。结果还是在雨中那场戏投降了。真正让我意外的是它的耐心——二十年，一个又一个小仪式，才走到越狱。这里的希望不是口号，而是一份需要每天维护的日程表。',
+    '你被打动的，是希望被拍成日常，而不是被拍成演讲。二十年的耐心比越狱本身更重要。',
     0.82,
   ),
   seed(
@@ -69,8 +71,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['time', 'love', 'family', 'sacrifice', 'hope', 'loss'],
     ['awe', 'cathartic', 'longing', 'hopeful'],
     'awe',
-    'The bookshelf scene is the one I keep returning to: time as a physical dimension you can reach into but not change. I do not fully buy the science and it does not matter. A father crossing a galaxy to keep a promise is the kind of ending I want to believe in.',
-    'Your attachment here is emotional, not scientific. You keep returning to the promise between a father and a daughter, and to time as something that can be touched but not repaired.',
+    '我反复回到书架那场戏：时间像一个可以伸手触碰、却无法改变的物理维度。我并不完全相信那套科学，但这不重要。一个父亲穿越星系去守住一个承诺——这是我愿意相信的那种结局。',
+    '你对它的依恋是情感上的，不是科学上的。你一次次回到父女之间的承诺，回到「时间可以被触摸，却无法被修复」这件事。',
     0.76,
   ),
   seed(
@@ -82,8 +84,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['identity', 'hope', 'love', 'family', 'loss'],
     ['hopeful', 'tender', 'cathartic', 'warmth'],
     'tender',
-    'The "it is not your fault" scene is almost too direct, and it still works because Will has spent the whole film outsmarting anyone who tries to be kind to him. What I remember is the bench, not the math. Being seen is scarier than being brilliant.',
-    'You read the film as a story about being known rather than being gifted. The bench, not the mathematics, is what stayed.',
+    '「这不是你的错」那场戏几乎太直白了，可它依然奏效，因为威尔整部电影都在用聪明躲开所有对他好的人。我记得的是长椅，不是数学。被看见，比才华横溢更可怕。',
+    '你把这部电影读成一个关于「被看见」而不是「被天赋选中」的故事。留下来的是长椅，不是数学。',
     0.71,
   ),
   seed(
@@ -95,8 +97,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['memory', 'art', 'friendship', 'loss', 'freedom'],
     ['playful', 'wistful', 'tender', 'melancholy'],
     'wistful',
-    'Wes Anderson\'s symmetry usually keeps me at a distance, but here the neatness is doing something sad. Moustafa telling the story to keep Zero\'s world alive — the whole film is a memorial pretending to be a caper. I love that the most beautiful object in it is a memory.',
-    'You see the precision as a form of mourning. The film works on you because its beauty is explicitly a way of keeping something that is already gone.',
+    '韦斯·安德森的对称通常让我保持距离，但这一次，整洁本身在做一件悲伤的事。穆斯塔法讲故事，是为了让零的世界继续活着——整部电影是一场伪装成冒险片的悼念。我最喜欢的是：片中最美的物件，是一段记忆。',
+    '你把这种精确看成一种哀悼方式。它之所以击中你，是因为它的美明确地用来留住一个已经消失的东西。',
     0.79,
   ),
   seed(
@@ -108,8 +110,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['freedom', 'reality', 'identity', 'loneliness', 'hope'],
     ['uneasy', 'hopeful', 'awe', 'tender'],
     'uneasy',
-    'I first saw this as a kid and thought it was a comedy about a man in a TV show. Now it feels like a film about the stories other people write for you. The moment he touches the painted horizon is the most frightening image in any film I love. Freedom costs you the only world you know.',
-    'The film has shifted genre for you with age. What reads now is the cost of leaving a world that was kindly, completely false.',
+    '小时候看，以为是一个关于电视节目的喜剧。现在看，它讲的是别人替你写好的故事。他伸手碰到那面画出来的天空时，是我爱过的电影里最可怕的画面。自由要你交出你唯一熟悉的世界。',
+    '这部电影随着你的年龄改变了类型。现在读到的，是离开一个被善意包裹、却彻底虚假的世界所要付出的代价。',
     0.74,
   ),
   seed(
@@ -121,8 +123,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['ambition', 'love', 'art', 'loss', 'hope', 'time'],
     ['wistful', 'cathartic', 'hopeful', 'longing'],
     'wistful',
-    'The epilogue is the whole film. For five minutes it lets you live the version where everything worked, then takes it back without cruelty. I do not even love musicals, but the last look in the jazz club wrecked me. Ambition and love do not always fit in the same frame.',
-    'You are not here for the musical numbers. The five-minute alternate life is the part you keep, which suggests a taste for endings that show the cost rather than pay it off.',
+    '尾声就是整部电影。它用五分钟让你活一遍「一切都成了」的版本，然后不带恶意地收回去。我甚至不算喜欢歌舞片，但爵士俱乐部最后那个眼神把我击溃了。野心和爱，并不总能放进同一个画框。',
+    '你不是为歌舞段落来的。那五分钟的另一种人生才是你留下的部分，这说明你偏爱让你看见代价、而不是替你结清的结局。',
     0.8,
   ),
   seed(
@@ -134,8 +136,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['grief', 'loss', 'family', 'memory', 'loneliness', 'forgiveness'],
     ['melancholy', 'restrained', 'quiet', 'wistful'],
     'restrained',
-    'I watched this again on a cold night and noticed how much of it happens in rooms where nobody says the thing they mean. Lee\'s grief is not a scene, it is the way he keeps apologizing for existing. The "I cannot beat it" moment did not make me cry until much later, in the car, when I realized I had been holding my breath. Some losses do not resolve; they just become part of the weather.',
-    'You are drawn to grief that refuses a cathartic shape. The detail you keep is the apology, not the breakdown — restraint reads to you as accuracy.',
+    '一个寒冷的夜晚重看，才注意到那么多戏都发生在没有人把真心话说出口的房间里。李的悲伤不是一个场景，而是他不断为自己存在而道歉的方式。「我走不出来」那句没有当场让我哭，直到很久以后，在车里，我才发现自己一直屏着呼吸。有些失去不会解决，它们只是变成了天气的一部分。',
+    '你被那种拒绝提供宣泄形状的悲伤吸引。你记住的细节是道歉，不是崩溃——在你眼里，克制是一种准确。',
     0.9,
   ),
   seed(
@@ -147,8 +149,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['memory', 'love', 'loss', 'identity', 'loneliness', 'hope'],
     ['wistful', 'tender', 'melancholy', 'longing'],
     'longing',
-    'What gets me is not the love story but the editing of it: memories collapsing mid-sentence, the beach house falling apart while they try to keep the moment. I think about the line about erasing someone from your mind more than I should. It makes heartbreak feel like architecture.',
-    'Your attention goes to form over plot. Heartbreak as architecture: you like a film that lets its structure carry the feeling.',
+    '击中我的不是爱情故事，而是它的剪辑：记忆在一句话中间塌陷，海边的房子在他们想留住那一刻时一点点散开。关于「把人从脑子里擦掉」的那句台词，我想得比应该的多。它让心碎有了一种建筑感。',
+    '你的注意力落在形式而不是情节上。心碎作为建筑：你喜欢让结构自己承载情绪的电影。',
     0.86,
   ),
   seed(
@@ -160,8 +162,8 @@ export const SEED_RECORDS: WatchRecord[] = [
     ['art', 'freedom', 'identity', 'loss', 'coming-of-age', 'hope'],
     ['cathartic', 'wistful', 'hopeful', 'melancholy'],
     'cathartic',
-    'The "O Captain" ending is manipulation and I fall for it every time. What stays with me is not the poetry but the boys learning to want something their parents did not choose. Neil\'s story is the part I cannot watch without anger. Art as permission, and the bill that comes with it.',
-    'You separate the famous ending from what actually moves you. The part you keep is the cost of choosing a life, which sits close to the centre of your taste.',
+    '「哦，船长，我的船长」那个结尾是煽动，可我每次都中招。留下来的不是诗，而是那群男孩开始想要一些父母没有替他们选好的东西。尼尔的故事是我每次看都会愤怒的部分。艺术是一种许可，也带着账单。',
+    '你把著名的结尾和真正打动你的东西分开了。你留下的是「选择一种人生」的代价，它离你品味的中心很近。',
     0.83,
   ),
 ]
@@ -174,4 +176,7 @@ export const createInitialState = (): AppState => ({
   customFilms: [],
   corrections: [],
   yearbookGenerations: [],
+  analyses: buildSeedAnalyses(SEED_RECORDS, FILMS),
+  profileHistory: [],
+  settings: { allowAiNotes: false },
 })

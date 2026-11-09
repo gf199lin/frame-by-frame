@@ -9,19 +9,19 @@ export const formatRating = (rating: number): string =>
 export const formatLongDate = (iso: string): string => {
   const d = parseDate(iso)
   if (!d) return '—'
-  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`
 }
 
 export const formatShortDate = (iso: string): string => {
   const d = parseDate(iso)
   if (!d) return '—'
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`
 }
 
 export const formatMonthYear = (iso: string): string => {
   const d = parseDate(iso)
   if (!d) return '—'
-  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  return `${d.getFullYear()}年${d.getMonth() + 1}月`
 }
 
 export const parseDate = (iso: string): Date | null => {
@@ -39,8 +39,9 @@ export const daysAgo = (iso: string, now = new Date()): number => {
 export const formatMinutes = (minutes: number): string => {
   const h = Math.floor(minutes / 60)
   const m = Math.round(minutes % 60)
-  if (h === 0) return `${m}m`
-  return `${h}h ${pad(m)}m`
+  if (h === 0) return `${m} 分钟`
+  if (m === 0) return `${h} 小时`
+  return `${h} 小时 ${pad(m)} 分`
 }
 
 export const percent = (value: number): string => `${Math.round(value * 100)}%`
@@ -64,7 +65,7 @@ export const sentenceCase = (text: string): string =>
 export const splitSentences = (text: string): string[] =>
   text
     .replace(/\s+/g, ' ')
-    .split(/(?<=[.!?])\s+/)
+    .split(/(?<=[.!?。！？])\s*/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0)
 

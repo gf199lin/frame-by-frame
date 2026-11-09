@@ -40,7 +40,7 @@ export const Rating = ({
 }) => {
   const light = tone === 'light'
   return (
-    <span className={cn('inline-flex items-center gap-1', className)} aria-label={`${value} out of 5`}>
+    <span className={cn('inline-flex items-center gap-1', className)} aria-label={`满分 5 分，当前 ${value} 分`}>
       <span className={cn('inline-flex items-center gap-[2px]', light ? 'text-ink' : 'text-paper')}>
         {[0, 1, 2, 3, 4].map((i) => (
           <Star
@@ -70,20 +70,20 @@ export const RatingInput = ({
   size?: number
 }) => {
   return (
-    <div className="flex items-center gap-3" role="radiogroup" aria-label="Your rating">
+    <div className="flex items-center gap-3" role="radiogroup" aria-label="我的评分">
       <div className="flex items-center gap-[3px] text-paper">
         {[0, 1, 2, 3, 4].map((i) => (
           <div key={i} className="relative" style={{ width: size, height: size }}>
             <Star fill={Math.max(0, Math.min(1, value - i))} size={size} />
             <button
               type="button"
-              aria-label={`Rate ${i + 0.5} out of 5`}
+              aria-label={`评为 ${i + 0.5} 分`}
               onClick={() => onChange(i + 0.5)}
               className="absolute inset-y-0 left-0 w-1/2 cursor-pointer"
             />
             <button
               type="button"
-              aria-label={`Rate ${i + 1} out of 5`}
+              aria-label={`评为 ${i + 1} 分`}
               onClick={() => onChange(i + 1)}
               className="absolute inset-y-0 right-0 w-1/2 cursor-pointer"
             />
