@@ -1213,9 +1213,13 @@ input[type='range']::-moz-range-thumb {
 
 [role='dialog'] .input {
   color: #fdf6e2;
+  border-bottom-color: rgba(253, 246, 226, 0.38);
 }
 [role='dialog'] .input::placeholder {
-  color: rgba(203, 200, 217, 0.6);
+  color: rgba(224, 221, 235, 0.78);
+}
+[role='dialog'] .input:focus {
+  border-color: #fdf6e2;
 }
 /* Boxed inputs sit on a cream surface, so they need ink-colored text. */
 [role='dialog'] .input-boxed {
