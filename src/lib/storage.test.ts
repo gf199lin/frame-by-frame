@@ -57,6 +57,16 @@ describe('storage migration', () => {
     expect(state.records[0].ai.extractedFrom).toBe('local-engine')
   })
 
+  test('turns a legacy single feeling into a multi-select tag', () => {
+    const legacy = {
+      ...v1State,
+      records: [{ ...v1Record, feltLike: 'tender' }],
+    }
+    const state = migrateState(legacy as unknown as Record<string, unknown>)
+    expect(state.records[0].feltLike).toBe('tender')
+    expect(state.records[0].feltLikeTags).toEqual(['tender'])
+  })
+
   test('keeps the user note even when its AI analysis is dropped', () => {
     const withAnalysis = {
       ...v1State,

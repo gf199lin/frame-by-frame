@@ -114,7 +114,7 @@ export const validateAnalyzeRequest = (raw: unknown): ValidationResult<AnalyzeRe
       film,
       rating: rating as number,
       watchedAt: text(raw.watchedAt, 40) || undefined,
-      feltLike: text(raw.feltLike, 40) || undefined,
+      feltLike: text(raw.feltLike, 120) || undefined,
       note,
       history,
       locale: text(raw.locale, 20) || 'zh-CN',

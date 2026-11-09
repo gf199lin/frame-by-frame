@@ -1,5 +1,6 @@
 import type { AddFilmDraft, AIFilmAnalysis, Film, MoodId, ThemeId, WatchRecord } from '@/types'
 import { clamp } from '@/lib/format'
+import { feltLikeMoodIds, feltLikeText } from '@/lib/feltLike'
 import type { AiAnalyzeResponse } from './types'
 
 export const themesOfAnalysis = (analysis: AIFilmAnalysis): ThemeId[] =>
@@ -64,7 +65,8 @@ export const createRecordFromAnalysis = (
     watchedAt: draft.watchedAt,
     status: draft.status,
     reflection: draft.reflection.trim(),
-    feltLike: draft.feltLike,
+    feltLike: feltLikeText(draft.feltLikeTags) || undefined,
+    feltLikeTags: draft.feltLikeTags,
     themes: themesOfAnalysis(analysis),
     moods: moodsOfAnalysis(analysis),
     createdAt: now,
@@ -97,9 +99,10 @@ export const createRecordWithoutAnalysis = (
     watchedAt: draft.watchedAt,
     status: draft.status,
     reflection: draft.reflection.trim(),
-    feltLike: draft.feltLike,
+    feltLike: feltLikeText(draft.feltLikeTags) || undefined,
+    feltLikeTags: draft.feltLikeTags,
     themes: [],
-    moods: draft.feltLike ? [draft.feltLike as MoodId] : [],
+    moods: feltLikeMoodIds(draft.feltLikeTags),
     createdAt: now,
     updatedAt: now,
     source: 'user',

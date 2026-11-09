@@ -15,6 +15,7 @@ import { MOODS, STATUS_LABELS, THEMES, DIMENSIONS, zhCountry, zhGenres, zhLangua
 import { directorOf, loglineOf } from '@/data/filmCopy'
 import { formatLongDate, formatMinutes } from '@/lib/format'
 import { artworkSourceUrl, artworkVerifiedAt, resolveFilmArtwork } from '@/lib/artwork'
+import { feltLikeLabel, feltLikeTagsOf } from '@/lib/feltLike'
 import { filmById, getEvidence, recordsSorted } from '@/lib/tasteEngine'
 
 export const FilmDetail = () => {
@@ -27,6 +28,7 @@ export const FilmDetail = () => {
 
   const film = filmById(films, filmId)
   const record = records.find((r) => r.filmId === filmId)
+  const feelings = record ? feltLikeTagsOf(record) : []
 
   if (!film) {
     return (
@@ -280,11 +282,19 @@ export const FilmDetail = () => {
                     </span>
                   </dd>
                 </div>
-                {record.feltLike && (
+                {feelings.length > 0 && (
                   <div>
                     <dt className="text-[12.5px] tracking-[0.04em] text-ink/55">看完的感觉</dt>
-                    <dd className="mt-1 text-[14px] text-ink/80">
-                      {MOODS[record.feltLike as keyof typeof MOODS]?.zh ?? record.feltLike}
+                    <dd className="mt-1.5 flex flex-wrap gap-1.5">
+                      {feelings.map((tag) => (
+                        <span
+                          key={tag}
+                          className="chip h-7 cursor-default px-2.5 text-[12px]"
+                          data-active="true"
+                        >
+                          {feltLikeLabel(tag)}
+                        </span>
+                      ))}
                     </dd>
                   </div>
                 )}

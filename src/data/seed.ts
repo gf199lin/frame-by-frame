@@ -22,6 +22,7 @@ const seed = (
   watchedAt,
   status,
   feltLike,
+  feltLikeTags: feltLike ? [feltLike] : undefined,
   reflection,
   themes,
   moods,

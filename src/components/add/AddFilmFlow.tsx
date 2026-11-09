@@ -41,6 +41,13 @@ import {
 } from '@/lib/ai/client'
 import { buildAnalysisHistory, filmMetaForAi } from '@/lib/ai/history'
 import {
+  FELT_LIKE_MAX_LENGTH,
+  FELT_LIKE_MAX_TAGS,
+  feltLikeTagsOf,
+  feltLikeText,
+  normaliseFeltLikeTag,
+} from '@/lib/feltLike'
+import {
   createRecordFromAnalysis,
   createRecordWithoutAnalysis,
   toFilmAnalysis,
@@ -172,8 +179,9 @@ export const AddFilmFlow = ({
     watchedAt: editRecord?.watchedAt ?? todayISO(),
     status: editRecord?.status ?? 'watched',
     reflection: editRecord?.reflection ?? '',
-    feltLike: editRecord?.feltLike ?? '',
+    feltLikeTags: editRecord ? feltLikeTagsOf(editRecord) : [],
   }))
+  const [customFeltLike, setCustomFeltLike] = useState('')
   const [error, setError] = useState('')
   const [activeStage, setActiveStage] = useState(-1)
   const [pending, setPending] = useState<{ analysis: AIFilmAnalysis; record: WatchRecord } | null>(
@@ -428,7 +436,7 @@ export const AddFilmFlow = ({
           film: filmMetaForAi(selected),
           rating: draft.rating,
           watchedAt: draft.watchedAt,
-          ...(draft.feltLike ? { feltLike: draft.feltLike } : {}),
+          ...(draft.feltLikeTags.length ? { feltLike: feltLikeText(draft.feltLikeTags) } : {}),
           note: draft.reflection.trim(),
           history: buildAnalysisHistory(previousRecords, films, selected),
           locale: 'zh-CN',
@@ -470,8 +478,9 @@ export const AddFilmFlow = ({
       watchedAt: todayISO(),
       status: 'watched',
       reflection: '',
-      feltLike: '',
+      feltLikeTags: [],
     })
+    setCustomFeltLike('')
     setPending(null)
     setAiError(null)
     setActiveStage(-1)
@@ -479,6 +488,37 @@ export const AddFilmFlow = ({
     setError('')
     setStatus('idle')
     setHits([])
+  }
+
+  const toggleFeltLikeTag = (tag: string) => {
+    const active = draft.feltLikeTags.includes(tag)
+    if (!active && draft.feltLikeTags.length >= FELT_LIKE_MAX_TAGS) {
+      setError(`最多选择 ${FELT_LIKE_MAX_TAGS} 个感受。`)
+      return
+    }
+    setDraft({
+      ...draft,
+      feltLikeTags: active
+        ? draft.feltLikeTags.filter((item) => item !== tag)
+        : [...draft.feltLikeTags, tag],
+    })
+    if (error) setError('')
+  }
+
+  const addCustomFeltLike = () => {
+    const tag = normaliseFeltLikeTag(customFeltLike)
+    if (!tag) return
+    if (draft.feltLikeTags.includes(tag)) {
+      setCustomFeltLike('')
+      return
+    }
+    if (draft.feltLikeTags.length >= FELT_LIKE_MAX_TAGS) {
+      setError(`最多选择 ${FELT_LIKE_MAX_TAGS} 个感受。`)
+      return
+    }
+    setDraft({ ...draft, feltLikeTags: [...draft.feltLikeTags, tag] })
+    setCustomFeltLike('')
+    if (error) setError('')
   }
 
   const currentIndex = STEP_INDEX[step]
@@ -1152,22 +1192,72 @@ export const AddFilmFlow = ({
                   </div>
 
                   <div>
-                    <span className="field-label">看完之后，你的感觉是？（可选）</span>
+                    <span className="field-label">看完之后，你的感觉是？（可多选）</span>
                     <div className="flex flex-wrap gap-1.5">
-                      {(Object.keys(MOODS) as MoodId[]).slice(0, 8).map((mood) => (
+                      {(Object.keys(MOODS) as MoodId[]).map((mood) => (
                         <button
                           key={mood}
                           type="button"
-                          onClick={() =>
-                            setDraft({ ...draft, feltLike: draft.feltLike === mood ? '' : mood })
-                          }
+                          onClick={() => toggleFeltLikeTag(mood)}
                           className="chip h-8 text-[13px]"
-                          data-active={draft.feltLike === mood}
+                          data-active={draft.feltLikeTags.includes(mood)}
+                          aria-pressed={draft.feltLikeTags.includes(mood)}
                         >
                           {MOODS[mood].zh}
                         </button>
                       ))}
+                      {draft.feltLikeTags
+                        .filter((tag) => !Object.prototype.hasOwnProperty.call(MOODS, tag))
+                        .map((tag) => (
+                          <button
+                            key={tag}
+                            type="button"
+                            onClick={() => toggleFeltLikeTag(tag)}
+                            className="chip h-8 text-[13px]"
+                            data-active="true"
+                            aria-pressed="true"
+                            title="点击移除"
+                          >
+                            {tag}
+                            <span aria-hidden="true" className="opacity-55">
+                              ×
+                            </span>
+                          </button>
+                        ))}
                     </div>
+                    <div className="mt-2.5 flex items-center gap-2">
+                      <input
+                        value={customFeltLike}
+                        onChange={(event) => {
+                          setCustomFeltLike(event.target.value)
+                          if (error) setError('')
+                        }}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' && !event.nativeEvent.isComposing) {
+                            event.preventDefault()
+                            addCustomFeltLike()
+                          }
+                        }}
+                        maxLength={FELT_LIKE_MAX_LENGTH}
+                        placeholder="自己写一个感觉…"
+                        aria-label="自定义感受"
+                        className="input h-8 min-w-0 flex-1 py-0 text-[13px] sm:w-44 sm:flex-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={addCustomFeltLike}
+                        disabled={
+                          !customFeltLike.trim() ||
+                          draft.feltLikeTags.length >= FELT_LIKE_MAX_TAGS
+                        }
+                        className="btn btn-ghost h-8 shrink-0 px-3 text-[12.5px]"
+                      >
+                        添加
+                      </button>
+                    </div>
+                    <p className="mt-2 text-[12px] text-paper-muted">
+                      可多选，最多 {FELT_LIKE_MAX_TAGS} 个；没有合适的词时，自己写一个。
+                    </p>
                   </div>
 
                   <label className="flex items-start gap-2.5 border-l border-white/15 pl-3">

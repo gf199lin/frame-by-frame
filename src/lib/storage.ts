@@ -52,10 +52,20 @@ const normaliseRecord = (value: WatchRecord): WatchRecord => {
     record.ai && typeof record.ai === 'object'
       ? (record.ai as unknown as Record<string, unknown>)
       : {}
+  const feltLikeTags = Array.isArray(record.feltLikeTags)
+    ? record.feltLikeTags
+        .filter((tag): tag is string => typeof tag === 'string')
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+        .slice(0, 6)
+    : typeof record.feltLike === 'string' && record.feltLike.trim()
+      ? [record.feltLike.trim()]
+      : []
   return {
     ...record,
     rating: numberOf(record.rating, 0),
     reflection: str(record.reflection),
+    feltLikeTags,
     themes: Array.isArray(record.themes) ? record.themes.filter((id) => themeKeys.has(id)) : [],
     moods: Array.isArray(record.moods) ? record.moods.filter((id) => moodKeys.has(id)) : [],
     createdAt: str(record.createdAt, new Date().toISOString()),

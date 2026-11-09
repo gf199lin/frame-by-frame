@@ -11,6 +11,7 @@ import type {
   WatchRecord,
 } from '@/types'
 import { clamp, truncate, uid } from './format'
+import { feltLikeText } from './feltLike'
 import { computeSnapshot, filmById, polePhrase } from './tasteEngine'
 
 /* ------------------------------------------------------------------ */
@@ -212,7 +213,8 @@ export const analyseDraft = (
     watchedAt: draft.watchedAt,
     status: draft.status,
     reflection: draft.reflection,
-    feltLike: draft.feltLike,
+    feltLike: feltLikeText(draft.feltLikeTags) || undefined,
+    feltLikeTags: draft.feltLikeTags,
     themes,
     moods,
     createdAt: new Date().toISOString(),
@@ -257,7 +259,8 @@ export const createRecordFromDraft = (
     watchedAt: draft.watchedAt,
     status: draft.status,
     reflection: draft.reflection.trim(),
-    feltLike: draft.feltLike,
+    feltLike: feltLikeText(draft.feltLikeTags) || undefined,
+    feltLikeTags: draft.feltLikeTags,
     themes: analysis.themes,
     moods: analysis.moods,
     createdAt: now,

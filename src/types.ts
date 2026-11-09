@@ -189,6 +189,8 @@ export type WatchRecord = {
   reflection: string
   /** How the user felt while watching, chosen, not inferred. */
   feltLike?: string
+  /** Multiple chosen feelings; `feltLike` stays for older records and AI payloads. */
+  feltLikeTags?: string[]
   themes: ThemeId[]
   moods: MoodId[]
   createdAt: string
@@ -374,7 +376,7 @@ export type AddFilmDraft = {
   watchedAt: string
   status: WatchStatus
   reflection: string
-  feltLike?: string
+  feltLikeTags: string[]
 }
 
 /* ------------------------------------------------------------------ */
