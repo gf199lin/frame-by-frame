@@ -76,10 +76,10 @@ export const Home = () => {
         <div className="absolute inset-0 hero-vignette" />
         <div className="shell relative py-24 lg:py-32">
           <p className="kicker">Frame by Frame · 私人电影记忆博物馆</p>
-          <h1 className="mt-7 max-w-4xl font-zh-title text-[clamp(2.6rem,7vw,5.4rem)] leading-[1.12] text-paper">
-            每一部电影，
+          <h1 className="mt-7 max-w-4xl font-display text-[clamp(2.4rem,6.2vw,5rem)] leading-[0.96] tracking-[-0.022em] text-paper">
+            Every Film
             <br />
-            都留下一帧。
+            Leaves a Frame
           </h1>
           <p className="mt-5 max-w-2xl font-display text-[clamp(1.15rem,2vw,1.7rem)] italic leading-snug text-paper-dim">
             Every film leaves a frame. Every frame tells your story.
@@ -91,7 +91,7 @@ export const Home = () => {
           <EmptyState
             className="mt-14 max-w-2xl border-white/15"
             eyebrow="片库还是空的"
-            title="还缺你的第一帧。"
+            title="还缺你的第一帧"
             description="添加一部你真正看过的电影，用自己的话写一段感受，然后看片库如何开始读取你。"
             action={
               <button type="button" onClick={() => openAdd()} className="btn btn-primary">
@@ -137,10 +137,10 @@ export const Home = () => {
           <div className="grid flex-1 grid-cols-1 gap-y-12 py-12 lg:grid-cols-12 lg:items-center lg:gap-x-6 lg:py-16">
             <div className="lg:col-span-8">
               <p className="kicker">私人电影记忆博物馆 · 第一卷</p>
-              <h1 className="mt-6 font-zh-title text-[clamp(2.7rem,8.4vw,7.4rem)] leading-[1.06] tracking-[-0.01em] text-balance">
-                每一部电影
+              <h1 className="mt-6 font-display text-[clamp(2.5rem,6.8vw,5.9rem)] leading-[0.95] tracking-[-0.022em] text-paper text-balance">
+                Every Film
                 <br />
-                都留下一<span className="text-paper">帧。</span>
+                Leaves a Frame
               </h1>
               <p className="mt-5 max-w-[34rem] font-display text-[clamp(1.15rem,2.1vw,1.85rem)] italic leading-snug text-paper-dim">
                 Every film leaves a frame. Every frame tells your story.
@@ -256,7 +256,7 @@ export const Home = () => {
                   <p className="artifact-label">
                     <b>01</b> 封面故事
                   </p>
-                  <h2 className="mt-4 t-head">最新的一帧。</h2>
+                  <h2 className="mt-4 t-head">最新的一帧</h2>
                 </div>
                 <div className="text-right">
                   <p className="folio">第 {String(records.length).padStart(3, '0')} 帧</p>
@@ -345,7 +345,7 @@ export const Home = () => {
                 <p className="artifact-label">
                   <b>02</b> 最近观看
                 </p>
-                <h2 className="mt-4 t-head">最近看过的电影。</h2>
+                <h2 className="mt-4 t-head">最近看过的电影</h2>
               </div>
               <Link to="/archive" className="link-rule text-ink/75 hover:text-ink">
                 查看全部片库 <ArrowRight size={12} />
@@ -452,7 +452,7 @@ export const Home = () => {
                 <p className="artifact-label">
                   <b>03</b> 暗房笔记
                 </p>
-                <h2 className="mt-4 t-head text-ink">看完之后，你写下了什么。</h2>
+                <h2 className="mt-4 t-head text-ink">看完之后，你写下了什么</h2>
               </div>
               <p className="measure-tight text-[13.5px] leading-[1.8] text-ink/60">
                 片尾字幕之后的那一段。每部电影一篇，用你自己的话。

@@ -113,7 +113,7 @@ export const Archive = () => {
     return (
       <div className="shell py-20">
         <p className="kicker">02 / 我的片库</p>
-        <h1 className="display-xl mt-5">片库里还没有电影。</h1>
+        <h1 className="display-xl mt-5">片库里还没有电影</h1>
         <EmptyState
           className="mt-12"
           eyebrow="片库是空的"
@@ -151,7 +151,7 @@ export const Archive = () => {
           <div className="mt-6 grid grid-cols-12 items-end gap-x-6 gap-y-8 border-b border-ink/10 pb-8">
             <div className="col-span-12 lg:col-span-8">
               <h1 className="font-zh-title text-[clamp(2.8rem,6.6vw,5.6rem)] leading-[1.06] tracking-[-0.01em]">
-                我的片库。
+                我的片库
               </h1>
               <p className="mt-2 font-display text-[clamp(1.5rem,2.8vw,2.4rem)] italic leading-none text-ink/50">
                 The archive.
@@ -488,7 +488,7 @@ export const Archive = () => {
                   <p className="artifact-label">
                     <b>尚未收录</b>
                   </p>
-                  <h2 className="mt-3 t-head">候场室。</h2>
+                  <h2 className="mt-3 t-head">候场室</h2>
                 </div>
                 <p className="max-w-sm text-[13.5px] leading-[1.85] text-taupe">
                   这些电影已经在片目里，只差一段属于你的记忆。打开其中一部，就可以开始记录。

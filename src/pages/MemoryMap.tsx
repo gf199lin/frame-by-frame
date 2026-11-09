@@ -68,11 +68,11 @@ export const MemoryMapPage = () => {
     return (
       <div className="mx-auto max-w-shell px-5 py-20 lg:px-10">
         <p className="micro text-brass/80">03 — 记忆地图</p>
-        <h1 className="mt-4 font-zh-title text-[clamp(2.2rem,4.6vw,4rem)] leading-tight">地图还没有亮起来。</h1>
+        <h1 className="mt-4 font-zh-title text-[clamp(2.2rem,4.6vw,4rem)] leading-tight">地图还没有亮起来</h1>
         <EmptyState
           className="mt-12"
           eyebrow="还没有星图"
-          title="这片星座还没有形成。"
+          title="这片星座还没有形成"
           description="记忆地图会从你的电影、它们的主题，以及它们带给你的感受中自行绘制。添加两三部电影之后，连接就会出现。"
           action={
             <button type="button" onClick={() => openAdd()} className="btn btn-primary">
@@ -96,7 +96,7 @@ export const MemoryMapPage = () => {
       <div className="flex flex-wrap items-end justify-between gap-8 pt-7">
         <div>
           <h1 className="font-zh-title text-[clamp(2.5rem,6.4vw,5.4rem)] leading-[1.08] tracking-[-0.01em]">
-            记忆地图。
+            记忆地图
           </h1>
           <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
             <p className="text-[11px] uppercase tracking-[0.16em] text-taupe">Memory Map</p>

@@ -149,7 +149,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
               <b>AI</b> 观影分析
             </p>
             <h2 className="mt-4 font-zh-title text-[1.7rem] leading-tight text-ink">
-              这次还没有 AI 解读。
+              这次还没有 AI 解读
             </h2>
           </div>
           <div>
@@ -219,10 +219,10 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
             </p>
             <h2 className="mt-3 font-zh-title text-[1.7rem] leading-tight text-ink">
               {analysis.model.provider === 'seed'
-                ? '示例解读 · 编辑撰写，不是模型输出。'
+                ? '示例解读 · 编辑撰写，不是模型输出'
                 : analysis.model.provider === 'local-engine'
-                  ? '本地引擎读到的，和你写下的。'
-                  : '模型读到的，和你写下的。'}
+                  ? '本地引擎读到的，和你写下的'
+                  : '模型读到的，和你写下的'}
             </h2>
             <p className="mt-2 max-w-2xl text-[13px] leading-[1.85] text-taupe">
               下面全部是分析引擎生成的解读，不是你的原文。你的笔记在上方「我的记忆」中保持原样。

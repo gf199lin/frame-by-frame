@@ -1238,7 +1238,7 @@ export const AddFilmFlow = ({
               在线 AI 分析 · 已等待 {elapsed} 秒
             </p>
             <h2 id="add-film-title" className="mt-3 font-zh-title text-[1.9rem] leading-tight text-paper">
-              正在听你写下的内容。
+              正在听你写下的内容
             </h2>
             <p className="mt-3 max-w-md text-[15px] leading-[1.9] text-paper-dim">
               后端正在调用已配置的模型服务。模型密钥只保存在服务端，不会出现在浏览器里。
@@ -1306,7 +1306,7 @@ export const AddFilmFlow = ({
           <div className="mx-auto w-full max-w-xl">
             <p className="text-[12px] tracking-[0.06em] text-[#e8b2a2]">AI 分析没有完成</p>
             <h2 id="add-film-title" className="mt-3 font-zh-title text-[1.9rem] leading-tight text-paper">
-              《{selected.title}》还没有被分析。
+              《{selected.title}》还没有被分析
             </h2>
             <p className="mt-3 text-[15px] leading-[1.9] text-paper-dim">{aiErrorMessage(aiError)}</p>
             <ul className="mt-6 space-y-2 border-l border-white/15 pl-4 text-[14px] leading-[1.8] text-paper-dim">
@@ -1348,7 +1348,7 @@ export const AddFilmFlow = ({
                   id="add-film-title"
                   className="mt-3 font-zh-title text-[2rem] leading-tight text-paper sm:text-[2.5rem]"
                 >
-                  《{selected.title}》已经进入片库。
+                  《{selected.title}》已经进入片库
                 </h2>
                 <p className="mt-3 max-w-2xl text-[15px] leading-[1.9] text-paper-dim">
                   {pending.analysis.summary}

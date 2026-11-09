@@ -20,7 +20,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
       <div className="flex min-h-screen flex-col items-center justify-center bg-ink px-6 text-center">
         <p className="micro text-paper/50">放映暂时中断</p>
         <h1 className="mt-4 font-zh-title text-3xl leading-snug text-paper sm:text-4xl">
-          放映机出了一点问题。
+          放映机出了一点问题
         </h1>
         <p className="mt-4 max-w-md text-[15px] leading-[1.9] text-paper-muted">
           你的片库仍然保存在这台设备的浏览器里。刷新页面即可重新进入博物馆；如果问题反复出现，可以在页脚恢复示例数据。

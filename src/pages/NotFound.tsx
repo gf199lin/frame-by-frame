@@ -7,7 +7,7 @@ export const NotFound = () => (
     <h1 className="mt-6 max-w-3xl font-zh-title text-[clamp(2.4rem,6vw,4.6rem)] leading-[1.15]">
       这一帧，
       <br />
-      <span className="text-taupe">已经从拷贝里剪掉了。</span>
+      <span className="text-taupe">已经从拷贝里剪掉了</span>
     </h1>
     <p className="mt-5 max-w-md text-[15px] leading-[1.9] text-ink/80">
       你访问的页面不存在，或者它指向的那条观影记录已经从片库中移除。

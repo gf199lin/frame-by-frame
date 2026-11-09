@@ -358,13 +358,13 @@ export const Reflection = () => {
         <div className="mx-auto max-w-shell px-5 py-20 lg:px-10">
           <p className="micro text-[#7a7264]">05 — 年度回顾</p>
           <h1 className="mt-4 font-zh-title text-[clamp(2.4rem,5vw,4.2rem)] leading-tight text-[#171512]">
-            年度特刊还没有内容。
+            年度特刊还没有内容
           </h1>
           <div className="mt-12">
             <EmptyState
               tone="light"
               className="border-[#171412]/20"
-              title="一本年鉴，需要一年的帧。"
+              title="一本年鉴，需要一年的帧"
               description="先添加第一部电影，然后再回来。年度回顾会把月份、主题、情绪，以及对你观影品味的解读，收进同一件可以打印的物件里。"
               action={
                 <button type="button" onClick={() => openAdd()} className="btn btn-primary">
@@ -725,7 +725,7 @@ export const Reflection = () => {
         createPortal(
           <div className="fixed inset-0 z-[110] flex flex-col items-center justify-center bg-[#1b1814]/96 px-6 text-center backdrop-blur">
             <p className="micro text-paper-dim">正在排版年度特刊</p>
-            <p className="mt-4 font-zh-title text-[2rem] text-paper sm:text-[2.6rem]">一年，在帧与帧之间。</p>
+            <p className="mt-4 font-zh-title text-[2rem] text-paper sm:text-[2.6rem]">一年，在帧与帧之间</p>
             <div className="mt-10 w-full max-w-sm space-y-3 text-left">
               {['收集这一年的帧', '整理主题与情绪', '排版与校色'].map((label, i) => (
                 <div key={label} className="flex items-center gap-3">

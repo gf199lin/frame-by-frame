@@ -32,7 +32,7 @@ export const FilmDetail = () => {
       <div className="shell py-24">
         <EmptyState
           eyebrow="404 / 找不到这一帧"
-          title="这部电影不在你的片库里。"
+          title="这部电影不在你的片库里"
           description="链接可能已经过期，或者这条观影记录已经被移除。"
           action={
             <Link to="/archive" className="btn btn-ghost">
@@ -313,7 +313,7 @@ export const FilmDetail = () => {
               <p className="artifact-label">
                 <b>III</b> 留下的东西
               </p>
-              <h2 className="mt-5 t-head">它在你身上留下了什么。</h2>
+              <h2 className="mt-5 t-head">它在你身上留下了什么</h2>
               <p className="mt-4 max-w-xs text-[13.5px] leading-[1.9] text-taupe">
                 主题是电影在讨论什么，情绪是它摸起来是什么质地。两者都从你的笔记和电影标签中读取，再按重复出现的次数加权。
               </p>
@@ -374,7 +374,7 @@ export const FilmDetail = () => {
                 <p className="artifact-label">
                   <b>IV</b> 与观影品味的关联
                 </p>
-                <h2 className="mt-4 t-head">这部电影，对照你的片库。</h2>
+                <h2 className="mt-4 t-head">这部电影，对照你的片库</h2>
               </div>
               <p className="max-w-sm text-[13px] leading-[1.85] text-taupe">
                 实心标记是你片库当前的位置，空心方框是这部电影自己的签名。两者之间的距离是信息，不是错误。
@@ -422,7 +422,7 @@ export const FilmDetail = () => {
                 <p className="artifact-label">
                   <b>V</b> 相关的电影
                 </p>
-                <h2 className="mt-4 t-head text-ink">与这部片子呼应的电影。</h2>
+                <h2 className="mt-4 t-head text-ink">与这部片子呼应的电影</h2>
               </div>
               <p className="max-w-xs text-[13px] leading-[1.85] text-ink/60">
                 按共同主题挑选，而不是按类型或上映年份。

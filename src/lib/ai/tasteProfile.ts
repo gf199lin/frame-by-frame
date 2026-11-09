@@ -199,8 +199,8 @@ const rollup = (
 }
 
 const buildSignature = (dimensions: DimensionProfile[], sampleState: TasteSampleState): string => {
-  if (sampleState === 'empty') return '还没有任何已确认的 AI 分析。'
-  if (sampleState === 'insufficient') return '证据还不够，暂时不能下结论。'
+  if (sampleState === 'empty') return '还没有任何已确认的 AI 分析'
+  if (sampleState === 'insufficient') return '证据还不够，暂时不能下结论'
   const ranked = [...dimensions]
     .filter((dimension) => dimension.sufficient && dimension.strength > 0.08)
     .sort((a, b) => b.strength * (0.4 + b.confidence) - a.strength * (0.4 + a.confidence))
@@ -208,7 +208,7 @@ const buildSignature = (dimensions: DimensionProfile[], sampleState: TasteSample
     const pole = dimension.lean >= 0 ? dimension.def.highZh : dimension.def.lowZh
     return `${dimension.def.labelZh}偏向「${pole}」`
   })
-  return phrases.length > 0 ? phrases.join('，') : '倾向存在，但方向仍然模糊。'
+  return phrases.length > 0 ? phrases.join('，') : '倾向存在，但方向仍然模糊'
 }
 
 const buildSummary = (

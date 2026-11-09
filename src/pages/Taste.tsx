@@ -59,12 +59,12 @@ export const Taste = () => {
       <div className="mx-auto max-w-shell px-5 py-20 lg:px-10">
         <p className="micro text-brass/80">04 — 观影品味</p>
         <h1 className="mt-4 font-zh-title text-[clamp(2.2rem,4.6vw,4rem)] leading-tight">
-          还没有可以读取的东西。
+          还没有可以读取的东西
         </h1>
         <EmptyState
           className="mt-12"
           eyebrow="画像是空白的"
-          title="没有一帧，AI 也就看不见你。"
+          title="没有一帧，AI 也就看不见你"
           description="添加一部电影，写下它留给你什么。六个维度会随着你确认过的证据逐渐出现，每个维度都带着置信度和支撑它的原句。"
           action={
             <button type="button" onClick={() => openAdd()} className="btn btn-primary">
@@ -386,7 +386,7 @@ export const Taste = () => {
                 <p className="artifact-label">
                   <b>02</b> 主题复现
                 </p>
-                <h2 className="mt-4 t-head">你反复回到的地方。</h2>
+                <h2 className="mt-4 t-head">你反复回到的地方</h2>
                 <p className="mt-3 max-w-xl text-[13.5px] leading-[1.85] text-taupe">
                   只统计已确认分析中被你回应过的主题，不统计电影本身的题材标签。
                 </p>
@@ -471,7 +471,7 @@ export const Taste = () => {
             <h2 className="font-zh-title text-[clamp(2rem,4vw,3.4rem)] leading-[1.2]">
               一条会
               <br />
-              <span className="text-brass-soft">随着片库生长的线索。</span>
+              <span className="text-brass-soft">随着片库生长的线索</span>
             </h2>
             <p className="mt-5 max-w-md text-[15px] leading-[1.95] text-ink/75">
               下面这条时间线由本地规则按片库规模计算，与 AI 六维画像相互独立。它记录的是记录数量的变化，不是 AI 对你下的结论。
