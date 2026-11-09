@@ -1217,6 +1217,19 @@ input[type='range']::-moz-range-thumb {
 [role='dialog'] .input::placeholder {
   color: rgba(203, 200, 217, 0.6);
 }
+/* Boxed inputs sit on a cream surface, so they need ink-colored text. */
+[role='dialog'] .input-boxed {
+  color: #161c66;
+  border-color: rgba(253, 246, 226, 0.32);
+  background: rgba(253, 246, 226, 0.9);
+}
+[role='dialog'] .input-boxed::placeholder {
+  color: rgba(22, 28, 102, 0.46);
+}
+[role='dialog'] .input-boxed:focus {
+  border-color: #fdf6e2;
+  background: #fdf6e2;
+}
 [role='dialog'] input[type='date']::-webkit-calendar-picker-indicator {
   filter: invert(0.85);
 }
