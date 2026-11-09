@@ -34,6 +34,9 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: /frame-by-frame/
+          # Public API origin (never a secret). If workers.dev is unreachable,
+          # point this at a custom domain bound to the same Worker.
+          VITE_AI_API_BASE: https://frame-by-frame-ai.frame-by-frame-ai.workers.dev
 
       # SPA fallback: deep links (e.g. /frame-by-frame/archive/xxx) get index.html
       - name: Add SPA fallback
