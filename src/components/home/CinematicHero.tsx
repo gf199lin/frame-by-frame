@@ -55,7 +55,7 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
               film={film}
               ratio="free"
               eager
-              position="50% 46%"
+              position="50% 70%"
               className="hero-still__media aspect-[4/3] w-full sm:aspect-[16/9] lg:aspect-[21/9]"
             />
           ) : (

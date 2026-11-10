@@ -59,10 +59,11 @@ export const Home = () => {
   const showRadar = profile.dimensions.filter((item) => item.sufficient).length >= 2
 
   // The cover is an editorial choice made from the collection, not simply the
-  // newest entry: a horizontal real still with a dark, quiet lower-left corner
-  // for the title and the deep blue/cream palette of the site.
-  const hasInterstellar = records.some((record) => record.filmId === 'interstellar')
-  const heroFilmId = hasInterstellar ? 'interstellar' : ordered[0]?.filmId
+  // newest entry: La La Land's City of Stars frame keeps the dancers to the
+  // right and a dark road at lower-left for the title, with city lights that
+  // sit comfortably beside the site's deep blue and cream.
+  const hasLaLaLand = records.some((record) => record.filmId === 'la-la-land')
+  const heroFilmId = hasLaLaLand ? 'la-la-land' : ordered[0]?.filmId
   const heroFilm = heroFilmId ? (filmById(films, heroFilmId) ?? null) : null
   const heroStats = { films: records.length, themes: themeCount, hours }
 
