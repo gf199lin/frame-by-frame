@@ -153,7 +153,7 @@ export const Archive = () => {
               <h1 className="font-zh-title text-[clamp(2.8rem,6.6vw,5.6rem)] leading-[1.06] tracking-[-0.01em]">
                 我的片库
               </h1>
-              <p className="mt-2 font-display text-[clamp(1.5rem,2.8vw,2.4rem)] italic leading-none text-ink/50">
+              <p className="mt-2 font-display text-[clamp(1.5rem,2.8vw,2.4rem)] italic leading-none text-ink/60">
                 The archive
               </p>
               <p className="measure mt-4 text-[15.5px] leading-[1.9] text-taupe">
@@ -366,7 +366,7 @@ export const Archive = () => {
                       {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].zh}
                     </p>
                     <Link to={`/archive/${featured.film.id}`} className="group mt-3">
-                      <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-ocean">
+                      <h2 className="font-poster text-[clamp(2rem,4.2vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-ocean">
                         {featured.film.title}
                       </h2>
                     </Link>

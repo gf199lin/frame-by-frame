@@ -153,7 +153,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
             </h2>
           </div>
           <div>
-            <p className="max-w-2xl text-[14.5px] leading-[1.95] text-ink/75">
+            <p className="max-w-2xl copy-body text-ink/85">
               分析会读取你写下的笔记、评分，以及少量相关旧片摘要；每条判断都会附上原文依据。
               只有你主动授权后，才会把这次记录发送给在线 AI 服务。原始笔记不会被修改，
               结论也只在你确认后计入六维画像；未连接或未授权时，不会生成任何解读。
@@ -166,7 +166,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                   onChange={(event) => setAiConsent(event.target.checked)}
                   className="mt-0.5 h-4 w-4"
                 />
-                <span className="text-[13px] leading-[1.8] text-ink/70">
+                <span className="text-[14px] leading-[1.8] text-ink/75">
                   允许把这次观影笔记发送给在线 AI 服务（可选）。只会发送这一部电影和少量相关旧片摘要。
                 </span>
               </label>
@@ -177,7 +177,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                 <p className="text-[13.5px] leading-[1.8] text-[#8c4b3a]">{aiErrorMessage(error)}</p>
               </div>
             )}
-            <p className="mt-4 flex items-start gap-2 text-[12.5px] leading-[1.8] text-ink/60">
+            <p className="mt-4 flex items-start gap-2 text-[14px] leading-[1.8] text-ink/75">
               <ShieldCheck size={12} className="mt-[3px] shrink-0" />
               {!configured
                 ? '当前没有连接 AI 服务，因此不会生成解读。'
@@ -224,7 +224,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                   ? '本地引擎读到的，和你写下的'
                   : '模型读到的，和你写下的'}
             </h2>
-            <p className="mt-2 max-w-2xl text-[13px] leading-[1.85] text-taupe">
+            <p className="mt-2 max-w-2xl text-[14px] leading-[1.8] text-taupe">
               下面全部是分析引擎生成的解读，不是你的原文。你的笔记在上方「我的记忆」中保持原样。
               {analysis.model.provider === 'seed'
                 ? '编辑示例 · 非模型输出 · 需要你确认后才计入画像'
@@ -246,7 +246,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1fr] lg:gap-14">
           <div>
-            <p className="text-[12px] tracking-[0.06em] text-ink/55">观察到的情绪</p>
+            <p className="text-[12.5px] tracking-[0.06em] text-ink/65">观察到的情绪</p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               {analysis.observed_emotions.map((item) => (
                 <span key={item.mood} className="tag border-ink/15 text-ink/75">
@@ -254,22 +254,22 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                 </span>
               ))}
               {analysis.observed_emotions.length === 0 && (
-                <span className="text-[13px] text-taupe">没有明确的情绪表达。</span>
+                <span className="text-[13.5px] text-taupe">没有明确的情绪表达。</span>
               )}
             </div>
 
-            <p className="mt-7 text-[12px] tracking-[0.06em] text-ink/55">主题（只算你回应过的）</p>
+            <p className="mt-7 text-[12.5px] tracking-[0.06em] text-ink/65">主题（只算你回应过的）</p>
             <ul className="mt-3 space-y-3">
               {analysis.themes_identified.map((item) => (
                 <li key={item.theme} className="border-l border-ink/15 pl-3">
-                  <p className="text-[14.5px] font-medium text-ink/85">
+                  <p className="text-[15.5px] font-medium text-ink/85">
                     {THEMES[item.theme]?.zh ?? item.theme}
                   </p>
-                  <p className="mt-1 text-[13px] leading-[1.8] text-ink/60">{item.evidence}</p>
+                  <p className="mt-1 text-[14px] leading-[1.8] text-ink/70">{item.evidence}</p>
                 </li>
               ))}
               {analysis.themes_identified.length === 0 && (
-                <li className="text-[13px] text-taupe">这次笔记没有指向明确主题。</li>
+                <li className="text-[13.5px] text-taupe">这次笔记没有指向明确主题。</li>
               )}
             </ul>
 
@@ -277,8 +277,8 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
               <div className="mt-7 grid gap-5 sm:grid-cols-2">
                 {analysis.liked.length > 0 && (
                   <div>
-                    <p className="text-[12px] tracking-[0.06em] text-ink/55">你喜欢的</p>
-                    <ul className="mt-2 space-y-1.5 text-[13.5px] leading-[1.8] text-ink/75">
+                    <p className="text-[12.5px] tracking-[0.06em] text-ink/65">你喜欢的</p>
+                    <ul className="mt-2 space-y-1.5 text-[14.5px] leading-[1.8] text-ink/80">
                       {analysis.liked.map((item) => (
                         <li key={item}>· {item}</li>
                       ))}
@@ -287,8 +287,8 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                 )}
                 {analysis.disliked.length > 0 && (
                   <div>
-                    <p className="text-[12px] tracking-[0.06em] text-ink/55">你不喜欢的</p>
-                    <ul className="mt-2 space-y-1.5 text-[13.5px] leading-[1.8] text-ink/75">
+                    <p className="text-[12.5px] tracking-[0.06em] text-ink/65">你不喜欢的</p>
+                    <ul className="mt-2 space-y-1.5 text-[14.5px] leading-[1.8] text-ink/80">
                       {analysis.disliked.map((item) => (
                         <li key={item}>· {item}</li>
                       ))}
@@ -300,7 +300,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
           </div>
 
           <div>
-            <p className="text-[12px] tracking-[0.06em] text-ink/55">偏好证据</p>
+            <p className="text-[12.5px] tracking-[0.06em] text-ink/65">偏好证据</p>
             <ul className="mt-3 space-y-4">
               {analysis.preference_evidence.map((contribution, index) => {
                 const def = DIMENSION_MAP[contribution.dimension_id]
@@ -311,7 +311,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                     className={cn('border-l pl-3', removed ? 'border-ink/10 opacity-50' : 'border-brass/40')}
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <p className="text-[13.5px] font-medium text-ink/85">
+                      <p className="text-[14.5px] font-medium text-ink/85">
                         {def.labelZh} · {directionLabel(contribution.direction, contribution.dimension_id)}
                       </p>
                       <button
@@ -323,18 +323,18 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                             removed ? 'kept' : 'removed',
                           )
                         }
-                        className="text-[11.5px] tracking-[0.04em] text-taupe underline decoration-ink/20 underline-offset-2 hover:text-ink"
+                        className="text-[12px] tracking-[0.04em] text-taupe underline decoration-ink/20 underline-offset-2 hover:text-ink"
                       >
                         {removed ? '恢复这条判断' : '这条不像我'}
                       </button>
                     </div>
-                    <p className="mt-1.5 text-[13.5px] leading-[1.85] text-ink/75">{contribution.evidence}</p>
+                    <p className="mt-1.5 text-[14.5px] leading-[1.8] text-ink/80">{contribution.evidence}</p>
                     {contribution.quote && (
-                      <p className="mt-1.5 font-zh-body text-[13px] leading-[1.8] text-taupe">
+                      <p className="mt-1.5 font-zh-body text-[14px] leading-[1.8] text-taupe">
                         “{contribution.quote}”
                       </p>
                     )}
-                    <p className="mt-1.5 flex flex-wrap gap-3 font-mono text-[11px] text-taupe">
+                    <p className="mt-1.5 flex flex-wrap gap-3 font-mono text-[11.5px] text-taupe">
                       <span>强度 {Math.round(contribution.strength * 100)}%</span>
                       <span>置信度 {percent(contribution.confidence)}</span>
                       {removed && <span>已从画像移除</span>}
@@ -346,8 +346,8 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
 
             {analysis.uncertainties.length > 0 && (
               <div className="mt-6 border-t border-ink/10 pt-4">
-                <p className="text-[12px] tracking-[0.06em] text-ink/55">AI 不确定的地方</p>
-                <ul className="mt-2 space-y-1.5 text-[13px] leading-[1.8] text-ink/65">
+                <p className="text-[12.5px] tracking-[0.06em] text-ink/65">AI 不确定的地方</p>
+                <ul className="mt-2 space-y-1.5 text-[14px] leading-[1.8] text-ink/75">
                   {analysis.uncertainties.map((item) => (
                     <li key={item}>· {item}</li>
                   ))}
@@ -367,8 +367,8 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
               ['视听', analysis.visual_observations],
             ].map(([label, items]) => (
               <div key={label as string}>
-                <p className="text-[12px] tracking-[0.06em] text-ink/55">{label as string}</p>
-                <ul className="mt-2 space-y-1.5 text-[13px] leading-[1.8] text-ink/70">
+                <p className="text-[12.5px] tracking-[0.06em] text-ink/65">{label as string}</p>
+                <ul className="mt-2 space-y-1.5 text-[14px] leading-[1.8] text-ink/75">
                   {(items as string[]).map((item) => (
                     <li key={item}>· {item}</li>
                   ))}
@@ -381,7 +381,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
 
         {analysis.related_films.length > 0 && (
           <div className="mt-8 border-t border-ink/10 pt-5">
-            <p className="text-[12px] tracking-[0.06em] text-ink/55">在这座片库里的关联</p>
+            <p className="text-[12.5px] tracking-[0.06em] text-ink/65">在这座片库里的关联</p>
             <ul className="mt-3 grid gap-3 sm:grid-cols-2">
               {analysis.related_films.map((item) => {
                 const related = filmById(films, item.filmId)
@@ -389,8 +389,8 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                 return (
                   <li key={item.filmId}>
                     <Link to={`/archive/${related.id}`} className="group block border-l border-ink/15 pl-3">
-                      <p className="text-[14px] text-ink/85 group-hover:underline">{related.title}</p>
-                      <p className="mt-1 text-[13px] leading-[1.8] text-taupe">{item.explanation}</p>
+                      <p className="text-[15px] text-ink/90 group-hover:underline">{related.title}</p>
+                      <p className="mt-1 text-[14px] leading-[1.8] text-taupe">{item.explanation}</p>
                     </Link>
                   </li>
                 )
@@ -407,7 +407,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
               onChange={(event) => setAiConsent(event.target.checked)}
               className="mt-0.5 h-4 w-4"
             />
-            <span className="text-[13px] leading-[1.8] text-ink/70">
+            <span className="text-[14px] leading-[1.8] text-ink/75">
               允许把这次观影笔记发送给在线 AI 服务。勾选后才能重新分析。
             </span>
           </label>
@@ -492,7 +492,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
               value={correction}
               onChange={(event) => setCorrection(event.target.value)}
               rows={3}
-              className="input input-boxed text-[14.5px] leading-[1.8]"
+              className="input input-boxed text-[15px] leading-[1.8]"
               placeholder="例如：“我喜欢它不是因为怀旧，而是因为它允许人物不和解。”"
             />
             <div className="mt-2 flex items-center gap-2">

@@ -56,26 +56,31 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
               ratio="free"
               eager
               position="50% 70%"
-              className="hero-still__media aspect-[4/3] w-full sm:aspect-[16/9] lg:aspect-[21/9]"
+              className="hero-still__media aspect-[4/3] min-h-[264px] w-full sm:aspect-[16/9] sm:min-h-0 lg:aspect-[21/9]"
             />
           ) : (
-            <div className="hero-still__media aspect-[4/3] w-full bg-ocean-deep sm:aspect-[16/9] lg:aspect-[21/9]" />
+            <div className="hero-still__media aspect-[4/3] min-h-[264px] w-full bg-ocean-deep sm:aspect-[16/9] sm:min-h-0 lg:aspect-[21/9]" />
           )}
 
           <div className="hero-scrim pointer-events-none absolute inset-0 z-20" aria-hidden="true" />
 
           <figcaption className="hero-copy absolute inset-x-0 bottom-0 z-30 px-5 pb-5 pt-20 sm:px-7 sm:pb-7 lg:px-10 lg:pb-9 lg:pt-24">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-paper-sheet/65 sm:text-[10.5px]">
+            <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-paper-sheet/75 sm:text-[11px]">
               {film ? `Cover still — ${film.title}, ${film.year}` : 'Cover still'}
             </p>
 
-            <h1 className="hero-title mt-2.5 font-display text-[clamp(2.1rem,4.1vw,3.7rem)] leading-[0.98] tracking-[-0.022em]">
+            <h1 className="hero-title mt-3 font-poster text-[clamp(2.55rem,6.3vw,5.25rem)] leading-[0.9] tracking-[-0.015em]">
               Every Film
               <br />
-              Leaves a Frame.
+              <span className="sm:hidden">
+                Leaves a
+                <br />
+                Frame.
+              </span>
+              <span className="hidden sm:inline">Leaves a Frame.</span>
             </h1>
 
-            <p className="mt-2.5 font-display text-[clamp(0.98rem,1.25vw,1.16rem)] italic text-paper-sheet/80">
+            <p className="mt-3 font-display text-[clamp(1.05rem,1.35vw,1.25rem)] italic leading-snug text-paper-sheet/85">
               Every frame tells your story.
             </p>
 
@@ -83,7 +88,7 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
               <button
                 type="button"
                 onClick={onAdd}
-                className="mt-4 inline-flex items-center gap-2.5 border-b border-paper-sheet/35 pb-1.5 pt-0.5 font-mono text-[10.5px] uppercase tracking-[0.2em] text-paper-sheet/85 transition-colors duration-300 hover:border-paper-sheet hover:text-paper-sheet sm:mt-5"
+                className="mt-4 inline-flex items-center gap-2.5 border-b border-paper-sheet/35 pb-1.5 pt-0.5 font-mono text-[11px] uppercase tracking-[0.19em] text-paper-sheet/90 transition-colors duration-300 hover:border-paper-sheet hover:text-paper-sheet sm:mt-5"
               >
                 Add your first film
                 <Plus size={13} strokeWidth={1.6} />
@@ -91,7 +96,7 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
             ) : (
               <Link
                 to="/archive"
-                className="group/entry mt-4 inline-flex items-center gap-2.5 border-b border-paper-sheet/35 pb-1.5 pt-0.5 font-mono text-[10.5px] uppercase tracking-[0.2em] text-paper-sheet/85 transition-colors duration-300 hover:border-paper-sheet hover:text-paper-sheet sm:mt-5"
+                className="group/entry mt-4 inline-flex items-center gap-2.5 border-b border-paper-sheet/35 pb-1.5 pt-0.5 font-mono text-[11px] uppercase tracking-[0.19em] text-paper-sheet/90 transition-colors duration-300 hover:border-paper-sheet hover:text-paper-sheet sm:mt-5"
               >
                 Explore my cinema
                 <ArrowRight
@@ -110,7 +115,7 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
             {statItems.map((item) => (
               <span
                 key={item.label}
-                className="text-[10.5px] uppercase tracking-[0.16em] text-taupe"
+                className="text-[11px] uppercase tracking-[0.15em] text-taupe"
               >
                 <b className="num mr-1.5 text-[12.5px] font-normal tracking-normal text-ink">
                   {item.value}
@@ -121,13 +126,13 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
           </div>
 
           {empty ? (
-            <span className="text-[10.5px] uppercase tracking-[0.16em] text-taupe/70">
+            <span className="text-[11px] uppercase tracking-[0.15em] text-taupe/70">
               Waiting for the first frame
             </span>
           ) : (
             <a
               href="#latest"
-              className="inline-flex items-center gap-1.5 text-[10.5px] uppercase tracking-[0.16em] text-taupe transition-colors hover:text-ink"
+              className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] text-taupe transition-colors hover:text-ink"
             >
               Scroll to explore
               <ArrowDown size={12} strokeWidth={1.6} />

@@ -102,7 +102,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             >
               <Plus size={13} strokeWidth={1.8} />
               <span className="hidden sm:inline">添加电影</span>
-              <span className="sm:hidden">添加</span>
+              <span className="hidden min-[360px]:inline sm:hidden">添加</span>
             </button>
             <button
               type="button"

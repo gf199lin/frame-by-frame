@@ -110,7 +110,7 @@ export const FilmIndexRow = ({
         {film.title}
       </span>
       {film.titleZh && (
-        <span className="mt-0.5 block truncate text-[12px] tracking-[0.03em] text-ink/55">
+        <span className="mt-0.5 block truncate text-[12px] tracking-[0.03em] text-ink/65">
           {film.titleZh}
         </span>
       )}
@@ -155,7 +155,7 @@ export const WaitingRoomCard = ({
         {film.title}
       </p>
       {film.titleZh && (
-        <p className="truncate text-[12px] tracking-[0.03em] text-ink/55">{film.titleZh}</p>
+        <p className="truncate text-[12px] tracking-[0.03em] text-ink/65">{film.titleZh}</p>
       )}
       <p className="mt-0.5 truncate text-[11.5px] tracking-[0.03em] text-taupe/80">
         {film.year} · {directorOf(film)}

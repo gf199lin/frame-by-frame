@@ -145,13 +145,13 @@ export const Taste = () => {
               <p className="mt-3 font-display text-[clamp(1.5rem,3vw,2.5rem)] italic leading-[1.05] text-ink/75">
                 a reading in progress
               </p>
-              <p className="measure mt-7 text-[15.5px] leading-[1.95] text-ink/75">
+              <p className="measure mt-7 copy-body-lg text-ink/85">
                 {profile.filmCount} 部电影 · {profile.acceptedCount} 条已确认的 AI 分析 ·{' '}
                 {profile.pendingCount} 条待确认。画像只使用你确认过的证据，不使用电影简介或随机数字。
               </p>
 
               <div className="mt-8 border-l border-brass pl-5">
-                <p className="text-[12px] tracking-[0.06em] text-brass/80">
+                <p className="text-[13px] tracking-[0.06em] text-brass">
                   {profile.sampleState === 'stable' || profile.sampleState === 'forming'
                     ? '这次解读'
                     : '目前的样本状态'}
@@ -162,9 +162,9 @@ export const Taste = () => {
               </div>
 
               <div className="mt-6 border border-brass/25 bg-brass/[0.05] px-4 py-3">
-                <p className="text-[13.5px] leading-[1.85] text-ink/75">{sampleStateCopy[profile.sampleState]}</p>
+                <p className="text-[14.5px] leading-[1.8] text-ink/80">{sampleStateCopy[profile.sampleState]}</p>
                 {profile.pendingCount > 0 && (
-                  <p className="mt-2 text-[12.5px] leading-[1.8] text-taupe">
+                  <p className="mt-2 text-[13px] leading-[1.8] text-taupe">
                     有 {profile.pendingCount} 条分析正在等待你的确认，它们还没有计入画像。
                   </p>
                 )}
@@ -183,8 +183,8 @@ export const Taste = () => {
             <div className="col-span-12 lg:col-span-5">
               <div className="paper-card relative mx-auto w-full max-w-[480px] p-4 sm:p-6">
                 <div className="flex items-center justify-between border-b border-ink/10 pb-2.5">
-                  <p className="micro-sm text-ink/50">Taste fingerprint</p>
-                  <p className="font-mono text-[10.5px] tracking-[0.06em] text-taupe">六维 · 只读已确认</p>
+                  <p className="micro-sm text-ink/60">Taste fingerprint</p>
+                  <p className="font-mono text-[11.5px] tracking-[0.05em] text-taupe">六维 · 只读已确认</p>
                 </div>
                 <div className="relative mt-3">
                   {showRadar ? (
@@ -198,14 +198,14 @@ export const Taste = () => {
                     />
                   ) : (
                     <div className="flex min-h-[300px] flex-col justify-center rounded-[8px] border border-dashed border-ink/20 px-8 py-10 text-center">
-                      <p className="font-zh-title text-[1.35rem] leading-[1.5] text-ink">
+                      <p className="font-zh-title text-[1.5rem] leading-[1.5] text-ink">
                         还没有可以画出的形状。
                       </p>
-                      <p className="mt-3 text-[13.5px] leading-[1.9] text-taupe">
+                      <p className="mt-3 text-[14.5px] leading-[1.85] text-taupe">
                         雷达图只显示你确认过的 AI 证据。没有证据时，我们不会用虚构数字把它填满。
                       </p>
                       {pending.length > 0 && (
-                        <p className="mt-4 text-[13px] text-ink/70">
+                        <p className="mt-4 text-[13px] text-ink/80">
                           下面有 {pending.length} 条分析等待你确认。
                         </p>
                       )}
@@ -214,20 +214,20 @@ export const Taste = () => {
                 </div>
                 <div className="mt-3 grid w-full grid-cols-3 divide-x divide-ink/10 border-t border-ink/10 pt-3 text-center">
                   <div>
-                    <p className="num text-[1.35rem] text-ink">{percent(profile.overallConfidence)}</p>
-                    <p className="mt-1 text-[12px] tracking-[0.03em] text-taupe">整体置信度</p>
+                    <p className="num text-[1.5rem] text-ink">{percent(profile.overallConfidence)}</p>
+                    <p className="mt-1 text-[12.5px] tracking-[0.03em] text-taupe">整体置信度</p>
                   </div>
                   <div>
-                    <p className="num text-[1.35rem] text-ink">{profile.acceptedCount}</p>
-                    <p className="mt-1 text-[12px] tracking-[0.03em] text-taupe">已确认分析</p>
+                    <p className="num text-[1.5rem] text-ink">{profile.acceptedCount}</p>
+                    <p className="mt-1 text-[12.5px] tracking-[0.03em] text-taupe">已确认分析</p>
                   </div>
                   <div>
-                    <p className="num text-[1.35rem] text-ink">{profile.filmCount}</p>
-                    <p className="mt-1 text-[12px] tracking-[0.03em] text-taupe">已读电影</p>
+                    <p className="num text-[1.5rem] text-ink">{profile.filmCount}</p>
+                    <p className="mt-1 text-[12.5px] tracking-[0.03em] text-taupe">已读电影</p>
                   </div>
                 </div>
                 {profile.updatedAt && (
-                  <p className="mt-3 flex items-center justify-center gap-1.5 text-[12px] text-taupe">
+                  <p className="mt-3 flex items-center justify-center gap-1.5 text-[12.5px] text-taupe">
                     <Clock size={10} /> 最近更新 {formatLongDate(profile.updatedAt.slice(0, 10))}
                   </p>
                 )}
@@ -243,7 +243,7 @@ export const Taste = () => {
             <p className="artifact-label">
               <b>—</b> 这是什么
             </p>
-            <p className="mt-3 text-[14.5px] leading-[1.9] text-ink/75">
+            <p className="mt-3 copy-body text-ink/85">
               一份来自你的评分与笔记、再由你确认的片库解读。六条轴线来自你在笔记里表达过的反应；每一个判断都能回到某句话、某个评分，
               或者被明确标为不确定。置信度反映的是证据有多少，而不是 AI 有多正确。
             </p>
@@ -252,7 +252,7 @@ export const Taste = () => {
             <p className="artifact-label">
               <b>—</b> 这不是什么
             </p>
-            <p className="mt-3 text-[14.5px] leading-[1.9] text-ink/75">
+            <p className="mt-3 copy-body text-ink/85">
               不是人格测试，不是审美排名，也不是替你定义感受的系统。「不太像」和修正都会被保存，并降低被质疑那部分解读的置信度；
               拒绝的分析不会再计入画像，而你的原始笔记永远不会被 AI 覆盖。
             </p>
@@ -265,10 +265,10 @@ export const Taste = () => {
               <p className="artifact-label">
                 <b>—</b> 用一段话说
               </p>
-              <p className="mt-4 font-zh-title text-[1.45rem] leading-[1.5] text-ink">
+              <p className="mt-4 font-zh-title text-[1.55rem] leading-[1.5] text-ink">
                 {strongest ? `最强的信号是${strongest.def.labelZh}。` : '目前还没有足够稳定的信号。'}
               </p>
-              <p className="mt-2 text-[13px] leading-[1.85] text-taupe">
+              <p className="mt-2 text-[14.5px] leading-[1.8] text-taupe">
                 {strongest
                   ? `${strongest.def.label} · ${percent(
                       strongest.value < 0.5 ? 1 - strongest.value : strongest.value,
@@ -278,7 +278,7 @@ export const Taste = () => {
             </div>
             <div className="space-y-3 border-l border-ink/10 pl-6 sm:pl-8">
               {profile.summary.map((sentence, i) => (
-                <p key={i} className="text-[15px] leading-[1.95] text-ink/75">
+                <p key={i} className="copy-body text-ink/85">
                   {sentence}
                 </p>
               ))}
@@ -293,7 +293,7 @@ export const Taste = () => {
             <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-4">
               <div>
                 <SectionLabel index="00">待你确认</SectionLabel>
-                <p className="mt-3 max-w-2xl text-[14px] leading-[1.9] text-taupe">
+                <p className="mt-3 max-w-2xl text-[15px] leading-[1.85] text-taupe">
                   这些分析还没有计入画像。你可以直接接受，也可以打开电影详情逐条修改或拒绝。
                 </p>
               </div>
@@ -308,13 +308,13 @@ export const Taste = () => {
                     className="flex flex-wrap items-start justify-between gap-4 border-b border-ink/10 py-5"
                   >
                     <div className="max-w-2xl">
-                      <p className="font-zh-title text-[1.2rem] text-ink">
+                      <p className="font-zh-title text-[1.3rem] text-ink">
                         {film ? `《${film.title}》` : '一部电影'}
                         <span className="ml-2 text-[12.5px] tracking-[0.06em] text-taupe">
                           {analysis.model.model} · {formatLongDate(analysis.model.analyzedAt.slice(0, 10))}
                         </span>
                       </p>
-                      <p className="mt-1.5 text-[13.5px] leading-[1.85] text-ink/70">
+                      <p className="mt-1.5 text-[15px] leading-[1.85] text-ink/85">
                         {analysis.summary}
                       </p>
                     </div>
@@ -356,13 +356,13 @@ export const Taste = () => {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <SectionLabel index="01">六个维度</SectionLabel>
-              <p className="mt-4 max-w-xl text-[14px] leading-[1.9] text-taupe">
+              <p className="mt-4 max-w-xl text-[15px] leading-[1.85] text-taupe">
                 每条轴线从一端延伸到另一端。标记是你确认过的证据给出的位置，数字是置信度。样本不足时，这里会直接说明，而不是给出一个看起来确定的数字。
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[12px] tracking-[0.06em] text-taupe">你给出的判断</p>
-              <p className="mt-1 text-[14px] text-ink/75">
+              <p className="text-[12.5px] tracking-[0.06em] text-taupe">你给出的判断</p>
+              <p className="mt-1 text-[15px] text-ink/85">
                 {feedbackCounts.agree} 次同意 · {feedbackCounts['not-quite']} 次不太像 ·{' '}
                 {feedbackCounts.corrected} 次修正
               </p>
@@ -394,7 +394,7 @@ export const Taste = () => {
                   <b>02</b> 主题复现
                 </p>
                 <h2 className="mt-4 t-head">你反复回到的地方</h2>
-                <p className="mt-3 max-w-xl text-[13.5px] leading-[1.85] text-taupe">
+                <p className="mt-3 max-w-xl text-[15.5px] leading-[1.8] text-taupe">
                   只统计已确认分析中被你回应过的主题，不统计电影本身的题材标签。
                 </p>
               </div>
@@ -414,20 +414,20 @@ export const Taste = () => {
                     <div className="flex items-start justify-between gap-5">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-baseline gap-4">
-                          <span className="font-mono text-[12px] tracking-[0.16em] text-brass/70">
+                          <span className="font-mono text-[12.5px] tracking-[0.16em] text-brass/70">
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <p className="font-zh-title text-[clamp(1.35rem,2.2vw,1.9rem)] leading-none text-ink">
                             {THEMES[theme.id]?.zh ?? theme.id}
                           </p>
-                          <span className="text-[11px] uppercase tracking-[0.08em] text-taupe">
+                          <span className="text-[12.5px] uppercase tracking-[0.08em] text-taupe">
                             {THEMES[theme.id]?.label ?? theme.id}
                           </span>
-                          <span className="ml-auto font-mono text-[11.5px] text-taupe">
+                          <span className="ml-auto font-mono text-[12.5px] text-taupe">
                             {String(theme.count).padStart(2, '0')} 部
                           </span>
                         </div>
-                        <p className="mt-3 max-w-md text-[13px] leading-[1.85] text-taupe">
+                        <p className="mt-3 max-w-md text-[14.5px] leading-[1.8] text-taupe">
                           {THEMES[theme.id]?.blurbZh ?? ''}
                         </p>
                       </div>
@@ -466,24 +466,24 @@ export const Taste = () => {
       {state.profileHistory.length > 0 && (
         <section className="mx-auto max-w-shell px-5 py-14 lg:px-10 lg:py-20">
           <SectionLabel index="03">画像为什么变化</SectionLabel>
-          <p className="mt-4 max-w-2xl text-[14px] leading-[1.9] text-taupe">
+          <p className="mt-4 max-w-2xl text-[15px] leading-[1.85] text-taupe">
             每一次接受、修改或拒绝都会留下记录。变化不是悄悄发生的，也不需要你相信一个黑箱。
           </p>
           <ol className="mt-8 border-t border-ink/10">
             {state.profileHistory.slice(0, 8).map((event) => (
               <li key={event.id} className="grid gap-3 border-b border-ink/10 py-5 sm:grid-cols-[140px_1fr]">
-                <p className="text-[12px] tracking-[0.05em] text-taupe">
+                <p className="text-[12.5px] tracking-[0.05em] text-taupe">
                   {formatLongDate(event.at.slice(0, 10))}
-                  <span className="mt-1 block text-[12.5px] text-taupe/70">
+                  <span className="mt-1 block text-[12.5px] text-taupe/85">
                     {event.acceptedCount} 条已确认
                   </span>
                 </p>
                 <div>
-                  <p className="text-[14px] leading-[1.85] text-ink/80">{event.reason}</p>
+                  <p className="text-[15px] leading-[1.85] text-ink/85">{event.reason}</p>
                   {event.changes.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {event.changes.slice(0, 6).map((change) => (
-                        <span key={change.dimension} className="tag border-ink/15 text-[12.5px] text-ink/70">
+                        <span key={change.dimension} className="tag border-ink/15 text-[12.5px] text-ink/80">
                           {DIMENSION_MAP[change.dimension].labelZh}{' '}
                           {change.after >= change.before ? '+' : ''}
                           {Math.round((change.after - change.before) * 100)} pts
@@ -507,12 +507,12 @@ export const Taste = () => {
               <br />
               <span className="text-brass-soft">随着片库生长的线索</span>
             </h2>
-            <p className="mt-5 max-w-md text-[15px] leading-[1.95] text-ink/75">
+            <p className="mt-5 max-w-md text-[16px] leading-[1.9] text-ink/85">
               下面这条时间线由本地规则按片库规模计算，与 AI 六维画像相互独立。它记录的是记录数量的变化，不是 AI 对你下的结论。
             </p>
             <div className="mt-8 border-t border-ink/10 pt-5">
-              <p className="text-[12px] tracking-[0.06em] text-taupe">最新阶段</p>
-              <p className="mt-2 text-[14px] text-ink/75">
+              <p className="text-[12.5px] tracking-[0.06em] text-taupe">最新阶段</p>
+              <p className="mt-2 text-[15px] text-ink/85">
                 {timeline[0]
                   ? `${timeline[0].filmCount} 部电影 · ${formatLongDate(timeline[0].at)} · 置信度 ${percent(
                       timeline[0].confidence,
@@ -536,7 +536,7 @@ export const Taste = () => {
             <div className="flex flex-wrap items-end justify-between gap-3">
               <div>
                 <p className="micro text-brass/80">你的修正</p>
-                <p className="mt-2 text-[14px] leading-[1.8] text-taupe">
+                <p className="mt-2 text-[14.5px] leading-[1.8] text-taupe">
                   只保存在本地。这些话应当比模型的解读更有分量。
                 </p>
               </div>
@@ -545,10 +545,10 @@ export const Taste = () => {
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
               {state.corrections.slice(0, 6).map((correction) => (
                 <li key={correction.id} className="border-l border-brass/40 pl-4">
-                  <p className="text-[12px] tracking-[0.06em] text-taupe">
+                  <p className="text-[12.5px] tracking-[0.06em] text-taupe">
                     {scopeLabel(correction.scope)}
                   </p>
-                  <p className="mt-1.5 font-zh-body text-[1rem] leading-[1.8] text-ink/75">
+                  <p className="mt-1.5 font-zh-body text-[1.0625rem] leading-[1.8] text-ink/85">
                     “{correction.text}”
                   </p>
                 </li>

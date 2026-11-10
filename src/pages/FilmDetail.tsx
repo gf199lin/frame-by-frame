@@ -55,7 +55,7 @@ export const FilmDetail = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/30" />
           <div className="shell absolute inset-x-0 bottom-0 pb-8">
             <p className="kicker">在片目中，尚未收录</p>
-            <h1 className="mt-4 font-display text-[clamp(2.4rem,6vw,5rem)] leading-[0.92] tracking-[-0.02em]">
+            <h1 className="mt-4 font-poster text-[clamp(2.4rem,6vw,5rem)] leading-[0.92] tracking-[-0.02em]">
               {film.title}
             </h1>
             <p className="mt-2 text-[13px] tracking-[0.06em] text-paper/85">
@@ -151,7 +151,7 @@ export const FilmDetail = () => {
             <p className="kicker">
               {STATUS_LABELS[record.status].zh} · {formatLongDate(record.watchedAt)}
             </p>
-            <h1 className="mt-4 max-w-[16ch] font-display text-[clamp(2.6rem,8vw,7rem)] leading-[0.86] tracking-[-0.03em] text-balance">
+            <h1 className="mt-4 max-w-[16ch] font-poster text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.86] tracking-[-0.03em] text-balance">
               {film.title}
             </h1>
             <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -260,21 +260,21 @@ export const FilmDetail = () => {
 
               <dl className="mt-8 space-y-4 border-t border-ink/15 pt-5">
                 <div>
-                  <dt className="text-[12.5px] tracking-[0.04em] text-ink/55">我的评分</dt>
+                  <dt className="text-[12.5px] tracking-[0.04em] text-ink/65">我的评分</dt>
                   <dd className="mt-1.5 flex items-baseline gap-2">
                     <span className="num text-[2rem] leading-none text-ink">
                       {record.rating.toFixed(1)}
                     </span>
-                    <span className="text-[13px] text-ink/55">/ 5</span>
+                    <span className="text-[13px] text-ink/65">/ 5</span>
                   </dd>
                   <Rating value={record.rating} size={10} tone="light" className="mt-2" />
                 </div>
                 <div>
-                  <dt className="text-[12.5px] tracking-[0.04em] text-ink/55">观看日期</dt>
+                  <dt className="text-[12.5px] tracking-[0.04em] text-ink/65">观看日期</dt>
                   <dd className="mt-1 text-[14px] text-ink/80">{formatLongDate(record.watchedAt)}</dd>
                 </div>
                 <div>
-                  <dt className="text-[12.5px] tracking-[0.04em] text-ink/55">观看状态</dt>
+                  <dt className="text-[12.5px] tracking-[0.04em] text-ink/65">观看状态</dt>
                   <dd className="mt-1 text-[14px] text-ink/80">
                     {STATUS_LABELS[record.status].zh}
                     <span className="ml-2 text-[12px] uppercase tracking-[0.1em] text-ink/45">
@@ -284,7 +284,7 @@ export const FilmDetail = () => {
                 </div>
                 {feelings.length > 0 && (
                   <div>
-                    <dt className="text-[12.5px] tracking-[0.04em] text-ink/55">看完的感觉</dt>
+                    <dt className="text-[12.5px] tracking-[0.04em] text-ink/65">看完的感觉</dt>
                     <dd className="mt-1.5 flex flex-wrap gap-1.5">
                       {feelings.map((tag) => (
                         <span
@@ -456,7 +456,7 @@ export const FilmDetail = () => {
                         {item.film.title}
                       </p>
                       {item.film.titleZh && (
-                        <p className="mt-0.5 text-[12.5px] tracking-[0.03em] text-ink/55">{item.film.titleZh}</p>
+                        <p className="mt-0.5 text-[12.5px] tracking-[0.03em] text-ink/65">{item.film.titleZh}</p>
                       )}
                       <p className="mt-1 text-[11.5px] tracking-[0.03em] text-ink/60">
                         {directorOf(item.film)} · {item.film.year}
@@ -482,11 +482,11 @@ export const FilmDetail = () => {
 
           <div className="mt-14 grid gap-10 border-t border-ink/20 pt-8 lg:grid-cols-[1.2fr_0.8fr]">
             <div>
-              <p className="text-[12.5px] tracking-[0.04em] text-ink/55">主演</p>
+              <p className="text-[12.5px] tracking-[0.04em] text-ink/65">主演</p>
               <p className="mt-2 text-[14px] leading-relaxed text-ink/80">{film.cast.join(' · ') || '暂无主演信息'}</p>
             </div>
             <div>
-              <p className="text-[12.5px] tracking-[0.04em] text-ink/55">
+              <p className="text-[12.5px] tracking-[0.04em] text-ink/65">
                 来自其他观影记忆的片段
               </p>
               <ul className="mt-3 space-y-4">
@@ -496,7 +496,7 @@ export const FilmDetail = () => {
                       <p className="font-zh-body text-[14.5px] leading-[1.85] text-ink/80 group-hover:text-ink">
                         “{item.quote}”
                       </p>
-                      <p className="mt-1.5 text-[12px] tracking-[0.06em] text-ink/55">
+                      <p className="mt-1.5 text-[12px] tracking-[0.06em] text-ink/65">
                         {item.filmTitle} · {item.year}
                       </p>
                     </Link>

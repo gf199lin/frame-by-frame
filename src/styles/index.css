@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -27,7 +26,10 @@
   --ocean-soft: #2a3189;
   --paper-ink: #161c66;
   --paper-dim: #cbc8d9;
-  --paper-muted: #5a5f85;
+  /* Deepened from #5a5f85: the old grey-blue fell below comfortable body
+     contrast on cream once it was used below 13px. */
+  --paper-muted: #4a5078;
+  --paper-muted-strong: #3e446b;
   --line: rgba(29, 35, 121, 0.14);
   --line-soft: rgba(29, 35, 121, 0.08);
   --line-strong: rgba(29, 35, 121, 0.24);
@@ -50,12 +52,26 @@
 
   /* Chinese-first type stacks. Latin stays editorial; CJK stays legible. */
   --font-editorial: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  /* Poster voice: high-contrast Didone for the largest English headlines only.
+     Bodoni Moda (OFL) is loaded with the editorial stack and falls back to
+     Instrument Serif, then the CJK serif for mixed lines. */
+  --font-poster: 'Bodoni Moda', 'Instrument Serif', 'Iowan Old Style', 'Noto Serif SC', 'Songti SC',
+    Georgia, serif;
   --font-zh: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC',
     sans-serif;
   --font-zh-serif: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', 'Source Han Serif SC', Georgia, serif;
   --font-ui: Inter, 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui,
     -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Noto Sans SC', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Semantic type scale — body copy is deliberately never below 14px. */
+  --type-body: 1rem;
+  --type-body-lg: 1.0625rem;
+  --type-copy: 0.9375rem;
+  --type-caption: 0.875rem;
+  --type-label: 0.8125rem;
+  --type-title: 1.75rem;
+  --leading-body: 1.9;
 }
 
 * {
@@ -187,6 +203,46 @@ input[type='date']::-webkit-calendar-picker-indicator {
 .font-display {
   font-family: var(--font-editorial);
   font-weight: 400;
+}
+
+/* Reserved for poster-scale English headlines. Keeping it separate from
+   .font-display means small film titles stay warm and readable in Instrument. */
+.font-poster {
+  font-family: var(--font-poster);
+  font-weight: 500;
+  font-optical-sizing: auto;
+  font-synthesis: none;
+}
+
+/* Readable copy scale used by analysis-heavy pages (My Taste, film detail). */
+.copy-body {
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  letter-spacing: 0.004em;
+}
+
+.copy-body-lg {
+  font-size: var(--type-body-lg);
+  line-height: 1.88;
+  letter-spacing: 0.004em;
+}
+
+.copy-evidence {
+  font-size: 0.96875rem;
+  line-height: 1.85;
+  letter-spacing: 0.004em;
+}
+
+.copy-note {
+  font-size: 0.875rem;
+  line-height: 1.8;
+  letter-spacing: 0.006em;
+}
+
+.meta-label {
+  font-size: var(--type-label);
+  line-height: 1.6;
+  letter-spacing: 0.05em;
 }
 
 /* 中文主标题：清晰的现代黑体，不做过细、过小的复古处理。 */
@@ -371,8 +427,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .folio {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
   text-transform: none;
   color: var(--paper-muted);
 }
@@ -422,8 +478,8 @@ input[type='date']::-webkit-calendar-picker-indicator {
   align-items: baseline;
   gap: 0.9rem;
   font-family: var(--font-zh);
-  font-size: 0.8125rem;
-  letter-spacing: 0.06em;
+  font-size: 0.84375rem;
+  letter-spacing: 0.055em;
   text-transform: none;
   font-weight: 500;
   color: var(--paper-muted);
@@ -1009,7 +1065,7 @@ input[type='range']::-moz-range-thumb {
 .on-paper {
   --paper: #161c66;
   --paper-dim: #d9d4e2;
-  --paper-muted: #5a5f85;
+  --paper-muted: #4a5078;
   --line: rgba(29, 35, 121, 0.14);
   --line-soft: rgba(29, 35, 121, 0.08);
   --brass: #1d2379;

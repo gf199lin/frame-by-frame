@@ -492,7 +492,7 @@ export const MemoryGraphView = ({
 
       {selectedNode && (
         <div className="pointer-events-none absolute left-4 top-4 max-w-[220px] rounded-[8px] border border-ink/15 bg-paper-sheet/90 px-3 py-2 shadow-card backdrop-blur">
-          <p className="micro-sm text-ink/50">
+          <p className="micro-sm text-ink/60">
             {selectedNode.kind === 'film' ? '电影' : selectedNode.kind === 'theme' ? '主题' : '情绪'}
           </p>
           <p className="mt-1 font-display text-lg leading-tight text-ink">{selectedNode.label}</p>

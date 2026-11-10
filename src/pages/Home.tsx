@@ -170,7 +170,7 @@ export const Home = () => {
 
                 <div className="col-span-12 sm:col-span-9 lg:col-span-7 lg:col-start-5">
                   <Link to={`/archive/${latest.film.id}`} className="group">
-                    <h3 className="font-display text-[clamp(2.2rem,4.4vw,3.8rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-taupe">
+                    <h3 className="font-poster text-[clamp(2.2rem,4.4vw,3.8rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-taupe">
                       {latest.film.title}
                     </h3>
                     {latest.film.titleZh && (
@@ -240,7 +240,7 @@ export const Home = () => {
                         {film.title}
                       </h3>
                       {film.titleZh && (
-                        <p className="mt-1 text-[14px] tracking-[0.04em] text-ink/55">{film.titleZh}</p>
+                        <p className="mt-1 text-[14px] tracking-[0.04em] text-ink/65">{film.titleZh}</p>
                       )}
                       <p className="mt-1 text-[12.5px] tracking-[0.06em] text-taupe">
                         {film.director} · {film.year}
@@ -343,7 +343,7 @@ export const Home = () => {
                     to={`/archive/${film.id}`}
                     className="group grid grid-cols-[2rem_1fr] gap-x-4 border-b border-ink/15 py-6 first:pt-0"
                   >
-                    <span className="font-mono text-[12px] tracking-[0.16em] text-ink/50">
+                    <span className="font-mono text-[12px] tracking-[0.16em] text-ink/60">
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     <span>
@@ -353,10 +353,10 @@ export const Home = () => {
                             {film.title}
                           </span>
                           {film.titleZh && (
-                            <span className="ml-2 text-[13px] tracking-[0.04em] text-ink/55">{film.titleZh}</span>
+                            <span className="ml-2 text-[13px] tracking-[0.04em] text-ink/65">{film.titleZh}</span>
                           )}
                         </span>
-                        <span className="font-mono text-[12px] tracking-[0.04em] text-ink/55">
+                        <span className="font-mono text-[12px] tracking-[0.04em] text-ink/65">
                           {formatLongDate(record.watchedAt)}
                         </span>
                       </span>
@@ -371,14 +371,14 @@ export const Home = () => {
 
             <Reveal delay={100} className="col-span-12 lg:col-span-4 lg:col-start-9">
               <div className="border-t border-ink/20 pt-4">
-                <p className="text-[12px] tracking-[0.06em] text-ink/55">精选剧照</p>
+                <p className="text-[12px] tracking-[0.06em] text-ink/65">精选剧照</p>
                 {latest?.film && (
                   <Link to={`/archive/${latest.film.id}`} className="group mt-4 block">
                     <FilmStill film={latest.film} ratio="portrait" tone="paper" />
                     <p className="mt-3 font-display text-[1.15rem] leading-tight text-ink">
                       {latest.film.title}
                     </p>
-                    <p className="mt-1 font-mono text-[12px] tracking-[0.04em] text-ink/55">
+                    <p className="mt-1 font-mono text-[12px] tracking-[0.04em] text-ink/65">
                       第 {String(records.length).padStart(3, '0')} 帧
                     </p>
                   </Link>
@@ -446,7 +446,7 @@ export const Home = () => {
                     <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                       <p className="num text-[3rem] leading-none text-ink">
                         {Math.round(profile.overallConfidence * 100)}
-                        <span className="text-lg text-ink/55">%</span>
+                        <span className="text-lg text-ink/65">%</span>
                       </p>
                       <p className="mt-1.5 text-[12px] tracking-[0.06em] text-ink/60">置信度</p>
                     </div>
@@ -480,7 +480,7 @@ export const Home = () => {
 
               <div className="mt-9 grid gap-8 border-t border-ink/15 pt-6 sm:grid-cols-2">
                 <div>
-                  <p className="text-[12px] tracking-[0.06em] text-ink/55">最强信号</p>
+                  <p className="text-[12px] tracking-[0.06em] text-ink/65">最强信号</p>
                   <p className="mt-2 font-zh-title text-[1.45rem] leading-tight text-ink">
                     {strongest ? strongest.def.labelZh : '还在聆听'}
                   </p>
@@ -495,7 +495,7 @@ export const Home = () => {
 
                 {profile.topThemes.length > 0 && (
                   <div>
-                    <p className="text-[12px] tracking-[0.06em] text-ink/55">你反复回到的主题</p>
+                    <p className="text-[12px] tracking-[0.06em] text-ink/65">你反复回到的主题</p>
                     <ul className="mt-2.5 space-y-1.5">
                       {profile.topThemes.slice(0, 4).map((theme) => (
                         <li key={theme.id} className="flex items-baseline justify-between gap-3 border-b border-ink/10 pb-1.5">
@@ -505,7 +505,7 @@ export const Home = () => {
                               {THEMES[theme.id].label}
                             </span>
                           </span>
-                          <span className="font-mono text-[12px] text-ink/55">
+                          <span className="font-mono text-[12px] text-ink/65">
                             {String(theme.count).padStart(2, '0')}
                           </span>
                         </li>
@@ -519,7 +519,7 @@ export const Home = () => {
                 <Link to="/taste" className="link-rule text-brass-ink hover:text-ink">
                   查看完整观影品味 <ArrowRight size={12} />
                 </Link>
-                <p className="flex items-center gap-2 text-[12.5px] text-ink/55">
+                <p className="flex items-center gap-2 text-[12.5px] text-ink/65">
                   <Sparkles size={10} /> 只使用你确认过的 AI 证据。
                 </p>
               </div>
