@@ -1487,6 +1487,74 @@ input[type='range']::-moz-range-thumb {
   text-wrap: balance;
 }
 
+/* ------------------------------------------------------------------ */
+/*  V6 — Cinematic overlay cover                                       */
+/*  The frame is the page furniture; the title lives inside the still.  */
+/* ------------------------------------------------------------------ */
+.hero-still__media {
+  animation: hero-still-in 1.25s var(--ease) both;
+}
+.hero-still__media.still:hover img {
+  transform: none;
+}
+
+/* Bottom scrim stays light: only enough to hold white type over the image. */
+.hero-scrim {
+  background:
+    linear-gradient(
+      to top,
+      rgba(13, 17, 63, 0.7) 0%,
+      rgba(13, 17, 63, 0.4) 20%,
+      rgba(13, 17, 63, 0.13) 44%,
+      rgba(13, 17, 63, 0) 64%
+    ),
+    linear-gradient(
+      to right,
+      rgba(13, 17, 63, 0.32) 0%,
+      rgba(13, 17, 63, 0.09) 38%,
+      rgba(13, 17, 63, 0) 62%
+    );
+}
+
+.hero-copy {
+  animation: hero-copy-in 1s var(--ease) 0.18s both;
+}
+
+.hero-title {
+  color: var(--sheet);
+  text-wrap: balance;
+  text-shadow: 0 1px 24px rgba(13, 17, 63, 0.24);
+}
+
+@keyframes hero-still-in {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-still__media,
+  .hero-copy {
+    animation: none;
+  }
+}
+
 /* Mobile: soften large offsets so prints do not clip. */
 @media (max-width: 640px) {
   .mount {
