@@ -76,11 +76,11 @@ export const Shell = ({ children }: { children: ReactNode }) => {
               >
                 <span className="flex items-baseline gap-1.5">
                   <span className="nav-index">{item.index}</span>
-                  <span className="font-zh-ui text-[14.5px] font-medium leading-none tracking-[0.04em]">
+                  <span className="font-zh-ui text-[14.5px] font-semibold leading-none tracking-[0.035em]">
                     {item.label}
                   </span>
                 </span>
-                <span className="nav-en mt-1 text-[9.5px] uppercase tracking-[0.14em] opacity-60">
+                <span className="nav-en mt-1 text-[10px] font-medium uppercase tracking-[0.12em] opacity-75">
                   {item.en}
                 </span>
               </NavLink>

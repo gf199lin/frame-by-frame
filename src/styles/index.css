@@ -64,6 +64,15 @@
     -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: 'IBM Plex Mono', 'Noto Sans SC', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
+  /* Editorial weight ladder. One rung heavier than the previous 400 baseline so
+     14–16px Chinese copy reads like printed matter rather than hairline UI.
+     Display faces (Bodoni Moda) carry a real 400–600 axis; Instrument Serif has
+     only 400, so it is never asked to fake a bold. */
+  --weight-body: 450;
+  --weight-ui: 500;
+  --weight-ui-strong: 600;
+  --weight-title: 600;
+
   /* Semantic type scale — body copy is deliberately never below 14px. */
   --type-body: 1rem;
   --type-body-lg: 1.0625rem;
@@ -95,7 +104,7 @@ body {
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: 16px;
-  font-weight: 400;
+  font-weight: var(--weight-body);
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
 }
@@ -245,8 +254,15 @@ input[type='date']::-webkit-calendar-picker-indicator {
   letter-spacing: 0.05em;
 }
 
-/* 中文主标题：清晰的现代黑体，不做过细、过小的复古处理。 */
-.font-zh-title,
+/* 中文页面主标题：宋体骨架，600 撑起大字号下的笔画厚度。 */
+.font-zh-title {
+  font-family: var(--font-zh-serif);
+  font-weight: 600;
+  letter-spacing: 0.012em;
+  line-height: 1.12;
+}
+
+/* 中文区块与卡片标题：500 与正文拉开层级，又不喧宾夺主。 */
 .zh-title {
   font-family: var(--font-zh-serif);
   font-weight: 500;
@@ -263,12 +279,14 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .font-zh-body {
   font-family: var(--font-zh);
+  font-weight: 450;
   letter-spacing: 0.01em;
 }
 
 /* 中文正文：16–18px，行高 1.85，中英混排时更从容。 */
 .zh-prose {
   font-family: var(--font-zh);
+  font-weight: 450;
   font-size: 16.5px;
   line-height: 1.9;
   letter-spacing: 0.01em;
@@ -276,6 +294,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .zh-prose-sm {
   font-family: var(--font-zh);
+  font-weight: 450;
   font-size: 15px;
   line-height: 1.85;
   letter-spacing: 0.01em;
@@ -283,6 +302,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 
 .zh-caption {
   font-family: var(--font-zh);
+  font-weight: 450;
   font-size: 14px;
   line-height: 1.8;
   letter-spacing: 0.02em;
@@ -305,45 +325,46 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .display-hero {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Noto Serif SC',
-    'Songti SC', 'STSong', Georgia, serif;
+  font-family: var(--font-poster);
   font-size: clamp(2.9rem, 7.4vw, 6.4rem);
-  line-height: 0.94;
-  letter-spacing: -0.022em;
-  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.024em;
+  font-weight: 500;
 }
 
 .display-xl {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Noto Serif SC',
-    'Songti SC', 'STSong', Georgia, serif;
+  font-family: var(--font-poster);
   font-size: clamp(2.2rem, 4.4vw, 3.8rem);
-  line-height: 0.98;
-  letter-spacing: -0.016em;
-  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.018em;
+  font-weight: 500;
 }
 
 .t-head {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Noto Serif SC', 'Songti SC', Georgia, serif;
+  font-family: var(--font-poster);
   font-size: clamp(1.85rem, 3.3vw, 2.9rem);
-  line-height: 1.04;
-  letter-spacing: -0.01em;
-  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  font-weight: 500;
 }
 
 .t-sub {
-  font-family: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Noto Serif SC', 'Songti SC', Georgia, serif;
+  font-family: var(--font-poster);
   font-size: clamp(1.25rem, 1.8vw, 1.6rem);
-  line-height: 1.2;
-  letter-spacing: -0.005em;
+  line-height: 1.18;
+  letter-spacing: -0.006em;
+  font-weight: 500;
 }
 
 .t-lead {
   font-size: clamp(1.0625rem, 1.2vw, 1.1875rem);
+  font-weight: 450;
   line-height: 1.75;
   letter-spacing: -0.004em;
 }
 
 .t-body {
+  font-weight: 450;
   font-size: 1rem;
   line-height: 1.75;
 }
@@ -356,7 +377,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 /* 中文辅助标签：字距略宽，但不过度拉散。 */
 .zh-label {
   font-family: var(--font-zh);
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.12em;
 }
 
@@ -365,7 +386,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   line-height: 1.5;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .micro-sm {
@@ -373,14 +394,14 @@ input[type='date']::-webkit-calendar-picker-indicator {
   line-height: 1.5;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .num {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .text-balance {
@@ -405,6 +426,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   font-size: 0.78rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  font-weight: 500;
   color: var(--brass);
 }
 .kicker::before {
@@ -430,6 +452,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   font-size: 0.8125rem;
   letter-spacing: 0.05em;
   text-transform: none;
+  font-weight: 500;
   color: var(--paper-muted);
 }
 
@@ -486,7 +509,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 .artifact-label b {
   color: var(--brass);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* ------------------------------------------------------------------ */
@@ -730,7 +753,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   font-size: 0.9375rem;
   letter-spacing: 0.02em;
   text-transform: none;
-  font-weight: 500;
+  font-weight: 600;
   border: 1.5px solid transparent;
   border-radius: var(--radius-pill);
   transition:
@@ -825,7 +848,7 @@ input[type='date']::-webkit-calendar-picker-indicator {
   gap: 1rem;
   font-family: var(--font-ui);
   font-size: 0.8125rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: none;
   color: var(--paper-muted);
@@ -1507,11 +1530,12 @@ input[type='range']::-moz-range-thumb {
 .nav-index {
   font-family: var(--font-mono);
   font-size: 0.625rem;
+  font-weight: 500;
   letter-spacing: 0.08em;
-  opacity: 0.62;
+  opacity: 0.74;
 }
 .nav-item[data-active='true'] .nav-index {
-  opacity: 0.72;
+  opacity: 0.88;
 }
 
 /* Ink panel used for the closing spread and footer. */
@@ -1576,10 +1600,24 @@ input[type='range']::-moz-range-thumb {
   animation: hero-copy-in 1s var(--ease) 0.18s both;
 }
 
+
+
 .hero-title {
   color: var(--sheet);
-  text-wrap: balance;
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
   text-shadow: 0 1px 24px rgba(13, 17, 63, 0.24);
+}
+
+.hero-line {
+  display: block;
+}
+
+.hero-line--italic {
+  font-style: italic;
+  color: rgba(253, 246, 226, 0.82);
 }
 
 @keyframes hero-still-in {

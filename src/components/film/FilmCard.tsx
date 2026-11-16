@@ -63,14 +63,14 @@ export const FilmCard = ({
       <div className="mt-3.5 border-t border-ink/10 pt-2.5">
         <h3
           className={cn(
-            'line-clamp-2 font-display leading-tight text-ink transition-colors group-hover:text-ocean',
+            'line-clamp-2 font-poster font-medium leading-tight text-ink transition-colors group-hover:text-ocean',
             size === 'large' ? 'text-[1.5rem]' : 'text-[1.12rem]',
           )}
         >
           {film.title}
         </h3>
         {film.titleZh && (
-          <p className="mt-0.5 line-clamp-1 text-[12.5px] tracking-[0.03em] text-ink/60">{film.titleZh}</p>
+          <p className="mt-0.5 line-clamp-1 text-[13px] font-medium tracking-[0.03em] text-ink/72">{film.titleZh}</p>
         )}
         <p className="mt-1 line-clamp-1 text-[11.5px] tracking-[0.03em] text-taupe">
           {directorOf(film)} · {film.year}
@@ -106,7 +106,7 @@ export const FilmIndexRow = ({
       <FilmPoster film={film} showTitle={false} />
     </span>
     <span className="min-w-0">
-      <span className="block truncate font-display text-[1.12rem] text-ink group-hover:text-ocean">
+      <span className="block truncate font-poster font-medium text-[1.12rem] text-ink group-hover:text-ocean">
         {film.title}
       </span>
       {film.titleZh && (
@@ -151,11 +151,11 @@ export const WaitingRoomCard = ({
       </div>
     </div>
     <div className="mt-2.5 border-t border-ink/10 pt-2">
-      <p className="truncate font-display text-[1.02rem] leading-tight text-ink/85 transition-colors group-hover:text-ink">
+      <p className="truncate font-poster font-medium text-[1.02rem] leading-tight text-ink/85 transition-colors group-hover:text-ink">
         {film.title}
       </p>
       {film.titleZh && (
-        <p className="truncate text-[12px] tracking-[0.03em] text-ink/65">{film.titleZh}</p>
+        <p className="truncate text-[13px] font-medium tracking-[0.03em] text-ink/72">{film.titleZh}</p>
       )}
       <p className="mt-0.5 truncate text-[11.5px] tracking-[0.03em] text-taupe/80">
         {film.year} · {directorOf(film)}

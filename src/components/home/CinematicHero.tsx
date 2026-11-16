@@ -69,20 +69,10 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
               {film ? `Cover still — ${film.title}, ${film.year}` : 'Cover still'}
             </p>
 
-            <h1 className="hero-title mt-3 font-poster text-[clamp(2.55rem,6.3vw,5.25rem)] leading-[0.9] tracking-[-0.015em]">
-              Every Film
-              <br />
-              <span className="sm:hidden">
-                Leaves a
-                <br />
-                Frame.
-              </span>
-              <span className="hidden sm:inline">Leaves a Frame.</span>
-            </h1>
-
-            <p className="mt-3 font-display text-[clamp(1.05rem,1.35vw,1.25rem)] italic leading-snug text-paper-sheet/85">
-              Every frame tells your story.
-            </p>
+            <h1 className="hero-title mt-4 font-display text-[clamp(1.75rem,4.7vw,4.35rem)]">
+              <span className="hero-line">Every film leaves a frame.</span>
+              <span className="hero-line hero-line--italic">Every frame tells your story.</span>
+            </h1>
 
             {empty ? (
               <button
