@@ -170,7 +170,7 @@ export const Home = () => {
 
                 <div className="col-span-12 sm:col-span-9 lg:col-span-7 lg:col-start-5">
                   <Link to={`/archive/${latest.film.id}`} className="group">
-                    <h3 className="font-poster text-[clamp(2.2rem,4.4vw,3.8rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-taupe">
+                    <h3 className="font-display text-[clamp(2.2rem,4.4vw,3.8rem)] leading-[1.02] tracking-[-0.015em] text-ink transition-colors group-hover:text-taupe">
                       {latest.film.title}
                     </h3>
                     {latest.film.titleZh && (

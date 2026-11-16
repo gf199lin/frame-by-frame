@@ -55,7 +55,7 @@ export const FilmDetail = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-ink/30" />
           <div className="shell absolute inset-x-0 bottom-0 pb-8">
             <p className="kicker">在片目中，尚未收录</p>
-            <h1 className="mt-4 font-poster text-[clamp(2.4rem,6vw,5rem)] leading-[0.92] tracking-[-0.02em]">
+            <h1 className="mt-4 font-display text-[clamp(2.4rem,6vw,5rem)] leading-[1.0] tracking-[-0.015em]">
               {film.title}
             </h1>
             <p className="mt-2 text-[13px] tracking-[0.06em] text-paper/85">
@@ -151,7 +151,7 @@ export const FilmDetail = () => {
             <p className="kicker">
               {STATUS_LABELS[record.status].zh} · {formatLongDate(record.watchedAt)}
             </p>
-            <h1 className="mt-4 max-w-[16ch] font-poster text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.86] tracking-[-0.03em] text-balance">
+            <h1 className="mt-4 max-w-[16ch] font-display text-[clamp(2.6rem,8vw,6.5rem)] leading-[0.96] tracking-[-0.02em] text-balance">
               {film.title}
             </h1>
             <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">

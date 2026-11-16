@@ -366,7 +366,7 @@ export const Archive = () => {
                       {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].zh}
                     </p>
                     <Link to={`/archive/${featured.film.id}`} className="group mt-3">
-                      <h2 className="font-poster text-[clamp(2rem,4.2vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-ink transition-colors group-hover:text-ocean">
+                      <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] leading-[1.02] tracking-[-0.015em] text-ink transition-colors group-hover:text-ocean">
                         {featured.film.title}
                       </h2>
                     </Link>

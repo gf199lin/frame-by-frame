@@ -567,7 +567,7 @@ export const Reflection = () => {
               <div className="mt-14 grid gap-8 border-t border-[#161c66]/20 pt-10 lg:grid-cols-12 lg:gap-12">
                 <div className="lg:col-span-7">
                   <p className="micro text-[#4a5078]">我留下的那一帧</p>
-                  <p className="mt-4 font-poster text-[clamp(2.2rem,4.4vw,3.6rem)] leading-[0.98] tracking-[-0.02em] text-[#161c66]">
+                  <p className="mt-4 font-display text-[clamp(2.2rem,4.4vw,3.6rem)] leading-[1.02] tracking-[-0.015em] text-[#161c66]">
                     {favoriteFilm.title}
                   </p>
                   {favoriteFilm.titleZh && (

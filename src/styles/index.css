@@ -52,11 +52,10 @@
 
   /* Chinese-first type stacks. Latin stays editorial; CJK stays legible. */
   --font-editorial: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
-  /* Poster voice: high-contrast Didone for the largest English headlines only.
-     Bodoni Moda (OFL) is loaded with the editorial stack and falls back to
-     Instrument Serif, then the CJK serif for mixed lines. */
-  --font-poster: 'Bodoni Moda', 'Instrument Serif', 'Iowan Old Style', 'Noto Serif SC', 'Songti SC',
-    Georgia, serif;
+  /* One serif voice for every English headline. Instrument Serif keeps the
+     hairlines thin and the contrast high without the Didone stiffness. */
+  --font-poster: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', 'Noto Serif SC',
+    'Songti SC', Georgia, serif;
   --font-zh: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC',
     sans-serif;
   --font-zh-serif: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', 'Source Han Serif SC', Georgia, serif;
@@ -66,8 +65,8 @@
 
   /* Editorial weight ladder. One rung heavier than the previous 400 baseline so
      14–16px Chinese copy reads like printed matter rather than hairline UI.
-     Display faces (Bodoni Moda) carry a real 400–600 axis; Instrument Serif has
-     only 400, so it is never asked to fake a bold. */
+     Instrument Serif ships a single 400 weight, so display sizes are never
+     asked to fake a bold; CJK headings pick up Noto Serif SC 600 instead. */
   --weight-body: 450;
   --weight-ui: 500;
   --weight-ui-strong: 600;
@@ -214,12 +213,10 @@ input[type='date']::-webkit-calendar-picker-indicator {
   font-weight: 400;
 }
 
-/* Reserved for poster-scale English headlines. Keeping it separate from
-   .font-display means small film titles stay warm and readable in Instrument. */
+/* Same serif voice as .font-display, kept as an alias for headline slots. */
 .font-poster {
-  font-family: var(--font-poster);
-  font-weight: 500;
-  font-optical-sizing: auto;
+  font-family: var(--font-editorial);
+  font-weight: 400;
   font-synthesis: none;
 }
 
@@ -325,35 +322,35 @@ input[type='date']::-webkit-calendar-picker-indicator {
 }
 
 .display-hero {
-  font-family: var(--font-poster);
+  font-family: var(--font-editorial);
   font-size: clamp(2.9rem, 7.4vw, 6.4rem);
-  line-height: 0.92;
-  letter-spacing: -0.024em;
-  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.018em;
+  font-weight: 400;
 }
 
 .display-xl {
-  font-family: var(--font-poster);
+  font-family: var(--font-editorial);
   font-size: clamp(2.2rem, 4.4vw, 3.8rem);
-  line-height: 0.96;
-  letter-spacing: -0.018em;
-  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.014em;
+  font-weight: 400;
 }
 
 .t-head {
-  font-family: var(--font-poster);
+  font-family: var(--font-editorial);
   font-size: clamp(1.85rem, 3.3vw, 2.9rem);
-  line-height: 1.02;
-  letter-spacing: -0.012em;
-  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  font-weight: 400;
 }
 
 .t-sub {
-  font-family: var(--font-poster);
+  font-family: var(--font-editorial);
   font-size: clamp(1.25rem, 1.8vw, 1.6rem);
-  line-height: 1.18;
-  letter-spacing: -0.006em;
-  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.004em;
+  font-weight: 400;
 }
 
 .t-lead {
