@@ -17,11 +17,14 @@ import { filmById } from '@/lib/tasteEngine'
 import { aiErrorMessage, isAiConfigured } from '@/lib/ai/client'
 import { AnalysisServiceError, createAnalysisService } from '@/lib/ai/analysisService'
 import { agentRunToAnalysis } from '@/lib/ai/normaliseRunV2'
-import { PROVIDER_LABELS, type PendingNoteV1, type ProviderId } from '@/lib/ai/contractV2'
+import { type PendingNoteV1 } from '@/lib/ai/contractV2'
 import { idempotencyKeyFor, sha256Hex } from '@/lib/ai/hashNote'
 import { buildAnalysisHistory, filmMetaForAi } from '@/lib/ai/history'
+import { buildLocalFilmAnalysis } from '@/lib/ai/localAnalysis'
+import { FALLBACK_NOTICE, type FallbackReason } from '@/lib/ai/localFallback'
+import { analysisSourceLabel } from '@/lib/ai/sourceLabel'
 import { moodsOfAnalysis, themesOfAnalysis } from '@/lib/ai/adapter'
-import type { Film, TasteDirection, WatchRecord } from '@/types'
+import type { AddFilmDraft, Film, TasteDirection, WatchRecord } from '@/types'
 
 const directionLabel = (direction: TasteDirection, key: keyof typeof DIMENSION_MAP): string => {
   const def = DIMENSION_MAP[key]
@@ -76,12 +79,57 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
 
   const consent = state.settings.allowAiNotes
 
+  /** Local rule engine: a fallback only, never presented as a model result. */
+  const localFallback = (reason: FallbackReason) => {
+    const draft: AddFilmDraft = {
+      filmId: film.id,
+      rating: record.rating,
+      watchedAt: record.watchedAt ?? '',
+      status: record.status ?? 'watched',
+      reflection: record.reflection,
+      feltLikeTags: record.feltLike ? [record.feltLike] : [],
+    }
+    const next = buildLocalFilmAnalysis(
+      film,
+      draft,
+      records.filter((item) => item.id !== record.id),
+      films,
+      record.id,
+    )
+    const now = next.model.analyzedAt || new Date().toISOString()
+    upsertRecord(
+      {
+        ...record,
+        themes: themesOfAnalysis(next),
+        moods: moodsOfAnalysis(next),
+        updatedAt: now,
+        ai: {
+          summary: next.summary,
+          extractedFrom: 'local-engine',
+          confidence: next.confidence,
+          status: 'complete',
+          model: next.model.model,
+          promptVersion: next.model.promptVersion,
+          analysedAt: next.model.analyzedAt,
+        },
+      },
+      record.id,
+    )
+    saveAnalysis(next)
+    push(FALLBACK_NOTICE[reason], 'success')
+  }
+
   const run = async () => {
     setError(null)
     setNotice(null)
 
     if (!isAiConfigured()) {
-      setNotice('还没有连接到 AI 服务。请先配置 VITE_AI_API_BASE，或启动本地 server。')
+      // Never overwrite an existing model result with a local fallback.
+      if (analysis) {
+        setNotice('当前没有连接在线 AI，已有分析保持不变。')
+        return
+      }
+      localFallback('not_configured')
       return
     }
     if (!consent) {
@@ -154,9 +202,14 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
       saveAnalysis(next)
       push('分析完成。它还没有计入画像，等待你的确认。', 'success')
     } catch (cause) {
-      // Keep the existing analysis; never replace a model result with a local guess.
-      setError(cause as Error)
-      push('在线 AI 没有返回可用结果，原有分析已保留。', 'error')
+      // Never replace a model result with a local guess. Only fill the gap when
+      // this record has no analysis at all.
+      if (analysis) {
+        setError(cause as Error)
+        push('在线 AI 没有返回可用结果，原有分析已保留。', 'error')
+        return
+      }
+      localFallback('request_failed')
     } finally {
       setRunning(false)
     }
@@ -187,7 +240,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
             <p className="max-w-2xl copy-body text-ink/85">
               分析会读取你写下的笔记、评分，以及少量相关旧片摘要；每条判断都会附上原文依据。
               只有你主动授权后，才会把这次记录发送给在线 AI 服务。原始笔记不会被修改，
-              结论也只在你确认后计入六维画像；未连接或未授权时，不会生成任何解读。
+              结论也只在你确认后计入六维画像；未连接在线 AI 时会改用本地规则引擎，并在结果里标注来源。
             </p>
             {!consent && configured && (
               <label className="mt-5 flex items-start gap-2.5 border-l border-brass/40 pl-3">
@@ -211,7 +264,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
             <p className="mt-4 flex items-start gap-2 text-[14px] leading-[1.8] text-ink/75">
               <ShieldCheck size={12} className="mt-[3px] shrink-0" />
               {!configured
-                ? '当前没有连接 AI 服务，因此不会生成解读。'
+                ? '当前没有连接在线 AI，会使用本地规则引擎生成解读，并明确标注来源。'
                 : !consent
                   ? '只有勾选授权后，分析才会开始；笔记不会写入日志。'
                   : '笔记只会发送给已配置的 AI 服务，不会写入日志。'}
@@ -219,14 +272,14 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
             <button
               type="button"
               onClick={run}
-              disabled={running || !configured || !consent}
+              disabled={running || (configured && !consent)}
               className="btn btn-primary mt-6 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {running ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
               {running
                 ? '正在分析…'
                 : !configured
-                  ? 'AI 服务未连接'
+                  ? '开始本地规则分析'
                   : !consent
                     ? '先勾选授权'
                     : '开始 AI 分析'}
@@ -252,7 +305,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
               {analysis.model.provider === 'seed'
                 ? '示例解读 · 编辑撰写，不是模型输出'
                 : analysis.model.provider === 'local-engine'
-                  ? '本地引擎读到的，和你写下的'
+                  ? '本地规则引擎读到的，和你写下的（未调用模型）'
                   : '模型读到的，和你写下的'}
             </h2>
             <p className="mt-2 max-w-2xl text-[14px] leading-[1.8] text-taupe">
@@ -261,7 +314,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                 ? '编辑示例 · 非模型输出 · 需要你确认后才计入画像'
                 : analysis.model.provider === 'local-engine'
                   ? '本地规则引擎 · 未调用外部模型'
-                  : `${PROVIDER_LABELS[analysis.model.provider as ProviderId] ?? analysis.model.provider} · ${analysis.model.model} · 提示词版本 ${analysis.model.promptVersion}`}{' '}
+                  : `${analysisSourceLabel(analysis.model.provider)} · ${analysis.model.model} · 提示词版本 ${analysis.model.promptVersion}`}{' '}
               · {formatLongDate(analysis.model.analyzedAt.slice(0, 10))}
             </p>
           </div>

@@ -43,6 +43,9 @@ import { agentRunToAnalysis } from '@/lib/ai/normaliseRunV2'
 import { PROVIDER_LABELS, type PendingNoteV1, type ProviderId } from '@/lib/ai/contractV2'
 import { idempotencyKeyFor, sha256Hex } from '@/lib/ai/hashNote'
 import { buildAnalysisHistory, filmMetaForAi } from '@/lib/ai/history'
+import { buildLocalFilmAnalysis } from '@/lib/ai/localAnalysis'
+import { FALLBACK_NOTICE, type FallbackReason } from '@/lib/ai/localFallback'
+import { analysisSourceLabel } from '@/lib/ai/sourceLabel'
 import {
   FELT_LIKE_MAX_LENGTH,
   FELT_LIKE_MAX_TAGS,
@@ -206,6 +209,7 @@ export const AddFilmFlow = ({
     null,
   )
   const [aiError, setAiError] = useState<unknown>(null)
+  const [fallbackReason, setFallbackReason] = useState<FallbackReason | null>(null)
   const [elapsed, setElapsed] = useState(0)
   const [consent, setConsent] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
@@ -423,6 +427,23 @@ export const AddFilmFlow = ({
     setEngine(next)
     setEnginePreference(next === 'deepworks' ? 'deepworks' : 'legacy-deepseek')
   }
+  /** Local rule engine: a fallback only, and every surface says so. */
+  const runLocalFallback = (reason: FallbackReason) => {
+    if (!selected) return
+    const recordId = editRecord?.id ?? uid('rec')
+    const analysis = buildLocalFilmAnalysis(selected, draft, previousRecords, films, recordId)
+    const record = createRecordFromAnalysis(selected, draft, analysis, recordId)
+    commitRecord({
+      ...record,
+      ...(editRecord ? { createdAt: editRecord.createdAt } : {}),
+    })
+    saveAnalysis(analysis)
+    setFallbackReason(reason)
+    setPending({ analysis, record })
+    setStep('result')
+    push(FALLBACK_NOTICE[reason], 'success')
+  }
+
   const runAnalysis = async () => {
     if (!selected) return
     if (draft.rating <= 0) {
@@ -436,12 +457,19 @@ export const AddFilmFlow = ({
     setError('')
     setAiError(null)
 
-    if (!isAiConfigured()) {
-      setError('AI 服务还没有连接。可以先保存记录，之后在电影详情页再分析。')
+    // DeepWorks only exists on this machine; never fake it with a local guess.
+    if (!isAiConfigured() && engine === 'deepworks') {
+      setError(
+        'DeepWorks Agent 需要在本机运行（npm run ai:dev）。可以切到 DeepSeek，或先保存记录。',
+      )
       return
     }
-    if (!consent) {
+    if (isAiConfigured() && !consent) {
       setError('请先勾选授权，分析才能读取这次笔记。')
+      return
+    }
+    if (!isAiConfigured()) {
+      runLocalFallback('not_configured')
       return
     }
 
@@ -512,6 +540,12 @@ export const AddFilmFlow = ({
         setStep('form')
         return
       }
+      // DeepSeek failed or the service is unreachable: keep the flow usable,
+      // but label the result as the local rule engine.
+      if (engine === 'deepseek') {
+        runLocalFallback('request_failed')
+        return
+      }
       setAiError(cause)
       setStep('failed')
     } finally {
@@ -534,6 +568,7 @@ export const AddFilmFlow = ({
     setCustomFeltLike('')
     setPending(null)
     setAiError(null)
+    setFallbackReason(null)
     setActiveStage(-1)
     setConsent(state.settings.allowAiNotes)
     setError('')
@@ -1332,7 +1367,7 @@ export const AddFilmFlow = ({
                     <p className="mt-2 text-[12px] leading-[1.7] text-paper-muted">
                       {engine === 'deepworks'
                         ? '由本机 DeepWorks 引擎运行 film-curator：知识库引用、六维证据、质量门。实测约 3 分钟，请勿关闭页面。'
-                        : '由项目后端调用 DeepSeek：约 10–30 秒，结果只属于展示层。'}
+                        : '由项目后端调用 DeepSeek：约 10–30 秒。未连接或请求失败时自动改用本地规则引擎，结果会标注「本地规则引擎分析」。'}
                     </p>
                   </div>
                   <label className="flex items-start gap-2.5 border-l border-white/15 pl-3">
@@ -1348,7 +1383,7 @@ export const AddFilmFlow = ({
                     <span className="text-[13.5px] leading-[1.7] text-paper-dim">
                       允许把这部电影的笔记发送给在线 AI 服务（可选）。只会发送这部片的信息、这次笔记和少量相关旧片摘要，不会发送整个片库。
                       <span className="mt-1 block text-[12.5px] text-paper-muted">
-                        不勾选时不会生成 AI 解读；你仍然可以只保存这条记录，之后再分析。
+                        不勾选时不会把笔记发给在线 AI；在线服务不可用时会改用本地规则引擎，并在结果里标注来源。
                       </span>
                     </span>
                   </label>
@@ -1363,18 +1398,31 @@ export const AddFilmFlow = ({
                     <button
                       type="button"
                       onClick={runAnalysis}
-                      disabled={!isAiConfigured() || !consent}
+                      disabled={
+                        (engine === 'deepworks' && !isAiConfigured()) ||
+                        (isAiConfigured() && !consent)
+                      }
                       className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Sparkles size={14} />
-                      {editRecord ? '保存并重新分析' : '开始 AI 分析'}
+                      {engine === 'deepworks' && !isAiConfigured()
+                        ? 'DeepWorks 需本机运行'
+                        : isAiConfigured()
+                          ? editRecord
+                            ? '保存并重新分析'
+                            : '开始 AI 分析'
+                          : editRecord
+                            ? '保存并本地分析'
+                            : '开始本地规则分析'}
                     </button>
                     <span className="text-[14px] text-paper-muted">
-                      {!isAiConfigured()
-                        ? 'AI 服务未连接 · 可以先只保存记录'
-                        : consent
-                          ? '在线 AI 分析 · 约 10–30 秒'
-                          : '需要先勾选授权'}
+                      {engine === 'deepworks' && !isAiConfigured()
+                        ? 'DeepWorks 只能在本地运行'
+                        : isAiConfigured()
+                          ? consent
+                            ? '在线 AI 分析 · 约 10–30 秒'
+                            : '需要先勾选授权'
+                          : '未连接在线 AI · 将使用本地规则引擎'}
                     </span>
                   </div>
                 </div>
@@ -1519,8 +1567,9 @@ export const AddFilmFlow = ({
                   {pending.analysis.summary}
                 </p>
                 <p className="mt-3 text-[12.5px] leading-[1.7] text-paper-muted">
-                  这次分析来自 {providerLabel(pending.analysis.model.provider)} ·{' '}
+                  这次分析来自 {analysisSourceLabel(pending.analysis.model.provider)} ·{' '}
                   {pending.analysis.model.model}。
+                  {fallbackReason ? '本地规则引擎只做了规则匹配，没有调用任何模型。' : ''}
                   {formatLongDate(pending.analysis.model.analyzedAt.slice(0, 10))}。
                   在你确认之前，它不会计入六维画像。
                 </p>
@@ -1545,7 +1594,11 @@ export const AddFilmFlow = ({
 
           <div className="grid flex-1 gap-0 lg:grid-cols-[1fr_1.1fr_0.9fr]">
             <div className="border-b border-white/10 p-5 sm:p-7 lg:border-b-0 lg:border-r">
-              <p className="micro text-paper-muted">AI 在你笔记里读到的情绪</p>
+              <p className="micro text-paper-muted">
+                {pending.analysis.model.provider === 'local-engine'
+                  ? '规则引擎在你笔记里读到的情绪'
+                  : 'AI 在你笔记里读到的情绪'}
+              </p>
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {pending.analysis.observed_emotions.length > 0 ? (
                   pending.analysis.observed_emotions.map((item) => (
