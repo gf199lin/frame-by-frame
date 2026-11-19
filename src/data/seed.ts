@@ -179,5 +179,8 @@ export const createInitialState = (): AppState => ({
   yearbookGenerations: [],
   analyses: buildSeedAnalyses(SEED_RECORDS, FILMS),
   profileHistory: [],
+  observationFeedback: [],
+  tasteSnapshots: [],
+  agentObservations: [],
   settings: { allowAiNotes: false },
 })

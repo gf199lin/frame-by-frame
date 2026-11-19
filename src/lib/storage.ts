@@ -1,8 +1,11 @@
 import type {
   AIAnalysisVerdict,
   AIFilmAnalysis,
+  AgentObservationBundle,
   AppState,
   Film,
+  TasteEvolutionSnapshot,
+  TasteObservationFeedback,
   TasteProfileEvent,
   WatchRecord,
 } from '@/types'
@@ -10,6 +13,7 @@ import { STORAGE_KEY, STORAGE_VERSION, DIMENSIONS, MOODS, THEMES } from '@/data/
 import { createInitialState } from '@/data/seed'
 import { FILMS } from '@/data/films'
 import { buildSeedAnalyses } from '@/data/seedAnalyses'
+import { isAgentRunV2, runV2ToAnalysis } from '@/lib/ai/normaliseRunV2'
 
 type LoadResult = {
   state: AppState
@@ -24,6 +28,9 @@ const isRecord = (value: unknown): value is WatchRecord => {
   const r = value as Record<string, unknown>
   return typeof r.id === 'string' && typeof r.filmId === 'string' && typeof r.rating === 'number'
 }
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null && !Array.isArray(value)
 
 const isFilm = (value: unknown): value is Film => {
   if (!value || typeof value !== 'object') return false
@@ -88,8 +95,24 @@ const normaliseRecord = (value: WatchRecord): WatchRecord => {
 
 const normaliseAnalysis = (value: unknown): AIFilmAnalysis | null => {
   if (!value || typeof value !== 'object') return null
+  // Agent runs (agent-run.v2) are a different shape from a persisted
+  // AIFilmAnalysis. Convert them instead of dropping the whole result.
+  if (isAgentRunV2(value)) {
+    const converted = runV2ToAnalysis(value)
+    if (converted) return converted
+  }
   const raw = value as Record<string, unknown>
-  if (typeof raw.recordId !== 'string' || typeof raw.filmId !== 'string') return null
+  const recordId =
+    (typeof raw.recordId === 'string' && raw.recordId) ||
+    (typeof raw.record_id === 'string' && raw.record_id) ||
+    (isPlainObject(raw.input) && typeof raw.input.record_id === 'string' ? raw.input.record_id : '')
+  const inputFilm = isPlainObject(raw.input) && isPlainObject(raw.input.film) ? raw.input.film : null
+  const analysisRaw = isPlainObject(raw.analysis) ? raw.analysis : null
+  const filmId =
+    (typeof raw.filmId === 'string' && raw.filmId) ||
+    (typeof raw.film_id === 'string' && raw.film_id) ||
+    (inputFilm && typeof inputFilm.id === 'string' ? inputFilm.id : '')
+  if (!recordId || !filmId) return null
   const reviewRaw = (raw.review ?? {}) as Record<string, unknown>
   const verdict = VERDICTS.includes(reviewRaw.verdict as AIAnalysisVerdict)
     ? (reviewRaw.verdict as AIAnalysisVerdict)
@@ -97,7 +120,7 @@ const normaliseAnalysis = (value: unknown): AIFilmAnalysis | null => {
   const modelRaw = (raw.model ?? {}) as Record<string, unknown>
   const contributions = Array.isArray(raw.preference_evidence)
     ? raw.preference_evidence
-        .map((item) => {
+        .map((item): AIFilmAnalysis['preference_evidence'][number] | null => {
           if (!item || typeof item !== 'object') return null
           const contribution = item as Record<string, unknown>
           if (typeof contribution.dimension_id !== 'string') return null
@@ -105,17 +128,26 @@ const normaliseAnalysis = (value: unknown): AIFilmAnalysis | null => {
           if (
             contribution.direction !== 'low' &&
             contribution.direction !== 'high' &&
-            contribution.direction !== 'neutral'
+            contribution.direction !== 'neutral' &&
+            contribution.direction !== 'ambivalent'
           ) {
             return null
           }
+          const direction = contribution.direction as 'low' | 'high' | 'neutral' | 'ambivalent'
+          // `interpretation` is the agent's wording; `evidence` is what the
+          // website renders. Falling back keeps the reasoning instead of
+          // persisting an empty string.
+          const evidence = str(contribution.evidence) || str(contribution.interpretation)
           return {
             dimension_id: contribution.dimension_id as AIFilmAnalysis['preference_evidence'][number]['dimension_id'],
-            direction: contribution.direction,
+            direction: direction === 'ambivalent' ? 'neutral' : direction,
             strength: numberOf(contribution.strength, 0),
             confidence: numberOf(contribution.confidence, 0),
-            evidence: str(contribution.evidence),
+            evidence,
             ...(typeof contribution.quote === 'string' ? { quote: contribution.quote } : {}),
+            ...(direction === 'ambivalent' || contribution.raw_direction === 'ambivalent'
+              ? { raw_direction: 'ambivalent' as const }
+              : {}),
             ...(contribution.userStatus === 'kept' || contribution.userStatus === 'removed'
               ? { userStatus: contribution.userStatus }
               : {}),
@@ -124,47 +156,73 @@ const normaliseAnalysis = (value: unknown): AIFilmAnalysis | null => {
         .filter((item): item is AIFilmAnalysis['preference_evidence'][number] => item !== null)
     : []
 
+  const focus = analysisRaw && isPlainObject(analysisRaw.focus) ? analysisRaw.focus : null
+  const observations = (key: 'narrative' | 'character' | 'visual', flat: unknown): string[] => {
+    if (Array.isArray(flat)) return flat as string[]
+    if (focus && Array.isArray(focus[key])) return focus[key] as string[]
+    return []
+  }
+  const analysedAt =
+    str(modelRaw.analyzedAt) ||
+    str(raw.completed_at) ||
+    str(raw.timestamp) ||
+    new Date().toISOString()
+  const agentRaw = isPlainObject(raw.agent) ? raw.agent : null
+
   return {
     schemaVersion: 1,
-    recordId: raw.recordId,
-    filmId: raw.filmId,
+    recordId,
+    filmId,
     status: 'complete',
-    summary: str(raw.summary),
+    summary: str(raw.summary) || (analysisRaw ? str(analysisRaw.summary) : ''),
     observed_emotions: Array.isArray(raw.observed_emotions)
       ? (raw.observed_emotions as AIFilmAnalysis['observed_emotions'])
-      : [],
+      : analysisRaw && Array.isArray(analysisRaw.observed_emotions)
+        ? (analysisRaw.observed_emotions as AIFilmAnalysis['observed_emotions'])
+        : [],
     themes_identified: Array.isArray(raw.themes_identified)
       ? (raw.themes_identified as AIFilmAnalysis['themes_identified'])
-      : [],
-    narrative_observations: Array.isArray(raw.narrative_observations)
-      ? (raw.narrative_observations as string[])
-      : [],
-    character_observations: Array.isArray(raw.character_observations)
-      ? (raw.character_observations as string[])
-      : [],
-    visual_observations: Array.isArray(raw.visual_observations)
-      ? (raw.visual_observations as string[])
-      : [],
-    liked: Array.isArray(raw.liked) ? (raw.liked as string[]) : [],
-    disliked: Array.isArray(raw.disliked) ? (raw.disliked as string[]) : [],
+      : analysisRaw && Array.isArray(analysisRaw.themes_identified)
+        ? (analysisRaw.themes_identified as AIFilmAnalysis['themes_identified'])
+        : [],
+    narrative_observations: observations('narrative', raw.narrative_observations),
+    character_observations: observations('character', raw.character_observations),
+    visual_observations: observations('visual', raw.visual_observations),
+    liked: Array.isArray(raw.liked)
+      ? (raw.liked as string[])
+      : analysisRaw && Array.isArray(analysisRaw.liked)
+        ? (analysisRaw.liked as string[])
+        : [],
+    disliked: Array.isArray(raw.disliked)
+      ? (raw.disliked as string[])
+      : analysisRaw && Array.isArray(analysisRaw.disliked)
+        ? (analysisRaw.disliked as string[])
+        : [],
     preference_evidence: contributions,
-    uncertainties: Array.isArray(raw.uncertainties) ? (raw.uncertainties as string[]) : [],
-    confidence: numberOf(raw.confidence, 0),
+    uncertainties: Array.isArray(raw.uncertainties)
+      ? (raw.uncertainties as string[])
+      : analysisRaw && Array.isArray(analysisRaw.uncertainties)
+        ? (analysisRaw.uncertainties as string[])
+        : [],
+    confidence: numberOf(raw.confidence, analysisRaw ? numberOf(analysisRaw.confidence, 0) : 0),
     related_films: Array.isArray(raw.related_films)
       ? (raw.related_films as AIFilmAnalysis['related_films'])
-      : [],
+      : analysisRaw && Array.isArray(analysisRaw.related_films)
+        ? (analysisRaw.related_films as AIFilmAnalysis['related_films'])
+        : [],
     model: {
       provider: str(modelRaw.provider, 'unknown'),
       model: str(modelRaw.model, 'unknown'),
       promptVersion: str(modelRaw.promptVersion, 'unknown'),
-      analyzedAt: str(modelRaw.analyzedAt, new Date().toISOString()),
+      analyzedAt: analysedAt,
       ...(typeof modelRaw.latencyMs === 'number' ? { latencyMs: modelRaw.latencyMs } : {}),
       ...(typeof modelRaw.inputChars === 'number' ? { inputChars: modelRaw.inputChars } : {}),
     },
+    ...(agentRaw ? { agent: agentRaw as AIFilmAnalysis['agent'] } : {}),
     review: {
       verdict,
       ...(typeof reviewRaw.note === 'string' ? { note: reviewRaw.note } : {}),
-      updatedAt: str(reviewRaw.updatedAt, new Date().toISOString()),
+      updatedAt: str(reviewRaw.updatedAt, analysedAt),
     },
   }
 }
@@ -202,6 +260,89 @@ const normaliseHistory = (value: unknown): TasteProfileEvent[] => {
     })
     .filter((item): item is TasteProfileEvent => item !== null)
     .slice(0, 80)
+}
+
+const DECISIONS = new Set(['accepted', 'partially_accepted', 'rejected', 'unsure'])
+
+const normaliseObservationFeedback = (value: unknown): TasteObservationFeedback[] => {
+  if (!Array.isArray(value)) return []
+  const seen = new Set<string>()
+  return value
+    .map((item) => {
+      if (!item || typeof item !== 'object') return null
+      const feedback = item as Record<string, unknown>
+      if (
+        typeof feedback.feedback_id !== 'string' ||
+        typeof feedback.observation_id !== 'string' ||
+        !feedback.observation_id.startsWith('obs_') ||
+        typeof feedback.decision !== 'string' ||
+        !DECISIONS.has(feedback.decision) ||
+        typeof feedback.created_at !== 'string'
+      ) {
+        return null
+      }
+      if (seen.has(feedback.feedback_id)) return null
+      seen.add(feedback.feedback_id)
+      return {
+        feedback_id: feedback.feedback_id,
+        observation_id: feedback.observation_id,
+        decision: feedback.decision as TasteObservationFeedback['decision'],
+        ...(typeof feedback.user_comment === 'string' && feedback.user_comment.trim()
+          ? { user_comment: feedback.user_comment }
+          : {}),
+        created_at: feedback.created_at,
+        affected_snapshot_id:
+          typeof feedback.affected_snapshot_id === 'string'
+            ? feedback.affected_snapshot_id
+            : 'unknown',
+      }
+    })
+    .filter((item): item is TasteObservationFeedback => item !== null)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+}
+
+const normaliseSnapshots = (value: unknown): TasteEvolutionSnapshot[] => {
+  if (!Array.isArray(value)) return []
+  return value
+    .map((item) => {
+      if (!item || typeof item !== 'object') return null
+      const snapshot = item as Record<string, unknown>
+      if (
+        typeof snapshot.snapshot_id !== 'string' ||
+        typeof snapshot.created_at !== 'string' ||
+        typeof snapshot.signature !== 'string' ||
+        !Array.isArray(snapshot.observations)
+      ) {
+        return null
+      }
+      return snapshot as unknown as TasteEvolutionSnapshot
+    })
+    .filter((item): item is TasteEvolutionSnapshot => item !== null)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+    .slice(0, 80)
+}
+
+const normaliseAgentObservations = (value: unknown): AgentObservationBundle[] => {
+  if (!Array.isArray(value)) return []
+  return value
+    .map((item) => {
+      if (!item || typeof item !== 'object') return null
+      const bundle = item as Record<string, unknown>
+      if (
+        typeof bundle.run_id !== 'string' ||
+        typeof bundle.record_id !== 'string' ||
+        typeof bundle.analyzed_at !== 'string' ||
+        !bundle.observation ||
+        typeof bundle.observation !== 'object'
+      ) {
+        return null
+      }
+      const observation = bundle.observation as Record<string, unknown>
+      if (typeof observation.observation_id !== 'string') return null
+      return bundle as unknown as AgentObservationBundle
+    })
+    .filter((item): item is AgentObservationBundle => item !== null)
+    .sort((a, b) => b.analyzed_at.localeCompare(a.analyzed_at))
 }
 
 const migrate = (parsed: Record<string, unknown>): AppState => {
@@ -248,6 +389,9 @@ const migrate = (parsed: Record<string, unknown>): AppState => {
       : [],
     analyses: analyses.filter((analysis) => alive.has(analysis.recordId)),
     profileHistory: normaliseHistory(parsed.profileHistory),
+    observationFeedback: normaliseObservationFeedback(parsed.observationFeedback),
+    tasteSnapshots: normaliseSnapshots(parsed.tasteSnapshots),
+    agentObservations: normaliseAgentObservations(parsed.agentObservations),
     settings: { allowAiNotes: settings.allowAiNotes === true },
   }
 }

@@ -253,4 +253,4 @@ export const STORAGE_KEY = 'fbf.state.v1'
  * The key keeps its v1 name on purpose: changing it would orphan every
  * existing archive. Migration is handled in `src/lib/storage.ts`.
  */
-export const STORAGE_VERSION = 2
+export const STORAGE_VERSION = 3

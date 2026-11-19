@@ -1,14 +1,28 @@
 import { MOODS, THEMES } from '@/data/taxonomy'
-import type { Film, GraphEdge, GraphNode, MemoryGraph, MoodId, ThemeId, WatchRecord } from '@/types'
+import type {
+  Film,
+  GraphEdge,
+  GraphNode,
+  MemoryGraph,
+  MoodId,
+  TasteObservation,
+  ThemeId,
+  WatchRecord,
+} from '@/types'
 import { filmById } from './tasteEngine'
+import { STAGE_COPY } from './taste/evolution'
 
 const filmNodeId = (id: string) => `film:${id}`
 const themeNodeId = (id: ThemeId) => `theme:${id}`
 const moodNodeId = (id: MoodId) => `mood:${id}`
+const observationNodeId = (id: string) => `observation:${id}`
 
 export type GraphOptions = {
   showThemes?: boolean
   showMoods?: boolean
+  showObservations?: boolean
+  /** Derived taste observations; never passed in from a hand-written list. */
+  observations?: TasteObservation[]
 }
 
 /**
@@ -22,9 +36,10 @@ export const buildMemoryGraph = (
   films: Film[],
   options: GraphOptions = {},
 ): MemoryGraph => {
-  const { showThemes = true, showMoods = true } = options
+  const { showThemes = true, showMoods = true, showObservations = true } = options
+  const observations = showObservations ? (options.observations ?? []) : []
   const usable = records.filter((r) => filmById(films, r.filmId))
-  if (usable.length === 0) return { nodes: [], edges: [] }
+  if (usable.length === 0 && observations.length === 0) return { nodes: [], edges: [] }
 
   const nodes = new Map<string, GraphNode>()
   const edges: GraphEdge[] = []
@@ -132,6 +147,41 @@ export const buildMemoryGraph = (
         weight: Math.min(1, shared.length / 4),
         reason: `《${titleA}》与《${titleB}》共享「${labels}」。`,
       })
+    }
+  }
+
+  /* Taste observations: a fourth layer that only exists while evidence exists. */
+  if (observations.length > 0) {
+    for (const observation of observations) {
+      const filmIds = Array.from(new Set(observation.evidence.map((item) => item.film_id)))
+      if (filmIds.length === 0) continue
+      nodes.set(observationNodeId(observation.observation_id), {
+        id: observationNodeId(observation.observation_id),
+        kind: 'observation',
+        label: observation.title,
+        sublabel: `${STAGE_COPY[observation.current_stage].zh} · ${Math.round(
+          observation.confidence * 100,
+        )}%`,
+        weight: Math.max(0.15, observation.confidence),
+        degree: filmIds.length,
+      })
+      for (const filmId of filmIds) {
+        if (!filmById(films, filmId)) continue
+        const evidence = observation.evidence.find((item) => item.film_id === filmId)
+        edges.push({
+          id: `${observation.observation_id}-${filmId}`,
+          source: observationNodeId(observation.observation_id),
+          target: filmNodeId(filmId),
+          kind: 'film-observation',
+          weight: evidence?.strength ?? 0.3,
+          reason:
+            evidence?.polarity === 'contradicting'
+              ? `《${evidence.film_title}》提供了反向证据。`
+              : evidence
+                ? `这条观察由《${evidence.film_title}》中的原句支撑。`
+                : undefined,
+        })
+      }
     }
   }
 

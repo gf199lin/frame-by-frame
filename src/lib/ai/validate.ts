@@ -221,6 +221,7 @@ export const validateAnalyzeResponse = (
         inputChars: num(meta.inputChars) ?? context.note.length,
         attempts: num(meta.attempts) ?? 1,
       },
+      ...(raw.run !== undefined ? { run: raw.run } : {}),
     },
   }
 }

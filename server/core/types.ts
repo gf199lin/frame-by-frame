@@ -81,6 +81,12 @@ export type ValidationResult<T> = {
 
 export type AnalysisMeta = {
   provider: string
+  /**
+   * Public provider identity. `deepseek` on the wire maps to
+   * `legacy-deepseek`; a DeepWorks run may only be labelled by the platform
+   * that actually executed it.
+   */
+  providerId?: AnalysisProviderId
   model: string
   promptVersion: string
   analyzedAt: string
@@ -88,6 +94,8 @@ export type AnalysisMeta = {
   inputChars: number
   attempts: number
 }
+
+export type AnalysisProviderId = 'legacy-deepseek' | 'deepworks' | 'unknown'
 
 export type AnalyzeResponse = {
   analysis: ModelAnalysis
@@ -108,6 +116,8 @@ export type ErrorEnvelope = {
     code: AIErrorCode
     message: string
     retryable: boolean
+    /** Echoed so a failed request can be correlated with logs. */
+    request_id?: string
     /** Only present when AI_DEBUG=1; never contains user notes. */
     detail?: string
   }

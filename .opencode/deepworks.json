@@ -8,5 +8,11 @@
   "authorizedRoots": [
     "C:\\Users\\BayMax\\Desktop\\frame by frame"
   ],
-  "reload": null
+  "reload": null,
+  "deepworksProxyConfig": {
+    "globalProxyUrl": "http://127.0.0.1:7890",
+    "perProvider": {
+      "dth": true
+    }
+  }
 }

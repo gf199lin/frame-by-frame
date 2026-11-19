@@ -1,9 +1,13 @@
 # AI Core V1 · 电影记忆分析
 
+> **状态说明（2026-11-17）**：本文档描述的 Worker / 云函数部署方式已**整体归档到 `legacy/`，不再部署，也不用于本次参赛**。当前唯一在用的运行形态是本地 Node 服务（`npm run ai:dev`）。本文保留原样作为设计演进记录；涉及部署的章节请按“历史方案”阅读。
+>
+> 本次参赛的 AI 分析主体是 DeepWorks 内的 `film-curator` Agent、三个 Skill 与平台知识库；本文件描述的网站侧 DeepSeek 链路是另一条链路，材料中分开标注来源。
+
 Frame by Frame 的 AI 分析不是装饰性的影评摘要。它读取**你自己写下的观影笔记**，输出带原文依据、置信度和不确定性的结构与六维偏好证据；在你确认之前，它不会进入长期画像。
 
 - 模型：DeepSeek（`deepseek-chat`，实际响应模型名以服务端记录为准）
-- 运行时：Cloudflare Workers（生产）/ Node（本地验证）
+- 运行时：Node（本地，当前唯一在用）；Cloudflare Workers / 云函数为历史方案，见 `legacy/`
 - 提示词版本：`fbf-ai-1.0.0`
 - 数据版本：`schemaVersion: 1`，本地存储 `fbf.state.v1`（内部版本 2）
 - 密钥：只存在服务端，浏览器只拿到公开的 API 地址
@@ -36,7 +40,8 @@ AIProvider（接口）
 
 | 入口 | 用途 | 命令 |
 | --- | --- | --- |
-| `server/worker.ts` | Cloudflare Workers | `npm run worker:dev` / `worker:deploy` |
+| `server/worker.ts` | 历史入口：Cloudflare Workers（未启用，见 `legacy/`） | 原命令已移除 |
+| `server/cloudfn.ts` | 历史入口：云函数 FC / SCF（未启用，见 `legacy/`） | 原命令已移除 |
 | `server/node.ts` | 本地 Node，读取 `.env` / `.dev.vars` | `npm run ai:dev` |
 
 核心逻辑在 `server/core/`：`contract`（限制与枚举）、`prompt`、`validate`、`service`、`deepseek`、`stub`、`rateLimit`、`json`、`env`、`loadEnv`。
@@ -150,11 +155,13 @@ npm run dev               # http://localhost:5173
 生产构建必须显式提供 API 地址：
 
 ```powershell
-$env:VITE_AI_API_BASE='https://<worker-name>.<account>.workers.dev'
+$env:VITE_AI_API_BASE='http://127.0.0.1:8787'
 npm run build
 ```
 
-## 8. 部署（Cloudflare Workers）
+## 8. 部署（历史方案，已归档）
+
+> 本章为历史记录，文件与命令均已移入 `legacy/`，不再执行，也不用于本次参赛。
 
 ```powershell
 npx wrangler secret put DEEPSEEK_API_KEY   # 只存服务端

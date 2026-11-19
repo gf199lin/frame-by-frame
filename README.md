@@ -28,7 +28,7 @@ npm run dev          # 前端 http://localhost:5173
 npm run ai:dev       # http://127.0.0.1:8787
 ```
 
-开发环境下前端默认请求 `http://127.0.0.1:8787`；也可用 `VITE_AI_API_BASE` 指向已部署的 Worker。
+开发环境下前端默认请求 `http://127.0.0.1:8787`；也可用 `VITE_AI_API_BASE` 指向你自行部署的地址。历史部署方案（Cloudflare Worker / 云函数）已归档到 `legacy/`，不再部署，也不参与本次参赛链路。
 
 其他命令：
 
@@ -36,11 +36,9 @@ npm run ai:dev       # http://127.0.0.1:8787
 npm run build        # 类型检查 + 生产构建（dist/）
 npm run preview      # 预览生产构建
 npm run typecheck    # 仅类型检查
-npm run test:unit    # 前端测试（21 个）
-npm run test:server  # 后端测试（30 个）
+npm run test:unit    # 前端测试
+npm run test:server  # 后端测试
 npm run ai:verify    # 真实模型验证，写入 docs/ai-verification.json
-npm run worker:dev   # Wrangler 本地 Worker
-npm run worker:deploy
 ```
 
 > 如果 PowerShell 因执行策略阻止 `npm.ps1`，请改用 `npm.cmd install` / `npm.cmd run dev`。这是本机环境问题，不是项目问题。
@@ -107,14 +105,17 @@ npm run worker:deploy
 ```
 .
 ├─ docs/
-│  ├─ ai-core.md                  # AI Core V1：架构、契约、部署、限制
+│  ├─ competition-rules-2026.md   # 赛事规则、评分标准与项目约束（长期依据）
+│  ├─ ai-core.md                  # AI Core V1：架构、契约、限制（部署章节已归档）
 │  ├─ ai-verification.json        # 真实模型调用证据
 │  ├─ agent-skill-spec.md
 │  └─ frontend-architecture.md
+├─ legacy/                        # 历史部署方案，未用于本次参赛（见 legacy/README.md）
 ├─ server/
 │  ├─ app.ts                      # 路由、CORS、限流、错误映射
-│  ├─ worker.ts                   # Cloudflare Workers 入口
-│  ├─ node.ts                     # 本地 Node 入口
+│  ├─ worker.ts                   # 历史入口：Cloudflare Workers（未启用）
+│  ├─ cloudfn.ts                  # 历史入口：云函数 FC / SCF（未启用）
+│  ├─ node.ts                     # 本地 Node 入口（当前唯一在用）
 │  └─ core/                       # contract / prompt / validate / service / provider …
 ├─ scripts/
 │  └─ verify-ai.ts                # 真实模型验证脚本
@@ -128,13 +129,13 @@ npm run worker:deploy
 │  ├─ types.ts
 │  └─ App.tsx
 ├─ outputs/ai-core-verification/  # 界面走查截图
-├─ wrangler.toml
+├─ legacy/                       # 历史部署配置（wrangler.toml / s.yaml / 云函数脚本）
 ├─ tsconfig.server.json
 ├─ vitest.config.ts
 └─ package.json
 ```
 
-技术栈：React 18 · TypeScript 5.7 · Vite 6 · Tailwind CSS 3.4 · React Router 6 · lucide-react · Vitest · Cloudflare Workers。
+技术栈：React 18 · TypeScript 5.7 · Vite 6 · Tailwind CSS 3.4 · React Router 6 · lucide-react · Vitest · Cloudflare Workers / 阿里云 FC / 腾讯云 SCF。
 
 ---
 

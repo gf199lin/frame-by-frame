@@ -1,0 +1,29 @@
+{
+  "provider": "deepworks-knowledge-center",
+  "knowledge_base_id": "4c321650-6fd5-418f-a300-b4a6760727b4",
+  "name": "Frame by Frame - Cinema Knowledge Base",
+  "project_space_id": "23796",
+  "entry_count": 12,
+  "indexed_at": "2026-11-16",
+  "document_format": "每条知识一个 Markdown 文档，按整篇切分；文件名与正文首行均带 kb_id",
+  "source_index": "knowledge/entries.json",
+  "verified": {
+    "knowledge_base_created": "PASS",
+    "documents_parsed": "PASS (12)",
+    "sass_search": "PASS",
+    "first_real_hit": {
+      "at": "2026-11-16T11:22:00+08:00",
+      "query": "克制 没有说出口 镜头停留 红色 没有敲门 结尾 关系",
+      "knowledge_title": "KB-003-emotion.md",
+      "score": 0.8177763,
+      "evidence": "outputs/p2/agent-integration/runs/fbf-p24-A-20261116-01.platform-search.json"
+    },
+    "platform_signed_run_id": "NOT RUN",
+    "platform_screenshot": "NOT ARCHIVED",
+    "full_12_entry_recall_coverage": "NOT VERIFIED"
+  },
+  "notes": [
+    "11-16 的检索发生在 film-curator 会话内，经 sass_search 工具真实返回，不是平台界面/API 发起的独立 Run。",
+    "材料中可使用“已接入平台知识库”，但必须同时声明 platform_signed_run_id、platform_screenshot、full_12_entry_recall_coverage 三项未完成。"
+  ]
+}

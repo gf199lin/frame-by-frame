@@ -218,4 +218,19 @@ describe('computeTasteProfile', () => {
     expect(deltas.some((change) => change.dimension === 'emotion')).toBe(true)
     expect(deltas.find((change) => change.dimension === 'emotion')!.afterConfidence).toBeGreaterThan(0)
   })
+
+  test('an ambivalent claim is visible on the analysis but never counted', () => {
+    const ambivalent = {
+      ...contribution('ending', 'neutral', 0.8),
+      raw_direction: 'ambivalent' as const,
+    }
+    const profile = computeTasteProfile(
+      stateWith([analysis('r1', 'f-r1', [ambivalent])]),
+      filmsFor(),
+    )
+    const dimension = profile.dimensions.find((item) => item.key === 'ending')
+    expect(dimension?.sampleCount).toBe(0)
+    expect(dimension?.aiEvidence).toHaveLength(0)
+    expect(dimension?.lean).toBe(0)
+  })
 })

@@ -244,6 +244,12 @@ export type TasteContribution = {
   evidence: string
   /** A short verbatim fragment of the user's note, when available. */
   quote?: string
+  /**
+   * The direction exactly as the agent produced it, before compatibility
+   * mapping. `ambivalent` becomes `neutral` for the radar, but the original
+   * claim stays traceable here instead of being silently discarded.
+   */
+  raw_direction?: 'low' | 'high' | 'neutral' | 'ambivalent'
   /** User can remove an individual claim without rejecting the whole analysis. */
   userStatus?: 'kept' | 'removed'
 }
@@ -275,12 +281,44 @@ export type AIFilmAnalysis = {
   confidence: number
   related_films: AIRelatedFilm[]
   model: AIModelMeta
+  /**
+   * Provenance kept from an agent run (agent-run.v2). Optional so every
+   * existing v1 archive stays valid. Never contains the user's note text.
+   */
+  agent?: AIAgentProvenance
   review: {
     verdict: AIAnalysisVerdict
     /** The user's own wording when they correct the reading. */
     note?: string
     updatedAt: string
   }
+}
+
+/** Non-note metadata preserved from an agent run, for traceability. */
+export type AIAgentProvenance = {
+  provider?: string
+  request_id?: string
+  run_id?: string
+  agent_id?: string
+  agent_version?: string
+  workflow_version?: string
+  profile_id?: string
+  profile_version?: string
+  skills_used?: Array<{
+    name: string
+    invoked?: boolean
+    via?: string
+    version?: string
+  }>
+  kb_citations?: Array<{
+    kb_id: string
+    title?: string
+    source?: string
+    excerpt?: string
+  }>
+  quality_gates?: Record<string, boolean>
+  /** The raw run, with `input` (and therefore the note) removed. */
+  raw?: unknown
 }
 
 export type TasteProfileEventChange = {
@@ -304,6 +342,155 @@ export type TasteProfileEvent = {
   reason: string
 }
 
+/* ------------------------------------------------------------------ */
+/*  Taste Evolution — observations, evidence, feedback, snapshots      */
+/*  Every observation is derived from accepted analyses and their      */
+/*  verbatim note quotes. Nothing here is authored by hand or invented.*/
+/* ------------------------------------------------------------------ */
+
+export type ObservationStage = 'emerging' | 'developing' | 'established' | 'evolving'
+
+export type ObservationPolarity = 'supporting' | 'contradicting' | 'neutral'
+
+export type ObservationDecision = 'accepted' | 'partially_accepted' | 'rejected' | 'unsure'
+
+export type ObservationChangeKind = 'created' | 'updated' | 'unchanged' | 'withdrawn'
+
+/** One traceable fragment of the user's own note, attached to an observation. */
+export type TasteEvolutionEvidence = {
+  evidence_id: string
+  observation_id: string
+  record_id: string
+  film_id: string
+  film_title: string
+  film_year: number
+  dimension: DimensionKey
+  /** Verbatim substring of the watch record's note. */
+  original_quote: string
+  /** The model's reading of that quote — never presented as the user's words. */
+  interpretation: string
+  polarity: ObservationPolarity
+  /** 0..1 — note depth × rating conviction × model confidence. */
+  strength: number
+  /** Where the claim came from, e.g. "deepworks" or "legacy-deepseek". */
+  source: string
+  created_at: string
+  run_id?: string
+  /** User removed this individual claim inside a film analysis. */
+  user_removed?: boolean
+}
+
+export type TasteObservationFeedback = {
+  feedback_id: string
+  observation_id: string
+  decision: ObservationDecision
+  user_comment?: string
+  created_at: string
+  /** The snapshot that was current when the feedback was recorded. */
+  affected_snapshot_id: string
+}
+
+export type TasteObservationHistoryEntry = {
+  at: string
+  snapshot_id: string
+  stage: ObservationStage
+  confidence: number
+  supporting_count: number
+  contradicting_count: number
+  reason: string
+}
+
+export type TasteObservation = {
+  observation_id: string
+  dimension: DimensionKey
+  title: string
+  description: string
+  current_stage: ObservationStage
+  /** 0..1. A rejected observation stays visible at a floor confidence. */
+  confidence: number
+  first_observed_at: string
+  last_updated_at: string
+  supporting_record_ids: string[]
+  supporting_evidence_ids: string[]
+  contradicting_evidence_ids: string[]
+  accepted_feedback_count: number
+  partially_accepted_feedback_count: number
+  rejected_feedback_count: number
+  unsure_feedback_count: number
+  latest_feedback?: TasteObservationFeedback
+  history: TasteObservationHistoryEntry[]
+  /** Supporting + contradicting evidence, for the detail page. */
+  evidence: TasteEvolutionEvidence[]
+  dominant_direction: TasteDirection
+  /** False when the user rejected it: it must not feed the profile. */
+  effective: boolean
+  record_count: number
+  evidence_count: number
+  /** Quotes the agent produced that could not be found verbatim in the note. */
+  unverified_evidence_count: number
+}
+
+export type TasteEvolutionSnapshotObservation = {
+  observation_id: string
+  dimension: DimensionKey
+  title: string
+  description: string
+  stage: ObservationStage
+  confidence: number
+  dominant_direction: TasteDirection
+  supporting_count: number
+  contradicting_count: number
+  film_ids: string[]
+  evidence_ids: string[]
+  effective: boolean
+}
+
+export type TasteEvolutionChange = {
+  observation_id: string
+  kind: ObservationChangeKind
+  reason: string
+  before_confidence?: number
+  after_confidence?: number
+  before_stage?: ObservationStage
+  after_stage?: ObservationStage
+}
+
+export type TasteEvolutionSnapshot = {
+  snapshot_id: string
+  created_at: string
+  /** Latest agent run that contributed evidence, when one exists. */
+  run_id: string | null
+  record_count: number
+  observations: TasteEvolutionSnapshotObservation[]
+  dimensions: Array<{
+    key: DimensionKey
+    lean: number
+    confidence: number
+    sampleCount: number
+  }>
+  overall_confidence: number
+  changes: TasteEvolutionChange[]
+  corrections_applied: string[]
+  /** Stable input fingerprint; identical inputs never create a second snapshot. */
+  signature: string
+}
+
+/**
+ * An observation that came from a real agent run and was imported verbatim.
+ * The site never recomputes these; it keeps the agent's wording, confidence
+ * and run provenance so an old analysis cannot pass for a new run.
+ */
+export type AgentObservationBundle = {
+  observation: TasteObservation
+  evidence: TasteEvolutionEvidence[]
+  run_id: string
+  record_id: string
+  film_id: string
+  note_sha256: string
+  analyzed_at: string
+  imported_at: string
+}
+
 export type AppState = {
   version: number
   /** Seed records and user records live in one list. */
@@ -319,6 +506,12 @@ export type AppState = {
   analyses: AIFilmAnalysis[]
   /** Why the six-dimension profile changed over time. */
   profileHistory: TasteProfileEvent[]
+  /** Append-only feedback on taste observations. */
+  observationFeedback: TasteObservationFeedback[]
+  /** Append-only evolution snapshots. Old snapshots are never overwritten. */
+  tasteSnapshots: TasteEvolutionSnapshot[]
+  /** Observations imported from a real DeepWorks run, keyed by observation_id. */
+  agentObservations: AgentObservationBundle[]
   settings: {
     /** Explicit consent before private notes are sent to the model. */
     allowAiNotes: boolean
@@ -484,7 +677,7 @@ export type TimelineStage = {
 
 export type GraphNode = {
   id: string
-  kind: 'film' | 'theme' | 'mood'
+  kind: 'film' | 'theme' | 'mood' | 'observation'
   label: string
   sublabel?: string
   weight: number
@@ -496,7 +689,7 @@ export type GraphEdge = {
   id: string
   source: string
   target: string
-  kind: 'film-theme' | 'film-mood' | 'film-film'
+  kind: 'film-theme' | 'film-mood' | 'film-film' | 'film-observation'
   weight: number
   reason?: string
 }

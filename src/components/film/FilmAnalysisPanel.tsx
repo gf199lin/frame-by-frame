@@ -12,11 +12,15 @@ import {
 import { useAppStore } from '@/store/AppStore'
 import { useToast } from '@/components/ui/Toast'
 import { DIMENSION_MAP, MOODS, THEMES } from '@/data/taxonomy'
-import { cn, formatLongDate, percent } from '@/lib/format'
+import { cn, formatLongDate, percent, uid } from '@/lib/format'
 import { filmById } from '@/lib/tasteEngine'
-import { aiErrorMessage, analyzeFilmMemory, isAiConfigured } from '@/lib/ai/client'
+import { aiErrorMessage, isAiConfigured } from '@/lib/ai/client'
+import { AnalysisServiceError, createAnalysisService } from '@/lib/ai/analysisService'
+import { agentRunToAnalysis } from '@/lib/ai/normaliseRunV2'
+import { PROVIDER_LABELS, type PendingNoteV1, type ProviderId } from '@/lib/ai/contractV2'
+import { idempotencyKeyFor, sha256Hex } from '@/lib/ai/hashNote'
 import { buildAnalysisHistory, filmMetaForAi } from '@/lib/ai/history'
-import { moodsOfAnalysis, themesOfAnalysis, toFilmAnalysis } from '@/lib/ai/adapter'
+import { moodsOfAnalysis, themesOfAnalysis } from '@/lib/ai/adapter'
 import type { Film, TasteDirection, WatchRecord } from '@/types'
 
 const directionLabel = (direction: TasteDirection, key: keyof typeof DIMENSION_MAP): string => {
@@ -86,22 +90,49 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
     }
 
     setRunning(true)
+    const service = createAnalysisService()
     try {
-      const response = await analyzeFilmMemory({
+      const noteText = record.reflection.trim()
+      const noteSha = await sha256Hex(noteText)
+      const createdAt = new Date().toISOString()
+      const pendingNote: PendingNoteV1 = {
+        schema_version: 1,
+        request_id: uid('req'),
+        record_id: record.id,
+        idempotency_key: idempotencyKeyFor(record.id, noteSha),
+        // The gateway must replace this with a server-confirmed identity.
+        user_id: 'anon-local',
+        consent: {
+          allow_ai_notes: consent,
+          policy_version: '2026-11-01',
+          accepted_at: createdAt,
+        },
+        created_at: createdAt,
         film: filmMetaForAi(film),
         rating: record.rating,
-        watchedAt: record.watchedAt,
-        ...(record.feltLike ? { feltLike: record.feltLike } : {}),
-        note: record.reflection.trim(),
+        note: noteText,
+        note_sha256: noteSha,
+        ...(record.watchedAt ? { watched_at: record.watchedAt } : {}),
+        ...(record.feltLike ? { felt_like: [record.feltLike] } : {}),
         history: buildAnalysisHistory(
           records.filter((item) => item.id !== record.id),
           films,
           film,
         ),
         locale: 'zh-CN',
-      })
-      const now = new Date().toISOString()
-      const next = toFilmAnalysis(response, record.id, film.id, now)
+      }
+
+      const submission = await service.submitAnalysis(pendingNote)
+      if (submission.status === 'failed') {
+        throw new AnalysisServiceError(
+          'ANALYSIS_FAILED',
+          submission.provider,
+          '在线 AI 没有返回可用结果，请稍后重试。',
+        )
+      }
+      const run = await service.getAnalysisResult(submission.run_id)
+      const next = agentRunToAnalysis(run)
+      const now = next.model.analyzedAt || new Date().toISOString()
       upsertRecord(
         {
           ...record,
@@ -230,7 +261,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                 ? '编辑示例 · 非模型输出 · 需要你确认后才计入画像'
                 : analysis.model.provider === 'local-engine'
                   ? '本地规则引擎 · 未调用外部模型'
-                  : `${analysis.model.provider} · ${analysis.model.model} · 提示词版本 ${analysis.model.promptVersion}`}{' '}
+                  : `${PROVIDER_LABELS[analysis.model.provider as ProviderId] ?? analysis.model.provider} · ${analysis.model.model} · 提示词版本 ${analysis.model.promptVersion}`}{' '}
               · {formatLongDate(analysis.model.analyzedAt.slice(0, 10))}
             </p>
           </div>

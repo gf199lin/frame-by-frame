@@ -8,11 +8,18 @@ import { TasteRadar } from '@/components/taste/TasteRadar'
 import { FilmPoster } from '@/components/film/FilmPoster'
 import { DimensionCard } from '@/components/taste/DimensionCard'
 import { HowAISeesMe } from '@/components/taste/HowAISeesMe'
+import { ObservationSection } from '@/components/taste/ObservationSection'
+import { EvolutionTransfer } from '@/components/taste/EvolutionTransfer'
 import { EmptyState, SectionLabel, TextLink } from '@/components/ui/Primitives'
 import { DIMENSION_MAP, THEMES } from '@/data/taxonomy'
 import { formatLongDate, percent } from '@/lib/format'
 import { sampleStateCopy } from '@/lib/ai/tasteProfile'
-import type { DimensionKey, DimensionFeedback, TasteSnapshot } from '@/types'
+import type {
+  DimensionKey,
+  DimensionFeedback,
+  ObservationDecision,
+  TasteSnapshot,
+} from '@/types'
 
 const scopeLabel = (scope: string): string => {
   if (scope.startsWith('dimension:')) {
@@ -33,8 +40,10 @@ export const Taste = () => {
     profile,
     timeline,
     state,
+    observations,
     setDimensionFeedback,
     setTimelineFeedback,
+    setObservationFeedback,
     addCorrection,
     reviewAnalysis,
   } = useAppStore()
@@ -108,6 +117,25 @@ export const Taste = () => {
     setTimelineFeedback(stageId, verdict, correction)
     if (correction) addCorrection(`timeline:${stageId}`, correction)
     push(verdict === 'agree' ? '已记下，对应片库阶段已确认。' : '已记下你对这个阶段的判断。', 'success')
+  }
+
+  const handleObservationFeedback = (
+    observationId: string,
+    decision: ObservationDecision,
+    comment?: string,
+  ) => {
+    const title = observations.find((item) => item.observation_id === observationId)?.title
+    setObservationFeedback(observationId, decision, comment)
+    push(
+      decision === 'accepted'
+        ? `已记下。${title ? `「${title}」` : '这条观察'}获得一点额外权重，但仍会随新证据变化。`
+        : decision === 'partially_accepted'
+          ? '已记下部分认可。相关判断会下调，你的说明会被保留。'
+          : decision === 'rejected'
+            ? '已记下。这条观察不再计入画像，但历史仍然保留。'
+            : '已记下你的不确定。它不会因此获得额外认可权重。',
+      'success',
+    )
   }
 
   const jumpTo = (key: DimensionKey) => {
@@ -385,13 +413,23 @@ export const Taste = () => {
         </div>
       </section>
 
+      <ObservationSection
+        observations={observations}
+        films={films}
+        records={records}
+        snapshots={state.tasteSnapshots}
+        onFeedback={handleObservationFeedback}
+      />
+
+      <EvolutionTransfer />
+
       {profile.topThemes.length > 0 && (
         <section className="chapter--paper border-y border-ink/10">
           <div className="mx-auto max-w-shell px-5 py-16 lg:px-10 lg:py-20">
             <div className="flex flex-wrap items-end justify-between gap-4 border-b border-ink/10 pb-4">
               <div>
                 <p className="artifact-label">
-                  <b>02</b> 主题复现
+                  <b>03</b> 主题复现
                 </p>
                 <h2 className="mt-4 t-head">你反复回到的地方</h2>
                 <p className="mt-3 max-w-xl text-[15.5px] leading-[1.8] text-taupe">
@@ -465,7 +503,7 @@ export const Taste = () => {
 
       {state.profileHistory.length > 0 && (
         <section className="mx-auto max-w-shell px-5 py-14 lg:px-10 lg:py-20">
-          <SectionLabel index="03">画像为什么变化</SectionLabel>
+          <SectionLabel index="04">画像为什么变化</SectionLabel>
           <p className="mt-4 max-w-2xl text-[15px] leading-[1.85] text-taupe">
             每一次接受、修改或拒绝都会留下记录。变化不是悄悄发生的，也不需要你相信一个黑箱。
           </p>
@@ -499,7 +537,7 @@ export const Taste = () => {
       )}
 
       <section className="mx-auto max-w-shell px-5 py-16 lg:px-10 lg:py-24">
-        <SectionLabel index="04">片库时间线（本地计算）</SectionLabel>
+        <SectionLabel index="05">片库时间线（本地计算）</SectionLabel>
         <div className="mt-6 grid gap-10 lg:grid-cols-[0.62fr_1fr] lg:gap-16">
           <div>
             <h2 className="font-zh-title text-[clamp(2rem,4vw,3.4rem)] leading-[1.2]">

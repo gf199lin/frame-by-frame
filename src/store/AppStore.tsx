@@ -13,10 +13,13 @@ import { createInitialState } from '@/data/seed'
 import type {
   AIAnalysisVerdict,
   AIFilmAnalysis,
+  AgentObservationBundle,
   AppState,
   DimensionFeedback,
   DimensionKey,
   Film,
+  ObservationDecision,
+  TasteEvolutionSnapshot,
   TasteProfileEvent,
   TimelineFeedbackMap,
   WatchRecord,
@@ -25,17 +28,27 @@ import { clearState, loadState, persistState, relisten } from '@/lib/storage'
 import { buildMemoryGraph } from '@/lib/graph'
 import { buildTimeline, computeSnapshot } from '@/lib/tasteEngine'
 import { computeTasteProfile, dimensionProfileDelta } from '@/lib/ai/tasteProfile'
+import { appendSnapshot, computeEvolution } from '@/lib/taste/evolution'
+import { importEvolutionDoc, type EvolutionImportResult } from '@/lib/taste/evolutionImport'
 
-type Action =
+export type Action =
   | { type: 'hydrate'; state: AppState }
-  | { type: 'upsert-record'; record: WatchRecord; editingId?: string }
+  | { type: 'ensure-snapshot'; films: Film[]; at: string }
+  | {
+      type: 'upsert-record'
+      record: WatchRecord
+      editingId?: string
+      films: Film[]
+      at: string
+      filmTitle: string
+    }
   | { type: 'delete-record'; id: string; at: string; films: Film[]; filmTitle: string }
   | { type: 'set-feedback'; key: DimensionKey; feedback: DimensionFeedback }
   | { type: 'set-timeline-feedback'; stageId: string; feedback: TimelineFeedbackMap[string] }
   | { type: 'add-correction'; id: string; scope: string; text: string; createdAt: string }
   | { type: 'add-film'; film: Film }
   | { type: 'mark-yearbook'; id: string }
-  | { type: 'save-analysis'; analysis: AIFilmAnalysis }
+  | { type: 'save-analysis'; analysis: AIFilmAnalysis; films: Film[]; at: string }
   | {
       type: 'review-analysis'
       recordId: string
@@ -55,6 +68,21 @@ type Action =
       filmTitle: string
     }
   | { type: 'delete-analysis'; recordId: string; at: string; films: Film[]; filmTitle: string }
+  | {
+      type: 'set-observation-feedback'
+      observationId: string
+      decision: ObservationDecision
+      comment?: string
+      at: string
+      films: Film[]
+      snapshotId: string
+    }
+  | {
+      type: 'import-evolution'
+      bundles: AgentObservationBundle[]
+      snapshot: TasteEvolutionSnapshot | null
+      at: string
+    }
   | { type: 'set-ai-consent'; allow: boolean }
   | { type: 'reset' }
 
@@ -88,10 +116,15 @@ const withProfileEvent = (
   return { ...next, profileHistory: [event, ...next.profileHistory].slice(0, 80) }
 }
 
-const reducer = (state: AppState, action: Action): AppState => {
+/** Exported for tests: the store itself always goes through this reducer. */
+export const appReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
     case 'hydrate':
       return action.state
+    case 'ensure-snapshot': {
+      if (state.tasteSnapshots.length > 0) return state
+      return appendSnapshot(state, action.films, action.at)
+    }
     case 'upsert-record': {
       const target = state.records.find(
         (r) => r.id === action.record.id || r.id === action.editingId || r.filmId === action.record.filmId,
@@ -99,14 +132,44 @@ const reducer = (state: AppState, action: Action): AppState => {
       const records = target
         ? state.records.map((r) => (r.id === target.id ? action.record : r))
         : [action.record, ...state.records]
+      const noteChanged =
+        target !== undefined && target.reflection.trim() !== action.record.reflection.trim()
       // If the record id changed, keep its analysis attached to the new id.
-      const analyses =
+      let analyses =
         target && target.id !== action.record.id
           ? state.analyses.map((analysis) =>
               analysis.recordId === target.id ? { ...analysis, recordId: action.record.id } : analysis,
             )
           : state.analyses
-      return { ...state, records, analyses }
+      if (noteChanged && target) {
+        // A changed note invalidates the old reading: its quotes can no longer
+        // be verified against the note, so they stop feeding the profile.
+        analyses = analyses.map((analysis) =>
+          analysis.recordId === target.id
+            ? {
+                ...analysis,
+                review: {
+                  verdict: 'unreviewed' as const,
+                  note: '原始笔记已修改，旧证据暂停计入画像，等待重新分析。',
+                  updatedAt: action.at,
+                },
+              }
+            : analysis,
+        )
+      }
+      const next: AppState = { ...state, records, analyses }
+      if (!noteChanged || !target) return appendSnapshot(next, action.films, action.at)
+      return appendSnapshot(
+        withProfileEvent(state, next, action.films, {
+          recordId: target.id,
+          filmTitle: action.filmTitle,
+          kind: 'edit',
+          reason: `你修改了《${action.filmTitle}》的原始笔记，旧证据暂停计入画像，等待新的确认。`,
+          at: action.at,
+        }),
+        action.films,
+        action.at,
+      )
     }
     case 'delete-record': {
       const next: AppState = {
@@ -114,14 +177,19 @@ const reducer = (state: AppState, action: Action): AppState => {
         records: state.records.filter((r) => r.id !== action.id),
         analyses: state.analyses.filter((analysis) => analysis.recordId !== action.id),
       }
-      if (!state.analyses.some((analysis) => analysis.recordId === action.id)) return next
-      return withProfileEvent(state, next, action.films, {
-        recordId: action.id,
-        filmTitle: action.filmTitle,
-        kind: 'delete',
-        reason: `删除了《${action.filmTitle}》的观影记录，其 AI 证据也一并移除。`,
-        at: action.at,
-      })
+      const hadAnalysis = state.analyses.some((analysis) => analysis.recordId === action.id)
+      if (!hadAnalysis) return appendSnapshot(next, action.films, action.at)
+      return appendSnapshot(
+        withProfileEvent(state, next, action.films, {
+          recordId: action.id,
+          filmTitle: action.filmTitle,
+          kind: 'delete',
+          reason: `删除了《${action.filmTitle}》的观影记录，其 AI 证据也一并移除。`,
+          at: action.at,
+        }),
+        action.films,
+        action.at,
+      )
     }
     case 'set-feedback':
       return { ...state, feedback: { ...state.feedback, [action.key]: action.feedback } }
@@ -154,7 +222,7 @@ const reducer = (state: AppState, action: Action): AppState => {
       }
     case 'save-analysis': {
       const exists = state.analyses.some((analysis) => analysis.recordId === action.analysis.recordId)
-      return {
+      const next: AppState = {
         ...state,
         analyses: exists
           ? state.analyses.map((analysis) =>
@@ -162,6 +230,7 @@ const reducer = (state: AppState, action: Action): AppState => {
             )
           : [action.analysis, ...state.analyses],
       }
+      return appendSnapshot(next, action.films, action.at)
     }
     case 'review-analysis': {
       const existing = state.analyses.find((analysis) => analysis.recordId === action.recordId)
@@ -189,18 +258,22 @@ const reducer = (state: AppState, action: Action): AppState => {
             : action.verdict === 'rejected'
               ? `你拒绝了《${action.filmTitle}》的 AI 分析，其证据不再计入画像。`
               : `《${action.filmTitle}》的分析回到待确认状态。`
-      return withProfileEvent(state, next, action.films, {
-        recordId: action.recordId,
-        filmTitle: action.filmTitle,
-        kind:
-          action.verdict === 'rejected'
-            ? 'reject'
-            : action.verdict === 'edited'
-              ? 'edit'
-              : 'accept',
-        reason,
-        at: action.at,
-      })
+      return appendSnapshot(
+        withProfileEvent(state, next, action.films, {
+          recordId: action.recordId,
+          filmTitle: action.filmTitle,
+          kind:
+            action.verdict === 'rejected'
+              ? 'reject'
+              : action.verdict === 'edited'
+                ? 'edit'
+                : 'accept',
+          reason,
+          at: action.at,
+        }),
+        action.films,
+        action.at,
+      )
     }
     case 'set-contribution': {
       const existing = state.analyses.find((analysis) => analysis.recordId === action.recordId)
@@ -225,29 +298,97 @@ const reducer = (state: AppState, action: Action): AppState => {
             : analysis,
         ),
       }
-      return withProfileEvent(state, next, action.films, {
-        recordId: action.recordId,
-        filmTitle: action.filmTitle,
-        kind: 'edit',
-        reason:
-          action.status === 'removed'
-            ? `你移除了《${action.filmTitle}》分析中的一项判断，它不再计入画像。`
-            : `你恢复了《${action.filmTitle}》分析中的一项判断。`,
-        at: action.at,
-      })
+      return appendSnapshot(
+        withProfileEvent(state, next, action.films, {
+          recordId: action.recordId,
+          filmTitle: action.filmTitle,
+          kind: 'edit',
+          reason:
+            action.status === 'removed'
+              ? `你移除了《${action.filmTitle}》分析中的一项判断，它不再计入画像。`
+              : `你恢复了《${action.filmTitle}》分析中的一项判断。`,
+          at: action.at,
+        }),
+        action.films,
+        action.at,
+      )
     }
     case 'delete-analysis': {
       const next: AppState = {
         ...state,
         analyses: state.analyses.filter((analysis) => analysis.recordId !== action.recordId),
       }
-      return withProfileEvent(state, next, action.films, {
-        recordId: action.recordId,
-        filmTitle: action.filmTitle,
-        kind: 'delete',
-        reason: `你删除了《${action.filmTitle}》的 AI 分析，原始观影记录仍然保留。`,
-        at: action.at,
-      })
+      return appendSnapshot(
+        withProfileEvent(state, next, action.films, {
+          recordId: action.recordId,
+          filmTitle: action.filmTitle,
+          kind: 'delete',
+          reason: `你删除了《${action.filmTitle}》的 AI 分析，原始观影记录仍然保留。`,
+          at: action.at,
+        }),
+        action.films,
+        action.at,
+      )
+    }
+    case 'set-observation-feedback': {
+      const existing = state.observationFeedback.find(
+        (feedback) => feedback.observation_id === action.observationId,
+      )
+      if (
+        existing &&
+        existing.decision === action.decision &&
+        (existing.user_comment ?? '') === (action.comment ?? '')
+      ) {
+        // Identical feedback is counted once, never twice.
+        return state
+      }
+      const feedback = {
+        feedback_id: `fb_${action.observationId}_${Date.now().toString(36)}${Math.random()
+          .toString(36)
+          .slice(2, 5)}`,
+        observation_id: action.observationId,
+        decision: action.decision,
+        ...(action.comment?.trim() ? { user_comment: action.comment.trim() } : {}),
+        created_at: action.at,
+        affected_snapshot_id: action.snapshotId,
+      }
+      const next: AppState = {
+        ...state,
+        observationFeedback: [feedback, ...state.observationFeedback],
+        corrections:
+          action.comment?.trim()
+            ? [
+                {
+                  id: `cor_${Date.now().toString(36)}`,
+                  scope: `observation:${action.observationId}`,
+                  text: action.comment.trim(),
+                  createdAt: action.at,
+                },
+                ...state.corrections,
+              ]
+            : state.corrections,
+      }
+      return appendSnapshot(next, action.films, action.at)
+    }
+    case 'import-evolution': {
+      if (action.bundles.length === 0 && !action.snapshot) return state
+      const byId = new Map(
+        state.agentObservations.map((bundle) => [bundle.observation.observation_id, bundle]),
+      )
+      for (const bundle of action.bundles) {
+        byId.set(bundle.observation.observation_id, bundle)
+      }
+      const agentObservations = Array.from(byId.values()).sort((a, b) =>
+        b.analyzed_at.localeCompare(a.analyzed_at),
+      )
+      let tasteSnapshots = state.tasteSnapshots
+      if (
+        action.snapshot &&
+        !tasteSnapshots.some((item) => item.snapshot_id === action.snapshot!.snapshot_id)
+      ) {
+        tasteSnapshots = [action.snapshot, ...tasteSnapshots].slice(0, 80)
+      }
+      return { ...state, agentObservations, tasteSnapshots }
     }
     case 'set-ai-consent':
       return { ...state, settings: { ...state.settings, allowAiNotes: action.allow } }
@@ -267,6 +408,8 @@ type StoreValue = {
   profile: ReturnType<typeof computeTasteProfile>
   timeline: ReturnType<typeof buildTimeline>
   graph: ReturnType<typeof buildMemoryGraph>
+  evolution: ReturnType<typeof computeEvolution>
+  observations: ReturnType<typeof computeEvolution>['observations']
   storageAvailable: boolean
   hydrated: boolean
   upsertRecord: (record: WatchRecord, editingId?: string) => void
@@ -284,6 +427,12 @@ type StoreValue = {
   reviewAnalysis: (recordId: string, verdict: AIAnalysisVerdict, note?: string) => void
   setContributionStatus: (recordId: string, dimension: DimensionKey, status: 'kept' | 'removed') => void
   deleteAnalysis: (recordId: string) => void
+  setObservationFeedback: (
+    observationId: string,
+    decision: ObservationDecision,
+    comment?: string,
+  ) => void
+  importEvolution: (doc: unknown) => Promise<EvolutionImportResult>
   setAiConsent: (allow: boolean) => void
   resetDemo: () => void
 }
@@ -292,7 +441,7 @@ const StoreContext = createContext<StoreValue | null>(null)
 
 export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const initial = useMemo(() => loadState(), [])
-  const [state, dispatch] = useReducer(reducer, initial.state)
+  const [state, dispatch] = useReducer(appReducer, initial.state)
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
@@ -314,7 +463,21 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const snapshot = useMemo(() => computeSnapshot(state.records, films), [state.records, films])
   const profile = useMemo(() => computeTasteProfile(state, films), [state, films])
   const timeline = useMemo(() => buildTimeline(state.records, films), [state.records, films])
-  const graph = useMemo(() => buildMemoryGraph(state.records, films), [state.records, films])
+  const evolution = useMemo(() => computeEvolution(state, films), [state, films])
+  const graph = useMemo(
+    () =>
+      buildMemoryGraph(state.records, films, {
+        observations: evolution.observations,
+      }),
+    [state.records, films, evolution.observations],
+  )
+
+  /* One baseline snapshot so the first visit already has a time anchor. */
+  useEffect(() => {
+    if (state.tasteSnapshots.length === 0) {
+      dispatch({ type: 'ensure-snapshot', films, at: new Date().toISOString() })
+    }
+  }, [state.tasteSnapshots.length, films])
 
   const titleOf = useCallback(
     (recordId: string): string => {
@@ -326,8 +489,18 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   )
 
   const upsertRecord = useCallback(
-    (record: WatchRecord, editingId?: string) => dispatch({ type: 'upsert-record', record, editingId }),
-    [],
+    (record: WatchRecord, editingId?: string) => {
+      const film = films.find((item) => item.id === record.filmId)
+      dispatch({
+        type: 'upsert-record',
+        record,
+        editingId,
+        films,
+        at: new Date().toISOString(),
+        filmTitle: film?.title ?? '这部电影',
+      })
+    },
+    [films],
   )
 
   const deleteRecord = useCallback(
@@ -381,8 +554,9 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const markYearbook = useCallback((id: string) => dispatch({ type: 'mark-yearbook', id }), [])
 
   const saveAnalysis = useCallback(
-    (analysis: AIFilmAnalysis) => dispatch({ type: 'save-analysis', analysis }),
-    [],
+    (analysis: AIFilmAnalysis) =>
+      dispatch({ type: 'save-analysis', analysis, films, at: new Date().toISOString() }),
+    [films],
   )
 
   const reviewAnalysis = useCallback(
@@ -428,6 +602,40 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     [films, titleOf],
   )
 
+  const setObservationFeedback = useCallback(
+    (observationId: string, decision: ObservationDecision, comment?: string) => {
+      const latestSnapshot = [...state.tasteSnapshots].sort((a, b) =>
+        b.created_at.localeCompare(a.created_at),
+      )[0]
+      dispatch({
+        type: 'set-observation-feedback',
+        observationId,
+        decision,
+        comment,
+        at: new Date().toISOString(),
+        films,
+        snapshotId: latestSnapshot?.snapshot_id ?? 'none',
+      })
+    },
+    [state.tasteSnapshots, films],
+  )
+
+  const importEvolution = useCallback(
+    async (doc: unknown): Promise<EvolutionImportResult> => {
+      const result = await importEvolutionDoc(doc, state)
+      if (result.ok && !result.alreadyImported) {
+        dispatch({
+          type: 'import-evolution',
+          bundles: result.bundles,
+          snapshot: result.snapshot,
+          at: new Date().toISOString(),
+        })
+      }
+      return result
+    },
+    [state],
+  )
+
   const setAiConsent = useCallback(
     (allow: boolean) => dispatch({ type: 'set-ai-consent', allow }),
     [],
@@ -447,6 +655,8 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     profile,
     timeline,
     graph,
+    evolution,
+    observations: evolution.observations,
     storageAvailable: initial.source !== 'unavailable',
     hydrated,
     upsertRecord,
@@ -460,6 +670,8 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     reviewAnalysis,
     setContributionStatus,
     deleteAnalysis,
+    setObservationFeedback,
+    importEvolution,
     setAiConsent,
     resetDemo,
   }

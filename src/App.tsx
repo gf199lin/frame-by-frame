@@ -9,6 +9,7 @@ import { Archive } from '@/pages/Archive'
 import { FilmDetail } from '@/pages/FilmDetail'
 import { MemoryMapPage } from '@/pages/MemoryMap'
 import { Taste } from '@/pages/Taste'
+import { ObservationDetail } from '@/pages/ObservationDetail'
 import { Reflection } from '@/pages/Reflection'
 import { NotFound } from '@/pages/NotFound'
 
@@ -51,6 +52,7 @@ const AppRoutes = () => {
           <Route path="/archive/:filmId" element={<FilmDetail />} />
           <Route path="/map" element={<MemoryMapPage />} />
           <Route path="/taste" element={<Taste />} />
+          <Route path="/taste/observations/:observationId" element={<ObservationDetail />} />
           <Route path="/reflection" element={<Reflection />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

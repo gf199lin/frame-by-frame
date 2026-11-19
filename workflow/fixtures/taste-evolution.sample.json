@@ -1,0 +1,148 @@
+{
+  "schema_version": "taste-evolution.v1",
+  "run_id": "run-contract-sample-01",
+  "record_id": "r-demo-01",
+  "film_id": "f-demo-01",
+  "analyzed_at": "2026-11-17T05:30:00.000Z",
+  "inputs": {
+    "note_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "prior_snapshot_id": "snap_prior"
+  },
+  "observations": [
+    {
+      "observation_id": "obs_visual",
+      "dimension": "visual",
+      "title": "视觉 · 构图与光线",
+      "description": "从你确认过的 3 部电影里，有 2 条原句指向构图与光线，另有 1 条指向相反方向。这只是当前证据的方向，不是结论。",
+      "current_stage": "developing",
+      "confidence": 0.51,
+      "first_observed_at": "2026-11-10T10:00:00.000Z",
+      "last_updated_at": "2026-11-17T05:30:00.000Z",
+      "supporting_record_ids": ["r-demo-01", "r-demo-02"],
+      "supporting_evidence_ids": ["ev_r-demo-01_visual_a1", "ev_r-demo-02_visual_a2"],
+      "contradicting_evidence_ids": ["ev_r-demo-03_visual_a3"],
+      "accepted_feedback_count": 1,
+      "partially_accepted_feedback_count": 0,
+      "rejected_feedback_count": 0,
+      "unsure_feedback_count": 0,
+      "history": [
+        {
+          "at": "2026-11-10T10:00:00.000Z",
+          "snapshot_id": "snap_prior",
+          "stage": "emerging",
+          "confidence": 0.22,
+          "supporting_count": 1,
+          "contradicting_count": 0,
+          "reason": "这条观察第一次出现。"
+        },
+        {
+          "at": "2026-11-17T05:30:00.000Z",
+          "snapshot_id": "snap_contract_sample",
+          "stage": "developing",
+          "confidence": 0.51,
+          "supporting_count": 2,
+          "contradicting_count": 1,
+          "reason": "新增 1 条支持证据和 1 条反向证据，阶段进入逐渐形成。"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_r-demo-01_visual_a1",
+      "observation_id": "obs_visual",
+      "record_id": "r-demo-01",
+      "film_id": "f-demo-01",
+      "dimension": "visual",
+      "original_quote": "我会先注意到构图和光线",
+      "interpretation": "你描述观看时最先进入注意力的是画面组织，而不是人物行动。",
+      "polarity": "supporting",
+      "strength": 0.62,
+      "source": "deepworks",
+      "created_at": "2026-11-10T10:00:00.000Z",
+      "run_id": "run-contract-sample-01"
+    },
+    {
+      "evidence_id": "ev_r-demo-02_visual_a2",
+      "observation_id": "obs_visual",
+      "record_id": "r-demo-02",
+      "film_id": "f-demo-02",
+      "dimension": "visual",
+      "original_quote": "镜头移动比人物更先抓住我",
+      "interpretation": "你把镜头运动放在人物之前描述，说明运动本身构成了观看入口。",
+      "polarity": "supporting",
+      "strength": 0.57,
+      "source": "deepworks",
+      "created_at": "2026-11-14T10:00:00.000Z",
+      "run_id": "run-contract-sample-02"
+    },
+    {
+      "evidence_id": "ev_r-demo-03_visual_a3",
+      "observation_id": "obs_visual",
+      "record_id": "r-demo-03",
+      "film_id": "f-demo-03",
+      "dimension": "visual",
+      "original_quote": "我反而能进入人物",
+      "interpretation": "这一次你把人物感受放在画面之前，方向与既有观察相反。",
+      "polarity": "contradicting",
+      "strength": 0.41,
+      "source": "deepworks",
+      "created_at": "2026-11-16T10:00:00.000Z",
+      "run_id": "run-contract-sample-03"
+    }
+  ],
+  "feedback_applied": [
+    {
+      "feedback_id": "fb_obs_visual_01",
+      "observation_id": "obs_visual",
+      "decision": "accepted",
+      "created_at": "2026-11-12T10:00:00.000Z",
+      "affected_snapshot_id": "snap_prior"
+    }
+  ],
+  "snapshot": {
+    "snapshot_id": "snap_contract_sample",
+    "created_at": "2026-11-17T05:30:00.000Z",
+    "run_id": "run-contract-sample-01",
+    "overall_confidence": 0.51,
+    "observations": [
+      {
+        "observation_id": "obs_visual",
+        "dimension": "visual",
+        "title": "视觉 · 构图与光线",
+        "stage": "developing",
+        "confidence": 0.51,
+        "dominant_direction": "high",
+        "supporting_count": 2,
+        "contradicting_count": 1,
+        "effective": true
+      }
+    ],
+    "dimensions": [
+      {
+        "key": "visual",
+        "lean": 0.4,
+        "confidence": 0.51,
+        "sampleCount": 3
+      }
+    ],
+    "changes": [
+      {
+        "observation_id": "obs_visual",
+        "kind": "updated",
+        "reason": "新增 1 条支持证据和 1 条反向证据，置信度从 22% 变为 51%，阶段进入逐渐形成。",
+        "before_confidence": 0.22,
+        "after_confidence": 0.51,
+        "before_stage": "emerging",
+        "after_stage": "developing"
+      }
+    ],
+    "corrections_applied": []
+  },
+  "quality_gates": {
+    "quotes_verbatim": true,
+    "no_unverified_quote_as_user_words": true,
+    "feedback_applied": true,
+    "snapshot_append_only": true
+  }
+}

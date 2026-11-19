@@ -1,0 +1,192 @@
+{
+  "mapping_version": "1.0.0",
+  "generated_at": "2026-11-16T03:55:51.603Z",
+  "generated_from": [
+    "outputs/p2/agent-integration/runs/fbf-p24-A-20261116-01.platform-search.json",
+    "outputs/p2/agent-integration/runs/fbf-p24-B-20261116-01.platform-search.json",
+    "outputs/p2/agent-integration/runs/fbf-p24-C-20261116-01.platform-search.json"
+  ],
+  "method": "kb_id parsed from knowledge_title; identity requires platform body sha256 == local entry text sha256",
+  "limitations": [
+    "platform knowledge_id (document level) was not captured in the P2-4 transcripts; platform_knowledge_ids is therefore empty and must be filled from a live capture.",
+    "text similarity is never used as identity proof."
+  ],
+  "entries": [
+    {
+      "kb_id": "KB-001",
+      "platform_document_title": "KB-001-narrative.md",
+      "local_title": "叙事：因果链、省略与留白",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "70686639-d67e-430a-a8ab-99a413f9f03a"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "218432f69f07f4107fb295b0ddce0292cd50211342b8767570094429cfa2a0ee",
+      "local_text_sha256": "218432f69f07f4107fb295b0ddce0292cd50211342b8767570094429cfa2a0ee",
+      "hash_consistent": true,
+      "observations": 2,
+      "source_transcripts": [
+        "fbf-p24-B-20261116-01.platform-search.json",
+        "fbf-p24-C-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-003",
+      "platform_document_title": "KB-003-emotion.md",
+      "local_title": "情绪：克制、间离与延迟反应",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "b707d47d-4c41-4092-a713-8903d2ac900e"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "6ed25616f25193b0ca85a2b5d029ce5cb4603828f0a4715c885b6e5c9b6f74a6",
+      "local_text_sha256": "6ed25616f25193b0ca85a2b5d029ce5cb4603828f0a4715c885b6e5c9b6f74a6",
+      "hash_consistent": true,
+      "observations": 1,
+      "source_transcripts": [
+        "fbf-p24-A-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-004",
+      "platform_document_title": "KB-004-ending.md",
+      "local_title": "结局：闭合、开放与苦涩的未解",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "1c3121ff-3b8b-4e14-ad95-cd25acf72f66"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "6d225d4095f6d324568ddb5fc1c41214e26086aa48f48b984f76023e9ee32f2d",
+      "local_text_sha256": "6d225d4095f6d324568ddb5fc1c41214e26086aa48f48b984f76023e9ee32f2d",
+      "hash_consistent": true,
+      "observations": 2,
+      "source_transcripts": [
+        "fbf-p24-A-20261116-01.platform-search.json",
+        "fbf-p24-B-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-005",
+      "platform_document_title": "KB-005-visual.md",
+      "local_title": "视觉：景别、视角与代入距离",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "64ecccb2-859f-406b-9e41-469eca659535"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "39fd0ed2e1d6dbc2d9455a3cec381ef7e13f9a3e48d81048579388a7c44c2045",
+      "local_text_sha256": "39fd0ed2e1d6dbc2d9455a3cec381ef7e13f9a3e48d81048579388a7c44c2045",
+      "hash_consistent": true,
+      "observations": 1,
+      "source_transcripts": [
+        "fbf-p24-C-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-006",
+      "platform_document_title": "KB-006-visual.md",
+      "local_title": "光线与色彩：情绪的第二套语法",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "17ad3222-3983-479c-837d-0b528afd23f2"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "eb3b7a301b3a51851bad0979e0539d864babd7890eca7aeed831fd62b3095b09",
+      "local_text_sha256": "eb3b7a301b3a51851bad0979e0539d864babd7890eca7aeed831fd62b3095b09",
+      "hash_consistent": true,
+      "observations": 1,
+      "source_transcripts": [
+        "fbf-p24-C-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-007",
+      "platform_document_title": "KB-007-sound.md",
+      "local_title": "声音：静默、环境声与声画对位",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "079a1057-d0c4-412c-8e5e-2d5230f5fce3"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "bc4ffdc63145afe29192a4d1c73befb3db7e5564931e642fd8eb8e6122f71455",
+      "local_text_sha256": "bc4ffdc63145afe29192a4d1c73befb3db7e5564931e642fd8eb8e6122f71455",
+      "hash_consistent": true,
+      "observations": 1,
+      "source_transcripts": [
+        "fbf-p24-C-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-008",
+      "platform_document_title": "KB-008-narrative.md",
+      "local_title": "剪辑：节奏、省略与动作连续性",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "ad84df4b-855f-4755-a7d8-84f84bcb9a13"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "ad66c751a0558a9cd1aaa174ebaa6b88c4a1a5a39dbee5db0275619639460501",
+      "local_text_sha256": "ad66c751a0558a9cd1aaa174ebaa6b88c4a1a5a39dbee5db0275619639460501",
+      "hash_consistent": true,
+      "observations": 2,
+      "source_transcripts": [
+        "fbf-p24-B-20261116-01.platform-search.json",
+        "fbf-p24-C-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-009",
+      "platform_document_title": "KB-009-character.md",
+      "local_title": "表演：微表情、身体与留白",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "ba0228c0-a96c-41c1-a3e5-c41758467aa5"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "b16d45579168a93f88fa412efaeceaa4a8bc8908d206415e790c8fac91f12d4f",
+      "local_text_sha256": "b16d45579168a93f88fa412efaeceaa4a8bc8908d206415e790c8fac91f12d4f",
+      "hash_consistent": true,
+      "observations": 1,
+      "source_transcripts": [
+        "fbf-p24-A-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-010",
+      "platform_document_title": "KB-010-thematic.md",
+      "local_title": "主题：作者表达、语境与多义性",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "bf2ea7ef-f018-4a25-ab4c-c39c5eb8794b"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "9f89b9799fcd31a58827e1d8ba2dd86d18f23411823752e736534e7b3c1d4218",
+      "local_text_sha256": "9f89b9799fcd31a58827e1d8ba2dd86d18f23411823752e736534e7b3c1d4218",
+      "hash_consistent": true,
+      "observations": 3,
+      "source_transcripts": [
+        "fbf-p24-A-20261116-01.platform-search.json",
+        "fbf-p24-B-20261116-01.platform-search.json",
+        "fbf-p24-C-20261116-01.platform-search.json"
+      ]
+    },
+    {
+      "kb_id": "KB-012",
+      "platform_document_title": "KB-012-thematic.md",
+      "local_title": "观影记忆：重看、互文与个人经验",
+      "title_matches_kb_id": true,
+      "platform_chunk_ids": [
+        "24be0d48-988a-4ba3-aa11-15810ca1c4a6"
+      ],
+      "platform_knowledge_ids": [],
+      "platform_body_sha256": "56977bb60f4d17c341dc90b671718bae2fbc4fa738eef527adc6a7275695e2f4",
+      "local_text_sha256": "56977bb60f4d17c341dc90b671718bae2fbc4fa738eef527adc6a7275695e2f4",
+      "hash_consistent": true,
+      "observations": 1,
+      "source_transcripts": [
+        "fbf-p24-C-20261116-01.platform-search.json"
+      ]
+    }
+  ],
+  "anomalies": []
+}

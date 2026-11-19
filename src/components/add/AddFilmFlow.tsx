@@ -36,21 +36,22 @@ import { ADD_STEPS, BRAND_LINE_EN, RITUAL } from '@/i18n/zh-CN'
 import {
   aiErrorCode,
   aiErrorMessage,
-  analyzeFilmMemory,
   isAiConfigured,
 } from '@/lib/ai/client'
+import { AnalysisServiceError, createAnalysisService, setEnginePreference } from '@/lib/ai/analysisService'
+import { agentRunToAnalysis } from '@/lib/ai/normaliseRunV2'
+import { PROVIDER_LABELS, type PendingNoteV1, type ProviderId } from '@/lib/ai/contractV2'
+import { idempotencyKeyFor, sha256Hex } from '@/lib/ai/hashNote'
 import { buildAnalysisHistory, filmMetaForAi } from '@/lib/ai/history'
 import {
   FELT_LIKE_MAX_LENGTH,
   FELT_LIKE_MAX_TAGS,
   feltLikeTagsOf,
-  feltLikeText,
   normaliseFeltLikeTag,
 } from '@/lib/feltLike'
 import {
   createRecordFromAnalysis,
   createRecordWithoutAnalysis,
-  toFilmAnalysis,
 } from '@/lib/ai/adapter'
 import { filmById } from '@/lib/tasteEngine'
 import { cn, formatLongDate, todayISO, uid } from '@/lib/format'
@@ -81,6 +82,15 @@ const STEP_INDEX: Record<Step, number> = {
 }
 
 const STEP_LABELS = ADD_STEPS.map((step) => step.label)
+
+const providerLabel = (provider: string): string =>
+  PROVIDER_LABELS[provider as ProviderId] ?? provider
+
+const runErrorMessage = (error: unknown): string =>
+  error instanceof AnalysisServiceError ? error.message : aiErrorMessage(error)
+
+const runErrorCode = (error: unknown): string =>
+  error instanceof AnalysisServiceError ? error.code : (aiErrorCode(error) ?? 'UNKNOWN')
 
 const AI_PHASES = [
   {
@@ -184,6 +194,14 @@ export const AddFilmFlow = ({
   const [customFeltLike, setCustomFeltLike] = useState('')
   const [error, setError] = useState('')
   const [activeStage, setActiveStage] = useState(-1)
+  const [aiProvider, setAiProvider] = useState<ProviderId>('legacy-deepseek')
+  const [engine, setEngine] = useState<'deepseek' | 'deepworks'>(() => {
+    try {
+      return window.localStorage.getItem('fbf.engine') === 'deepworks' ? 'deepworks' : 'deepseek'
+    } catch {
+      return 'deepseek'
+    }
+  })
   const [pending, setPending] = useState<{ analysis: AIFilmAnalysis; record: WatchRecord } | null>(
     null,
   )
@@ -401,6 +419,10 @@ export const AddFilmFlow = ({
     goTo(`/archive/${selected.id}`)
   }
 
+  const chooseEngine = (next: 'deepseek' | 'deepworks') => {
+    setEngine(next)
+    setEnginePreference(next === 'deepworks' ? 'deepworks' : 'legacy-deepseek')
+  }
   const runAnalysis = async () => {
     if (!selected) return
     if (draft.rating <= 0) {
@@ -430,22 +452,51 @@ export const AddFilmFlow = ({
     setActiveStage(0)
     setStep('analyzing')
 
+    const service = createAnalysisService({
+      provider: engine === 'deepworks' ? 'deepworks' : 'legacy-deepseek',
+    })
+    setAiProvider(service.provider)
+
     try {
-      const response = await analyzeFilmMemory(
-        {
-          film: filmMetaForAi(selected),
-          rating: draft.rating,
-          watchedAt: draft.watchedAt,
-          ...(draft.feltLikeTags.length ? { feltLike: feltLikeText(draft.feltLikeTags) } : {}),
-          note: draft.reflection.trim(),
-          history: buildAnalysisHistory(previousRecords, films, selected),
-          locale: 'zh-CN',
+      const noteText = draft.reflection.trim()
+      const noteSha = await sha256Hex(noteText)
+      const createdAt = new Date().toISOString()
+      const pendingNote: PendingNoteV1 = {
+        schema_version: 1,
+        request_id: uid('req'),
+        record_id: recordId,
+        idempotency_key: idempotencyKeyFor(recordId, noteSha),
+        // The gateway must replace this with a server-confirmed identity.
+        user_id: 'anon-local',
+        consent: {
+          allow_ai_notes: consent,
+          policy_version: '2026-11-01',
+          accepted_at: createdAt,
         },
-        { signal: controller.signal },
-      )
+        created_at: createdAt,
+        film: filmMetaForAi(selected),
+        rating: draft.rating,
+        note: noteText,
+        note_sha256: noteSha,
+        ...(draft.watchedAt ? { watched_at: draft.watchedAt } : {}),
+        ...(draft.feltLikeTags.length ? { felt_like: draft.feltLikeTags } : {}),
+        history: buildAnalysisHistory(previousRecords, films, selected),
+        locale: 'zh-CN',
+      }
+
+      const submission = await service.submitAnalysis(pendingNote, {
+        signal: controller.signal,
+      })
+      if (submission.status === 'failed') {
+        throw new AnalysisServiceError(
+          'ANALYSIS_FAILED',
+          submission.provider,
+          'AI 分析没有返回可用结果，请稍后重试。',
+        )
+      }
       setActiveStage(1)
-      const now = new Date().toISOString()
-      const analysis = toFilmAnalysis(response, recordId, selected.id, now)
+      const run = await service.getAnalysisResult(submission.run_id)
+      const analysis = agentRunToAnalysis(run)
       const record = createRecordFromAnalysis(selected, draft, analysis, recordId)
       commitRecord({
         ...record,
@@ -1260,6 +1311,30 @@ export const AddFilmFlow = ({
                     </p>
                   </div>
 
+                  <div className="border-l border-white/15 pl-3">
+                    <p className="text-[13.5px] text-paper-dim">分析引擎</p>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => chooseEngine('deepworks')}
+                        className={`btn h-9 px-3 text-[12.5px] ${engine === 'deepworks' ? 'btn-primary' : 'btn-ghost'}`}
+                      >
+                        DeepWorks Agent · film-curator
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => chooseEngine('deepseek')}
+                        className={`btn h-9 px-3 text-[12.5px] ${engine === 'deepseek' ? 'btn-primary' : 'btn-ghost'}`}
+                      >
+                        DeepSeek 在线分析
+                      </button>
+                    </div>
+                    <p className="mt-2 text-[12px] leading-[1.7] text-paper-muted">
+                      {engine === 'deepworks'
+                        ? '由本机 DeepWorks 引擎运行 film-curator：知识库引用、六维证据、质量门。实测约 3 分钟，请勿关闭页面。'
+                        : '由项目后端调用 DeepSeek：约 10–30 秒，结果只属于展示层。'}
+                    </p>
+                  </div>
                   <label className="flex items-start gap-2.5 border-l border-white/15 pl-3">
                     <input
                       type="checkbox"
@@ -1325,7 +1400,7 @@ export const AddFilmFlow = ({
 
           <div className="flex flex-col justify-center p-6 sm:p-10">
             <p className="text-[12px] tracking-[0.06em] text-paper-dim">
-              在线 AI 分析 · 已等待 {elapsed} 秒
+              {providerLabel(aiProvider)} · 运行中 · 已等待 {elapsed} 秒
             </p>
             <h2 id="add-film-title" className="mt-3 font-zh-title text-[1.9rem] leading-tight text-paper">
               正在听你写下的内容
@@ -1398,14 +1473,14 @@ export const AddFilmFlow = ({
             <h2 id="add-film-title" className="mt-3 font-zh-title text-[1.9rem] leading-tight text-paper">
               《{selected.title}》还没有被分析
             </h2>
-            <p className="mt-3 text-[15px] leading-[1.9] text-paper-dim">{aiErrorMessage(aiError)}</p>
+            <p className="mt-3 text-[15px] leading-[1.9] text-paper-dim">{runErrorMessage(aiError)}</p>
             <ul className="mt-6 space-y-2 border-l border-white/15 pl-4 text-[14px] leading-[1.8] text-paper-dim">
               <li>· 你的笔记和评分还在，没有丢失。</li>
               <li>· 没有写入任何伪造的分析结果。</li>
               <li>· 你可以重试，也可以先保存，之后在电影详情页再分析。</li>
             </ul>
             <p className="mt-5 font-mono text-[12.5px] tracking-[0.08em] text-paper-muted">
-              ERROR · {aiErrorCode(aiError) ?? 'UNKNOWN'}
+              ERROR · {runErrorCode(aiError)}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <button type="button" onClick={runAnalysis} className="btn btn-primary">
@@ -1444,7 +1519,8 @@ export const AddFilmFlow = ({
                   {pending.analysis.summary}
                 </p>
                 <p className="mt-3 text-[12.5px] leading-[1.7] text-paper-muted">
-                  这次分析来自 {pending.analysis.model.provider} · {pending.analysis.model.model}。
+                  这次分析来自 {providerLabel(pending.analysis.model.provider)} ·{' '}
+                  {pending.analysis.model.model}。
                   {formatLongDate(pending.analysis.model.analyzedAt.slice(0, 10))}。
                   在你确认之前，它不会计入六维画像。
                 </p>

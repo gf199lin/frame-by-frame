@@ -3,7 +3,7 @@ import { buildRepairPrompt, buildUserPrompt, SYSTEM_PROMPT } from './prompt.ts'
 import { extractJson } from './json.ts'
 import { ProviderError, type AIProvider, type ChatMessage } from './provider.ts'
 import { validateModelAnalysis } from './validate.ts'
-import type { AIErrorCode, AnalyzeRequest, AnalyzeResponse, AnalysisMeta, ModelAnalysis } from './types.ts'
+import type { AIErrorCode, AnalysisProviderId, AnalyzeRequest, AnalyzeResponse, AnalysisMeta, ModelAnalysis } from './types.ts'
 
 export class AIError extends Error {
   readonly code: AIErrorCode
@@ -19,6 +19,15 @@ export class AIError extends Error {
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+/**
+ * The wire provider name is vendor-specific. Public identity is separate so a
+ * DeepSeek result can never be presented as a DeepWorks run.
+ */
+export const providerIdFor = (providerName: string): AnalysisProviderId => {
+  if (providerName === 'deepseek' || providerName === 'stub') return 'legacy-deepseek'
+  return 'unknown'
+}
 
 const isTransient = (error: unknown): boolean => {
   if (!(error instanceof ProviderError)) return false
@@ -110,6 +119,7 @@ export const analyzeFilm = async (
       if (validated.ok) {
         const meta: AnalysisMeta = {
           provider: completion.provider,
+          providerId: providerIdFor(completion.provider),
           model: completion.model,
           promptVersion: PROMPT_VERSION,
           analyzedAt: now().toISOString(),

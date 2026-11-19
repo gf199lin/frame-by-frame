@@ -79,6 +79,9 @@ export type AiAnalysisMeta = {
 export type AiAnalyzeResponse = {
   analysis: AiModelAnalysis
   meta: AiAnalysisMeta
+  /** Present when the Worker produced an agent-run.v2. Kept untyped here so
+   * this file stays free of the contract module. */
+  run?: unknown
 }
 
 export type AiErrorCode =

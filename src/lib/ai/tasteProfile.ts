@@ -42,12 +42,28 @@ type ContributionRow = {
   direction: 'low' | 'high' | 'neutral'
 }
 
+/**
+ * Observation-level feedback is a second, independent signal. A rejected
+ * observation must lower the dimension profile too, otherwise the button would
+ * only change a label while the radar keeps trusting the same evidence.
+ */
+const observationFeedbackFactor = (state: AppState, key: DimensionKey): number => {
+  const latest = [...state.observationFeedback]
+    .filter((item) => item.observation_id === `obs_${key}`)
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))[0]
+  if (!latest) return 1
+  if (latest.decision === 'accepted') return 1.04
+  if (latest.decision === 'partially_accepted') return 0.85
+  // Rejected means withdrawn: keep only a trace, not a usable weight.
+  if (latest.decision === 'rejected') return 0.05
+  return 1
+}
+
 const feedbackFactor = (state: AppState, key: DimensionKey): number => {
   const verdict = state.feedback[key]?.verdict
-  if (verdict === 'agree') return 1.06
-  if (verdict === 'not-quite') return 0.6
-  if (verdict === 'corrected') return 0.32
-  return 1
+  const dimensionFactor =
+    verdict === 'agree' ? 1.06 : verdict === 'not-quite' ? 0.6 : verdict === 'corrected' ? 0.32 : 1
+  return dimensionFactor * observationFeedbackFactor(state, key)
 }
 
 const usableAnalysis = (analysis: AIFilmAnalysis): boolean =>
@@ -69,6 +85,9 @@ const buildRows = (
     for (const contribution of analysis.preference_evidence) {
       if (contribution.dimension_id !== key) continue
       if (contribution.userStatus === 'removed') continue
+      // The agent itself could not place this claim on a pole. It stays visible
+      // on the analysis page, but it must not dilute or shift the profile.
+      if (contribution.raw_direction === 'ambivalent') continue
       const signed = contribution.direction === 'high' ? 1 : contribution.direction === 'low' ? -1 : 0
       const strength = clamp(contribution.strength, 0, 1)
       const confidence = clamp(contribution.confidence * (0.55 + 0.45 * clamp(analysis.confidence, 0, 1)), 0, 1)

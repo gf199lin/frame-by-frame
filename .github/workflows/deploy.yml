@@ -34,9 +34,9 @@ jobs:
         run: npm run build
         env:
           VITE_BASE: /frame-by-frame/
-          # Public API origin (never a secret). If workers.dev is unreachable,
-          # point this at a custom domain bound to the same Worker.
-          VITE_AI_API_BASE: https://frame-by-frame-ai.frame-by-frame-ai.workers.dev
+          # 静态展示站点不注入 AI 接口地址。未配置 VITE_AI_API_BASE 时，
+          # 前端提示“未连接”，分析能力通过导入 DeepWorks Agent 产物呈现。
+          # 历史部署方案（Cloudflare Worker / 云函数）已归档到 legacy/，不再部署。
 
       # SPA fallback: deep links (e.g. /frame-by-frame/archive/xxx) get index.html
       - name: Add SPA fallback

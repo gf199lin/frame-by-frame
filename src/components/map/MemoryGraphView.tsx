@@ -26,6 +26,7 @@ const hash = (text: string): number => {
 const radiusOf = (node: GraphNode): number => {
   if (node.kind === 'film') return 24
   if (node.kind === 'theme') return 6 + node.weight * 6
+  if (node.kind === 'observation') return 8 + node.weight * 5
   return 3 + node.weight * 4
 }
 
@@ -100,9 +101,15 @@ export const MemoryGraphView = ({
     const rings = {
       film: { rx: size.w * 0.37, ry: size.h * 0.34, start: -90, count: 0 },
       theme: { rx: size.w * 0.245, ry: size.h * 0.245, start: -78, count: 0 },
-      mood: { rx: size.w * 0.115, ry: size.h * 0.125, start: -70, count: 0 },
+      observation: { rx: size.w * 0.175, ry: size.h * 0.185, start: -52, count: 0 },
+      mood: { rx: size.w * 0.1, ry: size.h * 0.11, start: -70, count: 0 },
     }
-    const groups: Record<GraphNode['kind'], GraphNode[]> = { film: [], theme: [], mood: [] }
+    const groups: Record<GraphNode['kind'], GraphNode[]> = {
+      film: [],
+      theme: [],
+      mood: [],
+      observation: [],
+    }
     for (const node of graph.nodes) groups[node.kind].push(node)
 
     /* Larger themes sit slightly further out; films are sorted by title for
@@ -110,8 +117,9 @@ export const MemoryGraphView = ({
     groups.film.sort((a, b) => a.label.localeCompare(b.label))
     groups.theme.sort((a, b) => b.weight - a.weight || a.label.localeCompare(b.label))
     groups.mood.sort((a, b) => a.label.localeCompare(b.label))
+    groups.observation.sort((a, b) => b.weight - a.weight || a.label.localeCompare(b.label))
 
-    for (const kind of ['film', 'theme', 'mood'] as const) {
+    for (const kind of ['film', 'theme', 'observation', 'mood'] as const) {
       const ring = rings[kind]
       const nodes = groups[kind]
       nodes.forEach((node, index) => {
@@ -279,7 +287,9 @@ export const MemoryGraphView = ({
                 ? 'rgba(29,35,121,0.3)'
                 : edge.kind === 'film-theme'
                   ? 'rgba(29,35,121,0.24)'
-                  : 'rgba(90,95,133,0.26)'
+                  : edge.kind === 'film-observation'
+                    ? 'rgba(150,120,60,0.35)'
+                    : 'rgba(90,95,133,0.26)'
             return (
               <path
                 key={edge.id}
@@ -326,7 +336,7 @@ export const MemoryGraphView = ({
                 className="graph-node"
                 tabIndex={0}
                 role="button"
-                aria-label={`${{ film: '电影', theme: '主题', mood: '情绪' }[node.kind]}：${node.label}`}
+                aria-label={`${{ film: '电影', theme: '主题', mood: '情绪', observation: '审美观察' }[node.kind]}：${node.label}`}
                 onPointerDown={(event) => {
                   event.stopPropagation()
                   const world = toWorld(event.clientX, event.clientY)
@@ -427,6 +437,19 @@ export const MemoryGraphView = ({
                     />
                     <circle r={1.5} fill="#1d2379" />
                   </>
+                ) : node.kind === 'observation' ? (
+                  <>
+                    <circle
+                      r={radiusOf(node)}
+                      fill="rgba(150,120,60,0.1)"
+                      stroke={isSelected ? 'rgba(29,35,121,0.95)' : 'rgba(150,120,60,0.7)'}
+                      strokeWidth={isSelected ? 1.5 : 1}
+                    />
+                    <circle
+                      r={Math.max(2, radiusOf(node) * 0.34)}
+                      fill={isSelected ? 'rgba(29,35,121,0.9)' : 'rgba(150,120,60,0.7)'}
+                    />
+                  </>
                 ) : (
                   <circle
                     r={radiusOf(node)}
@@ -493,7 +516,12 @@ export const MemoryGraphView = ({
       {selectedNode && (
         <div className="pointer-events-none absolute left-4 top-4 max-w-[220px] rounded-[8px] border border-ink/15 bg-paper-sheet/90 px-3 py-2 shadow-card backdrop-blur">
           <p className="micro-sm text-ink/60">
-            {selectedNode.kind === 'film' ? '电影' : selectedNode.kind === 'theme' ? '主题' : '情绪'}
+            {{
+              film: '电影',
+              theme: '主题',
+              mood: '情绪',
+              observation: '审美观察',
+            }[selectedNode.kind]}
           </p>
           <p className="mt-1 font-display text-lg leading-tight text-ink">{selectedNode.label}</p>
         </div>
@@ -502,7 +530,15 @@ export const MemoryGraphView = ({
   )
 }
 
-export const GraphLegend = ({ showThemes, showMoods }: { showThemes: boolean; showMoods: boolean }) => (
+export const GraphLegend = ({
+  showThemes,
+  showMoods,
+  showObservations = true,
+}: {
+  showThemes: boolean
+  showMoods: boolean
+  showObservations?: boolean
+}) => (
   <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] tracking-[0.03em] text-taupe">
     <span className="flex items-center gap-2">
       <span className="inline-block h-3 w-2.5 rounded-[1px] border border-ocean/70" /> 电影
@@ -515,6 +551,12 @@ export const GraphLegend = ({ showThemes, showMoods }: { showThemes: boolean; sh
     {showMoods && (
       <span className="flex items-center gap-2">
         <span className="inline-block h-2 w-2 rounded-full border border-taupe/60" /> 情绪
+      </span>
+    )}
+    {showObservations && (
+      <span className="flex items-center gap-2">
+        <span className="inline-block h-2.5 w-2.5 rounded-full border border-brass/70 bg-brass/25" />{' '}
+        审美观察
       </span>
     )}
     <span className="flex items-center gap-2">

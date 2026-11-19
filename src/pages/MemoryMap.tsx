@@ -9,30 +9,43 @@ import { Rating } from '@/components/ui/Rating'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { buildMemoryGraph } from '@/lib/graph'
 import { recordsSorted } from '@/lib/tasteEngine'
+import { STAGE_COPY } from '@/lib/taste/evolution'
 import { MOODS, THEMES } from '@/data/taxonomy'
-import { cn, formatShortDate } from '@/lib/format'
-import type { GraphNode, MoodId, ThemeId } from '@/types'
+import { cn, formatShortDate, percent } from '@/lib/format'
+import type { GraphNode, MoodId, TasteObservation, ThemeId } from '@/types'
 
 export const MemoryMapPage = () => {
-  const { records, films } = useAppStore()
+  const { records, films, observations } = useAppStore()
   const { openAdd } = useAddFilm()
   const [showThemes, setShowThemes] = useState(true)
   const [showMoods, setShowMoods] = useState(true)
+  const [showObservations, setShowObservations] = useState(true)
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   const graph = useMemo(
-    () => buildMemoryGraph(records, films, { showThemes, showMoods }),
-    [records, films, showThemes, showMoods],
+    () =>
+      buildMemoryGraph(records, films, {
+        showThemes,
+        showMoods,
+        showObservations,
+        observations,
+      }),
+    [records, films, showThemes, showMoods, showObservations, observations],
   )
 
   const selected = graph.nodes.find((n) => n.id === selectedId) ?? null
   const themeCount = graph.nodes.filter((n) => n.kind === 'theme').length
   const moodCount = graph.nodes.filter((n) => n.kind === 'mood').length
+  const observationCount = graph.nodes.filter((n) => n.kind === 'observation').length
   const linkCount = graph.edges.filter((e) => e.kind === 'film-film').length
 
   const selectedRef = selected ? selected.id.split(':')[1] : ''
   const themeDef = selected?.kind === 'theme' ? THEMES[selectedRef as ThemeId] : undefined
   const moodDef = selected?.kind === 'mood' ? MOODS[selectedRef as MoodId] : undefined
+  const selectedObservation: TasteObservation | undefined =
+    selected?.kind === 'observation'
+      ? observations.find((item) => item.observation_id === selectedRef)
+      : undefined
 
   const relatedFilms = useMemo(() => {
     if (!selected) return []
@@ -109,11 +122,12 @@ export const MemoryMapPage = () => {
           </div>
         </div>
 
-        <dl className="grid grid-cols-2 gap-x-10 gap-y-4 text-left sm:grid-cols-4 sm:text-right">
+        <dl className="grid grid-cols-2 gap-x-8 gap-y-4 text-left sm:grid-cols-5 sm:text-right">
           {[
             ['电影', records.length],
             ['主题', themeCount],
             ['情绪', moodCount],
+            ['观察', observationCount],
             ['共同关系', linkCount],
           ].map(([label, value]) => (
             <div key={String(label)}>
@@ -127,7 +141,11 @@ export const MemoryMapPage = () => {
       </div>
 
       <div className="mt-9 flex flex-wrap items-center justify-between gap-4 border-y border-ink/10 py-4">
-        <GraphLegend showThemes={showThemes} showMoods={showMoods} />
+        <GraphLegend
+          showThemes={showThemes}
+          showMoods={showMoods}
+          showObservations={showObservations}
+        />
         <div className="flex items-center gap-3">
           <span className="hidden text-[12px] tracking-[0.04em] text-taupe sm:inline">
             图层
@@ -156,6 +174,19 @@ export const MemoryMapPage = () => {
             <span
               className="absolute inset-x-0 -bottom-px h-px bg-brass transition-transform"
               style={{ transform: showMoods ? 'scaleX(1)' : 'scaleX(0)' }}
+            />
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowObservations((v) => !v)}
+            className="relative pb-0.5 text-[12px] tracking-[0.04em] transition-colors"
+            style={{ color: showObservations ? 'var(--ink)' : 'var(--taupe)' }}
+            aria-pressed={showObservations}
+          >
+            观察
+            <span
+              className="absolute inset-x-0 -bottom-px h-px bg-brass transition-transform"
+              style={{ transform: showObservations ? 'scaleX(1)' : 'scaleX(0)' }}
             />
           </button>
         </div>
@@ -190,7 +221,9 @@ export const MemoryMapPage = () => {
                     ? '电影节点'
                     : selected.kind === 'theme'
                       ? '主题节点'
-                      : '情绪节点'}
+                      : selected.kind === 'observation'
+                        ? '审美观察'
+                        : '情绪节点'}
                 </p>
                 <button
                   type="button"
@@ -245,6 +278,59 @@ export const MemoryMapPage = () => {
                   >
                     查看观影记忆 <ArrowUpRight size={11} />
                   </Link>
+                </>
+              ) : selected.kind === 'observation' ? (
+                <>
+                  <h3 className="mt-3 font-zh-title text-[1.45rem] leading-[1.4] text-ink">
+                    {selectedObservation?.title ?? selected.label}
+                  </h3>
+                  <p className="mt-1 text-[11px] uppercase tracking-[0.1em] text-taupe">
+                    {selectedObservation
+                      ? `${STAGE_COPY[selectedObservation.current_stage].zh} · ${STAGE_COPY[
+                          selectedObservation.current_stage
+                        ].en}`
+                      : selected.sublabel}
+                  </p>
+                  {selectedObservation && (
+                    <>
+                      <p className="mt-3 text-[13px] text-taupe">
+                        置信度 {percent(selectedObservation.confidence)} ·{' '}
+                        {selectedObservation.record_count} 部电影 ·{' '}
+                        {selectedObservation.evidence_count} 条证据
+                      </p>
+                      <p className="mt-3 max-h-[9rem] overflow-y-auto text-[13.5px] leading-[1.8] text-ink/75">
+                        {selectedObservation.description}
+                      </p>
+                    </>
+                  )}
+                  <p className="mt-4 text-[12.5px] tracking-[0.03em] text-taupe">
+                    {relatedFilms.length} 部电影与这条观察相连
+                  </p>
+                  <ul className="mt-3 divide-y divide-ink/10">
+                    {relatedFilms.map(({ film }) => (
+                      <li key={film.id}>
+                        <Link to={`/archive/${film.id}`} className="group flex items-center gap-3 py-2.5">
+                          <span className="relative block h-10 w-7 shrink-0 overflow-hidden rounded-[1px]">
+                            <FilmPoster film={film} showTitle={false} />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate font-display text-sm text-ink group-hover:text-ocean">
+                              {film.title}
+                            </span>
+                            <span className="text-[12px] text-taupe">{film.year}</span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  {selectedObservation && (
+                    <Link
+                      to={`/taste/observations/${selectedObservation.observation_id}`}
+                      className="mt-5 inline-flex items-center gap-2 text-[12px] tracking-[0.05em] text-ocean hover:underline hover:underline-offset-4"
+                    >
+                      查看证据与变化 <ArrowUpRight size={11} />
+                    </Link>
+                  )}
                 </>
               ) : selected.kind === 'theme' ? (
                 <>
