@@ -396,9 +396,54 @@ const migrate = (parsed: Record<string, unknown>): AppState => {
   }
 }
 
+/**
+ * Per-account local cache.
+ *
+ * Before accounts existed, every browser shared one key (`fbf.state.v1`).
+ * Now each signed-in account writes to `fbf.state.v1.u.<userId>` so two people
+ * on the same laptop never see each other's records. The legacy key is kept
+ * untouched and claimed once, by the first account that signs in on this
+ * browser, so existing memories survive the introduction of authentication.
+ */
+let storageScope: string | null = null
+const LEGACY_CLAIM_KEY = `${STORAGE_KEY}.claimedBy`
+
+export const setStorageScope = (userId: string | null): void => {
+  storageScope = userId
+}
+
+const activeStorageKey = (): string =>
+  storageScope ? `${STORAGE_KEY}.u.${storageScope}` : STORAGE_KEY
+
+/**
+ * Copy the pre-account archive into this account's key, exactly once per
+ * browser. Returns the raw JSON when adoption happened, otherwise null.
+ */
+const adoptLegacyInto = (targetKey: string): string | null => {
+  if (!storageScope) return null
+  try {
+    const claimedBy = window.localStorage.getItem(LEGACY_CLAIM_KEY)
+    if (claimedBy && claimedBy !== storageScope) return null
+
+    const legacyRaw = window.localStorage.getItem(STORAGE_KEY)
+    if (!legacyRaw) return null
+
+    const parsed = JSON.parse(legacyRaw) as Record<string, unknown>
+    if (!parsed || !Array.isArray(parsed.records)) return null
+
+    window.localStorage.setItem(targetKey, legacyRaw)
+    window.localStorage.setItem(LEGACY_CLAIM_KEY, storageScope)
+    return legacyRaw
+  } catch {
+    return null
+  }
+}
+
 const readStorage = (): LoadResult => {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
+    const key = activeStorageKey()
+    let raw = window.localStorage.getItem(key)
+    if (!raw) raw = adoptLegacyInto(key)
     if (!raw) return { state: createInitialState(), source: 'seed', recovered: false, migrated: false }
     const parsed = JSON.parse(raw) as Record<string, unknown>
     if (!parsed || !Array.isArray(parsed.records)) {
@@ -429,7 +474,7 @@ export const migrateState = (parsed: Record<string, unknown>): AppState => migra
 
 export const persistState = (state: AppState): boolean => {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+    window.localStorage.setItem(activeStorageKey(), JSON.stringify(state))
     return true
   } catch {
     return false
@@ -438,15 +483,16 @@ export const persistState = (state: AppState): boolean => {
 
 export const clearState = (): void => {
   try {
-    window.localStorage.removeItem(STORAGE_KEY)
+    window.localStorage.removeItem(activeStorageKey())
   } catch {
     /* storage can be unavailable in private mode */
   }
 }
 
 export const relisten = (handler: (state: AppState) => void): (() => void) => {
+  const key = activeStorageKey()
   const listener = (event: StorageEvent) => {
-    if (event.key !== STORAGE_KEY || !event.newValue) return
+    if (event.key !== key || !event.newValue) return
     try {
       const parsed = JSON.parse(event.newValue) as Record<string, unknown>
       if (parsed && Array.isArray(parsed.records)) {

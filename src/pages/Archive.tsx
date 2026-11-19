@@ -144,7 +144,7 @@ export const Archive = () => {
               <b>02</b> 我的片库
             </p>
             <p className="folio">
-              {records.length} 部电影 · 保存在这台设备
+              {records.length} 部电影 · 已保存到你的账号
             </p>
           </div>
 

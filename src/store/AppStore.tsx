@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useRef,
   useState,
   type ReactNode,
 } from 'react'
@@ -30,6 +31,13 @@ import { buildTimeline, computeSnapshot } from '@/lib/tasteEngine'
 import { computeTasteProfile, dimensionProfileDelta } from '@/lib/ai/tasteProfile'
 import { appendSnapshot, computeEvolution } from '@/lib/taste/evolution'
 import { importEvolutionDoc, type EvolutionImportResult } from '@/lib/taste/evolutionImport'
+import { useSession } from '@/auth/session'
+import { getSupabaseClient } from '@/lib/supabase/client'
+import { fetchRemote } from '@/lib/db/remote'
+import { remoteToState } from '@/lib/db/map'
+import type { SyncStatus } from '@/lib/db/rows'
+import { bootstrapOps, diffState, shadowFromState, type Shadow } from '@/lib/sync/diff'
+import { enqueue, flushQueue, pendingCount } from '@/lib/sync/queue'
 
 export type Action =
   | { type: 'hydrate'; state: AppState }
@@ -412,6 +420,10 @@ type StoreValue = {
   observations: ReturnType<typeof computeEvolution>['observations']
   storageAvailable: boolean
   hydrated: boolean
+  syncStatus: SyncStatus
+  syncError: string | null
+  pendingWrites: number
+  retrySync: () => void
   upsertRecord: (record: WatchRecord, editingId?: string) => void
   deleteRecord: (id: string) => void
   setDimensionFeedback: (
@@ -443,6 +455,36 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
   const initial = useMemo(() => loadState(), [])
   const [state, dispatch] = useReducer(appReducer, initial.state)
   const [hydrated, setHydrated] = useState(false)
+  const { user } = useSession()
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>('idle')
+  const [syncError, setSyncError] = useState<string | null>(null)
+  const [pendingWrites, setPendingWrites] = useState(0)
+  const shadowRef = useRef<Shadow | null>(null)
+  const syncedUserRef = useRef<string | null>(null)
+  const flushingRef = useRef(false)
+
+  const runFlush = useCallback(async (uid: string) => {
+    const client = getSupabaseClient()
+    if (!client || flushingRef.current) return
+    flushingRef.current = true
+    setSyncStatus('syncing')
+    try {
+      for (let round = 0; round < 5; round += 1) {
+        const result = await flushQueue(client, uid)
+        setPendingWrites(result.remaining)
+        if (result.error) {
+          setSyncError(result.error)
+          setSyncStatus('error')
+          return
+        }
+        if (result.remaining === 0) break
+      }
+      setSyncError(null)
+      setSyncStatus(pendingCount(uid) > 0 ? 'pending' : 'idle')
+    } finally {
+      flushingRef.current = false
+    }
+  }, [])
 
   useEffect(() => {
     const timer = window.setTimeout(() => setHydrated(true), 380)
@@ -459,6 +501,88 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     const builtIn = new Set(FILMS.map((film) => film.id))
     return [...FILMS, ...state.customFilms.filter((film) => !builtIn.has(film.id))]
   }, [state.customFilms])
+
+  const filmsRef = useRef(films)
+  filmsRef.current = films
+
+  /* Hydrate from Supabase once per account, then keep writing in the background. */
+  useEffect(() => {
+    const uid = user?.id
+    if (!uid) return
+    const client = getSupabaseClient()
+    if (!client) {
+      setSyncStatus('error')
+      setSyncError('还没有连接到云端，请检查 .env.local 中的 VITE_SUPABASE_URL 与 VITE_SUPABASE_ANON_KEY。')
+      return
+    }
+
+    let cancelled = false
+    syncedUserRef.current = null
+    shadowRef.current = null
+
+    void (async () => {
+      setSyncStatus('syncing')
+      setSyncError(null)
+
+      try {
+        // Never let a pull overwrite notes that are still waiting to be uploaded.
+        if (pendingCount(uid) > 0) {
+          const flushed = await flushQueue(client, uid)
+          if (flushed.error) {
+            if (cancelled) return
+            setPendingWrites(flushed.remaining)
+            setSyncError(flushed.error)
+            setSyncStatus('error')
+            return
+          }
+        }
+
+        const remote = await fetchRemote(client, uid)
+        if (cancelled) return
+
+        if (remote.isEmpty) {
+          // First login on this account: upload what is already on this device.
+          const local = loadState().state
+          const ops = bootstrapOps(local, filmsRef.current)
+          enqueue(uid, ops)
+          shadowRef.current = shadowFromState(local)
+          syncedUserRef.current = uid
+          setPendingWrites(ops.length)
+          void runFlush(uid)
+          return
+        }
+
+        const next = remoteToState(remote)
+        shadowRef.current = shadowFromState(next)
+        syncedUserRef.current = uid
+        dispatch({ type: 'hydrate', state: next })
+        const remaining = pendingCount(uid)
+        setPendingWrites(remaining)
+        setSyncStatus(remaining > 0 ? 'pending' : 'idle')
+      } catch (error) {
+        if (cancelled) return
+        setSyncError(error instanceof Error ? error.message : String(error))
+        setSyncStatus('error')
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [user?.id, runFlush])
+
+  /* Minimal diff -> queue -> flush. Runs after every local state change. */
+  useEffect(() => {
+    const uid = user?.id
+    if (!uid || syncedUserRef.current !== uid || !shadowRef.current) return
+    const { ops, next } = diffState(state, shadowRef.current, filmsRef.current)
+    shadowRef.current = next
+    if (ops.length === 0) return
+    const total = enqueue(uid, ops)
+    setPendingWrites(total)
+    setSyncStatus('pending')
+    void runFlush(uid)
+  }, [state, user?.id, runFlush])
 
   const snapshot = useMemo(() => computeSnapshot(state.records, films), [state.records, films])
   const profile = useMemo(() => computeTasteProfile(state, films), [state, films])
@@ -659,6 +783,12 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     observations: evolution.observations,
     storageAvailable: initial.source !== 'unavailable',
     hydrated,
+    syncStatus,
+    syncError,
+    pendingWrites,
+    retrySync: () => {
+      if (user) void runFlush(user.id)
+    },
     upsertRecord,
     deleteRecord,
     setDimensionFeedback,

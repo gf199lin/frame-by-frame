@@ -38,6 +38,11 @@ jobs:
           # When this endpoint is unreachable the UI falls back to the local rule
           # engine and labels the result accordingly.
           VITE_AI_API_BASE: https://frame-by-frame-ai.frame-by-frame-ai.workers.dev
+          # Public Supabase client values. Add both as repository secrets before
+          # pushing: Settings → Secrets and variables → Actions.
+          # Anon/publishable key only. Never a service_role key.
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       # SPA fallback: deep links (e.g. /frame-by-frame/archive/xxx) get index.html
       - name: Add SPA fallback

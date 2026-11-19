@@ -1,8 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Menu, Plus, RotateCcw, X } from 'lucide-react'
+import { Check, Loader2, Menu, Plus, RotateCcw, UserRound, X } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
+import { useSession } from '@/auth/session'
 import { cn } from '@/lib/format'
 import { useLockBody } from '@/components/ui/Toast'
 import { NAV, filmCount, pageTitle } from '@/i18n/zh-CN'
@@ -34,7 +35,9 @@ const Brand = ({ compact = false }: { compact?: boolean }) => (
 )
 
 export const Shell = ({ children }: { children: ReactNode }) => {
-  const { records, resetDemo, storageAvailable } = useAppStore()
+  const { records, resetDemo, storageAvailable, syncStatus, pendingWrites, syncError, retrySync } =
+    useAppStore()
+  const { user } = useSession()
   const { openAdd } = useAddFilm()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [confirmReset, setConfirmReset] = useState(false)
@@ -92,8 +95,22 @@ export const Shell = ({ children }: { children: ReactNode }) => {
               <p className="text-[12px] font-medium tracking-[0.03em] text-ink/80">
                 {filmCount(records.length)}
               </p>
-              <p className="mt-0.5 text-[10.5px] tracking-[0.1em] text-taupe/80">本地片库</p>
+              <p className="mt-0.5 text-[10.5px] tracking-[0.1em] text-taupe/80">我的片库</p>
             </div>
+            <SyncBadge
+              status={syncStatus}
+              pending={pendingWrites}
+              error={syncError}
+              onRetry={retrySync}
+            />
+            <Link
+              to="/account"
+              className="icon-btn"
+              aria-label="账号与设置"
+              title={user?.email ?? '账号'}
+            >
+              <UserRound size={16} />
+            </Link>
             <button
               type="button"
               onClick={() => openAdd()}
@@ -154,8 +171,15 @@ export const Shell = ({ children }: { children: ReactNode }) => {
             <button type="button" onClick={() => openAdd()} className="btn btn-primary w-full">
               <Plus size={14} /> 添加电影
             </button>
+            <Link
+              to="/account"
+              onClick={() => setMobileOpen(false)}
+              className="btn btn-ghost mt-2 w-full"
+            >
+              <UserRound size={14} /> 账号与设置
+            </Link>
             <p className="mt-3 text-center text-[12px] tracking-[0.06em] text-taupe">
-              {filmCount(records.length)} · 保存在这台设备
+              {filmCount(records.length)} · 已保存到你的账号
             </p>
           </div>
         </div>
@@ -183,7 +207,7 @@ export const Shell = ({ children }: { children: ReactNode }) => {
                   <span className="italic text-paper-dim">Every frame tells your story.</span>
                 </p>
                 <p className="mt-5 max-w-xs text-[14px] leading-[1.9] text-paper-dim">
-                  每一部电影都留下一帧，每一帧都在讲述你的故事。这是一座只属于你的电影记忆博物馆：片库、笔记与审美解读都保存在这台设备上，不会上传到服务器。
+                  每一部电影都留下一帧，每一帧都在讲述你的故事。这是一座只属于你的电影记忆博物馆：片库、笔记与审美解读保存在你的账号里，其他账号无法读取。只有你主动授权后，单篇笔记才会发送给 AI 服务生成解读。
                 </p>
               </div>
 
@@ -271,5 +295,51 @@ export const Shell = ({ children }: { children: ReactNode }) => {
         </div>
       </footer>
     </div>
+  )
+}
+
+const SyncBadge = ({
+  status,
+  pending,
+  error,
+  onRetry,
+}: {
+  status: 'idle' | 'syncing' | 'pending' | 'error'
+  pending: number
+  error: string | null
+  onRetry: () => void
+}) => {
+  const base = 'hidden items-center gap-1.5 text-[11px] tracking-[0.04em] md:inline-flex'
+
+  if (status === 'syncing') {
+    return (
+      <span className={cn(base, 'text-taupe')} title="正在写入你的账号">
+        <Loader2 size={11} className="animate-spin" /> 保存中
+      </span>
+    )
+  }
+  if (status === 'pending') {
+    return (
+      <span className={cn(base, 'text-ink/60')} title={`${pending} 条记录等待写入云端`}>
+        待同步 {pending}
+      </span>
+    )
+  }
+  if (status === 'error') {
+    return (
+      <button
+        type="button"
+        onClick={onRetry}
+        className={cn(base, 'text-ink underline decoration-dotted underline-offset-4')}
+        title={error ?? '同步失败'}
+      >
+        同步失败 · 重试
+      </button>
+    )
+  }
+  return (
+    <span className={cn(base, 'text-taupe/70')} title="笔记与画像已写入你的账号">
+      <Check size={11} /> 已同步
+    </span>
   )
 }

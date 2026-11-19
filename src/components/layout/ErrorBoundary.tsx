@@ -23,7 +23,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
           放映机出了一点问题
         </h1>
         <p className="mt-4 max-w-md text-[15px] leading-[1.9] text-paper-muted">
-          你的片库仍然保存在这台设备的浏览器里。刷新页面即可重新进入博物馆；如果问题反复出现，可以在页脚恢复示例数据。
+          你的片库已经保存到账号里，本机也留有一份缓存。刷新页面即可重新进入博物馆；如果问题反复出现，可以在页脚恢复示例数据。
         </p>
         <button
           type="button"
