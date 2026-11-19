@@ -7,6 +7,7 @@ import {
   AGENT_RUN_SCHEMA_VERSION,
   type AgentDirection,
   type AgentRunV2,
+  type ConsentV1,
   type KbCitationV2,
   type PendingNoteV1,
   type ProviderId,
@@ -79,12 +80,22 @@ type WorkerRequest = AiAnalyzeRequest & {
   record_id: string
   request_id: string
   idempotency_key: string
+  /**
+   * The Worker rejects (400) any note whose consent is not explicitly granted
+   * on the wire. Checking consent in the browser only is not enough.
+   */
+  consent: ConsentV1
 }
 
 const toAiRequest = (input: PendingNoteV1): WorkerRequest => ({
   record_id: input.record_id,
   request_id: input.request_id,
   idempotency_key: input.idempotency_key,
+  consent: {
+    allow_ai_notes: input.consent.allow_ai_notes === true,
+    ...(input.consent.policy_version ? { policy_version: input.consent.policy_version } : {}),
+    ...(input.consent.accepted_at ? { accepted_at: input.consent.accepted_at } : {}),
+  },
   film: {
     id: input.film.id,
     title: input.film.title,
