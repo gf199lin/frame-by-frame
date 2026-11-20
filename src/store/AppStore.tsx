@@ -51,6 +51,7 @@ export type Action =
       filmTitle: string
     }
   | { type: 'delete-record'; id: string; at: string; films: Film[]; filmTitle: string }
+  | { type: 'clear-seed'; films: Film[]; at: string }
   | { type: 'set-feedback'; key: DimensionKey; feedback: DimensionFeedback }
   | { type: 'set-timeline-feedback'; stageId: string; feedback: TimelineFeedbackMap[string] }
   | { type: 'add-correction'; id: string; scope: string; text: string; createdAt: string }
@@ -198,6 +199,29 @@ export const appReducer = (state: AppState, action: Action): AppState => {
         action.films,
         action.at,
       )
+    }
+    case 'clear-seed': {
+      const seedIds = new Set(
+        state.records.filter((record) => record.source === 'seed').map((record) => record.id),
+      )
+      if (seedIds.size === 0) return state
+      const seedObservationIds = new Set(
+        state.agentObservations
+          .filter((bundle) => seedIds.has(bundle.record_id))
+          .map((bundle) => bundle.observation.observation_id),
+      )
+      const next: AppState = {
+        ...state,
+        records: state.records.filter((record) => !seedIds.has(record.id)),
+        analyses: state.analyses.filter((analysis) => !seedIds.has(analysis.recordId)),
+        agentObservations: state.agentObservations.filter(
+          (bundle) => !seedIds.has(bundle.record_id),
+        ),
+        observationFeedback: state.observationFeedback.filter(
+          (item) => !seedObservationIds.has(item.observation_id),
+        ),
+      }
+      return appendSnapshot(next, action.films, action.at)
     }
     case 'set-feedback':
       return { ...state, feedback: { ...state.feedback, [action.key]: action.feedback } }
@@ -426,6 +450,7 @@ type StoreValue = {
   retrySync: () => void
   upsertRecord: (record: WatchRecord, editingId?: string) => void
   deleteRecord: (id: string) => void
+  clearSeed: () => void
   setDimensionFeedback: (
     key: DimensionKey,
     verdict: DimensionFeedback['verdict'],
@@ -642,6 +667,11 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     [state.records, films],
   )
 
+  const clearSeed = useCallback(
+    () => dispatch({ type: 'clear-seed', films, at: new Date().toISOString() }),
+    [films],
+  )
+
   const setDimensionFeedback = useCallback(
     (key: DimensionKey, verdict: DimensionFeedback['verdict'], correction?: string) => {
       dispatch({
@@ -791,6 +821,7 @@ export const AppStoreProvider = ({ children }: { children: ReactNode }) => {
     },
     upsertRecord,
     deleteRecord,
+    clearSeed,
     setDimensionFeedback,
     setTimelineFeedback,
     addCorrection,

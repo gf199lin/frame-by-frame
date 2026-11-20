@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, ArrowUpRight, Plus, Sparkles } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
@@ -28,8 +29,10 @@ const STATUS_TEXT: Record<string, string> = {
 }
 
 export const Home = () => {
-  const { records, films, snapshot, profile } = useAppStore()
+  const { records, films, snapshot, profile, clearSeed } = useAppStore()
   const { openAdd } = useAddFilm()
+  const [confirmClear, setConfirmClear] = useState(false)
+  const seedCount = records.filter((record) => record.source === 'seed').length
 
   const ordered = recordsSorted(records)
   const latest = ordered[0] ? { record: ordered[0], film: filmById(films, ordered[0].filmId) } : null
@@ -87,6 +90,66 @@ export const Home = () => {
       {/*  COVER — cinematic overlay                                        */}
       {/* ================================================================ */}
       <CinematicHero film={heroFilm} stats={heroStats} year={year} />
+
+      {seedCount > 0 && (
+        <section className="shell pt-5 lg:pt-6">
+          <div className="flex flex-col gap-4 border border-brass/45 bg-paper-sheet px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 inline-flex shrink-0 border border-brass/60 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-brass">
+                示例
+              </span>
+              <div>
+                <p className="font-zh-title text-[14px] leading-snug text-ink">
+                  当前片库为 {seedCount} 部示例电影
+                </p>
+                <p className="mt-1 text-[12px] leading-[1.75] text-ink/60">
+                  笔记为原型撰写，用于演示 AI 如何理解你，不是真实用户记录。可保留，也可清空后从自己的第一部开始。
+                </p>
+              </div>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-2 sm:pl-4">
+              {confirmClear ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      clearSeed()
+                      setConfirmClear(false)
+                    }}
+                    className="btn btn-primary h-8 min-h-0 px-3 text-[12px]"
+                  >
+                    确认清空
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmClear(false)}
+                    className="btn btn-ghost h-8 min-h-0 px-3 text-[12px]"
+                  >
+                    取消
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => openAdd()}
+                    className="btn btn-primary h-8 min-h-0 px-3 text-[12px]"
+                  >
+                    添加我的电影
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmClear(true)}
+                    className="btn btn-ghost h-8 min-h-0 px-3 text-[12px]"
+                  >
+                    清空示例
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ================================================================ */}
       {/*  ISSUE CONTENTS                                                   */}
@@ -170,6 +233,11 @@ export const Home = () => {
 
                 <div className="col-span-12 sm:col-span-9 lg:col-span-7 lg:col-start-5">
                   <Link to={`/archive/${latest.film.id}`} className="group">
+                    {latest.record.source === 'seed' && (
+                      <span className="mb-3 inline-flex items-center border border-brass/50 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-brass">
+                        示例记录 · 非真实用户数据
+                      </span>
+                    )}
                     <h3 className="font-display text-[clamp(2.2rem,4.4vw,3.8rem)] leading-[1.02] tracking-[-0.015em] text-ink transition-colors group-hover:text-taupe">
                       {latest.film.title}
                     </h3>
