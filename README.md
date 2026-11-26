@@ -28,7 +28,7 @@ npm run dev          # 前端 http://localhost:5173
 npm run ai:dev       # http://127.0.0.1:8787
 ```
 
-开发环境下前端默认请求 `http://127.0.0.1:8787`；也可用 `VITE_AI_API_BASE` 指向你自行部署的地址。历史部署方案（Cloudflare Worker / 云函数）已归档到 `legacy/`，不再部署，也不参与本次参赛链路。
+开发环境下前端默认请求 `http://127.0.0.1:8787`；也可用 `VITE_AI_API_BASE` 指向已部署的 Worker。
 
 其他命令：
 
@@ -36,9 +36,11 @@ npm run ai:dev       # http://127.0.0.1:8787
 npm run build        # 类型检查 + 生产构建（dist/）
 npm run preview      # 预览生产构建
 npm run typecheck    # 仅类型检查
-npm run test:unit    # 前端测试
-npm run test:server  # 后端测试
+npm run test:unit    # 前端测试（21 个）
+npm run test:server  # 后端测试（30 个）
 npm run ai:verify    # 真实模型验证，写入 docs/ai-verification.json
+npm run worker:dev   # Wrangler 本地 Worker
+npm run worker:deploy
 ```
 
 > 如果 PowerShell 因执行策略阻止 `npm.ps1`，请改用 `npm.cmd install` / `npm.cmd run dev`。这是本机环境问题，不是项目问题。
@@ -105,17 +107,14 @@ npm run ai:verify    # 真实模型验证，写入 docs/ai-verification.json
 ```
 .
 ├─ docs/
-│  ├─ competition-rules-2026.md   # 赛事规则、评分标准与项目约束（长期依据）
-│  ├─ ai-core.md                  # AI Core V1：架构、契约、限制（部署章节已归档）
+│  ├─ ai-core.md                  # AI Core V1：架构、契约、部署、限制
 │  ├─ ai-verification.json        # 真实模型调用证据
 │  ├─ agent-skill-spec.md
 │  └─ frontend-architecture.md
-├─ legacy/                        # 历史部署方案，未用于本次参赛（见 legacy/README.md）
 ├─ server/
 │  ├─ app.ts                      # 路由、CORS、限流、错误映射
-│  ├─ worker.ts                   # 历史入口：Cloudflare Workers（未启用）
-│  ├─ cloudfn.ts                  # 历史入口：云函数 FC / SCF（未启用）
-│  ├─ node.ts                     # 本地 Node 入口（当前唯一在用）
+│  ├─ worker.ts                   # Cloudflare Workers 入口
+│  ├─ node.ts                     # 本地 Node 入口
 │  └─ core/                       # contract / prompt / validate / service / provider …
 ├─ scripts/
 │  └─ verify-ai.ts                # 真实模型验证脚本
@@ -129,13 +128,13 @@ npm run ai:verify    # 真实模型验证，写入 docs/ai-verification.json
 │  ├─ types.ts
 │  └─ App.tsx
 ├─ outputs/ai-core-verification/  # 界面走查截图
-├─ legacy/                       # 历史部署配置（wrangler.toml / s.yaml / 云函数脚本）
+├─ wrangler.toml
 ├─ tsconfig.server.json
 ├─ vitest.config.ts
 └─ package.json
 ```
 
-技术栈：React 18 · TypeScript 5.7 · Vite 6 · Tailwind CSS 3.4 · React Router 6 · lucide-react · Vitest · Cloudflare Workers / 阿里云 FC / 腾讯云 SCF。
+技术栈：React 18 · TypeScript 5.7 · Vite 6 · Tailwind CSS 3.4 · React Router 6 · lucide-react · Vitest · Cloudflare Workers。
 
 ---
 
@@ -151,27 +150,38 @@ npm run ai:verify    # 真实模型验证，写入 docs/ai-verification.json
 ### 已实际验证
 
 - `tsc -b` 与 `tsc -p tsconfig.server.json`：0 错误。
-- 生产构建通过：JS 482 kB / gzip 149 kB。
-- 自动化测试：**51 个全部通过**（前端 21、后端 30）。
+- 生产构建通过：JS 约 834 kB（2026-11-19 记录）。
+- 自动化测试：**150 条全部通过**（前端 97、服务端 53，2026-11-20 复测）。
 - 真实模型调用：`deepseek / deepseek-flash`，约 8.8 秒，4 条偏好证据，引文全部可回溯；未涉及维度进入 uncertainties。
 - 浏览器走查：真实分析 → 待确认 → 接受 → 刷新持久化 → 品味页待确认减少 → 维度反馈 → 拒绝；页面控制台 0 错误。截图见 `outputs/ai-core-verification/`。
 
 ---
 
-## Phase 2 视觉改版（2026-11）
+## 视觉方向（2026-11 冻结）
 
-- 方向：Cinematheque / 私人电影资料馆；黑白灰为主、低饱和红 #C83B35 点缀。
-- 首页：本地 cinema still 作为全屏 Hero；下方切换暖白编辑式版面。
-- Archive：海报优先的资料馆墙，悬停显示笔记 / 评分 / 状态。
-- Film Detail：深色 feature spread + 暖白 "The note" 跨页 + 深色六维坐标。
-- Taste / Reflection / Map / Add Film：统一字体、发丝线、红色选中态与纸面变量。
+- 方向：私人电影资料馆 × 电影杂志；奶油米白 `#f4ead2` + 深海蓝 `#1d2379` / `#161c66`。
+- 标题：Instrument Serif + Noto Serif SC；正文中文优先，避免过细字重与过小字号。
+- 首页：剧照 Hero + 编辑式版面；Archive 为海报墙；Film Detail 为跨页 note；Taste 用纸面卡片呈现证据与观察阶段。
+- 历史方案（黑白灰 + `#C83B35`）已废弃，仅保留在 `outputs/v3-screens/` 等历史截图目录。
 
 ---
 
 ## 尚未完成
 
-- 真实注册 / 登录、多用户、云端同步。
+- Supabase 端到端（注册 / 登录 / 跨设备 / 双账号隔离）：代码在 `origin/main`（`17f9e3d`），T01–T16 未执行；本地 `main` 落后 16 个提交。
+- 真实用户访谈与真实反馈：当前 0 位 / 0 条；说明书中的 4 条为模拟反馈，不计入用户研究。
+- 3 分钟演示视频与报名回执。
 - 全局限流（当前为单 isolate 内存实现，多实例需 KV / Durable Object）。
 - 公开部署前的访问控制与配额体系。
 - 个性化推荐 feed、社交 / 社区功能。
 - 把浏览器走查固化为 CI 中的端到端测试。
+
+---
+
+## 比赛材料与文档同步
+
+- 同步规范：`PROJECT-DOCUMENTATION-SYNC.md`（任何改动都要走七步流程，并登记台账）。
+- 说明书源文：`outputs/submission/12-项目说明书.md`（内部版本 v3.1）。
+- 正式 DOCX/PDF：`outputs/submission/C_framebyframe_Frame by Frame_项目说明书.docx` / `.pdf`。
+- 路演 PPT：`outputs/submission/C_framebyframe_Frame by Frame.pptx`（22 页）。
+- 变更记录：`CHANGELOG.md`；提交核对：`COMPETITION-SUBMISSION-CHECKLIST.md`。
