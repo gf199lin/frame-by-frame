@@ -230,19 +230,19 @@ export const FilmDetail = () => {
       <section className="shell py-8" aria-labelledby="watch-history">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="watch-history" className="font-zh-title text-2xl">观影记录</h2>
-          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#8c3e31] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#713126] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8c3e31]">
+          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#365746] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#294536] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#365746]">
             <Plus size={14} /> 记录这次重看
           </button>
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {viewings.map((viewing) => (
-            <article key={viewing.id} className="min-w-0 border border-ink/15 bg-paper-sheet p-5">
+            <article key={viewing.id} className="min-w-0 rounded-md border border-[#365746]/20 bg-[#eef0e6] p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-zh-title text-[#8c3e31]">{STATUS_LABELS[viewing.status].zh} · {formatLongDate(viewing.watchedAt)}</h3>
+                <h3 className="font-zh-title text-[#365746]">{STATUS_LABELS[viewing.status].zh} · {formatLongDate(viewing.watchedAt)}</h3>
                 <Rating value={viewing.rating} size={12} />
               </div>
               <p className="mt-3 whitespace-pre-wrap break-words leading-relaxed text-ink/80">{viewing.reflection || '这次还没有写影评。'}</p>
-              <Link to={'?record=' + encodeURIComponent(viewing.id)} aria-current={record.id === viewing.id ? 'true' : undefined} className="link-rule mt-4 text-[#8c3e31]">
+              <Link to={'?record=' + encodeURIComponent(viewing.id)} aria-current={record.id === viewing.id ? 'true' : undefined} className="link-rule mt-4 text-[#365746]">
                 {record.id === viewing.id ? '下方正显示这条记录' : '查看这次的详情和分析'}
               </Link>
             </article>
