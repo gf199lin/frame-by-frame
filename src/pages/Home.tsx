@@ -58,6 +58,8 @@ export const Home = () => {
   const recent = recentCards.slice(1)
   const favourite = favoriteRecord(records, films)
   const favouriteFilm = favourite ? filmById(films, favourite.filmId) : null
+  const themeCount = new Set(records.flatMap((r) => r.themes)).size
+  const hours = snapshot.totalMinutes / 60
   const year = new Date().getFullYear()
 
   const radarSnapshot: TasteSnapshot = {
