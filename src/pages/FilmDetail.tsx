@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
@@ -27,7 +27,9 @@ export const FilmDetail = () => {
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   const film = filmById(films, filmId)
-  const record = records.find((r) => r.filmId === filmId)
+  const [params] = useSearchParams()
+  const viewings = recordsSorted(records.filter((r) => r.filmId === filmId))
+  const record = viewings.find((r) => r.id === params.get('record')) ?? viewings[0]
   const feelings = record ? feltLikeTagsOf(record) : []
 
   if (!film) {
@@ -93,7 +95,7 @@ export const FilmDetail = () => {
   const artworkUrl = artworkSourceUrl(film)
 
   const related = records
-    .filter((r) => r.id !== record.id)
+    .filter((r) => r.filmId !== film.id)
     .map((other) => {
       const otherFilm = filmById(films, other.filmId)
       if (!otherFilm) return null
@@ -114,8 +116,9 @@ export const FilmDetail = () => {
 
   const onDelete = () => {
     deleteRecord(record.id)
-    push(`《${film.title}》已从片库移除。`, 'success')
-    navigate('/archive')
+    push(`《${film.title}》的这次观影记录已移除。`, 'success')
+    setConfirmDelete(false)
+    navigate(viewings.length > 1 ? '/archive/' + film.id : '/archive', { replace: true })
   }
 
   return (
@@ -224,6 +227,28 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  II — My memory                                                   */}
       {/* ================================================================ */}
+      <section className="shell py-8" aria-labelledby="watch-history">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="watch-history" className="font-zh-title text-2xl">观影记录</h2>
+          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#8c3e31] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#713126] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8c3e31]">
+            <Plus size={14} /> 记录这次重看
+          </button>
+        </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {viewings.map((viewing) => (
+            <article key={viewing.id} className="min-w-0 border border-ink/15 bg-paper-sheet p-5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="font-zh-title text-[#8c3e31]">{STATUS_LABELS[viewing.status].zh} · {formatLongDate(viewing.watchedAt)}</h3>
+                <Rating value={viewing.rating} size={12} />
+              </div>
+              <p className="mt-3 whitespace-pre-wrap break-words leading-relaxed text-ink/80">{viewing.reflection || '这次还没有写影评。'}</p>
+              <Link to={'?record=' + encodeURIComponent(viewing.id)} aria-current={record.id === viewing.id ? 'true' : undefined} className="link-rule mt-4 text-[#8c3e31]">
+                {record.id === viewing.id ? '下方正显示这条记录' : '查看这次的详情和分析'}
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
       <div className="shell">
         <p className="border-b border-ink/10 py-3 text-[12.5px] tracking-[0.04em] text-ink/60">
           图片来源：{' '}

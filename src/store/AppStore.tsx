@@ -136,7 +136,7 @@ export const appReducer = (state: AppState, action: Action): AppState => {
     }
     case 'upsert-record': {
       const target = state.records.find(
-        (r) => r.id === action.record.id || r.id === action.editingId || r.filmId === action.record.filmId,
+        (r) => r.id === (action.editingId ?? action.record.id),
       )
       const records = target
         ? state.records.map((r) => (r.id === target.id ? action.record : r))

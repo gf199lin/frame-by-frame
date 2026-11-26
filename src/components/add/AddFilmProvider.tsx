@@ -3,12 +3,12 @@ import type { WatchRecord } from '@/types'
 import { AddFilmFlow } from './AddFilmFlow'
 
 type FlowState =
-  | { mode: 'add'; filmId?: string }
+  | { mode: 'add'; filmId?: string; rewatch?: boolean }
   | { mode: 'edit'; record: WatchRecord }
   | null
 
 type AddFilmContextValue = {
-  openAdd: (filmId?: string) => void
+  openAdd: (filmId?: string, rewatch?: boolean) => void
   openEdit: (record: WatchRecord) => void
 }
 
@@ -17,7 +17,7 @@ const AddFilmContext = createContext<AddFilmContextValue | null>(null)
 export const AddFilmProvider = ({ children }: { children: ReactNode }) => {
   const [flow, setFlow] = useState<FlowState>(null)
 
-  const openAdd = useCallback((filmId?: string) => setFlow({ mode: 'add', filmId }), [])
+  const openAdd = useCallback((filmId?: string, rewatch?: boolean) => setFlow({ mode: 'add', filmId, rewatch }), [])
   const openEdit = useCallback((record: WatchRecord) => setFlow({ mode: 'edit', record }), [])
   const close = useCallback(() => setFlow(null), [])
 
@@ -31,6 +31,7 @@ export const AddFilmProvider = ({ children }: { children: ReactNode }) => {
           open
           initialFilmId={flow.mode === 'add' ? flow.filmId : flow.record.filmId}
           editRecord={flow.mode === 'edit' ? flow.record : undefined}
+          rewatch={flow.mode === 'add' && flow.rewatch}
           onClose={close}
         />
       )}

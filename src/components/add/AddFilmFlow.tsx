@@ -159,11 +159,13 @@ export const AddFilmFlow = ({
   onClose,
   initialFilmId,
   editRecord,
+  rewatch = false,
 }: {
   open: boolean
   onClose: () => void
   initialFilmId?: string
   editRecord?: WatchRecord
+  rewatch?: boolean
 }) => {
   const {
     records,
@@ -179,7 +181,7 @@ export const AddFilmFlow = ({
   const { push } = useToast()
   const navigate = useNavigate()
 
-  const startStep: Step = editRecord ? 'form' : initialFilmId ? 'review' : 'search'
+  const startStep: Step = editRecord || rewatch ? 'form' : initialFilmId ? 'review' : 'search'
   const [step, setStep] = useState<Step>(startStep)
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Film | null>(() => {
@@ -190,7 +192,7 @@ export const AddFilmFlow = ({
     filmId: initialFilmId ?? '',
     rating: editRecord?.rating ?? 0,
     watchedAt: editRecord?.watchedAt ?? todayISO(),
-    status: editRecord?.status ?? 'watched',
+    status: editRecord?.status ?? (rewatch ? 'rewatched' : 'watched'),
     reflection: editRecord?.reflection ?? '',
     feltLikeTags: editRecord ? feltLikeTagsOf(editRecord) : [],
   }))
@@ -639,7 +641,7 @@ export const AddFilmFlow = ({
             </span>
           </div>
           <span className="font-display text-[20px] leading-none text-paper">
-            {editRecord ? '编辑观影记忆' : '添加电影'}
+            {editRecord ? '编辑观影记忆' : rewatch ? '记录这次重看' : '添加电影'}
           </span>
         </div>
 
