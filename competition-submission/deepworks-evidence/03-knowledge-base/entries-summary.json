@@ -1,0 +1,103 @@
+{
+  "count": 12,
+  "name": "Frame by Frame 电影审美知识库",
+  "license": "CC BY 4.0（本项目原创摘要）",
+  "entries": [
+    {
+      "kb_id": "KB-001",
+      "title": "叙事：因果链、省略与留白",
+      "domain": "narrative",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 172,
+      "text_sha256": "218432f69f07f4107fb295b0ddce0292cd50211342b8767570094429cfa2a0ee"
+    },
+    {
+      "kb_id": "KB-002",
+      "title": "人物：欲望、缺陷与转变",
+      "domain": "character",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 150,
+      "text_sha256": "dad73778b144d784822c7dd548363ff81080b652b125fba12c622c4bde7966ac"
+    },
+    {
+      "kb_id": "KB-003",
+      "title": "情绪：克制、间离与延迟反应",
+      "domain": "emotion",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 167,
+      "text_sha256": "6ed25616f25193b0ca85a2b5d029ce5cb4603828f0a4715c885b6e5c9b6f74a6"
+    },
+    {
+      "kb_id": "KB-004",
+      "title": "结局：闭合、开放与苦涩的未解",
+      "domain": "ending",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 153,
+      "text_sha256": "6d225d4095f6d324568ddb5fc1c41214e26086aa48f48b984f76023e9ee32f2d"
+    },
+    {
+      "kb_id": "KB-005",
+      "title": "视觉：景别、视角与代入距离",
+      "domain": "visual",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 161,
+      "text_sha256": "39fd0ed2e1d6dbc2d9455a3cec381ef7e13f9a3e48d81048579388a7c44c2045"
+    },
+    {
+      "kb_id": "KB-006",
+      "title": "光线与色彩：情绪的第二套语法",
+      "domain": "visual",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 148,
+      "text_sha256": "eb3b7a301b3a51851bad0979e0539d864babd7890eca7aeed831fd62b3095b09"
+    },
+    {
+      "kb_id": "KB-007",
+      "title": "声音：静默、环境声与声画对位",
+      "domain": "sound",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 157,
+      "text_sha256": "bc4ffdc63145afe29192a4d1c73befb3db7e5564931e642fd8eb8e6122f71455"
+    },
+    {
+      "kb_id": "KB-008",
+      "title": "剪辑：节奏、省略与动作连续性",
+      "domain": "narrative",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 166,
+      "text_sha256": "ad66c751a0558a9cd1aaa174ebaa6b88c4a1a5a39dbee5db0275619639460501"
+    },
+    {
+      "kb_id": "KB-009",
+      "title": "表演：微表情、身体与留白",
+      "domain": "character",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 145,
+      "text_sha256": "b16d45579168a93f88fa412efaeceaa4a8bc8908d206415e790c8fac91f12d4f"
+    },
+    {
+      "kb_id": "KB-010",
+      "title": "主题：作者表达、语境与多义性",
+      "domain": "thematic",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 148,
+      "text_sha256": "9f89b9799fcd31a58827e1d8ba2dd86d18f23411823752e736534e7b3c1d4218"
+    },
+    {
+      "kb_id": "KB-011",
+      "title": "类型：期待、契约与违背",
+      "domain": "narrative",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 152,
+      "text_sha256": "cb1d294030d2a552777d9f911e5e10c21d6ec42f427108ec6f317a20d385652c"
+    },
+    {
+      "kb_id": "KB-012",
+      "title": "观影记忆：重看、互文与个人经验",
+      "domain": "thematic",
+      "license": "CC BY 4.0（本项目原创摘要）",
+      "text_chars": 153,
+      "text_sha256": "56977bb60f4d17c341dc90b671718bae2fbc4fa738eef527adc6a7275695e2f4"
+    }
+  ]
+}

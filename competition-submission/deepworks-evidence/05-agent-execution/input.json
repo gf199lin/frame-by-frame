@@ -1,0 +1,21 @@
+{
+  "run_id": "fbf-evidence-20261119-01",
+  "user_id": "evidence-20261119",
+  "film": {
+    "id": "in-the-mood-for-love",
+    "title": "In the Mood for Love",
+    "titleZh": "花样年华",
+    "year": 2000,
+    "director": "Wong Kar-wai",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "runtime": 98
+  },
+  "rating": 4.5,
+  "felt_like": "restrained",
+  "note": "这次重看《花样年华》，最打动我的还是他们始终没有把那句话说出口。走廊里两个人擦肩，镜头停得比该停的久一点，房间里的红色一直压着人。我不觉得这是遗憾，反而觉得克制才让这段关系成立。结尾他没有敲门，我反而松了一口气。",
+  "history": [],
+  "locale": "zh-CN"
+}

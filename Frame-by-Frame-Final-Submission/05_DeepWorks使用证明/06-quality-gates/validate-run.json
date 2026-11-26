@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "schema_valid": true,
+  "workflow_correct": true,
+  "business_outcome": "analysis_completed_with_kb_support",
+  "business_outcome_note": "Machine checks cover evidence integrity and structure only. A passing schema does not prove the film analysis is good; no_relevant_entry in particular means the analysis ran without KB support.",
+  "run": "outputs/p0/runs/fbf-evidence-20261119-01.json",
+  "input": "_work/evidence-run/input.json",
+  "run_id": "fbf-evidence-20261119-01",
+  "kb_status": "cited",
+  "checks": {
+    "platform": "DeepWorks",
+    "model": "dth/DeepSeek-V4.1-Flash",
+    "skills": [
+      "cinema-knowledge-retrieval:invoked:read",
+      "film-note-analysis:invoked:read",
+      "cinema-taste-profiling:invoked:read"
+    ],
+    "kb_citations": [
+      "KB-003",
+      "KB-009",
+      "KB-012"
+    ],
+    "evidence_count": 5,
+    "dimensions": [
+      "emotion",
+      "narrative",
+      "visual",
+      "thematic",
+      "ending"
+    ],
+    "profile_sample_size": 5,
+    "profile_schema_version": 2,
+    "independent_note_count": 1,
+    "sufficient_dimensions": 0,
+    "note_sha256": "78e701b246c5a88017bb59a3c1e01bea457b4178349f9ab3ff43592f62906697"
+  },
+  "warnings": [],
+  "failures": []
+}

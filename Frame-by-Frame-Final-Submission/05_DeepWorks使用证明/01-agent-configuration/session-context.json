@@ -1,0 +1,10 @@
+{
+  "agent": "film-curator",
+  "session_id": "ses_e126800a7ffeDFT2OFUySxUbkB",
+  "message_id": "msg_1f3059e64001zntzH7M7H1owrP",
+  "directory": "C:\\Users\\BayMax\\Desktop\\frame by frame",
+  "captured_at": "2026-11-19T16:56:00+08:00",
+  "model": "dth/DeepSeek-V4.1-Flash",
+  "source": "deepworks_extension_list_actions 的 context 字段",
+  "limitation": "这是平台会话上下文，不是平台签发的独立 Run ID"
+}

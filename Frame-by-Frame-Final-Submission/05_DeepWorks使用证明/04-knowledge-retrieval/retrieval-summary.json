@@ -1,0 +1,58 @@
+{
+  "source": "sass_search 原始返回转录（2026-11-16）",
+  "platform_kb_id": "4c321650-6fd5-418f-a300-b4a6760727b4",
+  "transcripts": [
+    {
+      "file": "04-knowledge-retrieval/fbf-p24-A-20261116-01.platform-search.json",
+      "query": "克制 没有说出口 镜头停留 红色 没有敲门 结尾 关系",
+      "captured_at": "2026-11-16T11:22:00+08:00",
+      "source_tool": "sass_search",
+      "kb_id": "4c321650-6fd5-418f-a300-b4a6760727b4",
+      "result_count": 10,
+      "top": {
+        "knowledge_title": "KB-003-emotion.md",
+        "chunk_type": "text",
+        "score": 0.8177763,
+        "id": "b707d47d-4c41-4092-a713-8903d2ac900e"
+      }
+    },
+    {
+      "file": "04-knowledge-retrieval/fbf-p24-B-20261116-01.platform-search.json",
+      "query": "蒙太奇 顺序 想象 现实 结局 点头 台词 表演",
+      "captured_at": "2026-11-16T11:29:00+08:00",
+      "source_tool": "sass_search",
+      "kb_id": "4c321650-6fd5-418f-a300-b4a6760727b4",
+      "result_count": 10,
+      "top": {
+        "knowledge_title": "KB-008-narrative.md",
+        "chunk_type": "text",
+        "score": 0.7914144,
+        "id": "ad84df4b-855f-4755-a7d8-84f84bcb9a13"
+      }
+    },
+    {
+      "file": "04-knowledge-retrieval/fbf-p24-C-20261116-01.platform-search.json",
+      "query": "画幅 黑白 彩色 银幕 切换 画面",
+      "captured_at": "2026-11-16T11:36:00+08:00",
+      "source_tool": "sass_search",
+      "kb_id": "4c321650-6fd5-418f-a300-b4a6760727b4",
+      "result_count": 10,
+      "top": {
+        "knowledge_title": "KB-007-sound.md",
+        "chunk_type": "text",
+        "score": 0.77090025,
+        "id": "079a1057-d0c4-412c-8e5e-2d5230f5fce3"
+      }
+    }
+  ],
+  "identity_check": {
+    "entries_mapped": 10,
+    "hash_consistent": 10,
+    "method": "kb_id parsed from knowledge_title; identity requires platform body sha256 == local entry text sha256",
+    "limitation": [
+      "platform knowledge_id (document level) was not captured in the P2-4 transcripts; platform_knowledge_ids is therefore empty and must be filled from a live capture.",
+      "text similarity is never used as identity proof."
+    ]
+  },
+  "note": "三次检索发生在 film-curator 会话内，经 sass_search 真实返回；不是平台界面独立 Run，也不是本地 retrieve.mjs 结果。"
+}

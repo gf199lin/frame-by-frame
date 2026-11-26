@@ -1,0 +1,73 @@
+{
+  "ok": true,
+  "input": "_work/evidence-run/input.json",
+  "analysis": "_work/evidence-run/draft.json",
+  "note_chars": 106,
+  "note_sha256": "78e701b246c5a88017bb59a3c1e01bea457b4178349f9ab3ff43592f62906697",
+  "note_id": "sha256:2c293d0f387587d0a98ab9ea00cd05adca68d42e5fac6329bb4f58762c9193a6",
+  "semantic_status": "relevant",
+  "semantic_reasons": [
+    "personal_experience_with_emotion"
+  ],
+  "semantic_signals": {
+    "film_terms": [
+      "镜头",
+      "结尾"
+    ],
+    "experience_terms": [
+      "打动",
+      "克制"
+    ],
+    "first_person": [
+      "我"
+    ],
+    "body_reaction": [],
+    "plot_terms": [
+      "他们"
+    ],
+    "daily_terms": [],
+    "title_hit": true
+  },
+  "evidence_count": 5,
+  "distinct_dimensions": [
+    "emotion",
+    "narrative",
+    "visual",
+    "thematic",
+    "ending"
+  ],
+  "matches": [
+    {
+      "index": 0,
+      "dimension_id": "emotion",
+      "quote": "他们始终没有把那句话说出口",
+      "match_type": "exact"
+    },
+    {
+      "index": 1,
+      "dimension_id": "narrative",
+      "quote": "镜头停得比该停的久一点",
+      "match_type": "exact"
+    },
+    {
+      "index": 2,
+      "dimension_id": "visual",
+      "quote": "房间里的红色一直压着人",
+      "match_type": "exact"
+    },
+    {
+      "index": 3,
+      "dimension_id": "thematic",
+      "quote": "我不觉得这是遗憾，反而觉得克制才让这段关系成立",
+      "match_type": "exact"
+    },
+    {
+      "index": 4,
+      "dimension_id": "ending",
+      "quote": "结尾他没有敲门，我反而松了一口气",
+      "match_type": "exact"
+    }
+  ],
+  "warnings": [],
+  "failures": []
+}

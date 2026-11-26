@@ -1,0 +1,27 @@
+{
+  "count": 3,
+  "source": ".opencode/skills/<name>/SKILL.md",
+  "skills": [
+    {
+      "name": "cinema-knowledge-retrieval",
+      "description": "从 Frame by Frame 电影审美知识库中检索叙事、情绪、人物、视觉、声音与结局相关条目，返回真实 kb_id、来源与原文片段，并拒绝为了丰富分析而强行套用知识。",
+      "file": "02-skills-configuration/cinema-knowledge-retrieval.SKILL.md",
+      "sha256": "07a5703ded69374e3cae5f5aded23e64b6e7c3470af0113282fa1a1b49f8df67",
+      "chars": 2063
+    },
+    {
+      "name": "film-note-analysis",
+      "description": "从用户的中文观影笔记中提取可回溯的六维审美证据，强制每条证据带原文逐字引用，并区分用户原话、模型推断与不确定结论。",
+      "file": "02-skills-configuration/film-note-analysis.SKILL.md",
+      "sha256": "bbb7f66c14bf184741809dd98d601208ea2cb2329df48139b2a3e96e04e5575e",
+      "chars": 3160
+    },
+    {
+      "name": "cinema-taste-profiling",
+      "description": "基于用户已接受的六维审美证据更新电影审美画像，按样本量收缩、标注样本不足，并保留用户纠错信息，避免用一条笔记武断判断长期偏好。",
+      "file": "02-skills-configuration/cinema-taste-profiling.SKILL.md",
+      "sha256": "6aa771b1b0694702c39efbbcfb410fde8c198561da5a4ecdb3d8156297815ff7",
+      "chars": 4996
+    }
+  ]
+}

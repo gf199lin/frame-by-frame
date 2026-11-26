@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "checked_at": "2026-11-19T10:51:32.423Z",
+  "screenshot_groups": [
+    {
+      "id": "agent-overview",
+      "ok": true,
+      "found": [
+        {
+          "path": "01-agent-configuration/S01-agent-mention.png",
+          "bytes": 57145
+        }
+      ]
+    },
+    {
+      "id": "agent-config",
+      "ok": true,
+      "found": [
+        {
+          "path": "01-agent-configuration/S02-agent-session.png",
+          "bytes": 23019
+        }
+      ]
+    },
+    {
+      "id": "skill-retrieval",
+      "ok": true,
+      "found": [
+        {
+          "path": "02-skills-configuration/S03-skills-list.png",
+          "bytes": 80628
+        }
+      ]
+    },
+    {
+      "id": "skill-note",
+      "ok": true,
+      "found": [
+        {
+          "path": "02-skills-configuration/S03-skills-list.png",
+          "bytes": 80628
+        }
+      ]
+    },
+    {
+      "id": "skill-profile",
+      "ok": true,
+      "found": [
+        {
+          "path": "02-skills-configuration/S03-skills-list.png",
+          "bytes": 80628
+        }
+      ]
+    },
+    {
+      "id": "kb-entries",
+      "ok": true,
+      "found": [
+        {
+          "path": "03-knowledge-base/S06a-kb-entries-01-09.png",
+          "bytes": 308791
+        },
+        {
+          "path": "03-knowledge-base/S06c-kb-entries-11-12.png",
+          "bytes": 193578
+        }
+      ]
+    },
+    {
+      "id": "kb-retrieval",
+      "ok": true,
+      "found": [
+        {
+          "path": "04-knowledge-retrieval/S07-kb-retrieval-restraint.png",
+          "bytes": 277257
+        }
+      ]
+    },
+    {
+      "id": "agent-run",
+      "ok": true,
+      "found": [
+        {
+          "path": "05-agent-execution/S08-agent-run.png",
+          "bytes": 269159
+        }
+      ]
+    }
+  ],
+  "quality_gates": [
+    {
+      "file": "validate-evidence.json",
+      "ok": true
+    },
+    {
+      "file": "validate-citations.json",
+      "ok": true
+    },
+    {
+      "file": "validate-run.json",
+      "ok": true
+    }
+  ],
+  "run_id": "fbf-evidence-20261119-01",
+  "platform_run_id": null,
+  "note": "ok=true 只代表截图文件与质量门齐全，不替代人工核对截图内容。平台 Run ID 未取得。",
+  "failures": []
+}

@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "entries": 12,
+  "kb_status": "cited",
+  "citation_count": 3,
+  "checked": [
+    {
+      "kb_id": "KB-003",
+      "title": "情绪：克制、间离与延迟反应",
+      "excerpt_verbatim": true
+    },
+    {
+      "kb_id": "KB-009",
+      "title": "表演：微表情、身体与留白",
+      "excerpt_verbatim": true
+    },
+    {
+      "kb_id": "KB-012",
+      "title": "观影记忆：重看、互文与个人经验",
+      "excerpt_verbatim": true
+    }
+  ],
+  "warnings": [],
+  "failures": []
+}

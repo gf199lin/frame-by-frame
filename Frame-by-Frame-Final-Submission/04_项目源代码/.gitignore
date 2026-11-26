@@ -1,0 +1,51 @@
+# --- dependencies ---
+node_modules/
+
+# --- secrets ---
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+*.pem
+*.key
+
+# --- local session data (never commit) ---
+.wrangler/
+dist-cloudfn/
+.deepworks/tmp/
+data/user-memory/
+data/pending/
+data/*.local.json
+.opencode/deepworks/inbox/
+.opencode/deepworks/outbox/
+.opencode/deepworks/previews/
+uploads/
+
+# --- local artifacts (screenshots, generated previews) ---
+output/
+outputs/
+
+# --- build output ---
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+.wrangler/
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- logs / os ---
+*.log
+.DS_Store
+Thumbs.db
+
+# --- local redesign working files ---
+_work/

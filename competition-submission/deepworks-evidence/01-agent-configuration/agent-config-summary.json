@@ -1,0 +1,13 @@
+{
+  "agent": "film-curator",
+  "mode": "primary",
+  "model": "dth/DeepSeek-V4.1-Flash",
+  "temperature": 0.2,
+  "description": "Frame by Frame Film Curator — 读取用户电影笔记，调用知识库与三个产品 Skill，产出可回溯的结构化审美分析 JSON。",
+  "config_file": "01-agent-configuration/film-curator.agent.md",
+  "config_sha256": "ee28f970cee8dd6f038c7345fc73521c890a312873b10926958ab9c2633ac9e1",
+  "config_chars": 7977,
+  "source": "工作区 .opencode/agents/film-curator.md",
+  "runtime_confirmation": "deepworks_extension_list_actions 返回的 context.agent = film-curator",
+  "note": "配置为真实文件；本会话运行时上下文另见 session-context.json"
+}

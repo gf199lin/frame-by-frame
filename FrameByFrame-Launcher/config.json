@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "projectRoot": "..",
+  "panelUrl": "http://127.0.0.1:5173/",
+  "window": {
+    "width": 1400,
+    "height": 900,
+    "titleNeedles": ["Frame by Frame"]
+  },
+  "web": {
+    "enabled": true,
+    "port": 5173,
+    "startFile": "cmd.exe",
+    "startArgs": ["/c", "npm run dev -- --port 5173 --strictPort --host 127.0.0.1"],
+    "startMatch": "--port 5173",
+    "readyUrl": "http://127.0.0.1:5173/",
+    "readyMarker": "id=\"root\"",
+    "startTimeoutSeconds": 120
+  },
+  "ai": {
+    "enabled": true,
+    "required": false,
+    "port": 8787,
+    "startFile": "cmd.exe",
+    "startArgs": ["/c", "npm run ai:dev"],
+    "startMatch": "ai:dev",
+    "readyUrl": "http://127.0.0.1:8787/health",
+    "readyMarker": "\"ok\":true",
+    "startTimeoutSeconds": 90
+  },
+  "browser": {
+    "exe": "",
+    "extraArgs": []
+  },
+  "singleInstance": {
+    "mutexName": "Local\\FrameByFrameLauncher.Gate",
+    "waitSeconds": 60
+  },
+  "lifecycle": {
+    "windowPollMs": 1500,
+    "windowAppearTimeoutSeconds": 60,
+    "windowWarmupSeconds": 10,
+    "windowAbsentChecks": 3,
+    "stopOwnedServicesOnClose": true,
+    "taskkillGraceMs": 8000
+  },
+  "logging": {
+    "dir": "logs",
+    "keepDays": 14
+  }
+}

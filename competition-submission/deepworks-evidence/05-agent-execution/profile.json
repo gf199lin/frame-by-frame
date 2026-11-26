@@ -1,0 +1,108 @@
+{
+  "schema_version": 2,
+  "method": "weighted-evidence-shrinkage-v2",
+  "evidence_count": 5,
+  "independent_note_count": 1,
+  "sufficient_dimensions": 0,
+  "identity_missing_count": 0,
+  "duplicate_evidence_count": 0,
+  "duplicate_note_count": 0,
+  "duplicate_notes": [],
+  "sample_size": 5,
+  "sample_size_semantics": "deprecated alias of evidence_count",
+  "sufficient": false,
+  "insufficient_samples": true,
+  "provisional": true,
+  "provisional_reasons": [
+    "independent_note_count < 3",
+    "sufficient_dimensions < 2"
+  ],
+  "overall_confidence": 0.05,
+  "dimensions": {
+    "narrative": {
+      "status": "observed",
+      "score": 100,
+      "lean": "high",
+      "confidence": 0.15,
+      "evidence_count": 1,
+      "note_count": 1,
+      "sufficient": false,
+      "neutral_default": false,
+      "neutral_evidence_count": 0,
+      "ambivalent_evidence_count": 0
+    },
+    "emotion": {
+      "status": "observed",
+      "score": 0,
+      "lean": "low",
+      "confidence": 0.15,
+      "evidence_count": 1,
+      "note_count": 1,
+      "sufficient": false,
+      "neutral_default": false,
+      "neutral_evidence_count": 0,
+      "ambivalent_evidence_count": 0
+    },
+    "thematic": {
+      "status": "observed",
+      "score": 100,
+      "lean": "high",
+      "confidence": 0.15,
+      "evidence_count": 1,
+      "note_count": 1,
+      "sufficient": false,
+      "neutral_default": false,
+      "neutral_evidence_count": 0,
+      "ambivalent_evidence_count": 0
+    },
+    "visual": {
+      "status": "observed",
+      "score": 100,
+      "lean": "high",
+      "confidence": 0.15,
+      "evidence_count": 1,
+      "note_count": 1,
+      "sufficient": false,
+      "neutral_default": false,
+      "neutral_evidence_count": 0,
+      "ambivalent_evidence_count": 0
+    },
+    "character": {
+      "status": "unobserved",
+      "score": null,
+      "lean": "unknown",
+      "confidence": 0,
+      "evidence_count": 0,
+      "note_count": 0,
+      "sufficient": false,
+      "neutral_default": false,
+      "neutral_evidence_count": 0,
+      "ambivalent_evidence_count": 0
+    },
+    "ending": {
+      "status": "observed",
+      "score": 0,
+      "lean": "low",
+      "confidence": 0.15,
+      "evidence_count": 1,
+      "note_count": 1,
+      "sufficient": false,
+      "neutral_default": false,
+      "neutral_evidence_count": 0,
+      "ambivalent_evidence_count": 0
+    }
+  },
+  "notes_used": [
+    {
+      "note_id": "sha256:2c293d0f387587d0a98ab9ea00cd05adca68d42e5fac6329bb4f58762c9193a6",
+      "semantic_status": null,
+      "evidence_count": 5
+    }
+  ],
+  "excluded_notes": [],
+  "corrections_applied": [],
+  "warnings": [
+    "provisional profile: independent_note_count < 3; sufficient_dimensions < 2",
+    "unobserved dimensions (not neutral preferences): character"
+  ]
+}
