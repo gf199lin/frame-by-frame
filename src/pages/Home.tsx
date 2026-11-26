@@ -16,6 +16,8 @@ import { THEMES, zhGenres } from '@/data/taxonomy'
 import { formatLongDate, formatMinutes, percent } from '@/lib/format'
 import { frameSrc } from '@/lib/media'
 
+const manchester = filmById(FILMS, 'manchester')
+
 const FILM_PAIR = [
   {
     filmId: 'eternal-sunshine',
@@ -95,37 +97,43 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  COVER — cinematic overlay                                        */}
       {/* ================================================================ */}
-      <section className="shell pb-8 pt-10 lg:pt-14" aria-labelledby="film-pair-title">
-        <header className="mb-6 bg-ocean text-white rounded-md px-7 py-8">
-          <p className="text-sm text-paper-dim">示例对照</p>
-          <h1 id="film-pair-title" className="mt-3 font-zh-title text-[clamp(2rem,5vw,4rem)] leading-tight">
-            两部电影，放在一起看
-          </h1>
-          <p className="mt-3 leading-relaxed text-paper-dim">
-            一部想抹掉回忆，一部只能带着过去继续生活。两条观影笔记都写到了失去之后，什么还留在身上。
-          </p>
+      <section className="shell pb-8 pt-8 lg:pt-12" aria-labelledby="film-pair-title">
+        <header className="overflow-hidden rounded-lg bg-ocean text-white lg:grid lg:grid-cols-[1fr_2fr]">
+          <div className="order-first flex flex-col justify-center px-6 py-9 sm:px-10 lg:py-12">
+            <p className="text-sm text-paper-dim">暖暖内含光 · 2004</p>
+            <h1 id="film-pair-title" className="mt-4 font-zh-title text-[clamp(2rem,4vw,4.5rem)] leading-tight">
+              如果能忘掉，<br />你还想记住什么？
+            </h1>
+            <a href="#film-notes" className="mt-7 inline-flex items-center gap-2 self-start border-b border-white/50 pb-2 text-sm">
+              看两部电影的观影笔记 <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+          <img
+            src={import.meta.env.BASE_URL + 'images/eternal-sunshine-ice.png'}
+            alt="《暖暖内含光》中两人并肩躺在冰面上"
+            className="w-full self-center"
+            fetchPriority="high"
+          />
         </header>
-        <div className="grid gap-6 md:grid-cols-2">
-          {FILM_PAIR.map(({ filmId, title, quote }) => {
-            const film = filmById(FILMS, filmId)
-            if (!film) return null
-            return (
-              <article key={filmId} className="overflow-hidden border border-ink/15 bg-paper-sheet">
-                <FilmStill film={film} eager />
-                <div className="p-5 sm:p-6">
-                  <h2 className="font-zh-title text-2xl">{title}</h2>
-                  <blockquote className="mt-3 border-l-2 border-brass/60 pl-4 leading-relaxed text-ink/80">
-                    {quote}
-                  </blockquote>
+        <div id="film-notes" className="mt-10 grid scroll-mt-28 items-center gap-7 lg:grid-cols-2">
+          {manchester && <FilmStill film={manchester} />}
+          <div>
+            <p className="text-sm text-taupe">示例观影笔记</p>
+            <h2 className="mt-2 font-zh-title text-3xl">失去之后，什么还留着？</h2>
+            <div className="mt-5 space-y-5">
+              {FILM_PAIR.map(({ filmId, title, quote }) => (
+                <article key={filmId} className="border-l border-brass/60 pl-4">
+                  <h3 className="font-zh-title text-lg">{title}</h3>
+                  <blockquote className="mt-2 leading-relaxed text-ink/80">{quote}</blockquote>
                   {records.some((record) => record.filmId === filmId) && (
-                    <Link to={'/archive/' + filmId} className="link-rule mt-4 text-brass-ink hover:text-ink">
+                    <Link to={'/archive/' + filmId} className="link-rule mt-2 text-brass-ink">
                       查看电影记录 <ArrowRight size={12} />
                     </Link>
                   )}
-                </div>
-              </article>
-            )
-          })}
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
