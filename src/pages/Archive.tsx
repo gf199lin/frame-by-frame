@@ -144,7 +144,7 @@ export const Archive = () => {
               <b>02</b> 我的片库
             </p>
             <p className="folio">
-              {records.length} 部电影 · 已保存到你的账号
+              {records.length} 条观影记录 · 已保存到你的账号
             </p>
           </div>
 
@@ -318,7 +318,7 @@ export const Archive = () => {
 
             <div className="ml-auto flex items-center gap-4">
               <span className="text-[12.5px] tracking-[0.04em] text-taupe">
-                {filtered.length} 部电影
+                {filtered.length} 条观影记录
               </span>
               {activeFilters > 0 && (
                 <button
@@ -346,13 +346,13 @@ export const Archive = () => {
                   <p className="artifact-label">
                     <b>本期精选</b> 片库中央的那部电影
                   </p>
-                  <Link to={`/archive/${featured.film.id}`} className="link-rule text-brass hover:text-ink">
+                  <Link to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`} className="link-rule text-brass hover:text-ink">
                     打开完整记录 <ArrowUpRight size={12} />
                   </Link>
                 </div>
 
                 <div className="mt-6 grid gap-8 lg:grid-cols-[250px_1fr] lg:gap-12">
-                  <Link to={`/archive/${featured.film.id}`} className="group mx-auto block w-full max-w-[250px]">
+                  <Link to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`} className="group mx-auto block w-full max-w-[250px]">
                     <div className="mount">
                       <div className="aspect-[2/3] overflow-hidden rounded-[4px]">
                         <FilmPoster film={featured.film} showTitle={false} eager />
@@ -364,7 +364,7 @@ export const Archive = () => {
                     <p className="text-[12px] tracking-[0.06em] text-taupe">
                       {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].zh}
                     </p>
-                    <Link to={`/archive/${featured.film.id}`} className="group mt-3">
+                    <Link to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`} className="group mt-3">
                       <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] leading-[1.02] tracking-[-0.015em] text-ink transition-colors group-hover:text-ocean">
                         {featured.film.title}
                       </h2>
@@ -390,7 +390,7 @@ export const Archive = () => {
                         {formatMinutes(featured.film.runtime)}
                       </span>
                       <Link
-                        to={`/archive/${featured.film.id}`}
+                        to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`}
                         className="ml-auto inline-flex items-center gap-2 text-[12.5px] tracking-[0.04em] text-ocean hover:underline hover:underline-offset-4"
                       >
                         读这篇观影笔记 <ArrowUpRight size={11} />

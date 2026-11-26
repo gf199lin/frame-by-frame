@@ -29,7 +29,7 @@ export const FilmCard = ({
 }) => {
   return (
     <Link
-      to={`/archive/${film.id}`}
+      to={`/archive/${film.id}?record=${encodeURIComponent(record.id)}`}
       className={cn('group block', className)}
       aria-label={`${film.title}，${film.year}，评分 ${record.rating} 分（满分 5 分）`}
     >
@@ -96,7 +96,7 @@ export const FilmIndexRow = ({
   index: number
 }) => (
   <Link
-    to={`/archive/${film.id}`}
+    to={`/archive/${film.id}?record=${encodeURIComponent(record.id)}`}
     className="group grid grid-cols-[2rem_2.6rem_1fr_auto] items-center gap-3 border-b border-ink/10 py-3.5 transition-colors hover:bg-ink/[0.025] sm:grid-cols-[3.5rem_3rem_1fr_8rem_7rem] sm:gap-4"
   >
     <span className="font-mono text-[11.5px] tracking-[0.12em] text-taupe">

@@ -9,7 +9,7 @@ import type {
   ThemeId,
   WatchRecord,
 } from '@/types'
-import { filmById } from './tasteEngine'
+import { filmById, recordsSorted } from './tasteEngine'
 import { STAGE_COPY } from './taste/evolution'
 
 const filmNodeId = (id: string) => `film:${id}`
@@ -38,7 +38,8 @@ export const buildMemoryGraph = (
 ): MemoryGraph => {
   const { showThemes = true, showMoods = true, showObservations = true } = options
   const observations = showObservations ? (options.observations ?? []) : []
-  const usable = records.filter((r) => filmById(films, r.filmId))
+  const latestByFilm = new Map(recordsSorted(records, 'asc').map((record) => [record.filmId, record]))
+  const usable = [...latestByFilm.values()].filter((record) => filmById(films, record.filmId))
   if (usable.length === 0 && observations.length === 0) return { nodes: [], edges: [] }
 
   const nodes = new Map<string, GraphNode>()
