@@ -238,21 +238,21 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       <section className="shell my-8 rounded-lg bg-ocean py-7 text-white" aria-labelledby="watch-history">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 id="watch-history" className="font-zh-title text-2xl">观影记录</h2>
-          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#E5B34F] px-4 py-2.5 text-sm font-medium text-[#65450E] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E5B34F]">
+          <h2 id="watch-history" className="font-zh-title text-2xl border-l-2 border-[#FAE195] pl-3 text-[#FAE195]">观影记录</h2>
+          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#FAE195] px-4 py-2.5 text-sm font-medium text-[#292D67] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FAE195]">
             <Plus size={14} /> 记录这次重看
           </button>
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {ordered.map((viewing, index) => (
-            <article key={viewing.id} id={'viewing-' + viewing.id} className={'min-w-0 scroll-mt-28 rounded-md p-5 text-ink ' + (viewing.status === 'rewatched' ? 'bg-[#F8E3AC]' : 'bg-paper-sheet')}>
+            <article key={viewing.id} id={'viewing-' + viewing.id} className={'min-w-0 scroll-mt-28 rounded-md p-5 text-ink ' + (viewing.status === 'rewatched' ? 'bg-[#E8EAF7]' : 'bg-paper-sheet')}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-zh-title text-[#65450E]">{label(index)}</h3>
+                <h3 className="font-zh-title text-[#292D67]">{label(index)}</h3>
                 <small>{formatLongDate(viewing.watchedAt)}</small>
                 <Rating value={viewing.rating} size={12} />
               </div>
               <p className="mt-3 whitespace-pre-wrap break-words leading-relaxed text-ink/80">{viewing.reflection || '这次还没有写影评。'}</p>
-              <Link to={'?record=' + encodeURIComponent(viewing.id)} aria-current={record.id === viewing.id ? 'true' : undefined} className="link-rule mt-4 text-[#65450E]">
+              <Link to={'?record=' + encodeURIComponent(viewing.id)} aria-current={record.id === viewing.id ? 'true' : undefined} className="link-rule mt-4 text-[#292D67]">
                 {record.id === viewing.id ? '下方正显示这条记录' : '查看这次的详情和分析'}
               </Link>
             </article>
