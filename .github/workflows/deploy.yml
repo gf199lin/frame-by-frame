@@ -46,7 +46,12 @@ jobs:
 
       # SPA fallback: deep links (e.g. /frame-by-frame/archive/xxx) get index.html
       - name: Add SPA fallback
-        run: cp dist/index.html dist/404.html
+        run: |
+          cp dist/index.html dist/404.html
+          for route in archive map taste reflection account welcome auth/sign-up auth/forgot auth/reset auth/callback; do
+            mkdir -p "dist/$route"
+            cp dist/index.html "dist/$route/index.html"
+          done
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
