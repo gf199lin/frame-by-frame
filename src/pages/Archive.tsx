@@ -1,15 +1,14 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, ArrowUpRight, Plus, Search, X } from 'lucide-react'
+import { ArrowRight, Plus, Search, X } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
 import { useAddFilm } from '@/components/add/AddFilmProvider'
 import { FilmCard, FilmIndexRow, WaitingRoomCard } from '@/components/film/FilmCard'
-import { FilmPoster } from '@/components/film/FilmPoster'
 import { EmptyState } from '@/components/ui/Primitives'
 import { Rating } from '@/components/ui/Rating'
 import { Reveal } from '@/components/ui/Reveal'
-import { STATUS_LABELS, zhGenre, zhGenres } from '@/data/taxonomy'
-import { cn, formatLongDate, formatMinutes } from '@/lib/format'
+import { STATUS_LABELS, zhGenre } from '@/data/taxonomy'
+import { cn, formatMinutes } from '@/lib/format'
 import { filmById } from '@/lib/tasteEngine'
 import type { WatchStatus } from '@/types'
 
@@ -129,8 +128,6 @@ export const Archive = () => {
     )
   }
 
-  const featured = activeFilters === 0 && filtered.length > 0 ? filtered[0] : null
-  const shelf = featured ? filtered.slice(1) : filtered
 
   return (
     <div>
@@ -335,76 +332,6 @@ export const Archive = () => {
       </section>
 
       {/* ================================================================ */}
-      {/*  Featured film — the print on the wall                            */}
-      {/* ================================================================ */}
-      {featured && (
-        <section className="chapter--paper">
-          <div className="shell pb-10 pt-2 lg:pb-14">
-            <Reveal>
-              <div className="paper-card paper-card--offset overflow-hidden p-4 sm:p-6 lg:p-8">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/10 pb-3">
-                  <p className="artifact-label">
-                    <b>本期精选</b> 片库中央的那部电影
-                  </p>
-                  <Link to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`} className="link-rule text-brass hover:text-ink">
-                    打开完整记录 <ArrowUpRight size={12} />
-                  </Link>
-                </div>
-
-                <div className="mt-6 grid gap-8 lg:grid-cols-[250px_1fr] lg:gap-12">
-                  <Link to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`} className="group mx-auto block w-full max-w-[250px]">
-                    <div className="mount">
-                      <div className="aspect-[2/3] overflow-hidden rounded-[4px]">
-                        <FilmPoster film={featured.film} showTitle={false} eager />
-                      </div>
-                    </div>
-                  </Link>
-
-                  <div className="flex flex-col justify-center">
-                    <p className="text-[12px] tracking-[0.06em] text-taupe">
-                      {formatLongDate(featured.record.watchedAt)} · {STATUS_LABELS[featured.record.status].zh}
-                    </p>
-                    <Link to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`} className="group mt-3">
-                      <h2 className="font-display text-[clamp(2rem,4.2vw,3.6rem)] leading-[1.02] tracking-[-0.015em] text-ink transition-colors group-hover:text-ocean">
-                        {featured.film.title}
-                      </h2>
-                    </Link>
-                    {featured.film.titleZh && (
-                      <p className="mt-1.5 font-zh-title text-[1.05rem] tracking-[0.04em] text-ink/65">
-                        {featured.film.titleZh}
-                      </p>
-                    )}
-                    <p className="mt-2 text-[12.5px] tracking-[0.06em] text-taupe">
-                      {featured.film.director} · {featured.film.year} · {zhGenres(featured.film.genres)}
-                    </p>
-
-                    <blockquote className="mt-6 border-l-2 border-ink/70 pl-5">
-                      <p className="line-clamp-3 max-w-2xl font-zh-body text-[15.5px] leading-[1.95] text-ink/80">
-                        “{featured.record.reflection}”
-                      </p>
-                    </blockquote>
-
-                    <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-ink/10 pt-4">
-                      <Rating value={featured.record.rating} size={12} showValue />
-                      <span className="text-[12px] tracking-[0.04em] text-taupe">
-                        {formatMinutes(featured.film.runtime)}
-                      </span>
-                      <Link
-                        to={`/archive/${featured.film.id}?record=${encodeURIComponent(featured.record.id)}`}
-                        className="ml-auto inline-flex items-center gap-2 text-[12.5px] tracking-[0.04em] text-ocean hover:underline hover:underline-offset-4"
-                      >
-                        读这篇观影笔记 <ArrowUpRight size={11} />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-      )}
-
-      {/* ================================================================ */}
       {/*  The shelf                                                        */}
       {/* ================================================================ */}
       <section className="chapter--paper border-t border-ink/10">
@@ -430,7 +357,7 @@ export const Archive = () => {
               <Reveal>
                 <div className="flex flex-wrap items-end justify-between gap-3 border-b border-ink/10 pb-4">
                   <p className="artifact-label">
-                    <b>{featured ? '02' : '01'}</b> 片库陈列
+                    <b>01</b> 片库陈列
                   </p>
                   <p className="text-[12px] tracking-[0.04em] text-taupe">
                     点击海报，查看这篇观影笔记
@@ -439,12 +366,12 @@ export const Archive = () => {
               </Reveal>
 
               <div className="poster-wall mt-9">
-                {shelf.map(({ record, film }, index) => (
+                {filtered.map(({ record, film }, index) => (
                   <Reveal key={record.id} delay={(index % 5) * 40}>
                     <FilmCard
                       film={film}
                       record={record}
-                      index={index + (featured ? 2 : 1)}
+                      index={index + 1}
                     />
                   </Reveal>
                 ))}
