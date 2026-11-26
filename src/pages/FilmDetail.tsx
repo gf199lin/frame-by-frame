@@ -239,8 +239,8 @@ export const FilmDetail = () => {
       <section className="shell my-8 rounded-lg bg-ocean py-7 text-white" aria-labelledby="watch-history">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="watch-history" className="font-zh-title text-2xl border-l-2 border-[#FAE195] pl-3 text-[#FAE195]">观影记录</h2>
-          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#FAE195] px-4 py-2.5 text-sm font-medium text-[#292D67] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FAE195]">
-            <Plus size={14} /> 记录这次重看
+          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-white/10 border border-white/30 px-4 py-2.5 text-sm font-medium text-white hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FAE195]">
+            <Plus size={14} className="text-[#FAE195]" /> 记录这次重看
           </button>
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
