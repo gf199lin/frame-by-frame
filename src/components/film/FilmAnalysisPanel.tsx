@@ -320,9 +320,9 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
         </p>
         <p className="mt-2 text-[12.5px] text-taupe">{copy.detail}</p>
 
-        {excerpt && <blockquote className="my-4 border-l-4 border-[#494775] bg-[#eeedf6] px-5 py-3 text-ink"><small>{quote ? '引用原文' : '笔记摘录'}</small><p>{excerpt}</p></blockquote>}
+        {excerpt && <blockquote className="my-4 border-l-4 border-[#E5B34F] bg-[#F8E3AC] px-5 py-3 text-ink"><small>{quote ? '引用原文' : '笔记摘录'}</small><p>{excerpt}</p></blockquote>}
         <div className="my-3 flex flex-wrap gap-2">{[...analysis.observed_emotions.map(x => MOODS[x.mood]?.zh ?? x.mood), ...analysis.themes_identified.map(x => THEMES[x.theme]?.zh ?? x.theme)].slice(0, 5).map(label => <span key={label} className="tag">{label}</span>)}</div>
-        <details className="my-4"><summary className="cursor-pointer text-[#494775]">展开完整分析</summary>
+        <details className="my-4"><summary className="cursor-pointer text-[#65450E]">展开完整分析</summary>
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1fr] lg:gap-14">
           <div>
             <p className="text-[12.5px] tracking-[0.06em] text-ink/65">观察到的情绪</p>
