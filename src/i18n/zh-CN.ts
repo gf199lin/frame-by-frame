@@ -21,7 +21,7 @@ export const TERM = {
 } as const
 
 export const NAV = [
-  { to: '/', label: '我的电影', en: 'My Cinema', index: '01' },
+  { to: '/', label: '观影首页', en: 'Home', index: '01' },
   { to: '/archive', label: '我的片库', en: 'My Archive', index: '02' },
   { to: '/map', label: '记忆地图', en: 'Memory Map', index: '03' },
   { to: '/taste', label: '观影品味', en: 'My Taste', index: '04' },

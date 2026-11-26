@@ -14,7 +14,7 @@ export const NotFound = () => (
     </p>
     <div className="mt-8 flex flex-wrap gap-3">
       <Link to="/" className="btn btn-primary">
-        <ArrowLeft size={13} /> 返回我的电影
+        <ArrowLeft size={13} /> 返回观影首页
       </Link>
       <Link to="/archive" className="btn btn-ghost">
         打开我的片库

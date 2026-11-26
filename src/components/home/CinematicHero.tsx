@@ -88,7 +88,7 @@ export const CinematicHero = ({ film, stats, year, empty = false, onAdd }: Cinem
                 to="/archive"
                 className="group/entry mt-4 inline-flex items-center gap-2.5 border-b border-paper-sheet/35 pb-1.5 pt-0.5 font-mono text-[11px] uppercase tracking-[0.19em] text-paper-sheet/90 transition-colors duration-300 hover:border-paper-sheet hover:text-paper-sheet sm:mt-5"
               >
-                Explore my cinema
+                浏览全部电影
                 <ArrowRight
                   size={13}
                   strokeWidth={1.6}

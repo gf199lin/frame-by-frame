@@ -157,8 +157,7 @@ export const Archive = () => {
                 The archive
               </p>
               <p className="measure mt-4 text-[15.5px] leading-[1.9] text-taupe">
-                每一部留下的电影，都带着观看日期、评分，以及你在片尾字幕之后写下的那一段话。
-                像检索记忆一样检索它，而不是像表格。
+                在这里查找全部观影记录，按条件筛选和排序。打开一部电影即可查看笔记和分析。
               </p>
             </div>
 
