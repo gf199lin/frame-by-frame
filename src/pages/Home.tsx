@@ -11,9 +11,24 @@ import { Reveal } from '@/components/ui/Reveal'
 import { filmById, favoriteRecord, recordsSorted } from '@/lib/tasteEngine'
 import { sampleStateCopy } from '@/lib/ai/tasteProfile'
 import type { TasteSnapshot } from '@/types'
+import { FILMS } from '@/data/films'
 import { THEMES, zhGenres } from '@/data/taxonomy'
 import { formatLongDate, formatMinutes, percent } from '@/lib/format'
 import { frameSrc } from '@/lib/media'
+
+const FILM_PAIR = [
+  {
+    filmId: 'eternal-sunshine',
+    title: '暖暖内含光',
+    quote: '记忆在一句话中间塌陷，海边的房子在他们想留住那一刻时一点点散开。',
+  },
+  {
+    filmId: 'manchester',
+    title: '海边的曼彻斯特',
+    quote: '有些失去不会解决，它们只是变成了天气的一部分。',
+  },
+]
+
 
 const ISSUE = [
   { no: '01', label: '最新一帧', en: 'The latest frame', href: '#latest' },
@@ -43,8 +58,6 @@ export const Home = () => {
   const recent = recentCards.slice(1)
   const favourite = favoriteRecord(records, films)
   const favouriteFilm = favourite ? filmById(films, favourite.filmId) : null
-  const themeCount = new Set(records.flatMap((r) => r.themes)).size
-  const hours = snapshot.totalMinutes / 60
   const year = new Date().getFullYear()
 
   const radarSnapshot: TasteSnapshot = {
@@ -60,15 +73,6 @@ export const Home = () => {
     .filter((item) => item.sufficient)
     .sort((a, b) => b.confidence - a.confidence)[0]
   const showRadar = profile.dimensions.filter((item) => item.sufficient).length >= 2
-
-  // The cover is an editorial choice made from the collection, not simply the
-  // newest entry: La La Land's City of Stars frame keeps the dancers to the
-  // right and a dark road at lower-left for the title, with city lights that
-  // sit comfortably beside the site's deep blue and cream.
-  const hasLaLaLand = records.some((record) => record.filmId === 'la-la-land')
-  const heroFilmId = hasLaLaLand ? 'la-la-land' : ordered[0]?.filmId
-  const heroFilm = heroFilmId ? (filmById(films, heroFilmId) ?? null) : null
-  const heroStats = { films: records.length, themes: themeCount, hours }
 
   if (records.length === 0) {
     // An empty shelf still gets a real frame — a quiet catalogue still with a
@@ -89,7 +93,39 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  COVER — cinematic overlay                                        */}
       {/* ================================================================ */}
-      <CinematicHero film={heroFilm} stats={heroStats} year={year} />
+      <section className="shell pb-8 pt-10 lg:pt-14" aria-labelledby="film-pair-title">
+        <header className="mb-6 max-w-3xl">
+          <p className="kicker">示例对照</p>
+          <h1 id="film-pair-title" className="mt-3 font-zh-title text-[clamp(2rem,5vw,4rem)] leading-tight">
+            两部电影，放在一起看
+          </h1>
+          <p className="mt-3 leading-relaxed text-ink/75">
+            一部想抹掉回忆，一部只能带着过去继续生活。两条观影笔记都写到了失去之后，什么还留在身上。
+          </p>
+        </header>
+        <div className="grid gap-6 md:grid-cols-2">
+          {FILM_PAIR.map(({ filmId, title, quote }) => {
+            const film = filmById(FILMS, filmId)
+            if (!film) return null
+            return (
+              <article key={filmId} className="overflow-hidden border border-ink/15 bg-paper-sheet">
+                <FilmStill film={film} eager />
+                <div className="p-5 sm:p-6">
+                  <h2 className="font-zh-title text-2xl">{title}</h2>
+                  <blockquote className="mt-3 border-l-2 border-brass/60 pl-4 leading-relaxed text-ink/80">
+                    {quote}
+                  </blockquote>
+                  {records.some((record) => record.filmId === filmId) && (
+                    <Link to={'/archive/' + filmId} className="link-rule mt-4 text-brass-ink hover:text-ink">
+                      查看电影记录 <ArrowRight size={12} />
+                    </Link>
+                  )}
+                </div>
+              </article>
+            )
+          })}
+        </div>
+      </section>
 
       {seedCount > 0 && (
         <section className="shell pt-5 lg:pt-6">
