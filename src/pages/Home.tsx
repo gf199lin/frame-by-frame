@@ -96,12 +96,12 @@ export const Home = () => {
       {/*  COVER — cinematic overlay                                        */}
       {/* ================================================================ */}
       <section className="shell pb-8 pt-10 lg:pt-14" aria-labelledby="film-pair-title">
-        <header className="mb-6 bg-[#56364d] text-white rounded-md px-7 py-8">
-          <p className="text-sm text-[#f1e7ef]">示例对照</p>
+        <header className="mb-6 bg-ocean text-white rounded-md px-7 py-8">
+          <p className="text-sm text-paper-dim">示例对照</p>
           <h1 id="film-pair-title" className="mt-3 font-zh-title text-[clamp(2rem,5vw,4rem)] leading-tight">
             两部电影，放在一起看
           </h1>
-          <p className="mt-3 leading-relaxed text-[#f1e7ef]">
+          <p className="mt-3 leading-relaxed text-paper-dim">
             一部想抹掉回忆，一部只能带着过去继续生活。两条观影笔记都写到了失去之后，什么还留在身上。
           </p>
         </header>
