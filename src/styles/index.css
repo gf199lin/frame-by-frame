@@ -927,6 +927,7 @@ select.input option {
 }
 
 .tag {
+  background-color: rgba(73, 71, 117, 0.08);
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -1521,7 +1522,7 @@ input[type='range']::-moz-range-thumb {
 }
 .nav-item[data-active='true'] {
   color: var(--sheet);
-  background: var(--ocean);
+  background: #494775;
 }
 
 .nav-index {
