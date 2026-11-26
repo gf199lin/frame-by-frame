@@ -168,7 +168,7 @@ export const Home = () => {
       {/* ================================================================ */}
       {/*  05 — THE READING                                                 */}
       {/* ================================================================ */}
-      <section id="reading" className="bg-[#E8EAF7] border-t-4 border-ocean">
+      <section id="reading" className="chapter--paper-2 paper-texture border-t border-ink/10">
         <div className="shell py-16 lg:py-24">
           <div className="grid grid-cols-12 gap-x-6 gap-y-12">
             <Reveal className="col-span-12 lg:col-span-5 xl:col-span-4">
