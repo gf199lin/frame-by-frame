@@ -691,6 +691,7 @@ export type GraphEdge = {
   target: string
   kind: 'film-theme' | 'film-mood' | 'film-film' | 'film-observation'
   weight: number
+  connectionKind?: 'thematic' | 'character' | 'cinematic' | 'personal'
   reason?: string
 }
 

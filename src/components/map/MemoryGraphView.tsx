@@ -1,3 +1,4 @@
+import { connectionKinds } from '@/lib/cinemaConnections'
 import {
   useEffect,
   useLayoutEffect,
@@ -282,6 +283,7 @@ export const MemoryGraphView = ({
               neighborIds && !(neighborIds.has(edge.source) && neighborIds.has(edge.target))
             const active =
               selectedId !== null && (edge.source === selectedId || edge.target === selectedId)
+            const style = edge.connectionKind ? connectionKinds[edge.connectionKind] : undefined
             const stroke =
               edge.kind === 'film-film'
                 ? 'rgba(29,35,121,0.3)'
@@ -295,9 +297,9 @@ export const MemoryGraphView = ({
                 key={edge.id}
                 d={edgePath(edge, a, b)}
                 fill="none"
-                stroke={active ? 'rgba(29,35,121,0.95)' : stroke}
+                stroke={style?.stroke ?? (active ? 'rgba(29,35,121,0.95)' : stroke)}
                 strokeWidth={active ? 1.4 : edge.kind === 'film-film' ? 1 : 0.7}
-                strokeDasharray={edge.kind === 'film-mood' ? '2 5' : undefined}
+                strokeDasharray={style?.dash ?? (edge.kind === 'film-mood' ? '2 5' : undefined)}
                 opacity={dim ? 0.07 : 1}
               />
             )
