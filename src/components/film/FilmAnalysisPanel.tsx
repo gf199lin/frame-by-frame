@@ -291,6 +291,8 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
   }
 
   const copy = verdictCopy[analysis.review.verdict]
+  const quote = analysis.preference_evidence.find(x => x.userStatus !== 'removed' && x.quote && record.reflection.includes(x.quote))?.quote
+  const excerpt = quote || record.reflection.split(/[。！？]/)[0]
   const rejected = analysis.review.verdict === 'rejected'
 
   return (
@@ -302,20 +304,10 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
               <b>AI</b> 观影分析
             </p>
             <h2 className="mt-3 font-zh-title text-[1.7rem] leading-tight text-ink">
-              {analysis.model.provider === 'seed'
-                ? '示例解读 · 编辑撰写，不是模型输出'
-                : analysis.model.provider === 'local-engine'
-                  ? '本地规则引擎读到的，和你写下的（未调用模型）'
-                  : '模型读到的，和你写下的'}
+              本次观察
             </h2>
-            <p className="mt-2 max-w-2xl text-[14px] leading-[1.8] text-taupe">
-              下面全部是分析引擎生成的解读，不是你的原文。你的笔记在上方「我的记忆」中保持原样。
-              {analysis.model.provider === 'seed'
-                ? '编辑示例 · 非模型输出 · 需要你确认后才计入画像'
-                : analysis.model.provider === 'local-engine'
-                  ? '本地规则引擎 · 未调用外部模型'
-                  : `${analysisSourceLabel(analysis.model.provider)} · ${analysis.model.model} · 提示词版本 ${analysis.model.promptVersion}`}{' '}
-              · {formatLongDate(analysis.model.analyzedAt.slice(0, 10))}
+            <p className="mt-2 text-sm text-taupe">
+              {analysis.model.provider === 'seed' ? '编辑示例' : analysisSourceLabel(analysis.model.provider)} · {formatLongDate(analysis.model.analyzedAt.slice(0, 10))}
             </p>
           </div>
           <span className={cn('border px-3 py-1.5 text-[12px] tracking-[0.04em]', copy.tone)}>
@@ -328,6 +320,9 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
         </p>
         <p className="mt-2 text-[12.5px] text-taupe">{copy.detail}</p>
 
+        {excerpt && <blockquote className="my-4 border-l-4 border-[#56364d] bg-[#f1e7ef] px-5 py-3 text-ink"><small>{quote ? '引用原文' : '笔记摘录'}</small><p>{excerpt}</p></blockquote>}
+        <div className="my-3 flex flex-wrap gap-2">{[...analysis.observed_emotions.map(x => MOODS[x.mood]?.zh ?? x.mood), ...analysis.themes_identified.map(x => THEMES[x.theme]?.zh ?? x.theme)].slice(0, 5).map(label => <span key={label} className="tag">{label}</span>)}</div>
+        <details className="my-4"><summary className="cursor-pointer text-[#56364d]">展开完整分析</summary>
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1fr] lg:gap-14">
           <div>
             <p className="text-[12.5px] tracking-[0.06em] text-ink/65">观察到的情绪</p>
@@ -413,7 +408,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
                       </button>
                     </div>
                     <p className="mt-1.5 text-[14.5px] leading-[1.8] text-ink/80">{contribution.evidence}</p>
-                    {contribution.quote && (
+                    {contribution.quote && contribution.quote !== quote && analysis.preference_evidence.findIndex(x => x.quote === contribution.quote) === index && (
                       <p className="mt-1.5 font-zh-body text-[14px] leading-[1.8] text-taupe">
                         “{contribution.quote}”
                       </p>
@@ -483,6 +478,7 @@ export const FilmAnalysisPanel = ({ film, record }: { film: Film; record: WatchR
           </div>
         )}
 
+        </details>
         {!consent && isAiConfigured() && (
           <label className="mt-6 flex items-start gap-2.5 border-l border-brass/40 pl-3">
             <input

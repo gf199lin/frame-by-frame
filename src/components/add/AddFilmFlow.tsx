@@ -403,7 +403,9 @@ export const AddFilmFlow = ({
     setStep('form')
   }
 
+  const [savedId, setSavedId] = useState('')
   const commitRecord = (record: WatchRecord) => {
+    setSavedId(record.id)
     upsertRecord(record, editRecord?.id)
   }
 
@@ -422,7 +424,7 @@ export const AddFilmFlow = ({
         : 'AI 分析失败，电影和笔记已经保存。',
       'success',
     )
-    goTo(`/archive/${selected.id}`)
+    goTo('/archive/' + selected.id + '?record=' + encodeURIComponent(recordId) + '#viewing-' + recordId)
   }
 
   const chooseEngine = (next: 'deepseek' | 'deepworks') => {
@@ -1749,7 +1751,7 @@ export const AddFilmFlow = ({
                   type="button"
                   onClick={() => {
                     reviewAnalysis(pending.record.id, 'rejected')
-                    goTo(`/archive/${selected.id}`)
+                    goTo('/archive/' + selected.id + '?record=' + encodeURIComponent(savedId) + '#viewing-' + savedId)
                   }}
                   className="btn btn-ghost w-full"
                 >
@@ -1757,7 +1759,7 @@ export const AddFilmFlow = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => goTo(`/archive/${selected.id}`)}
+                  onClick={() => goTo('/archive/' + selected.id + '?record=' + encodeURIComponent(savedId) + '#viewing-' + savedId)}
                   className="btn btn-quiet w-full"
                 >
                   先保存，稍后再看

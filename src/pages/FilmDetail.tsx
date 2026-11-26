@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowUpRight, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useAppStore } from '@/store/AppStore'
@@ -30,6 +30,15 @@ export const FilmDetail = () => {
   const [params] = useSearchParams()
   const viewings = recordsSorted(records.filter((r) => r.filmId === filmId))
   const record = viewings.find((r) => r.id === params.get('record')) ?? viewings[0]
+  const ordered = [...viewings].reverse()
+  const label = (index: number) => {
+    const status = ordered[index].status
+    if (ordered[0].status === 'rewatched') return STATUS_LABELS[status].zh
+    return '第 ' + (index + 1) + ' 次观影' + (status === 'rewatched' ? ' · 重看' : '')
+  }
+  useEffect(() => {
+    if (record && window.location.hash.endsWith('#viewing-' + record.id)) document.getElementById('viewing-' + record.id)?.scrollIntoView()
+  }, [record?.id])
   const feelings = record ? feltLikeTagsOf(record) : []
 
   if (!film) {
@@ -227,22 +236,23 @@ export const FilmDetail = () => {
       {/* ================================================================ */}
       {/*  II — My memory                                                   */}
       {/* ================================================================ */}
-      <section className="shell py-8" aria-labelledby="watch-history">
+      <section className="shell my-8 rounded-lg bg-[#56364d] py-7 text-white" aria-labelledby="watch-history">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="watch-history" className="font-zh-title text-2xl">观影记录</h2>
-          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#365746] px-4 py-2.5 text-sm font-medium text-white hover:bg-[#294536] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#365746]">
+          <button type="button" onClick={() => openAdd(film.id, true)} className="inline-flex items-center gap-2 rounded bg-[#f1e7ef] px-4 py-2.5 text-sm font-medium text-[#56364d] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#56364d]">
             <Plus size={14} /> 记录这次重看
           </button>
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          {viewings.map((viewing) => (
-            <article key={viewing.id} className="min-w-0 rounded-md border border-[#365746]/20 bg-[#eef0e6] p-5">
+          {ordered.map((viewing, index) => (
+            <article key={viewing.id} id={'viewing-' + viewing.id} className={'min-w-0 scroll-mt-28 rounded-md p-5 text-ink ' + (viewing.status === 'rewatched' ? 'bg-[#f1e7ef]' : 'bg-paper-sheet')}>
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-zh-title text-[#365746]">{STATUS_LABELS[viewing.status].zh} · {formatLongDate(viewing.watchedAt)}</h3>
+                <h3 className="font-zh-title text-[#56364d]">{label(index)}</h3>
+                <small>{formatLongDate(viewing.watchedAt)}</small>
                 <Rating value={viewing.rating} size={12} />
               </div>
               <p className="mt-3 whitespace-pre-wrap break-words leading-relaxed text-ink/80">{viewing.reflection || '这次还没有写影评。'}</p>
-              <Link to={'?record=' + encodeURIComponent(viewing.id)} aria-current={record.id === viewing.id ? 'true' : undefined} className="link-rule mt-4 text-[#365746]">
+              <Link to={'?record=' + encodeURIComponent(viewing.id)} aria-current={record.id === viewing.id ? 'true' : undefined} className="link-rule mt-4 text-[#56364d]">
                 {record.id === viewing.id ? '下方正显示这条记录' : '查看这次的详情和分析'}
               </Link>
             </article>
@@ -333,7 +343,8 @@ export const FilmDetail = () => {
                 </p>
               </blockquote>
 
-              <FilmAnalysisPanel film={film} record={record} />
+              <h2 className="mt-5 font-zh-title text-2xl">{label(ordered.indexOf(record))}的分析</h2>
+              <FilmAnalysisPanel key={record.id} film={film} record={record} />
             </Reveal>
           </div>
         </div>
